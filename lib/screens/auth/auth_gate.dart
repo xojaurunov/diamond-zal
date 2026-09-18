@@ -6,6 +6,7 @@ import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
 import '../admin/admin_home.dart';
+import '../barmen/barmen_home.dart';
 import '../user/profile_setup_screen.dart';
 import '../user/user_home.dart';
 import 'login_screen.dart';
@@ -30,6 +31,8 @@ class AuthGate extends ConsumerWidget {
             // yo bosh admin akkauntni o'chirgan. Farqini kutib aniqlaymiz.
             if (u == null) return const _NoProfile();
             if (u.isAdmin) return const AdminHome();
+            // Barmen — faqat do'kon paneli
+            if (u.isBarmen) return const BarmenHome();
             // Zalda trener bo'lsa — shogird trenerini tanlashi shart
             final trainers = ref.watch(trainerDirectoryProvider).value ?? const [];
             final needTrainer = u.trainerId == null && trainers.isNotEmpty;

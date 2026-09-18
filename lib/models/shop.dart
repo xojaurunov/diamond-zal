@@ -108,6 +108,10 @@ class ShopOrder {
   final String status;
   final DateTime? createdAt;
 
+  /// Kim berdi (trener yoki barmen uid) va qachon — sotuv hisoboti shunga tayanadi
+  final String givenBy;
+  final DateTime? givenAt;
+
   const ShopOrder({
     this.id = '',
     required this.clientId,
@@ -121,6 +125,8 @@ class ShopOrder {
     this.qty = 1,
     this.status = orderNew,
     this.createdAt,
+    this.givenBy = '',
+    this.givenAt,
   });
 
   int get total => price * qty;
@@ -152,6 +158,8 @@ class ShopOrder {
       qty: ((d['qty'] ?? 1) as num).toInt(),
       status: (d['status'] ?? orderNew) as String,
       createdAt: (d['createdAt'] as Timestamp?)?.toDate(),
+      givenBy: (d['givenBy'] ?? '') as String,
+      givenAt: (d['givenAt'] as Timestamp?)?.toDate(),
     );
   }
 }
@@ -161,19 +169,52 @@ class SalesReport {
   final int sum, count;
   const SalesReport(this.sum, this.count);
 
+  /// Hisobga olinadigan sana: berilgan vaqt, bo'lmasa buyurtma vaqti
+  static DateTime? soldAt(ShopOrder o) => o.givenAt ?? o.createdAt;
+
+  /// Shu davrga kiradigan, berilgan buyurtmalar (0 — hamma vaqt)
+  static List<ShopOrder> sold(List<ShopOrder> orders, {int days = 0, DateTime? now}) {
+    final n = now ?? DateTime.now();
+    return orders.where((o) {
+      if (!o.isGiven) return false;
+      if (days <= 0) return true;
+      final at = soldAt(o);
+      return at != null && n.difference(at).inDays < days;
+    }).toList();
+  }
+
   /// [days] kun ichida berilgan buyurtmalar (0 — hammasi)
   factory SalesReport.of(List<ShopOrder> orders, {int days = 0, DateTime? now}) {
-    final n = now ?? DateTime.now();
-    var sum = 0, count = 0;
-    for (final o in orders) {
-      if (!o.isGiven) continue;
-      if (days > 0) {
-        final at = o.createdAt;
-        if (at == null || n.difference(at).inDays >= days) continue;
-      }
-      sum += o.total;
-      count++;
+    final list = sold(orders, days: days, now: now);
+    return SalesReport(list.fold(0, (s, o) => s + o.total), list.length);
+  }
+
+  /// Sotuvchi (barmen/trener) bo'yicha: uid -> (summa, soni)
+  static Map<String, SalesReport> bySeller(
+    List<ShopOrder> orders, {
+    int days = 0,
+    DateTime? now,
+  }) {
+    final r = <String, SalesReport>{};
+    for (final o in sold(orders, days: days, now: now)) {
+      final key = o.givenBy.isEmpty ? '' : o.givenBy;
+      final old = r[key] ?? const SalesReport(0, 0);
+      r[key] = SalesReport(old.sum + o.total, old.count + 1);
     }
-    return SalesReport(sum, count);
+    return r;
+  }
+
+  /// Tovar bo'yicha: nomi -> (summa, soni)
+  static Map<String, SalesReport> byProduct(
+    List<ShopOrder> orders, {
+    int days = 0,
+    DateTime? now,
+  }) {
+    final r = <String, SalesReport>{};
+    for (final o in sold(orders, days: days, now: now)) {
+      final old = r[o.productName] ?? const SalesReport(0, 0);
+      r[o.productName] = SalesReport(old.sum + o.total, old.count + o.qty);
+    }
+    return r;
   }
 }

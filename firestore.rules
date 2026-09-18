@@ -15,6 +15,9 @@ service cloud.firestore {
     // Trener paneliga kiradiganlar: trener va bosh admin
     function isStaff() { return signedIn() && myRole() in ['admin', 'owner']; }
 
+    // Barmen — zal bari/sotuvchisi: faqat do'kon (tovar va buyurtma)
+    function isBarmen() { return signedIn() && myRole() == 'barmen'; }
+
     // Trener faqat O'ZIGA biriktirilgan shogird bilan ishlaydi (bosh admin — hamma bilan)
     function isTrainerOf(uid) {
       return isStaff() &&
@@ -152,7 +155,7 @@ service cloud.firestore {
     // Tovarlarni trener kiritadi; hamma kirganlar ko'radi.
     match /shop/{id} {
       allow read: if signedIn();
-      allow write: if isStaff();
+      allow write: if isStaff() || isBarmen();
     }
 
     // Buyurtma: shogird o'zi beradi, trener "berildi"/"bekor" deb belgilaydi.
@@ -177,19 +180,24 @@ service cloud.firestore {
           && product.get('active', true) == true;
       }
       // Buyurtma yozilgandan keyin faqat holati o'zgaradi
+      // Holat o'zgarganda kim bergani ham yoziladi (sotuv hisoboti uchun)
       function onlyStatusChanged() {
         return request.resource.data.diff(resource.data)
-                 .affectedKeys().hasOnly(['status', 'updatedAt']);
+                 .affectedKeys().hasOnly(['status', 'updatedAt', 'givenBy', 'givenAt'])
+          && (request.resource.data.get('givenBy', '') == ''
+              || request.resource.data.get('givenBy', '') == request.auth.uid);
       }
       function isMyOrder() { return resource.data.get('clientId', '') == request.auth.uid; }
       function isMyClientOrder() {
         return isStaff() && resource.data.get('trainerId', '') == request.auth.uid;
       }
 
-      allow read: if signedIn() && (isMyOrder() || isMyClientOrder() || isOwner());
+      allow read: if signedIn()
+        && (isMyOrder() || isMyClientOrder() || isOwner() || isBarmen());
       allow create: if signedIn() && validNewOrder();
       allow update: if onlyStatusChanged() && (
-        ((isOwner() || isMyClientOrder()) && request.resource.data.status in ['given', 'canceled'])
+        ((isOwner() || isMyClientOrder() || isBarmen())
+          && request.resource.data.status in ['given', 'canceled'])
         // shogird faqat hali berilmagan buyurtmasini bekor qiladi
         || (isMyOrder() && resource.data.status == 'new'
             && request.resource.data.status == 'canceled'));

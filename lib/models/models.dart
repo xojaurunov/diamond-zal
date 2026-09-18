@@ -8,7 +8,8 @@ class AppUser {
   final String name;
   final String email;
   final String phone; // 998901234567 — kirish telefon raqam + parol bilan
-  /// 'user' — shogird, 'admin' — trener, 'owner' — bosh admin (zal egasi).
+  /// 'user' — shogird, 'admin' — trener, 'barmen' — zal bari (faqat do'kon),
+  /// 'owner' — bosh admin (zal egasi).
   /// Rolni faqat bosh admin o'zgartira oladi (firestore.rules).
   final String role;
   final String gender; // 'male' | 'female'
@@ -71,6 +72,13 @@ class AppUser {
 
   /// Faqat trener (bosh admin emas)
   bool get isTrainer => role == 'admin';
+
+  /// Barmen — zal bari/sotuvchisi: faqat do'kon bilan ishlaydi.
+  /// Shogirdlar, rejalar va chatga kirmaydi.
+  bool get isBarmen => role == 'barmen';
+
+  /// Xodimmi (shogird emas) — Xodimlar ro'yxatida chiqadi
+  bool get isStaff => isAdmin || isBarmen;
 
   bool get profileDone => age > 0 && height > 0 && weight > 0;
 

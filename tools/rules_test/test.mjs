@@ -23,6 +23,7 @@ const USER4 = 'user4'; // hali trener tanlamagan
 const USER5 = 'user5'; // hali trener tanlamagan
 const TRAINER4 = 'trainer4'; // shogird qabul qiladigan ikkinchi trener
 const W1 = 'w1', W2 = 'w2', W3 = 'w3';
+const BARMEN = 'barmen1';
 
 let pass = 0, fail = 0;
 async function check(name, fn) {
@@ -55,6 +56,7 @@ await env.withSecurityRulesDisabled(async (ctx) => {
   await setDoc(doc(db, 'users', W2), { name: 'W2', role: 'user', weight: 90, trainerId: null,
     lastWeighIn: new Date(Date.now() - 8 * 24 * 3600 * 1000) });
   await setDoc(doc(db, 'users', W3), { name: 'W3', role: 'user', weight: 0, trainerId: null });
+  await setDoc(doc(db, 'users', BARMEN), { name: 'Barmen', role: 'barmen', phone: '998905050505' });
   await setDoc(doc(db, 'users', USER, 'days', '2026-09-15'), { done: [0] });
   await setDoc(doc(db, 'plans', 'p1'), { title: 'Reja', meals: [] });
   await setDoc(doc(db, 'foods', 'f1'), { name: 'Tovuq', kcal: 165 });
@@ -390,6 +392,48 @@ await check('trener shogirdining zalini ozgartira OLMAYDI', () =>
   assertFails(updateDoc(doc(as(TRAINER), 'users', USER), { gymId: 'zal1' })));
 await check('bosh admin zalni ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(OWNER), 'gyms', 'zal1'))));
+
+console.log('\n== BARMEN ==');
+await check('barmen tovar qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(BARMEN), 'shop', 'bar1'), {
+    category: 'Sport pitaniya', name: 'Kreatin 300 g', note: '', image: '',
+    price: 250000, stock: 4, active: true })));
+await check('barmen tovar qoldigini ozgartiradi', () =>
+  assertSucceeds(updateDoc(doc(as(BARMEN), 'shop', 'bar1'), { stock: 3 })));
+await check('barmen hamma buyurtmani koradi', () =>
+  assertSucceeds(getDocs(collection(as(BARMEN), 'orders'))));
+await check('barmen "berildi" deb belgilaydi va kim bergani yoziladi', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'orders', 'ob1'), {
+      clientId: USER, clientName: 'Shogird', clientPhone: '998903333333', trainerId: TRAINER,
+      productId: 'bar1', productName: 'Kreatin 300 g', category: 'Sport pitaniya',
+      price: 250000, qty: 1, status: 'new', createdAt: new Date() });
+  });
+  await assertSucceeds(updateDoc(doc(as(BARMEN), 'orders', 'ob1'), {
+    status: 'given', updatedAt: serverTimestamp(), givenBy: BARMEN, givenAt: serverTimestamp() }));
+});
+await check('boshqa nomdan "men berdim" deb yozib bolmaydi', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'orders', 'ob2'), {
+      clientId: USER, clientName: 'Shogird', trainerId: TRAINER,
+      productId: 'bar1', productName: 'Kreatin', category: 'Sport pitaniya',
+      price: 250000, qty: 1, status: 'new', createdAt: new Date() });
+  });
+  await assertFails(updateDoc(doc(as(BARMEN), 'orders', 'ob2'), {
+    status: 'given', givenBy: TRAINER }));
+});
+await check('barmen buyurtmani ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(BARMEN), 'orders', 'ob1'))));
+await check('barmen shogird hujjatini kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(BARMEN), 'users', USER))));
+await check('barmen shogird chatini kora OLMAYDI', () =>
+  assertFails(getDocs(collection(as(BARMEN), 'chats', USER, 'messages'))));
+await check('barmen rol ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(BARMEN), 'users', USER), { role: 'admin' })));
+await check('barmen reja yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'plans', 'pb1'), { title: 'X', meals: [] })));
+await check('barmen zal qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'gyms', 'zalb'), { name: 'Yangi' })));
 
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();

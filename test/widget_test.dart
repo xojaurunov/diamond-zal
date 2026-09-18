@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kotta_qani_diet/models/feed.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/hudud.dart';
 import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/shop.dart';
 import 'package:kotta_qani_diet/models/stats.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
+import 'package:kotta_qani_diet/screens/notifications_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
 import 'package:kotta_qani_diet/services/reminders.dart';
 import 'package:kotta_qani_diet/widgets/change_password.dart';
@@ -687,6 +689,246 @@ void main() {
       final t = AppUser(id: 't1', name: 'Trener', email: '', role: 'admin');
       expect(t.gymId, isNull);
       expect(t.isTrainer, isTrue);
+    });
+  });
+
+  group('Bildirishnomalar (Eslatma bo-limi)', () {
+    final now = DateTime(2026, 9, 18, 15, 0);
+
+    AppUser student({String? planId, DateTime? assigned}) => AppUser(
+          id: 'u1',
+          name: 'Shogird',
+          email: '',
+          age: 30,
+          height: 175,
+          weight: 80,
+          goal: 'lose',
+          planId: planId,
+          planAssignedAt: assigned,
+        );
+
+    test('trener xabari ro-yxatga tushadi, o-zining xabari tushmaydi', () {
+      final items = studentFeed(
+        user: student(),
+        messages: [
+          ChatMessage('trener1', 'Salom, bugun kelasizmi?', now.subtract(const Duration(hours: 2))),
+          ChatMessage('u1', 'Ha, kelaman', now.subtract(const Duration(hours: 1))),
+        ],
+        weights: [WeightLog(now.subtract(const Duration(days: 1)), 80)],
+        now: now,
+      );
+      final chat = items.where((i) => i.kind == FeedKind.chat).toList();
+      expect(chat, hasLength(1));
+      expect(chat.first.body, 'Salom, bugun kelasizmi?');
+    });
+
+    test('vazn muddati kelganda amal talab qiladigan eslatma chiqadi', () {
+      final items = studentFeed(
+        user: student(),
+        messages: const [],
+        weights: [WeightLog(now.subtract(const Duration(days: 8)), 80)],
+        now: now,
+      );
+      final w = items.where((i) => i.kind == FeedKind.weighIn).toList();
+      expect(w, hasLength(1));
+      expect(w.first.action, isTrue);
+    });
+
+    test('vazn yaqinda kiritilgan bo-lsa eslatma yo-q', () {
+      final items = studentFeed(
+        user: student(),
+        messages: const [],
+        weights: [WeightLog(now.subtract(const Duration(days: 2)), 80)],
+        now: now,
+      );
+      expect(items.where((i) => i.kind == FeedKind.weighIn), isEmpty);
+    });
+
+    test('vaqti o-tgan va belgilanmagan mahal eslatma beradi', () {
+      final plan = Plan(title: 'Ozish • A', meals: [
+        Meal(time: '08:00', title: 'Nonushta', items: [
+          MealItem(name: 'Tuxum', grams: 100, kcal: 155, protein: 13),
+        ]),
+        Meal(time: '20:00', title: 'Kechki', items: []),
+      ]);
+      final items = studentFeed(
+        user: student(planId: 'p1', assigned: now.subtract(const Duration(days: 3))),
+        messages: const [],
+        plan: plan,
+        weights: [WeightLog(now.subtract(const Duration(days: 1)), 80)],
+        now: now,
+      );
+      final meals = items.where((i) => i.kind == FeedKind.meal).toList();
+      // 08:00 o-tgan (belgilanmagan), 20:00 hali kelmagan
+      expect(meals, hasLength(1));
+      expect(meals.first.title, contains('Nonushta'));
+    });
+
+    test('belgilangan mahal eslatma bermaydi', () {
+      final plan = Plan(title: 'Ozish • A', meals: [
+        Meal(time: '08:00', title: 'Nonushta', items: []),
+      ]);
+      final items = studentFeed(
+        user: student(planId: 'p1', assigned: now),
+        messages: const [],
+        plan: plan,
+        doneMeals: {0},
+        weights: [WeightLog(now.subtract(const Duration(days: 1)), 80)],
+        now: now,
+      );
+      expect(items.where((i) => i.kind == FeedKind.meal), isEmpty);
+    });
+
+    test('trenerda: shogird xabari, yangi buyurtma va rejasiz shogird', () {
+      final trainer = AppUser(id: 't1', name: 'Trener', email: '', role: 'admin');
+      final items = trainerFeed(
+        trainer: trainer,
+        clients: [
+          AppUser(id: 'c1', name: 'Aziz', email: '', gymDays: const [1, 3, 5]),
+          AppUser(id: 'c2', name: 'Jasur', email: '', planId: 'p1', gymDays: const [2, 4, 6]),
+        ],
+        messages: {
+          'c1': [
+            ChatMessage('c1', 'Bugun kelolmayman', now.subtract(const Duration(minutes: 10))),
+            ChatMessage('t1', 'Mayli', now.subtract(const Duration(minutes: 5))),
+          ],
+        },
+        orders: [
+          ShopOrder(
+            clientId: 'c1',
+            clientName: 'Aziz',
+            productId: 'p',
+            productName: 'Protein',
+            price: 450000,
+            createdAt: now.subtract(const Duration(hours: 1)),
+          ),
+        ],
+        now: now,
+      );
+      // shogirdning xabari bor, trenerning o-zi yozgani yo-q
+      expect(items.where((i) => i.kind == FeedKind.chat), hasLength(1));
+      // yangi buyurtma amal talab qiladi
+      final order = items.firstWhere((i) => i.kind == FeedKind.order);
+      expect(order.action, isTrue);
+      // faqat rejasiz shogird (Aziz) uchun eslatma
+      final noPlan = items.where((i) => i.kind == FeedKind.attention).toList();
+      expect(noPlan, hasLength(1));
+      expect(noPlan.first.body, contains('Aziz'));
+    });
+
+    test('yangi (ko-rilmagan) soni sanaladi', () {
+      final items = [
+        FeedItem(kind: FeedKind.chat, title: 'a', body: 'b', at: now),
+        FeedItem(
+            kind: FeedKind.chat,
+            title: 'a',
+            body: 'b',
+            at: now.subtract(const Duration(hours: 5))),
+      ];
+      expect(unreadCount(items, null), 2, reason: 'hech qachon ochilmagan');
+      expect(unreadCount(items, now.subtract(const Duration(hours: 1))), 1);
+      expect(unreadCount(items, now.add(const Duration(minutes: 1))), 0);
+    });
+
+    test('vaqt yozuvi: hozir, bugun, kecha', () {
+      expect(feedTime(now, now), 'Hozir');
+      expect(feedTime(now.subtract(const Duration(minutes: 20)), now), '20 daqiqa oldin');
+      expect(feedTime(DateTime(2026, 9, 18, 8, 5), now), 'Bugun 08:05');
+      expect(feedTime(DateTime(2026, 9, 17, 8, 5), now), 'Kecha 08:05');
+    });
+  });
+
+  group('Barmen va sotuv hisoboti', () {
+    final now = DateTime(2026, 9, 18, 18, 0);
+
+    ShopOrder order({
+      required String product,
+      int price = 100000,
+      int qty = 1,
+      String status = orderGiven,
+      String givenBy = 'b1',
+      int daysAgo = 0,
+      String client = 'Aziz',
+    }) =>
+        ShopOrder(
+          clientId: 'c1',
+          clientName: client,
+          productId: 'p',
+          productName: product,
+          price: price,
+          qty: qty,
+          status: status,
+          givenBy: givenBy,
+          givenAt: now.subtract(Duration(days: daysAgo)),
+          createdAt: now.subtract(Duration(days: daysAgo)),
+        );
+
+    test('barmen roli: faqat do-kon xodimi', () {
+      final b = AppUser(id: 'b1', name: 'Sardor', email: '', role: 'barmen');
+      expect(b.isBarmen, isTrue);
+      expect(b.isStaff, isTrue, reason: 'Xodimlar ro-yxatida chiqadi');
+      expect(b.isAdmin, isFalse, reason: 'trener paneliga kirmaydi');
+      expect(b.isTrainer, isFalse);
+      expect(b.isOwner, isFalse);
+    });
+
+    test('sotuvchi kesimida hisobot', () {
+      final orders = [
+        order(product: 'Protein', price: 450000, givenBy: 'b1'),
+        order(product: 'Mayka', price: 120000, givenBy: 'b1'),
+        order(product: 'Protein', price: 450000, givenBy: 't1'),
+        order(product: 'Kreatin', price: 90000, status: orderNew, givenBy: ''),
+      ];
+      final sellers = SalesReport.bySeller(orders, days: 30, now: now);
+      expect(sellers['b1']!.count, 2);
+      expect(sellers['b1']!.sum, 570000);
+      expect(sellers['t1']!.count, 1);
+      expect(sellers.containsKey(''), isFalse, reason: 'berilmagan buyurtma sanalmaydi');
+    });
+
+    test('tovar kesimida hisobot: dona soni qo-shiladi', () {
+      final orders = [
+        order(product: 'Protein', price: 450000, qty: 2),
+        order(product: 'Protein', price: 450000, qty: 1),
+        order(product: 'Mayka', price: 120000, qty: 1),
+      ];
+      final byProduct = SalesReport.byProduct(orders, days: 30, now: now);
+      expect(byProduct['Protein']!.count, 3, reason: '2 + 1 dona');
+      expect(byProduct['Protein']!.sum, 450000 * 2 + 450000);
+      expect(byProduct['Mayka']!.count, 1);
+    });
+
+    test('davr: 7 kundan eskisi kirmaydi', () {
+      final orders = [
+        order(product: 'Protein', daysAgo: 2),
+        order(product: 'Mayka', daysAgo: 10),
+      ];
+      expect(SalesReport.of(orders, days: 7, now: now).count, 1);
+      expect(SalesReport.of(orders, days: 0, now: now).count, 2, reason: 'hamma vaqt');
+    });
+
+    test('berilgan vaqt yo-q bo-lsa buyurtma vaqti olinadi', () {
+      final o = ShopOrder(
+        clientId: 'c1',
+        productId: 'p',
+        productName: 'Protein',
+        price: 1000,
+        status: orderGiven,
+        createdAt: now.subtract(const Duration(days: 3)),
+      );
+      expect(SalesReport.soldAt(o), now.subtract(const Duration(days: 3)));
+      expect(SalesReport.of([o], days: 7, now: now).count, 1);
+    });
+
+    test('barmen eslatmasi: yangi buyurtma amal talab qiladi', () {
+      final items = barmenFeed(orders: [
+        order(product: 'Protein', status: orderNew, givenBy: ''),
+        order(product: 'Mayka', daysAgo: 1),
+      ]);
+      expect(items, hasLength(2));
+      final yangi = items.firstWhere((i) => i.title == 'Yangi buyurtma');
+      expect(yangi.action, isTrue);
+      expect(yangi.body, contains('Aziz'));
     });
   });
 }

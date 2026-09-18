@@ -108,7 +108,7 @@ class Db {
   /// `whereIn` bitta so'rovda ikkala rolni oladi.
   static Stream<List<AppUser>> staff() => _fs
       .collection('users')
-      .where('role', whereIn: ['admin', 'owner'])
+      .where('role', whereIn: ['admin', 'owner', 'barmen'])
       .snapshots()
       .map((s) => s.docs.map(AppUser.fromDoc).toList());
 
@@ -151,10 +151,11 @@ class Db {
   /// seansida qoladi. Hujjat ham o'sha seansdan yoziladi (qoidalar: har kim faqat
   /// o'z hujjatini va faqat `user` roli bilan yarata oladi), so'ng bosh admin uni
   /// trenerga aylantiradi va zalga biriktiradi.
-  static Future<String> createTrainer({
+  static Future<String> createStaff({
     required String name,
     required String phone,
     required String password,
+    String role = 'admin',
     String? gymId,
   }) async {
     final app = await Firebase.initializeApp(
@@ -175,7 +176,7 @@ class Db {
       await app.delete();
     }
     // Endi bosh admin (asosiy seans) rolni va zalni qo'yadi
-    await setRole(uid, 'admin');
+    await setRole(uid, role);
     if (gymId != null) await setUserGym(uid, gymId);
     return uid;
   }
@@ -280,7 +281,8 @@ class Db {
     } else {
       await _fs.collection('trainers').doc(uid).delete();
     }
-    if (role == 'user') {
+    // trener bo'lmay qolsa — shogirdlari bo'shaydi
+    if (role != 'admin') {
       final orphans = await _fs.collection('users').where('trainerId', isEqualTo: uid).get();
       for (final d in orphans.docs) {
         await d.reference.update({'trainerId': null});
@@ -362,7 +364,8 @@ class Db {
       .snapshots()
       .map(_sortedOrders);
 
-  /// Hamma buyurtmalar — faqat bosh admin (qoidalar trenerga bu so'rovni bermaydi)
+  /// Hamma buyurtmalar — bosh admin va barmen uchun
+  /// (qoidalar trenerga bu so'rovni bermaydi)
   static Stream<List<ShopOrder>> allOrders() =>
       _fs.collection('orders').snapshots().map(_sortedOrders);
 
@@ -402,6 +405,9 @@ class Db {
     await _fs.collection('orders').doc(o.id).update({
       'status': status,
       'updatedAt': FieldValue.serverTimestamp(),
+      // kim berdi — sotuv hisoboti shunga tayanadi
+      if (status == orderGiven) 'givenBy': byId,
+      if (status == orderGiven) 'givenAt': FieldValue.serverTimestamp(),
     });
     if (status == orderGiven && o.productId.isNotEmpty) {
       final ref = _fs.collection('shop').doc(o.productId);

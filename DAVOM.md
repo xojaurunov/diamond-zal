@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-09-18 (15:00)**
+> Oxirgi yangilanish: **2026-09-18 (19:00)**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,10 +11,10 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 15:00 holati)
+## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 19:00 holati)
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **71/71**, qoida testlari **127/127**.
+`flutter test` **85/85**, qoida testlari **138/138**.
 
 Oxirgi APK: **18-sentabr, 22,7 MB** — kod bilan mos (haftalik ratsion yo'q).
 Saytda ham, `public/app/kq.bin` da ham shu turibdi.
@@ -33,6 +33,7 @@ haftalik reja qoida o'zgarishini talab qilmadi.
 | Trener — Kotta Qani | `900000000` | `<trener-paroli>` | Kotta Qani zali |
 | Trener — Trener 1 | `900000001` | `<trener-paroli>` | Kotta Qani zali |
 | Trener — Trener 2 | `900000002` | `<trener-paroli>` | Kotta Qani zali |
+| **Barmen — Barmen** | `900000003` | `<barmen-paroli>` | Kotta Qani zali |
 
 Trener parollarini bosh admin `Xodimlar → Qo'shish → Yangi trener akkaunti` orqali
 o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
@@ -60,8 +61,12 @@ o'rnatib, Zal bo'limidan kunlarini tanlashgan.
 11. **Ilova brauzerda** (49-band): https://kotta-qani-09111753.web.app/ilova/ — iPhone va kompyuter.
 12. **Hujjatlar va maketlar** (48, 50-band): TZ (Word + web), 13 ta ekran maketi (SVG + PNG),
     Figma plagini.
-13. **Zallar (filiallar)** (53-band): bosh admin zal qo'shadi va nomlaydi, zalga trener
-    yollaydi (yangi akkaunt yaratadi), zal bo'yicha trener va shogirdlarni ajratib ko'radi.
+13. **Zallar (filiallar)** (53, 54-band): bosh admin zal qo'shadi — mamlakat → viloyat →
+    tuman → nom; zalga trener yollaydi, zal bo'yicha ajratib ko'radi.
+14. **"Eslatma" bo'limi** (55-band): pastki menyuda bildirishnomalar ro'yxati — telefonda
+    bildirishnoma o'chirilgan bo'lsa ham hamma narsa shu yerda turadi.
+15. **Barmen roli va sotuv hisoboti** (56-band): 4-rol — faqat do'kon; zal egasi
+    "kim nechta sotdi" hisobotini ko'radi.
 
 ### ⏳ Ertaga / ochiq
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
@@ -983,3 +988,34 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       qoida testlari **127/127**, Dart testlari **71/71**.
     - Brauzerda ko'rildi: viloyatlar ro'yxati, Toshkent shahri tumanlari (12 + Boshqa…).
       **"Kotta Qani zali" ning tumani hali tanlanmagan** — foydalanuvchidan so'raladi.
+55. **"Eslatma" bo'limi (18-sent)** — "notifikatsiyani pastki menyuga qo'sh, user o'chirib
+    qo'ygan bo'lsa ham ilovada ko'rinsin".
+    - `lib/models/feed.dart` — ro'yxat **saqlanmaydi**, bazadagi narsalardan yig'iladi:
+      chat xabarlari, biriktirilgan reja, vazn muddati, bugungi belgilanmagan mahallar,
+      buyurtmalar; trenerda — shogird xabarlari, yangi buyurtma, rejasiz shogird va zal
+      kunlarini tanlamaganlar. Shu sababli telefon sozlamasiga bog'liq emas.
+    - `lib/screens/notifications_screen.dart`: `FeedBuilder` (oqimlarni yig'adi),
+      `FeedBadge` (menyudagi qizil raqam), `NotificationsScreen` ("Amal kutilmoqda" + "Tarix").
+    - "Ko'rilgan" vaqti qurilmada saqlanadi (`AppSettings.feedSeen`) — bo'lim ochilganda
+      yangilanadi, yangilari "Yangi" yorlig'i bilan chiqadi.
+    - Menyu: shogirdda 7 ta, trenerda 6 ta bo'lim bo'lgani uchun yozuvlar faqat tanlanganida
+      ko'rinadi (`labelBehavior: onlyShowSelected`).
+    - Brauzerda ko'rildi: trenerda Shogird 3 va Shogird 1ning xabarlari ro'yxatda chiqdi.
+56. **Barmen roli va sotuv hisoboti (18-sent)** — "barmen degan rol qo'sh, u sotuvga javob
+    beradi; faqat zal egasiga hisob beradi — nechta nima sotdi".
+    - **4-rol: `barmen`.** Faqat do'kon: tovar qo'shadi, qoldiqni boshqaradi, buyurtmani
+      "Berildi" qiladi. Shogird, reja, chat va zal sozlamalariga kirmaydi.
+      Kirish `BarmenHome` (3 bo'lim: Do'kon · Hisobim · Eslatma).
+    - **Kim sotgani yoziladi:** buyurtmaga `givenBy` (uid) va `givenAt` qo'shildi —
+      "Berildi" bosilganda yoziladi. Qoidalar: boshqa odam nomidan yozib bo'lmaydi.
+    - **Sotuv hisoboti** (`sales_report_screen.dart`): davr (Bugun / 7 / 30 kun / Hammasi),
+      jami tushum, **kim sotdi** (xodim kesimida), **qaysi tovar** (dona va summa) va har bir
+      sotuv ro'yxati. Zal egasi Xodimlar bo'limidan ochadi; barmen "Hisobim" da faqat
+      o'zinikini ko'radi.
+    - **Qoidalar:** barmen `shop` ga yozadi, hamma `orders` ni o'qiydi va statusni o'zgartiradi;
+      `users`, `chats`, `plans`, `gyms` ga tegmaydi. Qoida testlariga 11 ta holat qo'shildi —
+      jami **138, 0 xato**. Dart testlari **85/85**.
+    - Brauzerda sinaldi: bosh admin "Yangi barmen akkaunti" orqali Barmenni yaratdi
+      (+998 90 000 00 03 / <barmen-paroli>) → barmen kirdi va faqat do'kon panelini ko'rdi.
+    - **Eslatma:** hozir barmen **hamma zal** buyurtmasini ko'radi (zal bittaligi uchun).
+      Filial ko'paysa, buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak.

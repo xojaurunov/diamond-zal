@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/db.dart';
 import '../../widgets/notification_sync.dart';
+import '../notifications_screen.dart';
 import 'today_screen.dart';
 import 'progress_screen.dart';
 import 'chat_screen.dart';
@@ -34,6 +35,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
             ProgressScreen(user: me),
             GymScreen(user: me),
             ShopScreen(user: me),
+            NotificationsScreen(user: me),
             ChatScreen(
               chatUid: me.id,
               myId: me.id,
@@ -46,15 +48,20 @@ class _UserHomeState extends ConsumerState<UserHome> {
         bottomNavigationBar: NavigationBar(
           selectedIndex: _tab,
           onDestinationSelected: (i) => setState(() => _tab = i),
-          // Faqat ingichka chiziqli ikonkalar — tanlangani rang bilan ajraladi,
-          // to'la ikonka ekranni vizual tomondan to'ldirib yuboradi.
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.today_outlined), label: 'Bugun'),
-            NavigationDestination(icon: Icon(Icons.insights_outlined), label: 'Progress'),
-            NavigationDestination(icon: Icon(Icons.fitness_center_outlined), label: 'Zal'),
-            NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
-            NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Trener'),
-            NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profil'),
+          // 7 ta bo'lim — yozuv faqat tanlanganida ko'rinadi, aks holda tiqilib ketadi
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          // Faqat ingichka chiziqli ikonkalar — tanlangani rang bilan ajraladi
+          destinations: [
+            const NavigationDestination(icon: Icon(Icons.today_outlined), label: 'Bugun'),
+            const NavigationDestination(icon: Icon(Icons.insights_outlined), label: 'Progress'),
+            const NavigationDestination(icon: Icon(Icons.fitness_center_outlined), label: 'Zal'),
+            const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
+            NavigationDestination(
+              icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
+              label: 'Eslatma',
+            ),
+            const NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Trener'),
+            const NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profil'),
           ],
         ),
       ),

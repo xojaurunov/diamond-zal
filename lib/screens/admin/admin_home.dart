@@ -6,6 +6,7 @@ import '../../widgets/change_password.dart';
 import '../../widgets/notification_sync.dart';
 import '../../widgets/settings_sheet.dart';
 import '../../widgets/ui.dart';
+import '../notifications_screen.dart';
 import 'clients_screen.dart';
 import 'gym_admin_screen.dart';
 import 'plans_screen.dart';
@@ -30,6 +31,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
     'Ovqatlanish rejalari',
     'Mahsulotlar bazasi',
     "Do'kon",
+    'Eslatmalar',
   ];
   static const _ownerTitles = [..._trainerTitles, 'Xodimlar va shogirdlar'];
 
@@ -98,6 +100,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
               const PlansScreen(),
               const FoodsScreen(),
               ShopAdminScreen(admin: me),
+              NotificationsScreen(user: me),
               if (me.isOwner) StaffScreen(owner: me),
             ],
           ),
@@ -106,6 +109,8 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
+        // bo'lim ko'p — yozuv faqat tanlanganida
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         // Faqat ingichka chiziqli ikonkalar (dizayn qoidasi)
         destinations: [
           const NavigationDestination(icon: Icon(Icons.people_outline), label: 'Mijozlar'),
@@ -113,6 +118,10 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
           const NavigationDestination(icon: Icon(Icons.menu_book_outlined), label: 'Rejalar'),
           const NavigationDestination(icon: Icon(Icons.egg_alt_outlined), label: 'Ovqat'),
           const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
+          NavigationDestination(
+            icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
+            label: 'Eslatma',
+          ),
           if (me.isOwner)
             const NavigationDestination(icon: Icon(Icons.badge_outlined), label: 'Xodimlar'),
         ],

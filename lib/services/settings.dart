@@ -23,6 +23,7 @@ class AppSettings {
       'system' => ThemeMode.system,
       _ => ThemeMode.dark,
     };
+    _loadFeedSeen();
   }
 
   static Future<void> setThemeMode(ThemeMode m) async {
@@ -39,5 +40,22 @@ class AppSettings {
   static Future<void> setNotif(String key, bool v) async {
     await _p?.setBool(key, v);
     notifChanged.value++;
+  }
+
+  // ---------- "Eslatma" bo'limi ----------
+  /// Bildirishnomalar oxirgi marta qachon ko'rilgan (yangi belgisini hisoblash uchun).
+  /// Hisobga emas, qurilmaga bog'langan.
+  static final feedSeen = ValueNotifier<DateTime?>(null);
+
+  static void _loadFeedSeen() {
+    final ms = _p?.getInt('feed_seen');
+    feedSeen.value = ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+  }
+
+  /// Bo'lim ochilganda chaqiriladi — shundan keyin eskilari "yangi" bo'lmaydi
+  static Future<void> markFeedSeen([DateTime? at]) async {
+    final t = at ?? DateTime.now();
+    feedSeen.value = t;
+    await _p?.setInt('feed_seen', t.millisecondsSinceEpoch);
   }
 }
