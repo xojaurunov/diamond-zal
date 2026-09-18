@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-09-17 (17:00)**
+> Oxirgi yangilanish: **2026-09-18 (10:00)**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,14 +11,14 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (17-sentabr, 17:00 holati)
+## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 10:00 holati)
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **66/66**, qoida testlari **111/111**.
 
-> ⚠️ **APK kod bilan mos emas.** Saytdagi APK — 17-sent 12:39 (haftalik ratsion bilan),
-> keyin haftalik ratsion **olib tashlandi** (51-band). Kodni chiqarish uchun APK qayta
-> yig'ilishi kerak: `flutter build apk --release --split-per-abi` → `public/app/kq.bin`.
+Oxirgi APK: **18-sentabr, 22,7 MB** — kod bilan mos (haftalik ratsion yo'q).
+Saytda ham, `public/app/kq.bin` da ham shu turibdi.
+**Loyiha endi git'da** (52-band) — kod o'chsa `git checkout` bilan qaytariladi.
 Qoidalar 16-sent do'kon bilan joylandi (`firebase deploy --only firestore:rules`) —
 haftalik reja qoida o'zgarishini talab qilmadi.
 
@@ -57,7 +57,6 @@ o'rnatib, Zal bo'limidan kunlarini tanlashgan.
     Figma plagini.
 
 ### ⏳ Ertaga / ochiq
-- **APK qayta yig'ilsin** — hozirgi kodda haftalik ratsion yo'q, saytdagi APK'da bor.
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
   A — suv belgisi (shogird ismi rejada xira turadi, tavsiya qilingan);
   B — `FLAG_SECURE` bilan skrinshotni bloklash (web'da ishlamaydi, ikkinchi telefon kamerasini
@@ -922,3 +921,18 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       hech qayerga yuborilmaydi). Buni bir marta sozlash 5 daqiqa.
     - Yakuniy tekshiruv: `analyze` 0 xato, `flutter test` **66/66**.
     - **APK yig'ilmadi** — foydalanuvchi "to'xta" dedi, skrinshot savoli bilan (yuqoridagi qaror).
+52. **Kunlik ish (18-sent ertalab)** — "qilinishi kerak bo'lgan ishlarni boshla".
+    - **APK qayta yig'ildi**: 22,7 MB (ratsion rasmlari olib tashlangani uchun 24,4 dan tushdi),
+      `public/app/kq.bin` va `kq-eski.bin` yangilandi, saytga joylandi.
+    - **Web versiya qayta yig'ildi** va `public/ilova/` ga qo'yildi (`<base href>` qo'lda `/ilova/`).
+      Tekshirildi: sayt 200, ilova 200, APK Content-Length 23 835 303,
+      `main.dart.js` da "1 haftalik ratsion" yo'q — ya'ni chiqarilgan versiya kod bilan mos.
+    - **Bazadagi "Ozish • 1 haftalik ratsion" rejasi o'chirildi** (avval unga biriktirilgan
+      shogird yo'qligi tekshirildi). Qolgan rejalar: Massa nabor 2-versiya, Ozish 80-90,
+      Ozish 60/65/75.
+    - **`git init` qilindi** — 233 fayl, birinchi commit. `.gitignore` yozildi:
+      `build/`, `.dart_tool/`, `node_modules/`, `public/ilova/`, `public/app/*.bin` kirmaydi;
+      **`android/diamond-release.jks` va `key.properties` ataylab saqlanadi** (imzo kaliti
+      yo'qolsa hamma mijoz ilovani qayta o'rnatishga majbur bo'ladi).
+      Repo faqat shu kompyuterda — hech qayerga yuborilmagan (remote yo'q).
+      Kundalik ish: `git add -A` → `git commit -m "nima qilindi"`.
