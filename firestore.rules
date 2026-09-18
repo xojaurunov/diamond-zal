@@ -132,12 +132,19 @@ service cloud.firestore {
     match /gyms/{id} {
       allow read: if signedIn();
       allow write: if isOwner()
-        && request.resource.data.keys().hasOnly(['name', 'address'])
+        && request.resource.data.keys()
+             .hasOnly(['name', 'address', 'country', 'region', 'district'])
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 60
         && request.resource.data.get('address', '') is string
-        && request.resource.data.get('address', '').size() <= 200;
+        && request.resource.data.get('address', '').size() <= 200
+        && request.resource.data.get('country', '') is string
+        && request.resource.data.get('country', '').size() <= 60
+        && request.resource.data.get('region', '') is string
+        && request.resource.data.get('region', '').size() <= 60
+        && request.resource.data.get('district', '') is string
+        && request.resource.data.get('district', '').size() <= 60;
       allow delete: if isOwner();
     }
 

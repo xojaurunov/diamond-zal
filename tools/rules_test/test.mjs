@@ -355,6 +355,13 @@ console.log('\n== ZALLAR ==');
 await check('bosh admin zal qoshadi', () =>
   assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'),
     { name: 'Diamond Chilonzor', address: 'Bunyodkor 12' })));
+await check('zal joyi bilan saqlanadi (mamlakat/viloyat/tuman)', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'), {
+    name: 'Kotta Qani zali', address: 'Bunyodkor 12',
+    country: 'Ozbekiston', region: 'Toshkent shahri', district: 'Chilonzor' })));
+await check('notanish maydonli zal OTMAYDI', () =>
+  assertFails(setDoc(doc(as(OWNER), 'gyms', 'zal1b'), {
+    name: 'X', country: 'Ozbekiston', kenglik: 41.3 })));
 await check('bosh admin zal nomini ozgartiradi', () =>
   assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'),
     { name: 'Diamond Chilonzor 2', address: '' })));

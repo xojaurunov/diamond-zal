@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-09-18 (13:00)**
+> Oxirgi yangilanish: **2026-09-18 (15:00)**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,10 +11,10 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 13:00 holati)
+## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 15:00 holati)
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **69/69**, qoida testlari **125/125**.
+`flutter test` **71/71**, qoida testlari **127/127**.
 
 Oxirgi APK: **18-sentabr, 22,7 MB** — kod bilan mos (haftalik ratsion yo'q).
 Saytda ham, `public/app/kq.bin` da ham shu turibdi.
@@ -970,3 +970,16 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       buzilmadi, ekranda telefon va parol ko'rsatildi) → mavjud trener "Kotta Qani" ham shu
       zalga biriktirildi → Trener 1 o'z telefon-paroli bilan kirdi va trener panelini ko'rdi.
     - Testlar: `analyze` 0 xato, `flutter test` **69/69**.
+54. **Zal joyi: mamlakat → viloyat → tuman (18-sent)** — "zal tanlashdan oldin O'zbekistonmi
+    tanlaydi, qaysi shahar, qaysi rayon — keyin nomlaydi".
+    - `lib/models/hudud.dart`: 14 viloyat/shahar va ularning tumanlari (Toshkent shahri —
+      12 tuman). Har viloyat oxirida **"Boshqa…"** varianti bor: ro'yxatda yo'q tumanni
+      qo'lda yozish mumkin (ro'yxat to'liq bo'lmasligi mumkin).
+    - `Gym` ga `country`, `region`, `district` qo'shildi; `place` ("Chilonzor, Toshkent shahri")
+      va `fullAddress` (joy + ko'cha) getterlari.
+    - Zal varag'i ketma-ket: Mamlakat → Viloyat/shahar → Tuman (viloyat tanlanmaguncha
+      o'chiq turadi) → Zal nomi → Ko'cha (ixtiyoriy).
+    - Qoidalarga yangi maydonlar qo'shildi (har biri ≤60 belgi, notanish maydon o'tmaydi);
+      qoida testlari **127/127**, Dart testlari **71/71**.
+    - Brauzerda ko'rildi: viloyatlar ro'yxati, Toshkent shahri tumanlari (12 + Boshqa…).
+      **"Kotta Qani zali" ning tumani hali tanlanmagan** — foydalanuvchidan so'raladi.

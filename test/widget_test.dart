@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
+import 'package:kotta_qani_diet/models/hudud.dart';
 import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/shop.dart';
 import 'package:kotta_qani_diet/models/stats.dart';
@@ -646,9 +647,32 @@ void main() {
   });
 
   group('Zallar', () {
-    test('zal nomi va manzili saqlanadi', () {
-      const g = Gym(name: 'Diamond — Chilonzor', address: 'Bunyodkor 12');
-      expect(g.toMap(), {'name': 'Diamond — Chilonzor', 'address': 'Bunyodkor 12'});
+    test('zal nomi, joyi va manzili saqlanadi', () {
+      const g = Gym(
+        name: 'Kotta Qani zali',
+        country: "O'zbekiston",
+        region: 'Toshkent shahri',
+        district: 'Chilonzor',
+        address: 'Bunyodkor 12',
+      );
+      expect(g.place, 'Chilonzor, Toshkent shahri');
+      expect(g.fullAddress, 'Chilonzor, Toshkent shahri · Bunyodkor 12');
+      expect(g.toMap()['district'], 'Chilonzor');
+    });
+
+    test('joyi tanlanmagan zal ham ishlaydi', () {
+      const g = Gym(name: 'Zal');
+      expect(g.place, '');
+      expect(g.fullAddress, '');
+    });
+
+    test('hududlar: viloyatlar va Toshkent tumanlari', () {
+      expect(regionNames, contains('Toshkent shahri'));
+      expect(regionNames.length, greaterThanOrEqualTo(14));
+      expect(districtsOf('Toshkent shahri'), contains('Chilonzor'));
+      // har viloyat oxirida qo-lda yozish varianti turadi
+      expect(districtsOf('Toshkent shahri').last, otherOption);
+      expect(districtsOf('Yo-q viloyat'), [otherOption]);
     });
 
     test('shogird profilni saqlaganda zal o-zgarmaydi (gymId toMap da yo-q)', () {

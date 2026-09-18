@@ -209,21 +209,49 @@ class Gym {
   final String id;
   final String name;
 
-  /// Manzil yoki qisqa izoh (ixtiyoriy)
+  /// Joylashuvi: mamlakat → viloyat → tuman (bosh admin tanlaydi)
+  final String country;
+  final String region;
+  final String district;
+
+  /// Ko'cha va uy raqami (ixtiyoriy)
   final String address;
 
-  const Gym({this.id = '', required this.name, this.address = ''});
+  const Gym({
+    this.id = '',
+    required this.name,
+    this.country = '',
+    this.region = '',
+    this.district = '',
+    this.address = '',
+  });
+
+  /// Ro'yxatda ko'rsatish uchun: "Chilonzor, Toshkent shahri"
+  String get place => [district, region].where((e) => e.isNotEmpty).join(', ');
+
+  /// To'liq manzil: "Chilonzor, Toshkent shahri · Bunyodkor 12"
+  String get fullAddress =>
+      [place, address].where((e) => e.isNotEmpty).join(' · ');
 
   factory Gym.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
     return Gym(
       id: doc.id,
       name: (d['name'] ?? '') as String,
+      country: (d['country'] ?? '') as String,
+      region: (d['region'] ?? '') as String,
+      district: (d['district'] ?? '') as String,
       address: (d['address'] ?? '') as String,
     );
   }
 
-  Map<String, dynamic> toMap() => {'name': name, 'address': address};
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'country': country,
+        'region': region,
+        'district': district,
+        'address': address,
+      };
 }
 
 /// Trenerlar katalogi (`trainers/{uid}`) — shogird anketada trenerini shundan tanlaydi.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/hudud.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -111,9 +112,9 @@ class _StaffScreenState extends State<StaffScreen> {
                       Row(children: [
                         Expanded(
                           child: Text(
-                            gyms.firstWhere((g) => g.id == gymId).address.isEmpty
+                            gyms.firstWhere((g) => g.id == gymId).fullAddress.isEmpty
                                 ? 'Manzil kiritilmagan'
-                                : gyms.firstWhere((g) => g.id == gymId).address,
+                                : gyms.firstWhere((g) => g.id == gymId).fullAddress,
                             style: TextStyle(color: AppColors.textFaint, fontSize: 12.5),
                           ),
                         ),
@@ -309,55 +310,154 @@ class _StaffScreenState extends State<StaffScreen> {
   Future<void> _gymSheet({Gym? gym}) async {
     final name = TextEditingController(text: gym?.name);
     final address = TextEditingController(text: gym?.address);
+    // ro'yxatda yo'q tuman qo'lda yozilgan bo'lsa — shu maydonda turadi
+    final otherDistrict = TextEditingController();
+
+    var country = gym?.country.isNotEmpty == true ? gym!.country : countries.first;
+    var region = regionNames.contains(gym?.region) ? gym!.region : null;
+    String? district;
+    if (region != null && gym!.district.isNotEmpty) {
+      if (districtsOf(region).contains(gym.district)) {
+        district = gym.district;
+      } else {
+        district = otherOption;
+        otherDistrict.text = gym.district;
+      }
+    }
+
     final saved = await showSheet<bool>(
       context,
-      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: AppSpace.md),
-            Text(gym == null ? 'Yangi zal' : 'Zalni tahrirlash',
-                style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: AppSpace.lg),
-            TextField(
-              controller: name,
-              autofocus: gym == null,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: const InputDecoration(labelText: 'Zal nomi', hintText: 'Diamond — Chilonzor'),
-            ),
-            const SizedBox(height: AppSpace.md),
-            TextField(
-              controller: address,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: const InputDecoration(
-                labelText: 'Manzil (ixtiyoriy)',
-                hintText: 'Bunyodkor ko\'chasi, 12',
-              ),
-            ),
-            const SizedBox(height: AppSpace.lg),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Saqlash'),
-            ),
-            if (gym != null) ...[
-              const SizedBox(height: AppSpace.sm),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
-                onPressed: () => Navigator.pop(context, false),
-                icon: const Icon(Icons.delete_outline, size: 18),
-                label: const Text('Zalni o\'chirish'),
-              ),
-            ],
-          ]),
+      StatefulBuilder(
+        builder: (ctx, setS) => SingleChildScrollView(
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: AppSpace.md),
+                Text(gym == null ? 'Yangi zal' : 'Zalni tahrirlash',
+                    style: Theme.of(ctx).textTheme.titleLarge),
+                const SizedBox(height: AppSpace.xs),
+                Text('Avval joyini tanlang, keyin nom bering',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
+                const SizedBox(height: AppSpace.lg),
+
+                // 1 — mamlakat
+                DropdownButtonFormField<String>(
+                  initialValue: country,
+                  isExpanded: true,
+                  decoration: const InputDecoration(labelText: 'Mamlakat'),
+                  items: [
+                    for (final c in countries) DropdownMenuItem(value: c, child: Text(c)),
+                  ],
+                  onChanged: (v) => setS(() => country = v ?? countries.first),
+                ),
+                const SizedBox(height: AppSpace.md),
+
+                // 2 — viloyat
+                DropdownButtonFormField<String>(
+                  initialValue: region,
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Viloyat / shahar',
+                    hintText: 'Tanlang',
+                  ),
+                  items: [
+                    for (final r in regionNames) DropdownMenuItem(value: r, child: Text(r)),
+                  ],
+                  onChanged: (v) => setS(() {
+                    region = v;
+                    district = null;
+                    otherDistrict.clear();
+                  }),
+                ),
+                const SizedBox(height: AppSpace.md),
+
+                // 3 — tuman
+                DropdownButtonFormField<String>(
+                  initialValue: district,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Tuman',
+                    hintText: region == null ? 'Avval viloyatni tanlang' : 'Tanlang',
+                  ),
+                  items: region == null
+                      ? const []
+                      : [
+                          for (final d in districtsOf(region!))
+                            DropdownMenuItem(value: d, child: Text(d)),
+                        ],
+                  onChanged:
+                      region == null ? null : (v) => setS(() => district = v),
+                ),
+                if (district == otherOption) ...[
+                  const SizedBox(height: AppSpace.md),
+                  TextField(
+                    controller: otherDistrict,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Tuman nomi',
+                      hintText: "Ro'yxatda yo'q bo'lsa — o'zingiz yozing",
+                    ),
+                  ),
+                ],
+                const SizedBox(height: AppSpace.md),
+
+                // 4 — nomi va ko'chasi
+                TextField(
+                  controller: name,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    labelText: 'Zal nomi',
+                    hintText: 'Kotta Qani zali',
+                  ),
+                ),
+                const SizedBox(height: AppSpace.md),
+                TextField(
+                  controller: address,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    labelText: "Ko'cha, uy (ixtiyoriy)",
+                    hintText: 'Bunyodkor 12',
+                  ),
+                ),
+                const SizedBox(height: AppSpace.lg),
+                FilledButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: const Text('Saqlash'),
+                ),
+                if (gym != null) ...[
+                  const SizedBox(height: AppSpace.sm),
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
+                    onPressed: () => Navigator.pop(ctx, false),
+                    icon: const Icon(Icons.delete_outline, size: 18),
+                    label: const Text("Zalni o'chirish"),
+                  ),
+                ],
+                const SizedBox(height: AppSpace.sm),
+              ]),
+        ),
+      ),
     );
     if (!mounted) return;
 
     if (saved == true) {
-      if (name.text.trim().isEmpty) return;
-      final id = await Db.saveGym(
-        Gym(id: gym?.id ?? '', name: name.text.trim(), address: address.text.trim()),
-      );
+      if (name.text.trim().isEmpty) {
+        showSnack(context, 'Zal nomini kiriting');
+        return;
+      }
+      final d = district == otherOption ? otherDistrict.text.trim() : (district ?? '');
+      final id = await Db.saveGym(Gym(
+        id: gym?.id ?? '',
+        name: name.text.trim(),
+        country: country,
+        region: region ?? '',
+        district: d,
+        address: address.text.trim(),
+      ));
       if (mounted) {
         setState(() => _gymId = id);
-        showSnack(context, gym == null ? 'Zal qo\'shildi' : 'Saqlandi');
+        showSnack(context, gym == null ? "Zal qo'shildi" : 'Saqlandi');
       }
       return;
     }
@@ -365,17 +465,17 @@ class _StaffScreenState extends State<StaffScreen> {
     if (saved == false && gym != null) {
       final ok = await confirm(
         context,
-        title: 'Zal o\'chirilsinmi?',
+        title: "Zal o'chirilsinmi?",
         message: '"${gym.name}" o\'chiriladi. Undagi trenerlar zalsiz qoladi — '
-            'ularni boshqa zalga biriktirasiz. Shogirdlarga ta\'sir qilmaydi.',
-        ok: 'O\'chirish',
+            "ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.",
+        ok: "O'chirish",
         destructive: true,
       );
       if (!ok || !mounted) return;
       await Db.deleteGym(gym.id);
       if (mounted) {
         setState(() => _gymId = null);
-        showSnack(context, 'Zal o\'chirildi');
+        showSnack(context, "Zal o'chirildi");
       }
     }
   }
