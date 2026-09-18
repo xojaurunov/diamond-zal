@@ -32,6 +32,10 @@ class AppUser {
   /// Shogird qaysi trenerga biriktirilgan (null — hali biriktirilmagan)
   final String? trainerId;
 
+  /// Trener qaysi zalga tegishli (`gyms/{id}`). Faqat bosh admin yozadi —
+  /// shuning uchun toMap() ga kirmaydi (shogird o'z profilini saqlaganda tegmasin).
+  final String? gymId;
+
   /// Zal kunlari (DateTime.weekday, aynan 3 ta) — shogird o'zi tanlaydi. toMap() ga kirmaydi.
   final List<int> gymDays;
 
@@ -54,6 +58,7 @@ class AppUser {
     this.planId,
     this.planAssignedAt,
     this.trainerId,
+    this.gymId,
     this.gymDays = const [],
     this.homeWorkoutDate,
   });
@@ -151,6 +156,7 @@ class AppUser {
         planId: planId ?? this.planId,
         planAssignedAt: planAssignedAt,
         trainerId: trainerId ?? this.trainerId,
+        gymId: gymId,
         gymDays: gymDays,
         homeWorkoutDate: homeWorkoutDate,
       );
@@ -173,6 +179,7 @@ class AppUser {
       planId: d['planId'],
       planAssignedAt: (d['planAssignedAt'] as Timestamp?)?.toDate(),
       trainerId: d['trainerId'],
+      gymId: d['gymId'],
       gymDays: ((d['gymDays'] ?? []) as List).map((e) => (e as num).toInt()).toList(),
       homeWorkoutDate: d['homeWorkoutDate'] as String?,
     );
@@ -193,6 +200,30 @@ class AppUser {
         'planId': planId,
         'trainerId': trainerId,
       };
+}
+
+/// `gyms/{id}` — zal (filial). Faqat bosh admin qo'shadi va o'chiradi.
+/// Har trener bitta zalga tegishli (`AppUser.gymId`); shogird esa o'z treneri orqali
+/// shu zalga kiradi — shuning uchun shogirdda alohida maydon yo'q.
+class Gym {
+  final String id;
+  final String name;
+
+  /// Manzil yoki qisqa izoh (ixtiyoriy)
+  final String address;
+
+  const Gym({this.id = '', required this.name, this.address = ''});
+
+  factory Gym.fromDoc(DocumentSnapshot doc) {
+    final d = doc.data() as Map<String, dynamic>? ?? {};
+    return Gym(
+      id: doc.id,
+      name: (d['name'] ?? '') as String,
+      address: (d['address'] ?? '') as String,
+    );
+  }
+
+  Map<String, dynamic> toMap() => {'name': name, 'address': address};
 }
 
 /// Trenerlar katalogi (`trainers/{uid}`) — shogird anketada trenerini shundan tanlaydi.

@@ -7,162 +7,581 @@ import 'clients_screen.dart';
 import 'trainer_stats_screen.dart';
 
 /// "Xodimlar" — faqat bosh admin (zal egasi) uchun.
-/// Trener tayinlaydi, har trenerning shogirdlarini ko'radi, akkaunt o'chiradi.
-class StaffScreen extends StatelessWidget {
+/// Zal qo'shadi, zalga trener biriktiradi, har trenerning shogirdlarini ko'radi.
+class StaffScreen extends StatefulWidget {
   final AppUser owner;
   const StaffScreen({super.key, required this.owner});
 
   @override
+  State<StaffScreen> createState() => _StaffScreenState();
+}
+
+class _StaffScreenState extends State<StaffScreen> {
+  /// Tanlangan zal; null — hamma zallar
+  String? _gymId;
+
+  AppUser get owner => widget.owner;
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<AppUser>>(
-      stream: Db.staff(),
-      builder: (context, staffSnap) {
+    return StreamBuilder<List<Gym>>(
+      stream: Db.gyms(),
+      builder: (context, gymSnap) {
+        final gyms = gymSnap.data ?? const <Gym>[];
+        // o'chirilgan zal tanlab qolgan bo'lsa — "Hammasi" ga qaytamiz
+        final gymId = gyms.any((g) => g.id == _gymId) ? _gymId : null;
+
         return StreamBuilder<List<AppUser>>(
-          stream: Db.clients(),
-          builder: (context, clientSnap) {
-            if (!staffSnap.hasData || !clientSnap.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final staff = [...staffSnap.data!]..sort((a, b) {
-                // bosh admin doim birinchi, keyin ism bo'yicha
-                if (a.isOwner != b.isOwner) return a.isOwner ? -1 : 1;
-                return a.name.compareTo(b.name);
-              });
-            final clients = clientSnap.data!;
-            final trainers = staff.where((u) => u.isTrainer).length;
-            final free = clients.where((c) => c.trainerId == null).length;
+          stream: Db.staff(),
+          builder: (context, staffSnap) {
+            return StreamBuilder<List<AppUser>>(
+              stream: Db.clients(),
+              builder: (context, clientSnap) {
+                if (!staffSnap.hasData || !clientSnap.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final allStaff = [...staffSnap.data!]..sort((a, b) => a.name.compareTo(b.name));
+                final clients = clientSnap.data!;
 
-            int countFor(String uid) => clients.where((c) => c.trainerId == uid).length;
+                final owners = allStaff.where((u) => u.isOwner).toList();
+                final allTrainers = allStaff.where((u) => u.isTrainer).toList();
+                final trainers =
+                    allTrainers.where((t) => gymId == null || t.gymId == gymId).toList();
+                final noGym = allTrainers.where((t) => t.gymId == null).toList();
 
-            return ListView(
-              padding:
-                  const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
-              children: [
-                FadeInUp(
-                  child: Row(children: [
-                    Expanded(
-                      child: StatTile(
-                        icon: Icons.badge_outlined,
-                        label: 'Trener',
-                        value: '$trainers',
-                        color: AppColors.accent,
+                final ids = trainers.map((t) => t.id).toSet();
+                final gymClients = gymId == null
+                    ? clients
+                    : clients.where((c) => ids.contains(c.trainerId)).toList();
+                final free = clients.where((c) => c.trainerId == null).toList();
+
+                int countFor(String uid) => clients.where((c) => c.trainerId == uid).length;
+                String gymName(String? id) =>
+                    gyms.where((g) => g.id == id).map((g) => g.name).firstOrNull ?? 'Zalsiz';
+
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(
+                      AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
+                  children: [
+                    // ---------- zallar ----------
+                    SectionHeader(
+                      gyms.isEmpty || gymId == null ? 'Zallar' : gymName(gymId),
+                      eyebrow: 'Zal tanlang',
+                      trailing: TextButton.icon(
+                        onPressed: () => _gymSheet(),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('Zal'),
                       ),
                     ),
-                    const SizedBox(width: AppSpace.md),
-                    Expanded(
-                      child: StatTile(
-                        icon: Icons.groups_outlined,
-                        label: 'Shogird',
-                        value: '${clients.length}',
-                        color: AppColors.water,
+                    if (gyms.isEmpty)
+                      BentoTile(
+                        padding: const EdgeInsets.all(AppSpace.lg),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text('Hali zal qo\'shilmagan',
+                              style: Theme.of(context).textTheme.titleMedium),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Zal qo\'shsangiz, har trenerni o\'z zaliga biriktirasiz va '
+                            'zal bo\'yicha ajratib ko\'rasiz.',
+                            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+                          ),
+                        ]),
+                      )
+                    else
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          _GymChip(
+                            label: 'Hammasi',
+                            selected: gymId == null,
+                            onTap: () => setState(() => _gymId = null),
+                          ),
+                          for (final g in gyms)
+                            _GymChip(
+                              label: g.name,
+                              count: allTrainers.where((t) => t.gymId == g.id).length,
+                              selected: gymId == g.id,
+                              onTap: () => setState(() => _gymId = g.id),
+                              onLongPress: () => _gymSheet(gym: g),
+                            ),
+                        ]),
                       ),
-                    ),
-                    const SizedBox(width: AppSpace.md),
-                    Expanded(
-                      child: StatTile(
-                        icon: Icons.person_off_outlined,
-                        label: 'Biriktirilmagan',
-                        value: '$free',
-                        color: free > 0 ? AppColors.warning : AppColors.textMuted,
+                    if (gymId != null) ...[
+                      const SizedBox(height: AppSpace.sm),
+                      Row(children: [
+                        Expanded(
+                          child: Text(
+                            gyms.firstWhere((g) => g.id == gymId).address.isEmpty
+                                ? 'Manzil kiritilmagan'
+                                : gyms.firstWhere((g) => g.id == gymId).address,
+                            style: TextStyle(color: AppColors.textFaint, fontSize: 12.5),
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () =>
+                              _gymSheet(gym: gyms.firstWhere((g) => g.id == gymId)),
+                          icon: const Icon(Icons.edit_outlined, size: 16),
+                          label: const Text('Tahrirlash'),
+                        ),
+                      ]),
+                    ],
+                    const SizedBox(height: AppSpace.lg),
+
+                    // ---------- ko'rsatkichlar ----------
+                    Row(children: [
+                      Expanded(
+                        child: StatTile(
+                          icon: Icons.badge_outlined,
+                          label: 'Trener',
+                          value: '${trainers.length}',
+                          color: AppColors.accent,
+                        ),
                       ),
-                    ),
-                  ]),
-                ),
-                const SizedBox(height: AppSpace.md),
-                FadeInUp(
-                  index: 1,
-                  child: BentoTile(
-                    feature: true,
-                    padding: const EdgeInsets.all(AppSpace.md),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => TrainerStatsScreen(owner: owner)),
-                    ),
-                    child: Row(children: [
-                      IconBadge(Icons.leaderboard_outlined, color: AppColors.accent, size: 38),
                       const SizedBox(width: AppSpace.md),
                       Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('Trenerlar reytingi',
-                              style: Theme.of(context).textTheme.titleMedium),
-                          const SizedBox(height: 2),
-                          Text(
-                            "Solishtirish, ball va kimga e'tibor kerak",
-                            style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
+                        child: StatTile(
+                          icon: Icons.groups_outlined,
+                          label: 'Shogird',
+                          value: '${gymClients.length}',
+                          color: AppColors.water,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpace.md),
+                      Expanded(
+                        child: StatTile(
+                          icon: Icons.person_off_outlined,
+                          label: 'Biriktirilmagan',
+                          value: '${free.length}',
+                          color: free.isEmpty ? AppColors.textMuted : AppColors.warning,
+                        ),
+                      ),
+                    ]),
+                    const SizedBox(height: AppSpace.md),
+                    BentoTile(
+                      feature: true,
+                      padding: const EdgeInsets.all(AppSpace.md),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => TrainerStatsScreen(owner: owner)),
+                      ),
+                      child: Row(children: [
+                        IconBadge(Icons.leaderboard_outlined, color: AppColors.accent, size: 38),
+                        const SizedBox(width: AppSpace.md),
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text('Trenerlar reytingi',
+                                style: Theme.of(context).textTheme.titleMedium),
+                            const SizedBox(height: 2),
+                            Text(
+                              "Solishtirish, ball va kimga e'tibor kerak",
+                              style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
+                            ),
+                          ]),
+                        ),
+                        Icon(Icons.chevron_right, size: 20, color: AppColors.textFaint),
+                      ]),
+                    ),
+                    const SizedBox(height: AppSpace.xl),
+
+                    // ---------- trenerlar ----------
+                    SectionHeader(
+                      'Trenerlar',
+                      eyebrow: gymId == null ? 'Hamma zallar' : gymName(gymId),
+                      trailing: TextButton.icon(
+                        onPressed: () => _addTrainerMenu(gyms, gymId, clients),
+                        icon: const Icon(Icons.person_add_alt, size: 18),
+                        label: const Text('Qo\'shish'),
+                      ),
+                    ),
+                    if (trainers.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpace.sm, left: 4),
+                        child: Text(
+                          gymId == null
+                              ? 'Hali trener yo\'q'
+                              : 'Bu zalda trener yo\'q — qo\'shing yoki boshqa zaldan ko\'chiring',
+                          style: TextStyle(color: AppColors.textMuted),
+                        ),
+                      ),
+                    for (final t in trainers)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                        child: _StaffTile(
+                          person: t,
+                          clientCount: countFor(t.id),
+                          subtitle: gymId == null ? gymName(t.gymId) : null,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => TrainerDetail(trainer: t, owner: owner),
+                            ),
+                          ),
+                          onActions: () => _staffActions(
+                            context,
+                            t,
+                            countFor(t.id),
+                            ownerCount: owners.length,
+                            gyms: gyms,
+                          ),
+                        ),
+                      ),
+
+                    // ---------- zalsiz trenerlar ----------
+                    if (gymId == null && noGym.isNotEmpty && gyms.isNotEmpty) ...[
+                      const SizedBox(height: AppSpace.sm),
+                      BentoTile(
+                        padding: const EdgeInsets.all(AppSpace.md),
+                        child: Row(children: [
+                          Icon(Icons.info_outline, size: 18, color: AppColors.warning),
+                          const SizedBox(width: AppSpace.sm),
+                          Expanded(
+                            child: Text(
+                              '${noGym.length} ta trener zalga biriktirilmagan — '
+                              'ustiga bosib "Zalga biriktirish" ni tanlang.',
+                              style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
+                            ),
                           ),
                         ]),
                       ),
-                      Icon(Icons.chevron_right, size: 20, color: AppColors.textFaint),
-                    ]),
-                  ),
-                ),
-                const SizedBox(height: AppSpace.xl),
-                SectionHeader(
-                  'Xodimlar',
-                  eyebrow: 'Zal jamoasi',
-                  trailing: TextButton.icon(
-                    onPressed: () => _promoteSheet(context, clients),
-                    icon: const Icon(Icons.person_add_alt, size: 18),
-                    label: const Text('Trener tayinlash'),
-                  ),
-                ),
-                for (var i = 0; i < staff.length; i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpace.sm),
-                    child: FadeInUp(
-                      index: 1 + i,
-                      child: _StaffTile(
-                        person: staff[i],
-                        clientCount: countFor(staff[i].id),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => TrainerDetail(
-                              trainer: staff[i],
-                              owner: owner,
+                    ],
+
+                    // ---------- bosh adminlar ----------
+                    const SizedBox(height: AppSpace.xl),
+                    const SectionHeader('Bosh adminlar', eyebrow: 'Zal egasi'),
+                    for (final o in owners)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                        child: _StaffTile(
+                          person: o,
+                          clientCount: countFor(o.id),
+                          subtitle: o.id == owner.id ? 'Siz' : null,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => TrainerDetail(trainer: o, owner: owner),
+                            ),
+                          ),
+                          onActions: o.id == owner.id
+                              ? null
+                              : () => _staffActions(
+                                    context,
+                                    o,
+                                    countFor(o.id),
+                                    ownerCount: owners.length,
+                                    gyms: gyms,
+                                  ),
+                        ),
+                      ),
+
+                    // ---------- trenersiz shogirdlar ----------
+                    if (free.isNotEmpty) ...[
+                      const SizedBox(height: AppSpace.xl),
+                      SectionHeader(
+                        'Trenersiz shogirdlar',
+                        eyebrow: 'Biriktirish kerak',
+                        trailing: Pill(text: '${free.length}', color: AppColors.warning),
+                      ),
+                      for (final c in free)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                          child: _ClientRow(
+                            client: c,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ClientDetail(client: c, admin: owner),
+                              ),
                             ),
                           ),
                         ),
-                        // O'zini o'zgartirib bo'lmaydi; boshqa bosh adminni
-                        // faqat bosh adminlikdan olish mumkin
-                        onActions: staff[i].id == owner.id
-                            ? null
-                            : () => _staffActions(
-                                  context,
-                                  staff[i],
-                                  countFor(staff[i].id),
-                                  ownerCount: staff.where((u) => u.isOwner).length,
-                                ),
-                      ),
-                    ),
-                  ),
-                if (free > 0) ...[
-                  const SizedBox(height: AppSpace.xl),
-                  SectionHeader(
-                    'Trenersiz shogirdlar',
-                    eyebrow: 'Biriktirish kerak',
-                    trailing: Pill(text: '$free', color: AppColors.warning),
-                  ),
-                  for (final c in clients.where((c) => c.trainerId == null))
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpace.sm),
-                      child: _ClientRow(
-                        client: c,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ClientDetail(client: c, admin: owner),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ],
+                    ],
+                  ],
+                );
+              },
             );
           },
         );
       },
     );
+  }
+
+  // ---------------- zal qo'shish / tahrirlash ----------------
+  Future<void> _gymSheet({Gym? gym}) async {
+    final name = TextEditingController(text: gym?.name);
+    final address = TextEditingController(text: gym?.address);
+    final saved = await showSheet<bool>(
+      context,
+      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpace.md),
+            Text(gym == null ? 'Yangi zal' : 'Zalni tahrirlash',
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: AppSpace.lg),
+            TextField(
+              controller: name,
+              autofocus: gym == null,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: const InputDecoration(labelText: 'Zal nomi', hintText: 'Diamond — Chilonzor'),
+            ),
+            const SizedBox(height: AppSpace.md),
+            TextField(
+              controller: address,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: const InputDecoration(
+                labelText: 'Manzil (ixtiyoriy)',
+                hintText: 'Bunyodkor ko\'chasi, 12',
+              ),
+            ),
+            const SizedBox(height: AppSpace.lg),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Saqlash'),
+            ),
+            if (gym != null) ...[
+              const SizedBox(height: AppSpace.sm),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
+                onPressed: () => Navigator.pop(context, false),
+                icon: const Icon(Icons.delete_outline, size: 18),
+                label: const Text('Zalni o\'chirish'),
+              ),
+            ],
+          ]),
+    );
+    if (!mounted) return;
+
+    if (saved == true) {
+      if (name.text.trim().isEmpty) return;
+      final id = await Db.saveGym(
+        Gym(id: gym?.id ?? '', name: name.text.trim(), address: address.text.trim()),
+      );
+      if (mounted) {
+        setState(() => _gymId = id);
+        showSnack(context, gym == null ? 'Zal qo\'shildi' : 'Saqlandi');
+      }
+      return;
+    }
+
+    if (saved == false && gym != null) {
+      final ok = await confirm(
+        context,
+        title: 'Zal o\'chirilsinmi?',
+        message: '"${gym.name}" o\'chiriladi. Undagi trenerlar zalsiz qoladi — '
+            'ularni boshqa zalga biriktirasiz. Shogirdlarga ta\'sir qilmaydi.',
+        ok: 'O\'chirish',
+        destructive: true,
+      );
+      if (!ok || !mounted) return;
+      await Db.deleteGym(gym.id);
+      if (mounted) {
+        setState(() => _gymId = null);
+        showSnack(context, 'Zal o\'chirildi');
+      }
+    }
+  }
+
+  // ---------------- trener qo'shish ----------------
+  Future<void> _addTrainerMenu(List<Gym> gyms, String? gymId, List<AppUser> clients) async {
+    final choice = await showSheet<String>(
+      context,
+      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpace.md),
+            Text('Trener qo\'shish', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: AppSpace.sm),
+            Text(
+              'Yangi akkaunt yaratasizmi yoki ro\'yxatdan o\'tgan odamni trener qilasizmi?',
+              style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+            ),
+            const SizedBox(height: AppSpace.lg),
+            FilledButton.icon(
+              onPressed: () => Navigator.pop(context, 'new'),
+              icon: const Icon(Icons.person_add_alt_1, size: 18),
+              label: const Text('Yangi trener akkaunti'),
+            ),
+            const SizedBox(height: AppSpace.sm),
+            OutlinedButton.icon(
+              onPressed: () => Navigator.pop(context, 'promote'),
+              icon: const Icon(Icons.switch_account_outlined, size: 18),
+              label: const Text('Mavjud foydalanuvchini tayinlash'),
+            ),
+          ]),
+    );
+    if (choice == null || !mounted) return;
+    if (choice == 'promote') {
+      await _promoteSheet(context, clients);
+      return;
+    }
+    await _createTrainerSheet(gyms, gymId);
+  }
+
+  /// Yangi trener akkaunti: ism, telefon, parol
+  Future<void> _createTrainerSheet(List<Gym> gyms, String? gymId) async {
+    final name = TextEditingController();
+    final phone = TextEditingController();
+    final pass = TextEditingController(text: 'trener${DateTime.now().year}');
+    var targetGym = gymId ?? (gyms.isNotEmpty ? gyms.first.id : null);
+    var busy = false;
+    String? error;
+
+    final ok = await showSheet<bool>(
+      context,
+      StatefulBuilder(
+        builder: (ctx, setS) => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: AppSpace.md),
+              Text('Yangi trener', style: Theme.of(ctx).textTheme.titleLarge),
+              const SizedBox(height: AppSpace.lg),
+              TextField(
+                controller: name,
+                autofocus: true,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(labelText: 'Ism', hintText: 'Trener 1'),
+              ),
+              const SizedBox(height: AppSpace.md),
+              TextField(
+                controller: phone,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Telefon raqam',
+                  hintText: '90 123 45 67',
+                  prefixText: '+998 ',
+                ),
+              ),
+              const SizedBox(height: AppSpace.md),
+              TextField(
+                controller: pass,
+                decoration: const InputDecoration(
+                  labelText: 'Parol',
+                  helperText: 'Kamida 6 belgi — trenerga shu parolni aytasiz',
+                ),
+              ),
+              if (gyms.isNotEmpty) ...[
+                const SizedBox(height: AppSpace.md),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+                    for (final g in gyms)
+                      ChoiceChip(
+                        selected: targetGym == g.id,
+                        onSelected: (_) => setS(() => targetGym = g.id),
+                        label: Text(g.name),
+                      ),
+                  ]),
+                ),
+              ],
+              if (error != null) ...[
+                const SizedBox(height: AppSpace.md),
+                Text(error!, style: TextStyle(color: AppColors.danger, fontSize: 13)),
+              ],
+              const SizedBox(height: AppSpace.lg),
+              FilledButton(
+                onPressed: busy
+                    ? null
+                    : () async {
+                        final n = name.text.trim();
+                        final ph = normalizePhone(phone.text);
+                        if (n.isEmpty) {
+                          setS(() => error = 'Ismni kiriting');
+                          return;
+                        }
+                        if (ph.length < 12) {
+                          setS(() => error = 'Telefon raqam to\'liq emas');
+                          return;
+                        }
+                        if (pass.text.trim().length < 6) {
+                          setS(() => error = 'Parol kamida 6 belgi bo\'lsin');
+                          return;
+                        }
+                        setS(() {
+                          busy = true;
+                          error = null;
+                        });
+                        try {
+                          await Db.createTrainer(
+                            name: n,
+                            phone: ph,
+                            password: pass.text.trim(),
+                            gymId: targetGym,
+                          );
+                          if (ctx.mounted) Navigator.pop(ctx, true);
+                        } catch (e) {
+                          final msg = '$e'.contains('email-already-in-use')
+                              ? 'Bu raqam allaqachon ro\'yxatdan o\'tgan'
+                              : 'Bo\'lmadi: $e';
+                          setS(() {
+                            busy = false;
+                            error = msg;
+                          });
+                        }
+                      },
+                child: Text(busy ? 'Yaratilmoqda…' : 'Trener qo\'shish'),
+              ),
+            ]),
+      ),
+    );
+
+    if (ok == true && mounted) {
+      await showSheet<void>(
+        context,
+        Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: AppSpace.md),
+              Text('Trener qo\'shildi', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: AppSpace.sm),
+              Text(
+                'Shu ma\'lumotni trenerga bering — ilovaga shu bilan kiradi:',
+                style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+              ),
+              const SizedBox(height: AppSpace.lg),
+              BentoTile(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Telefon: ${fmtPhone(normalizePhone(phone.text))}',
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 4),
+                  Text('Parol: ${pass.text.trim()}',
+                      style: Theme.of(context).textTheme.titleMedium),
+                ]),
+              ),
+              const SizedBox(height: AppSpace.lg),
+              FilledButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Tushundim'),
+              ),
+            ]),
+      );
+    }
+  }
+
+  /// Trenerni boshqa zalga ko'chirish
+  Future<void> _pickGym(AppUser trainer, List<Gym> gyms) async {
+    final picked = await showSheet<String>(
+      context,
+      Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpace.md),
+            Text('Qaysi zalga?', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: AppSpace.lg),
+            for (final g in gyms)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context, g.id),
+                  child: Text(g.name),
+                ),
+              ),
+            if (trainer.gymId != null)
+              TextButton(
+                onPressed: () => Navigator.pop(context, ''),
+                child: const Text('Zaldan chiqarish'),
+              ),
+          ]),
+    );
+    if (picked == null || !mounted) return;
+    await Db.setUserGym(trainer.id, picked.isEmpty ? null : picked);
+    if (mounted) showSnack(context, picked.isEmpty ? 'Zaldan chiqarildi' : 'Zalga biriktirildi');
   }
 
   /// Oddiy foydalanuvchini trener qilish
@@ -196,6 +615,7 @@ class StaffScreen extends StatelessWidget {
     AppUser person,
     int count, {
     required int ownerCount,
+    List<Gym> gyms = const [],
   }) async {
     final name = person.name.isEmpty ? fmtPhone(person.phone) : person.name;
     // Oxirgi bosh adminni tushirib bo'lmaydi — aks holda hech kim rol tayinlay olmaydi
@@ -215,6 +635,14 @@ class StaffScreen extends StatelessWidget {
             style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
           const SizedBox(height: AppSpace.lg),
+          if (!person.isOwner && gyms.isNotEmpty) ...[
+            OutlinedButton.icon(
+              onPressed: () => Navigator.pop(context, 'gym'),
+              icon: const Icon(Icons.home_work_outlined, size: 18),
+              label: const Text('Zalga biriktirish'),
+            ),
+            const SizedBox(height: AppSpace.sm),
+          ],
           if (!person.isOwner) ...[
             FilledButton.icon(
               onPressed: () => Navigator.pop(context, 'makeOwner'),
@@ -251,6 +679,11 @@ class StaffScreen extends StatelessWidget {
       ),
     );
     if (action == null || !context.mounted) return;
+
+    if (action == 'gym') {
+      await _pickGym(person, gyms);
+      return;
+    }
 
     if (action == 'makeOwner') {
       final ok = await confirm(
@@ -305,15 +738,49 @@ class StaffScreen extends StatelessWidget {
   }
 }
 
+/// Zal tugmachasi (yuqoridagi gorizontal ro'yxat).
+/// Uzoq bosilsa — zalni tahrirlash.
+class _GymChip extends StatelessWidget {
+  final String label;
+  final int? count;
+  final bool selected;
+  final VoidCallback onTap;
+  final VoidCallback? onLongPress;
+  const _GymChip({
+    required this.label,
+    this.count,
+    required this.selected,
+    required this.onTap,
+    this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(right: AppSpace.sm),
+        child: GestureDetector(
+          onLongPress: onLongPress,
+          child: ChoiceChip(
+            selected: selected,
+            onSelected: (_) => onTap(),
+            label: Text(count == null ? label : '$label · $count'),
+          ),
+        ),
+      );
+}
+
 /// Bitta trener/bosh admin qatori
 class _StaffTile extends StatelessWidget {
   final AppUser person;
   final int clientCount;
+
+  /// Qo'shimcha yozuv (zal nomi yoki "Siz") — ism yonida chiqadi
+  final String? subtitle;
   final VoidCallback onTap;
   final VoidCallback? onActions;
   const _StaffTile({
     required this.person,
     required this.clientCount,
+    this.subtitle,
     required this.onTap,
     this.onActions,
   });
@@ -342,7 +809,7 @@ class _StaffTile extends StatelessWidget {
               ),
               const SizedBox(width: AppSpace.sm),
               Pill(
-                text: person.isOwner ? 'Bosh admin' : 'Trener',
+                text: subtitle ?? (person.isOwner ? 'Bosh admin' : 'Trener'),
                 color: person.isOwner ? AppColors.accent : AppColors.textMuted,
               ),
             ]),

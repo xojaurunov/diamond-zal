@@ -351,6 +351,39 @@ await check('trener buyurtmani ochira OLMAYDI', () =>
 await check('bosh admin buyurtmani ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(OWNER), 'orders', 'o1'))));
 
+console.log('\n== ZALLAR ==');
+await check('bosh admin zal qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'),
+    { name: 'Diamond Chilonzor', address: 'Bunyodkor 12' })));
+await check('bosh admin zal nomini ozgartiradi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'),
+    { name: 'Diamond Chilonzor 2', address: '' })));
+await check('nomsiz zal OTMAYDI', () =>
+  assertFails(setDoc(doc(as(OWNER), 'gyms', 'zal2'), { name: '', address: '' })));
+await check('ortiqcha maydonli zal OTMAYDI', () =>
+  assertFails(setDoc(doc(as(OWNER), 'gyms', 'zal3'),
+    { name: 'X', address: '', egasi: 'men' })));
+await check('trener zal qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'gyms', 'zal4'), { name: 'Yangi', address: '' })));
+await check('shogird zal qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'gyms', 'zal5'), { name: 'Yangi', address: '' })));
+await check('trener zallarni koradi', () =>
+  assertSucceeds(getDocs(collection(as(TRAINER), 'gyms'))));
+await check('shogird zallarni koradi', () =>
+  assertSucceeds(getDocs(collection(as(USER), 'gyms'))));
+await check('kirmagan odam zalni kora OLMAYDI', () =>
+  assertFails(getDocs(collection(anon(), 'gyms'))));
+await check('bosh admin trenerni zalga biriktiradi', () =>
+  assertSucceeds(updateDoc(doc(as(OWNER), 'users', TRAINER), { gymId: 'zal1' })));
+await check('trener ozini boshqa zalga kochira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'users', TRAINER), { gymId: 'zal9' })));
+await check('shogird ozining zalini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER), { gymId: 'zal1' })));
+await check('trener shogirdining zalini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'users', USER), { gymId: 'zal1' })));
+await check('bosh admin zalni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(OWNER), 'gyms', 'zal1'))));
+
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();
 process.exit(fail === 0 ? 0 : 1);

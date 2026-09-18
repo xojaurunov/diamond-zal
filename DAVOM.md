@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-09-18 (10:00)**
+> Oxirgi yangilanish: **2026-09-18 (13:00)**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,10 +11,10 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 10:00 holati)
+## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 13:00 holati)
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **66/66**, qoida testlari **111/111**.
+`flutter test` **69/69**, qoida testlari **125/125**.
 
 Oxirgi APK: **18-sentabr, 22,7 MB** — kod bilan mos (haftalik ratsion yo'q).
 Saytda ham, `public/app/kq.bin` da ham shu turibdi.
@@ -27,10 +27,15 @@ haftalik reja qoida o'zgarishini talab qilmadi.
 `hujjatlar\figma-plugin\` — Figma plagini (Figma ichida maketni o'zi chizadi).
 
 ### Kirish
-| Rol | Telefon | Parol |
-|---|---|---|
-| Bosh admin | `99XXXXXXX` | `<bosh-admin-paroli>` |
-| Trener | `900000000` | `<trener-paroli>` |
+| Rol | Telefon | Parol | Zal |
+|---|---|---|---|
+| Bosh admin | `99XXXXXXX` | `<bosh-admin-paroli>` | — |
+| Trener — Kotta Qani | `900000000` | `<trener-paroli>` | Kotta Qani zali |
+| Trener — Trener 1 | `900000001` | `<trener-paroli>` | Kotta Qani zali |
+| Trener — Trener 2 | `900000002` | `<trener-paroli>` | Kotta Qani zali |
+
+Trener parollarini bosh admin `Xodimlar → Qo'shish → Yangi trener akkaunti` orqali
+o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 Bazadagi shogirdlar (16-sent ertalab): **Shogird 1** (maqsad Ozish, zal kunlari Se/Pay/Sha) va
 **Shogird 2** (Ozish, Du/Chor/Ju) — ikkalasi trener Kotta Qani'da. Ya'ni ular yangi APK'ni
@@ -55,6 +60,8 @@ o'rnatib, Zal bo'limidan kunlarini tanlashgan.
 11. **Ilova brauzerda** (49-band): https://kotta-qani-09111753.web.app/ilova/ — iPhone va kompyuter.
 12. **Hujjatlar va maketlar** (48, 50-band): TZ (Word + web), 13 ta ekran maketi (SVG + PNG),
     Figma plagini.
+13. **Zallar (filiallar)** (53-band): bosh admin zal qo'shadi va nomlaydi, zalga trener
+    yollaydi (yangi akkaunt yaratadi), zal bo'yicha trener va shogirdlarni ajratib ko'radi.
 
 ### ⏳ Ertaga / ochiq
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
@@ -936,3 +943,30 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       yo'qolsa hamma mijoz ilovani qayta o'rnatishga majbur bo'ladi).
       Repo faqat shu kompyuterda — hech qayerga yuborilmagan (remote yo'q).
       Kundalik ish: `git add -A` → `git commit -m "nima qilindi"`.
+53. **Zallar va trener yollash (18-sent)** — foydalanuvchi so'rovi: "bosh admin zal tanlaydi va
+    trener qo'sha oladi ... zal nomlaydi Admin va yollaydi zalga trener".
+    - **Model**: `gyms/{id}` (`name`, `address`) va `AppUser.gymId`. `gymId` **toMap() ga
+      kirmaydi** — shogird o'z profilini saqlaganda zal o'zgarmasin; uni faqat bosh admin yozadi.
+      Shogirdda zal maydoni yo'q: u treneri orqali zalga tegishli.
+    - **Db**: `gyms()`, `saveGym()`, `deleteGym()` (zal o'chsa trenerlar zalsiz qoladi),
+      `setUserGym()`, `createTrainer()`.
+    - **`createTrainer` qanday ishlaydi:** Firebase mijoz kutubxonasi yangi akkaunt yaratganda
+      o'sha akkauntga kirib oladi va bosh admin seansini buzadi. Shuning uchun akkaunt
+      **ikkinchi Firebase ulanishida** (`Firebase.initializeApp(name: ...)`) yaratiladi va
+      `users/{uid}` hujjati ham o'sha seansdan yoziladi (qoida: har kim faqat o'z hujjatini,
+      faqat `user` roli bilan). So'ng bosh admin rolni `admin` ga o'zgartiradi va zalga
+      biriktiradi, ulanish `app.delete()` bilan yopiladi.
+    - **Xodimlar ekrani**: yuqorida zal tugmachalari (Hammasi + har zal, trener soni bilan),
+      "＋ Zal", tanlangan zal manzili va "Tahrirlash"; ko'rsatkichlar zal bo'yicha; "Trenerlar"
+      ro'yxati (zalsizlarda "Zalsiz" yorlig'i va ogohlantirish); "Bosh adminlar" alohida bo'lim;
+      trener ustidagi amallarga **"Zalga biriktirish"** qo'shildi. Zal tugmachasini uzoq bosish —
+      tahrirlash/o'chirish.
+    - **Qoidalar**: `gyms` — hamma kirganlar o'qiydi, yozish/o'chirish faqat bosh adminda,
+      maydonlar `name` (1–60) va `address` (≤200) bilan cheklangan. `users` yangilashda
+      `same('gymId')` qo'shildi: shogird ham, trener ham o'z zalini o'zgartira olmaydi.
+      Qoida testlariga 14 ta holat qo'shildi — **jami 125, 0 xato**.
+    - **Brauzerda to'liq sinaldi**: zal "Kotta Qani zali" (Toshkent) yaratildi → "Trener 1"
+      va "Trener 2" trener akkauntlari ilovaning o'zidan yaratildi (bosh admin seansi
+      buzilmadi, ekranda telefon va parol ko'rsatildi) → mavjud trener "Kotta Qani" ham shu
+      zalga biriktirildi → Trener 1 o'z telefon-paroli bilan kirdi va trener panelini ko'rdi.
+    - Testlar: `analyze` 0 xato, `flutter test` **69/69**.

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/models.dart';
@@ -117,6 +118,67 @@ class Db {
       .where('role', isEqualTo: 'admin')
       .snapshots()
       .map((s) => s.docs.map(AppUser.fromDoc).toList());
+
+  // ---------- zallar (filiallar) ----------
+  /// Zallar ro'yxati — nomi bo'yicha tartiblangan
+  static Stream<List<Gym>> gyms() => _fs.collection('gyms').snapshots().map(
+      (s) => s.docs.map(Gym.fromDoc).toList()..sort((a, b) => a.name.compareTo(b.name)));
+
+  /// Zal qo'shish yoki nomini o'zgartirish; id qaytadi
+  static Future<String> saveGym(Gym g) async {
+    if (g.id.isEmpty) return (await _fs.collection('gyms').add(g.toMap())).id;
+    await _fs.collection('gyms').doc(g.id).set(g.toMap());
+    return g.id;
+  }
+
+  /// Zalni o'chirish — undagi trenerlar zalsiz qoladi
+  static Future<void> deleteGym(String id) async {
+    final staff = await _fs.collection('users').where('gymId', isEqualTo: id).get();
+    for (final d in staff.docs) {
+      await d.reference.update({'gymId': null});
+    }
+    await _fs.collection('gyms').doc(id).delete();
+  }
+
+  /// Trenerni zalga biriktirish (null — zaldan chiqarish). Faqat bosh admin.
+  static Future<void> setUserGym(String uid, String? gymId) =>
+      _fs.collection('users').doc(uid).update({'gymId': gymId});
+
+  /// Yangi trener akkaunti — bosh admin yaratadi.
+  ///
+  /// Firebase mijoz kutubxonasi yangi akkaunt yaratganda o'sha akkauntga kirib oladi,
+  /// shuning uchun ish IKKINCHI Firebase ulanishida bajariladi — bosh admin o'z
+  /// seansida qoladi. Hujjat ham o'sha seansdan yoziladi (qoidalar: har kim faqat
+  /// o'z hujjatini va faqat `user` roli bilan yarata oladi), so'ng bosh admin uni
+  /// trenerga aylantiradi va zalga biriktiradi.
+  static Future<String> createTrainer({
+    required String name,
+    required String phone,
+    required String password,
+    String? gymId,
+  }) async {
+    final app = await Firebase.initializeApp(
+      name: 'trener-yaratish-${DateTime.now().millisecondsSinceEpoch}',
+      options: Firebase.app().options,
+    );
+    String uid;
+    try {
+      final cred = await FirebaseAuth.instanceFor(app: app).createUserWithEmailAndPassword(
+        email: phoneToEmail(phone),
+        password: password,
+      );
+      uid = cred.user!.uid;
+      await FirebaseFirestore.instanceFor(app: app).collection('users').doc(uid).set(
+            AppUser(id: uid, name: name.trim(), email: '', phone: normalizePhone(phone)).toMap(),
+          );
+    } finally {
+      await app.delete();
+    }
+    // Endi bosh admin (asosiy seans) rolni va zalni qo'yadi
+    await setRole(uid, 'admin');
+    if (gymId != null) await setUserGym(uid, gymId);
+    return uid;
+  }
 
   static Future<void> updateUser(AppUser u) =>
       _fs.collection('users').doc(u.id).set(u.toMap(), SetOptions(merge: true));

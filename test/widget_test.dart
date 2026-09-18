@@ -644,4 +644,25 @@ void main() {
       expect((w['7'] as List).length, 1);
     });
   });
+
+  group('Zallar', () {
+    test('zal nomi va manzili saqlanadi', () {
+      const g = Gym(name: 'Diamond — Chilonzor', address: 'Bunyodkor 12');
+      expect(g.toMap(), {'name': 'Diamond — Chilonzor', 'address': 'Bunyodkor 12'});
+    });
+
+    test('shogird profilni saqlaganda zal o-zgarmaydi (gymId toMap da yo-q)', () {
+      final u = AppUser(id: 'u1', name: 'A', email: '', gymId: 'zal1');
+      expect(u.gymId, 'zal1');
+      expect(u.toMap().containsKey('gymId'), isFalse,
+          reason: 'zalni faqat bosh admin yozadi');
+      expect(u.copyWith(name: 'B').gymId, 'zal1', reason: 'nusxada ham qoladi');
+    });
+
+    test('zalsiz trener ham bo-lishi mumkin', () {
+      final t = AppUser(id: 't1', name: 'Trener', email: '', role: 'admin');
+      expect(t.gymId, isNull);
+      expect(t.isTrainer, isTrue);
+    });
+  });
 }

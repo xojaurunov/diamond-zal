@@ -61,13 +61,13 @@ service cloud.firestore {
       allow update: if
         // bosh admin — hamma maydon, rol ham
         isOwner()
-        // trener — faqat o'z shogirdi: reja, maqsad va h.k., lekin ROL va TRENER emas
+        // trener — faqat o'z shogirdi: reja, maqsad va h.k., lekin ROL, TRENER va ZAL emas
         || (isStaff() && resource.data.get('trainerId', null) == request.auth.uid
-            && same('role') && same('trainerId'))
+            && same('role') && same('trainerId') && same('gymId'))
         // foydalanuvchi o'zi — rol va rejaga tegmaydi; trenerni katalogdan tanlaydi;
         // vaznni haftada 1 martadan ko'p o'zgartira olmaydi
         || (isSelf(uid) && same('role') && same('planId') && same('planAssignedAt')
-            && trainerChoiceOk() && weightChangeOk()
+            && same('gymId') && trainerChoiceOk() && weightChangeOk()
             // "uyda mashq"ni faqat trener belgilaydi; zal kunlari — aynan 3 ta
             && same('homeWorkoutDate')
             && (same('gymDays') || request.resource.data.gymDays in [[2, 4, 6], [1, 3, 5]]));
@@ -125,6 +125,20 @@ service cloud.firestore {
     match /plans/{id} {
       allow read: if signedIn();
       allow write: if isStaff();
+    }
+
+    // Zallar (filiallar). Hamma kirganlar o'qiydi (trener o'z zalining nomini ko'radi),
+    // qo'shish va o'chirish — faqat bosh adminda.
+    match /gyms/{id} {
+      allow read: if signedIn();
+      allow write: if isOwner()
+        && request.resource.data.keys().hasOnly(['name', 'address'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 60
+        && request.resource.data.get('address', '') is string
+        && request.resource.data.get('address', '').size() <= 200;
+      allow delete: if isOwner();
     }
 
     // Zal do'koni: forma, anjomlar, sport pitaniya.
