@@ -1,0 +1,50 @@
+name: kotta_qani_diet
+description: Diamond zal - ovqatlanish rejasi ilovasi
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  flutter_riverpod: ^2.5.1
+  fl_chart: ^0.69.0
+  intl: ^0.19.0
+  shared_preferences: ^2.5.5
+  flutter_local_notifications: ^22.3.1
+  timezone: ^0.11.1
+  firebase_messaging: ^15.2.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  image: ^4.9.2
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/foods/
+    - assets/credits.txt
+
+# Ilova ikonkasi: assets/icon/logo_src.jpg dan tools/make_icon.dart yasab beradi,
+# so'ng `dart run flutter_launcher_icons` barcha o'lchamlarni chiqaradi.
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/icon.png"
+  # Adaptiv ikonka ATAYLAB yo'q: adaptiv ikonkani launcher doim shaklga solib, shaffof fonni
+  # qora/oq plashka bilan to'ldiradi. Faqat shaffof PNG — ikonka ramkasiz, orqa fon ko'rinadi.
+  # (Eslatma: mipmap-anydpi-v26/ic_launcher.xml bo'lmasligi kerak.)
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "#16191E"
+    theme_color: "#4AF2FF"

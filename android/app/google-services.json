@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318857705993",
+    "project_id": "kotta-qani-09111753",
+    "storage_bucket": "kotta-qani-09111753.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318857705993:android:a7ac01cd69badca44a16d8",
+        "android_client_info": {
+          "package_name": "uz.kottaqani.kotta_qani_diet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGPnXDtW2573a0SyDtRvvksLQCRa8Yi8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

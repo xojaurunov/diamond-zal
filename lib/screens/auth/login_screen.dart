@@ -1,0 +1,304 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // FilteringTextInputFormatter (raqam maydoni)
+import '../../services/db.dart';
+import '../../theme.dart';
+import '../../widgets/ui.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _form = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  // final _email = TextEditingController(); // email bilan kirish o'chirilgan
+  final _phone = TextEditingController(); // 9 ta raqam, +998 siz
+  final _pass = TextEditingController();
+  bool _isRegister = false;
+  bool _busy = false;
+  bool _hidePass = true;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    _pass.dispose();
+    super.dispose();
+  }
+
+  /// Firebase xato kodlarini tushunarli o'zbekcha matnga aylantiradi
+  static String _authError(FirebaseAuthException e) => switch (e.code) {
+        'invalid-credential' ||
+        'wrong-password' ||
+        'user-not-found' =>
+          "Telefon raqam yoki parol noto'g'ri",
+        'email-already-in-use' => "Bu raqam bilan akkaunt allaqachon bor — Kirish'ni bosing",
+        'weak-password' => 'Parol juda oddiy — kamida 6 belgi',
+        'invalid-email' => "Telefon raqam noto'g'ri",
+        'network-request-failed' => 'Internet aloqasini tekshiring',
+        'too-many-requests' => "Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring",
+        _ => e.message ?? e.code,
+      };
+
+  Future<void> _submit() async {
+    if (!_form.currentState!.validate()) return;
+    FocusScope.of(context).unfocus();
+    setState(() => _busy = true);
+    try {
+      if (_isRegister) {
+        await AuthService.register(_name.text, _phone.text, _pass.text);
+      } else {
+        await AuthService.signIn(_phone.text, _pass.text);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) showSnack(context, _authError(e));
+    } catch (e) {
+      if (mounted) showSnack(context, e.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    final s = Theme.of(context).colorScheme;
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(children: [
+          // Editorial bosh blok: chapga tekislangan yirik matn, laym urg'u
+          GradientHeader(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(AppSpace.xl, 44, AppSpace.xl, 40),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
+                    child: Icon(Icons.fitness_center, size: 22, color: AppColors.onAccent),
+                  ),
+                  const SizedBox(width: AppSpace.md),
+                  Eyebrow('Diamond zal', color: AppColors.textFaint),
+                ]),
+                const SizedBox(height: AppSpace.xl),
+                Text(
+                  "To'g'ri ovqatlanish —",
+                  style: t.headlineLarge?.copyWith(color: AppColors.text),
+                ),
+                Text(
+                  'natijaga yo’l',
+                  style: t.headlineLarge?.copyWith(color: AppColors.accent),
+                ),
+                const SizedBox(height: AppSpace.md),
+                Text(
+                  'Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.',
+                  style: t.bodyMedium?.copyWith(color: AppColors.textMuted),
+                ),
+              ]),
+            ),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+                child: Form(
+                  key: _form,
+                  child: AutofillGroup(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                      _Toggle(
+                        isRegister: _isRegister,
+                        onChanged: (v) => setState(() => _isRegister = v),
+                      ),
+                      const SizedBox(height: AppSpace.xl),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                        child: _isRegister
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 14),
+                                child: TextFormField(
+                                  controller: _name,
+                                  textCapitalization: TextCapitalization.words,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [AutofillHints.name],
+                                  validator: (v) =>
+                                      (v ?? '').trim().isEmpty ? 'Ismingizni kiriting' : null,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Ism',
+                                    prefixIcon: Icon(Icons.person_outline),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(width: double.infinity),
+                      ),
+                      // Email maydoni (o'chirilgan — endi faqat telefon raqam + parol):
+                      // TextFormField(
+                      //   controller: _email,
+                      //   keyboardType: TextInputType.emailAddress,
+                      //   textInputAction: TextInputAction.next,
+                      //   autofillHints: const [AutofillHints.email],
+                      //   validator: (v) => RegExp(r'^\S+@\S+\.\S+$').hasMatch((v ?? '').trim())
+                      //       ? null
+                      //       : "Email manzil noto'g'ri",
+                      //   decoration: const InputDecoration(
+                      //     labelText: 'Email',
+                      //     prefixIcon: Icon(Icons.mail_outline),
+                      //   ),
+                      // ),
+                      TextFormField(
+                        controller: _phone,
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const [AutofillHints.telephoneNumberNational],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(9),
+                        ],
+                        validator: (v) =>
+                            (v ?? '').length == 9 ? null : "Raqamni to'liq kiriting: 90 123 45 67",
+                        decoration: const InputDecoration(
+                          labelText: 'Telefon raqam',
+                          hintText: '90 123 45 67',
+                          prefixText: '+998 ',
+                          prefixIcon: Icon(Icons.phone_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      TextFormField(
+                        controller: _pass,
+                        obscureText: _hidePass,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: [
+                          _isRegister ? AutofillHints.newPassword : AutofillHints.password
+                        ],
+                        onFieldSubmitted: (_) => _submit(),
+                        validator: (v) =>
+                            (v ?? '').length < 6 ? 'Parol kamida 6 belgidan iborat' : null,
+                        decoration: InputDecoration(
+                          labelText: 'Parol',
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            tooltip: _hidePass ? "Parolni ko'rsatish" : 'Parolni yashirish',
+                            onPressed: () => setState(() => _hidePass = !_hidePass),
+                            icon: Icon(_hidePass
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      FilledButton(
+                        onPressed: _busy ? null : _submit,
+                        child: _busy
+                            ? const SizedBox.square(
+                                dimension: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
+                            : Text(_isRegister ? 'Akkaunt yaratish' : 'Kirish'),
+                      ),
+                      if (!_isRegister)
+                        TextButton(
+                          onPressed: () => showSheet<void>(
+                            context,
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text('Parolni unutdingizmi?', style: t.titleLarge),
+                                const SizedBox(height: AppSpace.sm),
+                                Text(
+                                  "SMS yuborilmaydi, shuning uchun parolni zal tiklaydi:\n\n"
+                                  "1. Zal egasiga (bosh adminga) telefon raqamingizni ayting.\n"
+                                  "2. U sizga vaqtinchalik yangi parol beradi.\n"
+                                  "3. Shu parol bilan kiring va Profil → «Parolni o'zgartirish» "
+                                  "orqali o'zingizning parolingizni qo'ying.",
+                                  style: t.bodyMedium?.copyWith(height: 1.5),
+                                ),
+                                const SizedBox(height: AppSpace.xl),
+                                FilledButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Tushunarli'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: const Text('Parolni unutdim'),
+                        ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _isRegister
+                            ? "Ro'yxatdan o'tgach, trener sizga shaxsiy ovqatlanish rejasini biriktiradi."
+                            : 'Trener va mijozlar bitta ilovadan kiradi.',
+                        textAlign: TextAlign.center,
+                        style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+/// Kirish / Ro'yxatdan o'tish almashtirgichi — bitta segmentli yorliq
+class _Toggle extends StatelessWidget {
+  final bool isRegister;
+  final ValueChanged<bool> onChanged;
+  const _Toggle({required this.isRegister, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(AppSpace.xs),
+      decoration: BoxDecoration(
+        color: s.surfaceContainerHighest.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: s.outlineVariant),
+      ),
+      child: Row(children: [
+        _seg(context, 'Kirish', !isRegister, () => onChanged(false)),
+        _seg(context, "Ro'yxatdan o'tish", isRegister, () => onChanged(true)),
+      ]),
+    );
+  }
+
+  Widget _seg(BuildContext context, String label, bool active, VoidCallback onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          height: 44,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: active ? AppColors.accent.withValues(alpha: 0.16) : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppRadius.md - 4),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.2,
+              color: active ? AppColors.accent : AppColors.textMuted,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

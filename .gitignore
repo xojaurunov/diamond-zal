@@ -1,0 +1,28 @@
+# Yig'ilgan fayllar — qaytadan yaratiladi, saqlashning hojati yo'q
+build/
+.dart_tool/
+.gradle/
+android/.gradle/
+android/app/.cxx/
+windows/flutter/ephemeral/
+tools/rules_test/node_modules/
+functions/node_modules/
+
+# Chiqarish artefaktlari (APK va web nusxasi) — yig'ilgandan keyin qayta paydo bo'ladi
+public/ilova/
+public/app/*.bin
+
+# Loglar va vaqtinchalik
+*.log
+joylash-log.txt
+desktop.ini
+.firebase/
+
+# Muharrir
+.idea/
+.vscode/
+*.iml
+
+# DIQQAT: android/diamond-release.jks va android/key.properties ATAYLAB saqlanadi —
+# imzo kaliti yo'qolsa hamma mijoz ilovani o'chirib qayta o'rnatishga majbur bo'ladi.
+# Bu repo faqat shu kompyuterda turadi, hech qayerga yuborilmaydi.

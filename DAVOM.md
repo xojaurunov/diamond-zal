@@ -1,0 +1,924 @@
+# Diamond — loyihaning to'liq holati
+
+> **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
+> shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
+>
+> Oxirgi yangilanish: **2026-09-17 (17:00)**
+>
+> Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
+> qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
+> yozuvlar. Ziddiyat bo'lsa **shu fayl to'g'ri**.
+
+---
+
+## 0. ▶ SHU YERDAN BOSHLANG (17-sentabr, 17:00 holati)
+
+**Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
+`flutter test` **66/66**, qoida testlari **111/111**.
+
+> ⚠️ **APK kod bilan mos emas.** Saytdagi APK — 17-sent 12:39 (haftalik ratsion bilan),
+> keyin haftalik ratsion **olib tashlandi** (51-band). Kodni chiqarish uchun APK qayta
+> yig'ilishi kerak: `flutter build apk --release --split-per-abi` → `public/app/kq.bin`.
+Qoidalar 16-sent do'kon bilan joylandi (`firebase deploy --only firestore:rules`) —
+haftalik reja qoida o'zgarishini talab qilmadi.
+
+**Hujjatlar** (17-sent): `hujjatlar\Diamond-TZ.docx` — texnik topshiriq va reja (Word);
+`hujjatlar\figma\` — 7 ta SVG maket (Figma import qiladi);
+`hujjatlar\figma-plugin\` — Figma plagini (Figma ichida maketni o'zi chizadi).
+
+### Kirish
+| Rol | Telefon | Parol |
+|---|---|---|
+| Bosh admin | `99XXXXXXX` | `<bosh-admin-paroli>` |
+| Trener | `900000000` | `<trener-paroli>` |
+
+Bazadagi shogirdlar (16-sent ertalab): **Shogird 1** (maqsad Ozish, zal kunlari Se/Pay/Sha) va
+**Shogird 2** (Ozish, Du/Chor/Ju) — ikkalasi trener Kotta Qani'da. Ya'ni ular yangi APK'ni
+o'rnatib, Zal bo'limidan kunlarini tanlashgan.
+(15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
+
+### ✅ Tayyor (qisqa)
+1. Shablonlar: Ozish 2 variant, Massa nabor 3 variant; trener faqat shogird maqsadiga mos rejani beradi,
+   mos kelmaydigan reja bloklanadi. (Ozish tanlagan shogirdda "2 ta variant" chiqishi — to'g'ri, xato emas.)
+2. Shogird anketasi: maqsad, trener (katalogdan), metabolizm; norma = vazn × 31/33/35 (±%).
+3. Trener faqat o'z shogirdlarini ko'radi; bosh adminni ko'rmaydi; katalogdagi profilini o'zi boshqaradi.
+4. Bosh admin: Xodimlar, trenerlar reytingi (avtomatik ball + qo'lda baho).
+5. Vazn haftada 1 marta (ilova + server), parolni o'zgartirish/tiklash, o'chirilgan akkauntni qayta ro'yxat.
+6. Yorug'/qorong'i rejim; bildirishnomalar (ovqat, vazn, chat, reja — Android).
+7. **Zal bo'limi** (42-band): Se/Pay/Sha yoki Du/Chor/Ju; trener "Uyda mashq" (shogird chatda yozsa).
+8. **Ikonka** (43-band): oq fon va qora ramka yo'q — adaptiv ikonka olib tashlangan, faqat shaffof PNG.
+9. **Do'kon bo'limi** (46-band): forma, anjomlar, sport pitaniya. Trener tovar kiritadi va buyurtmani
+   "Berildi" deb belgilaydi (qoldiq avtomatik kamayadi), shogird buyurtma beradi. To'lov zalda naqd.
+10. **Haftalik reja imkoniyati** (47-band): rejaga hafta kunlari qo'shildi — har kunga alohida
+    menyu va kun rasmi. **Tayyor ratsion va rasmlar 51-bandda olib tashlandi** — imkoniyatning
+    o'zi qoldi, trener xohlasa o'zi haftalik reja tuzadi.
+11. **Ilova brauzerda** (49-band): https://kotta-qani-09111753.web.app/ilova/ — iPhone va kompyuter.
+12. **Hujjatlar va maketlar** (48, 50-band): TZ (Word + web), 13 ta ekran maketi (SVG + PNG),
+    Figma plagini.
+
+### ⏳ Ertaga / ochiq
+- **APK qayta yig'ilsin** — hozirgi kodda haftalik ratsion yo'q, saytdagi APK'da bor.
+- **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
+  A — suv belgisi (shogird ismi rejada xira turadi, tavsiya qilingan);
+  B — `FLAG_SECURE` bilan skrinshotni bloklash (web'da ishlamaydi, ikkinchi telefon kamerasini
+  to'smaydi); C — ikkalasi; D — kerak emas.
+- **Trener paroli almashtirilsin** — u saytda ochiq turgan edi (49-band).
+- **Foydalanuvchi telefonda tekshiradi:** ikonka ramkasiz chiqdimi (chiqmasa: ilovani o'chirib qayta
+  o'rnatish; Samsung'da "Icon frames" o'chirish; telefon rusumini so'rash) va **bildirishnomalar**
+  (ular hali hech qayerda ko'rilmagan — emulyator yo'q).
+  Zal ekranlari 16-sent brauzerda to'liq tekshirildi (45-band) — ishlayapti.
+- **Zal mashqlari** — hozir "tuzatish ishlari / ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
+  (foydalanuvchidan matn kutiladi).
+- **Do'kon tovarlari** — bo'lim tayyor, baza bo'sh. Foydalanuvchi ro'yxatni (nomi, narxi, qoldiq) beradi,
+  keyin kiritiladi. Trener ham "Do'kon → Tovarlar → + Tovar" orqali o'zi kirita oladi.
+  (Foydalanuvchi sayt havolasini berishi mumkin — tovar nomi, narxi va rasmi o'sha yerdan olinadi.)
+- **Haftalik ratsion grammlari taxminiy** — trener tasdiqlashi kerak, keyin izohdagi "TAXMINIY"
+  so'zi olib tashlanadi.
+- **Figma** — plagin yozildi, lekin haqiqiy Figma'da sinalmagan (bu kompyuterda Figma yo'q,
+  hisobga kirish imkoni ham yo'q). Foydalanuvchi ishga tushirib skrinshot bersa — tuzatiladi.
+- **Blaze** (faqat Firebase Console orqali, bank karta) → `FUNKSIYALAR_JOYLASH.bat` — ilova yopiq bo'lganda
+  chat/reja push.
+- Ozish uchun 3-variant kerak bo'lsa — matn kutiladi.
+- Taxminiy qiymatlar (Osh KBJU, massa 2-/3-versiya porsiyalari) — trener ko'rib chiqsin.
+
+### Bu kompyuterda
+Firebase CLI kirgan — `deploy.ps1`, `PAROL_TIKLASH.bat`, `AKKAUNT_OCHIRISH.bat` ishlaydi.
+Firebase CLI Windows'da ba'zan ish tugagach "Assertion failed ... async.c" bilan chiqadi — buyruq bajarilgan
+bo'ladi (skriptlar natijani stdout'dan tekshiradi).
+APK imzosi: `apksigner` (JAVA_HOME = `%LOCALAPPDATA%\jdk21\jdk-21.0.12.1+1`) → `CN=Diamond Zal`.
+Qoida testlari: `firebase emulators:start --only firestore --project demo-rules-test`, keyin
+`node tools\rules_test\test.mjs`.
+Web: `flutter build web --release`, `python -m http.server 5173 --bind 127.0.0.1 --directory build\web`.
+Ikonka: `dart run tools/make_icon.dart` → `dart run flutter_launcher_icons`
+(**mipmap-anydpi-v26 papkasi paydo bo'lsa — o'chirish kerak**, aks holda ramka qaytadi).
+
+---
+
+## 1. Ilova nima qiladi
+
+Zal mijozlari uchun ovqatlanish rejasi ilovasi. **Flutter + Firebase**, telefon (Android)
+va brauzerda ishlaydi, ikkalasi **bitta bazani** ko'radi.
+
+- **Shogird:** ro'yxatdan o'tadi → anketa (**maqsad: ozish / massa nabor**, jins, yosh,
+  bo'y, vazn, faollik) → kunlik kaloriya normasi (ozish −20%, massa +10%) va BMI.
+  "Bugun" ekranida trener bergan reja, "yedim" belgisi, suv hisobi, "Trener maslahati".
+  Vazn grafigi — vazn **haftada faqat 1 marta**. Trener bilan chat.
+- **Trener:** mijozlar ro'yxati (maqsad belgisi bilan) va progressi, mahsulotlar bazasi
+  (100 g uchun KBJU), reja yaratish/nusxalash (kategoriya majburiy), 5 ta tayyor shablon,
+  shogirdga **faqat uning maqsadiga mos** rejani biriktirish, chat.
+- **Bosh admin:** yuqoridagilarning hammasi + trener tayinlash, hamma trener va
+  shogirdni ko'rish, akkaunt o'chirish, **trenerlar reytingi**.
+
+Kirish **telefon raqam + parol** bilan, SMS yo'q.
+
+---
+
+## 2. Kirish ma'lumotlari va havolalar
+
+| Nima | Qiymat |
+|---|---|
+| **Bosh admin** | maydonga `99XXXXXXX` · parol `<bosh-admin-paroli>` (+998 XX XXX XX XX) |
+| **Trener** | maydonga `900000000` · parol `<trener-paroli>` (+998 90 000 00 00) |
+| Ilovani yuklab olish | https://kotta-qani-09111753.web.app |
+| **Ilova brauzerda (iPhone, kompyuter)** | https://kotta-qani-09111753.web.app/ilova/ |
+| Firebase loyiha | `kotta-qani-09111753` (akkaunt: sizning-email@gmail.com) |
+| Firebase konsol | https://console.firebase.google.com/project/kotta-qani-09111753 |
+| Tarif | **Spark** (bepul) — hozircha yetarli |
+| Parolni unutgan foydalanuvchi | `PAROL_TIKLASH.bat` (shu kompyuterda, Firebase CLI kirgan bo'lsa) |
+
+APK kompyuterda: `build\app\outputs\flutter-apk\app-arm64-v8a-release.apk`
+(21,6 MB — deyarli barcha telefonlar). Eski telefon uchun: `app-armeabi-v7a-release.apk`.
+Saytda ular `public/app/kq.bin` va `kq-eski.bin` nomida turadi (`deploy.ps1` o'zi ko'chiradi).
+
+> Telefon raqam faqat **login** vazifasini bajaradi (SMS ketmaydi). Firebase ichida u
+> emailga aylanadi, foydalanuvchi buni ko'rmaydi:
+> `99XXXXXXX` → `998XXXXXXXXX@phone.kottaqani.uz`
+
+---
+
+## 3. Rollar
+
+| Rol (`users/{uid}.role`) | Kim | Nima ko'radi |
+|---|---|---|
+| `user` | shogird | Bugun, Progress, Trener (chat), Profil. Anketada trenerini katalogdan tanlaydi |
+| `admin` | trener | Mijozlar (**faqat o'ziga biriktirilganlar**), Rejalar, Mahsulotlar. Bosh adminni ko'rmaydi |
+| `owner` | **bosh admin** | yuqoridagilar **+ Xodimlar** (4-bo'lim) |
+
+Kodda: `AppUser.isOwner`, `isAdmin` (admin **yoki** owner), `isTrainer` (faqat admin).
+`AppUser.trainerId` — shogird qaysi trenerga biriktirilgan (`null` — biriktirilmagan).
+
+### Bosh admin nima qila oladi
+- **Trener tayinlash** — oddiy foydalanuvchini trener qiladi.
+- **Bosh admin qilish / tushirish** — trenerni bosh admin qiladi yoki boshqa bosh adminni
+  trenerga tushiradi.
+- **Trenerlikdan olish** — shogirdlari avtomatik bo'shatiladi (`trainerId = null`).
+- **Akkauntni o'chirish** — Firestore hujjati o'chadi.
+- **Shogirdni trenerga biriktirish** — mijoz tafsilotidagi "Biriktirilgan trener" maydoni.
+
+**Himoyalar:** o'zini o'zgartira olmaydi; **yagona** bosh adminni tushirib bo'lmaydi
+(`ownerCount <= 1` tekshiruvi) — aks holda rol tayinlaydigan hech kim qolmaydi.
+
+### Hozirgi holat
+`99XXXXXXX` → `owner`, `900000000` → `admin`. Ikkalasi Firestore'da shunday turibdi
+(REST orqali qo'yilgan, tekshirilgan).
+
+---
+
+## 4. Dizayn tizimi — "Diamond"
+
+Ilova **faqat qorong'i rejimda** (`themeMode: ThemeMode.dark`). Hammasi
+[lib/theme.dart](lib/theme.dart) da.
+
+**60 / 30 / 10 qoidasi:**
+
+| Ulush | Nima | Rang |
+|---|---|---|
+| 60% | Fon — mutlaqo qora emas, to'q grafit | `bg #16191E`, `bgDeep #11141A` |
+| 30% | Matn va kartochkalar | `text #E3E8EE`, `textMuted #96A0AE`, `card #22262F` |
+| 10% | Urg'u — faqat asosiy tugma va ko'rsatkich | `accent #4AF2FF` (Diamond Blue) |
+
+Holat ranglari: `success #4ADE80`, `warning #FBBF24`, `danger #FB7185`,
+`water #38BDF8`, `protein #A78BFA`.
+
+**Qoidalar:**
+- Burchaklar 8–16 px (`AppRadius.sm 8 / md 10 / lg 12 / xl 16`)
+- Kartochkalar — **shisha effekti**: shaffof to'ldirish + ingichka oq qirra + yuqori
+  qirrada yorug' chiziq. `BentoTile(blur: true)` haqiqiy `BackdropFilter` qo'shadi
+  (qimmat, faqat bosh bloklarda). Fonda (`AppBackdrop`) yumshoq olmos jilosi bor —
+  shisha aynan shuni xiralashtiradi.
+- **Ikonkalar faqat ingichka chiziqli.** Pastki menyuda `selectedIcon` yo'q — tanlangani
+  rang bilan ajraladi.
+- **Pop-up yo'q.** Tasdiqlash va vazn kiritish pastdan chiquvchi varaqda (`showSheet()`).
+- Keng bo'shliq: `AppSpace` (xs 4, sm 8, md 14, lg 20, xl 28, xxl 40),
+  bosiladigan element eng kami `kTouchTarget = 52` px.
+- Raqamlar `tabular` (jadvalda sakramaydi).
+
+**Komponentlar** ([lib/widgets/ui.dart](lib/widgets/ui.dart)): `AppBackdrop`, `BentoTile`
+(`feature`/`blur`), `StatTile`, `KcalRing`, `Pill`, `IconBadge`, `UserAvatar`,
+`EmptyState`, `SectionHeader`, `Eyebrow`, `FadeInUp`, `CountUp`, `showSheet()`,
+`confirm()`, `GradientHeader`.
+
+---
+
+## 5a. Muhit — bu kompyuterda nima o'rnatilgan
+
+Windows qayta o'rnatilgani uchun hammasi noldan tiklandi. Hech biri admin huquqi
+talab qilmaydi (foydalanuvchi papkasiga o'rnatilgan):
+
+| Nima | Versiya | Qayerda |
+|---|---|---|
+| Flutter | 3.47.4 (Dart 3.13.3) | `%USERPROFILE%\flutter` |
+| Node.js | 22.20.0 | `%LOCALAPPDATA%\node` |
+| Java (Temurin) | 21 | `%LOCALAPPDATA%\jdk21` |
+| Android SDK | platform 36, build-tools 36.0.0, NDK 28 | `%LOCALAPPDATA%\Android\Sdk` |
+| firebase-tools | global npm | `%APPDATA%\npm` |
+| Git | — | `C:\Program Files\Git` |
+
+Yo'llar foydalanuvchi `PATH` iga qo'shilgan — **yangi terminal** ochsangiz ishlaydi.
+
+> ⚠️ **Xotira tang.** Kompyuterda 15,7 GB RAM, lekin Chrome ko'pincha 10 GB dan ortiq
+> egallaydi. Shu sababli `flutter analyze`, `flutter run` va Gradle bir necha marta
+> "Out of memory" bilan qulagan. Ish boshlashdan oldin Chrome varaqlarini kamaytiring
+> yoki Gradle demonini to'xtating (`Get-Process java | Stop-Process -Force`).
+>
+> `android/gradle.properties` da heap **8 GB → 1600 MB** ga tushirilgan — 8 GB
+> so'ralganda JVM shu kompyuterda qulaydi.
+
+---
+
+## 5b. Boshqa kompyuterga ko'chirish
+
+### Nimani ko'chirish kerak
+
+> ⚠️ **Butun papkani to'g'ridan-to'g'ri zip qilmang.** 14-sentabrda shunday qilinganda
+> zip **2,3 GB** chiqdi (haqiqiy kod ~40 MB), boshqa kompyuterdagi Claude Code esa
+> "Stewing..." da uzoq turib qoldi. Sabablari:
+>
+> | Nima | Hajm | Muammo |
+> |---|---|---|
+> | `build/` | 1174 MB | qayta yig'iladi |
+> | `assets/Изображения/kotta_qani_diet.zip` | 513 MB | loyihaning **eski zip nusxasi o'z ichida** |
+> | `.dart_tool/` | 411 MB | qayta yaratiladi |
+> | `tools/rules_test/node_modules/` | 143 MB | qayta o'rnatiladi |
+> | `windows/flutter/ephemeral/.plugin_symlinks/` | — | plagin **havolalari**: nusxalanganda haqiqiy papkaga aylanib, Windows'ning 260 belgilik yo'l chegarasidan oshadi |
+
+**To'g'ri yo'l — toza nusxa** (41,8 MB, 149 fayl, 14-sentabrda sinalgan: ochildi →
+`flutter pub get` → `flutter analyze` 0 xato):
+
+```powershell
+$src   = "E:\kotta_qani_diet"
+$stage = "$env:TEMP\diamond-stage\kotta_qani_diet"
+robocopy $src $stage /E /XJ `
+  /XD "$src\build" "$src\.dart_tool" "$src\android\.gradle" "$src\android\app\.cxx" `
+      "$src\tools\rules_test\node_modules" "$src\windows\flutter\ephemeral" `
+  /XF "kotta_qani_diet.zip" "desktop.ini" "joylash-log.txt" "*.log"
+tar -a -c -f E:\Diamond-toza.zip -C "$env:TEMP\diamond-stage" kotta_qani_diet
+```
+
+`/XJ` — havolalarni (symlink) kuzatmaslik; aynan shu uzun yo'llar muammosini oldini oladi.
+
+**Albatta kerak** (toza nusxada bor, tekshirilgan):
+
+| Fayl | Nega |
+|---|---|
+| `android/diamond-release.jks` | **Imzo kaliti.** Yo'qolsa — hamma mijoz ilovani o'chirib qayta o'rnatishga majbur bo'ladi |
+| `android/key.properties` | kalit paroli |
+| `lib/firebase_options.dart` | Firebase ulanishi |
+| `android/app/google-services.json` | Firebase (Android) |
+| `assets/` | mahsulot rasmlari va logotip |
+| `public/` | yuklab olish sahifasi + APK |
+| `DAVOM.md` | shu hujjat |
+
+> Haqiqiy ma'lumotlar (mijozlar, rejalar, chatlar) Firebase'da — ular ko'chmaydi va
+> yo'qolmaydi.
+
+### Yangi kompyuterda Claude Code bilan boshlash
+
+1. Zipni oching, **`kotta_qani_diet` papkasini** VS Code'da oching (ichidagi emas, aynan shu).
+2. Claude Code'ga **bitta** xabar yozing, bir nechta ketma-ket emas:
+   > `DAVOM.md faylini o'qib chiq va ishni davom ettir`
+3. "Stewing..." — bu xato emas, "o'ylayapman" degani. 3–4 daqiqadan oshsa, qizil
+   to'xtatish tugmasini bosib, xabarni qayta yuboring.
+
+### Yangi kompyuterda nima o'rnatish kerak
+
+| Nima | Havola / buyruq |
+|---|---|
+| Flutter 3.47+ | https://docs.flutter.dev/get-started/install/windows |
+| Google Chrome | https://google.com/chrome |
+| Node.js LTS | https://nodejs.org — faqat `deploy` uchun |
+| firebase-tools | `npm install -g firebase-tools` |
+| Java 21 (Temurin) | https://adoptium.net — faqat APK uchun |
+| Android SDK | Android Studio, yoki cmdline-tools (platform 36, build-tools 36.0.0) |
+
+Faqat ilovani **ko'rish** kerak bo'lsa — Flutter va Chrome yetadi.
+APK yig'ish kerak bo'lsa — Java va Android SDK ham.
+
+### Birinchi ishga tushirish
+
+```powershell
+flutter pub get
+powershell -ExecutionPolicy Bypass -File .\start.ps1
+```
+
+Tekshirish: `flutter analyze` (0 xato) va `flutter test` (16/16).
+
+### Diqqat
+- APK yig'ishdan oldin `android/diamond-release.jks` va `key.properties` joyida
+  ekaniga ishonch hosil qiling. Bo'lmasa Gradle debug kaliti bilan imzolaydi va
+  yangilanish eski ilova ustiga tushmaydi.
+- `flutter doctor --android-licenses` ni bir marta bajarish kerak bo'lishi mumkin.
+
+---
+
+## 6. Buyruqlar
+
+```powershell
+# Ilovani brauzerda ishga tushirish (xotira tang bo'lsa web-server rejimi yengilroq)
+powershell -ExecutionPolicy Bypass -File .\start.ps1
+flutter run -d web-server --web-port 5173 --web-hostname 127.0.0.1   # keyin Chrome'da oching
+
+# Tekshiruv
+flutter analyze
+flutter test                          # 16 ta test
+
+# Xavfsizlik qoidalari testi (33 ta holat, lokal emulyator, haqiqiy bazaga tegmaydi)
+firebase emulators:start --only firestore --project demo-rules-test
+cd tools\rules_test; npm install; node test.mjs
+
+# APK
+flutter build apk --release --split-per-abi
+copy build\app\outputs\flutter-apk\app-arm64-v8a-release.apk public\app\kq.bin
+copy build\app\outputs\flutter-apk\app-armeabi-v7a-release.apk public\app\kq-eski.bin
+
+# Firebase'ga joylash (qoidalar + yuklab olish sahifasi)
+powershell -ExecutionPolicy Bypass -File .\deploy.ps1
+# yoki JOYLASH.bat ustiga ikki marta bosing
+
+# Ikonka (logotip o'zgarsa)
+dart run tools/make_icon.dart
+dart run flutter_launcher_icons
+```
+
+---
+
+## 7. Tuzilma
+
+```
+lib/
+  main.dart                   Firebase ulanishi, qorong'i tema, fon, keng ekran ramkasi
+  theme.dart                  Diamond dizayn tizimi (ranglar, AppSpace, AppRadius)
+  firebase_options.dart       Firebase sozlamalari (flutterfire configure)
+  models/models.dart          AppUser (rol, goal, trainerId, BMI, targetKcal), Food, MealItem,
+                              Meal, Plan (category), WeightLog (canAdd/daysLeft), ChatMessage
+  models/stats.dart           Trenerlar reytingi hisobi (ClientStat, TrainerStat) — Firestore'siz
+  services/db.dart            Auth + Firestore, Riverpod providerlar, Db.trainerStats()
+  widgets/ui.dart             Umumiy komponentlar (BentoTile, showSheet, ...)
+  widgets/food_image.dart     Mahsulot rasmi (nomdagi birinchi mahsulot -> rasm), mualliflar oynasi
+  screens/auth/               AuthGate (rolga qarab; maqsadsiz shogird -> anketa), Login
+  screens/user/               Bugun, Progress (vazn qulfi), Chat, Profil, Anketa (maqsad)
+  screens/admin/              Mijozlar (maqsad + variantlar), Rejalar (shablonlar, kategoriya),
+                              Mahsulotlar, Xodimlar (bosh admin), trainer_stats_screen (reyting)
+assets/foods/                 34 ta mahsulot rasmi; assets/credits.txt — mualliflar (CC litsenziya)
+assets/icon/logo_src.jpg      Ilova logotipi (manba)
+test/widget_test.dart         50 ta test
+tools/make_icon.dart          Logotipdan ikonka rasmlari
+tools/rules_test/             firestore.rules testlari (77 ta holat)
+functions/                    Push bildirishnomalar (Cloud Functions, Blaze kerak) — FUNKSIYALAR_JOYLASH.bat
+tools/parol_tiklash/          Parolni unutganlarga yangi parol (PAROL_TIKLASH.bat chaqiradi)
+firestore.rules               Xavfsizlik qoidalari
+firebase.json, .firebaserc    Firebase sozlamalari
+public/                       Yuklab olish sahifasi + APK fayllari
+start.ps1                     Ilovani ishga tushirish
+deploy.ps1, JOYLASH.bat       Firebase'ga joylash
+emulators.ps1                 Lokal emulyator
+usb.ps1, internet.ps1         Eski yordamchilar (endi shart emas)
+```
+
+---
+
+## 8. Xavfsizlik qoidalari
+
+[firestore.rules](firestore.rules) — asosiy mantiq:
+
+- `isOwner()` — rol o'zgartiradi va hujjat o'chiradi
+- `isStaff()` — trener + bosh admin: reja/mahsulot yozadi
+- `isTrainerOf(uid)` — trener faqat o'ziga biriktirilgan shogirdni o'qiydi/yangilaydi, uning
+  kunlari, vaznlari, chatiga kiradi; `canManage(uid)` = bosh admin yoki shu trener
+- Trener rolni **o'zgartira olmaydi** (`same('role')`)
+- Foydalanuvchi o'zining rolini, rejasini, reja berilgan vaqtini (`planAssignedAt`) va
+  trenerini o'zgartira olmaydi; maqsadini (`goal`) o'zi tanlaydi
+- Ro'yxatdan o'tayotgan har kim faqat `user` bo'la oladi
+- `same(field)` — `.get(field, null)` orqali, eski hujjatlarda maydon yo'q bo'lsa ham ishlaydi
+
+**77 ta test o'tgan** (`tools/rules_test/`): rol o'zgartirish, bosh admin tayinlash,
+o'chirish, trener biriktirish, o'qish huquqlari, reja/mahsulot, chat, ro'yxatdan o'tish.
+
+> `firestore.rules` o'zgartirilsa — **joylashdan oldin** testni ishga tushiring.
+
+---
+
+## 9. ⚠️ Ochiq masalalar
+
+### 9.1. ~~Qoidalar hali joylanmagan~~ — HAL BO'LDI (14-sent kechqurun)
+Yangi `firestore.rules` Firebase'ga joylandi (`released rules firestore.rules`). Endi
+rolni faqat bosh admin o'zgartiradi. Firebase CLI bu kompyuterda kirgan holatda —
+`deploy.ps1` to'g'ridan-to'g'ri ishlaydi.
+
+### 9.2. ~~Yuklab olish sahifasi eski~~ — HAL BO'LDI (14-sent kechqurun)
+Saytda eng yangi APK (21,6 MB, `CN=Diamond Zal` imzosi) turibdi — HEAD so'rovi bilan
+tekshirildi.
+
+### 9.3. ~~APK'da eng yangi kod yo'q~~ — HAL BO'LDI (14-sent)
+APK **14-sentabr 08:54** da qayta yig'ildi, unda "Bosh admin qilish / tushirish" ham bor.
+`public/app/kq.bin` va `kq-eski.bin` ham yangilandi. Faqat hostingga joylash qoldi (9.2).
+
+### 9.4. Imzo kaliti — HAL BO'LDI (14-sent), lekin oxirgi marta o'chirish kerak
+
+**Muammo shu edi:** Windows qayta o'rnatilganda `~/.android/debug.keystore` yo'qolgan,
+Gradle har kompyuterda yangi debug kaliti yaratardi. Android imzosi boshqacha
+yangilanishni o'rnatmaydi — shuning uchun yangi APK eski ilova ustiga tushmasdi.
+
+**Yechim (14-sent):** loyihaning o'zida **doimiy release kaliti** yaratildi:
+
+| Fayl | Nima |
+|---|---|
+| `android/diamond-release.jks` | kalit (JKS, 10000 kun amal qiladi) |
+| `android/key.properties` | parol va alias: `diamond` / `diamond2026` |
+| `android/app/build.gradle.kts` | `signingConfigs.release` shu kalitni o'qiydi |
+
+Sertifikat: `CN=Diamond Zal, OU=Diamond, O=Diamond Zal, L=Tashkent, C=UZ`
+SHA-256: `7f6ad1c620eb6330ea36ca16c2826ef566220b7ae3274567deebf0f462e0007c`
+
+Endi APK **qaysi kompyuterda yig'ilishidan qat'i nazar bir xil imzoga ega** —
+yangilanishlar eski ilova ustiga bemalol tushadi.
+
+> ⚠️ **`android/diamond-release.jks` va `key.properties` ni YO'QOTMANG.**
+> Ko'chirishda albatta olib keting, zaxira nusxa saqlang. Yo'qolsa — hamma mijoz
+> ilovani o'chirib qayta o'rnatishga majbur bo'ladi va bu tuzatib bo'lmaydigan holat.
+>
+> `key.properties` bo'lmasa, Gradle jimgina debug kalitiga qaytadi — build buzilmaydi,
+> lekin imzo boshqacha chiqadi. APK yig'ishdan oldin fayl joyida ekanini tekshiring.
+
+**Oxirgi marta o'chirish kerak:** 14-sentabr 09:06 dan oldingi barcha APK'lar debug
+kaliti bilan imzolangan. Kimda ular o'rnatilgan bo'lsa — **bir marta** o'chirib,
+yangisini o'rnatadi. Bundan keyin hech qachon kerak bo'lmaydi.
+
+### 9.5. Ekranlar vizual tekshiruvi — ASOSAN HAL BO'LDI (15-sent)
+Trener va bosh admin ekranlari telefon o'lchamida (390×844) brauzerda ko'rildi va topilgan
+kamchiliklar tuzatildi (30-band). **Qolgani:** shogird ekranlari (Bugun, Anketa, Progress,
+Profil, Chat) — shogird akkaunti paroli yo'q, ko'rilmagan.
+
+### 9.6. ~~Parolni o'zgartirish / tiklash yo'q~~ — HAL BO'LDI (15-sent)
+- **O'zgartirish:** shogird Profil → "Parolni o'zgartirish"; trener/bosh admin — yuqoridagi kalit.
+- **Unutganlar:** login ekranida "Parolni unutdim" → zal egasiga murojaat qilish yo'riqnomasi.
+  Bosh admin shu kompyuterda `PAROL_TIKLASH.bat` ni ishga tushiradi: telefon raqam va
+  vaqtinchalik parol kiritadi. Ichida `tools/parol_tiklash/tiklash.mjs`: `firebase auth:export`
+  → shu akkauntni BCRYPT xeshli yangi parol bilan `firebase auth:import` (uid saqlanadi,
+  Firestore ma'lumotlari joyida qoladi). Vaqtinchalik fayllar o'chiriladi.
+  Test akkauntida sinaldi: yangi parol bilan kirdi, eskisi ishlamadi, hujjat o'sha uid'da.
+- Cheklov: faqat Firebase CLI kirgan kompyuterda ishlaydi (telefondan emas).
+
+### 9.7. Trener bilan aniqlashtirish kerak (mahsulot savollari)
+- "50 g grechka qaynatilgan holda" — quruq vazn yoki pishgan vazn? (shablonda quruq)
+- "Fruktozadan voz keching" deyilgan, lekin rejada olma/qulupnay bor — qoldiramizmi?
+
+### 9.8. Akkaunt o'chirilganda qoldiqlar
+`Db.deleteUser()` faqat `users/{uid}` hujjatini o'chiradi. Ichki to'plamlar
+(`days/`, `weights/`) va Firebase Auth akkaunti qoladi — mijoz kutubxonasi ularni
+o'chira olmaydi. Amalda muammo emas: hujjatsiz kirishni `AuthGate` to'sadi
+("Akkaunt topilmadi" ekrani). To'liq tozalash uchun Cloud Functions (Blaze tarifi) kerak.
+
+### 9.9. ~~Shogirdlar maqsad tanlamagan~~ — ESKIRDI (15-sent 12:00)
+Barcha shogirdlar foydalanuvchi so'rovi bilan o'chirildi (39-band). Yangi shogirdlar
+ro'yxatdan o'tganda anketada maqsad va metabolizmni tanlaydi; bosh admin trenerga biriktiradi.
+
+### 9.10. ~~Trener formulasi~~ — QILINDI (15-sent)
+`AppUser.targetKcal` = vazn × `kcalPerKg` (ayol 31/33, erkak 33/35; metabolizm tanlanmagan —
+sekin). Ozish: −20% (BMI < 23 bo'lsa defitsit yo'q, minimum erkak 1500 / ayol 1200),
+massa: +10%. Anketada "Faollik darajasi" o'rniga "Moddalar almashinuvi" (sekin/tez).
+`activity` maydoni modelda qoldi, hisobda ishlatilmaydi.
+**Qaror (men qabul qildim):** −20% / +10% tuzatish formula ustidan saqlandi — trener
+formulaning o'zini xohlasa, `targetKcal` dagi ikki qatorni olib tashlash kifoya.
+
+### 9.11. ~~Har trener faqat o'z shogirdlarini ko'rsin~~ — QILINDI (15-sent)
+Ilova: trener uchun `Db.clientsOf(trainerId)`, bosh admin uchun `Db.clients()`.
+Qoidalar: trener faqat `trainerId == o'zi` bo'lgan shogirdni o'qiydi/yangilaydi (trenerni
+o'zgartira olmaydi), uning kunlari/vaznlari/chatiga faqat shu trener va bosh admin kiradi;
+xodimlar hujjatlarini o'qiy oladi (bosh admin bormi — tekshirish uchun). 49 qoida testi;
+haqiqiy bazada trenerning "hamma shogirdlar" so'rovi 403 bilan rad etildi.
+**Oqibat:** eski APK dagi trener panelida Mijozlar ishlamaydi — yangi APK kerak.
+
+### 9.12. Bosh admin trenerga qo'lda baho qo'ysin — QILINMADI
+Foydalanuvchi bu safar so'ramadi (faqat 9.10 va 9.11 ni tanladi). Hozir reyting avtomatik.
+
+### 9.13. Shablonlar — TUZATILDI (15-sent)
+- **Massa nabor 3-versiya** — trener maslahatlari asosida 6 mahal (har 2–3 soat, sekin
+  uglevodlar, gainer mashg'ulotdan oldin/keyin), ~2720 kkal. Porsiyalar taxminiy.
+- **Massa nabor 2-versiya** — muqobil mahsulotlar bir qatorda, ikkinchi protein olib
+  tashlandi: ~2700 kkal, ~205 g oqsil (avval 2915 / 258). Bazadagi saqlangan reja ham
+  yangilandi (Axror shu rejada).
+- 1-versiya va Ozish 2-versiyadagi izohlar o'zgarmadi (9.13 eski yozuvlari o'rinli).
+- **Abdusamad (BMI 18,3):** ilovaga himoya qo'shildi — BMI < 18,5 bo'lsa anketada "Ozish"
+  o'chiq, trener ham belgilay olmaydi, sahifada qizil ogohlantirish. Uning rejasini
+  men o'zgartirmadim.
+
+### 9.14. Cheklovlar (bilib qo'yish uchun)
+- Vazn qulfi faqat ilova ichida — `firestore.rules` da tekshirilmaydi (qoidalar oxirgi
+  o'lchov sanasini so'rov bilan topa olmaydi).
+- 9.8 ga qo'shimcha: akkaunt o'chirilganda Auth akkaunti qoladi, shuning uchun **o'sha raqam
+  bilan qayta ro'yxatdan o'tib bo'lmaydi** ("raqam band"). Parolni unutganlarga `PAROL_TIKLASH.bat`.
+- ~~Reytingda "rioya" 7 kunga bo'linadi~~ — hal bo'ldi (15-sent): `planAssignedAt` saqlanadi,
+  rioya shu kundan hisoblanadi. Eski biriktirishlarda vaqt yo'q — ular uchun hali 7 kun.
+  Chatga javobni istalgan xodim bersa hisoblanadi.
+- Maqsadga mos reja **sarlavha** bo'yicha aniqlanadi ("Ozish • ..." / "Massa nabor • ...").
+  Reja muharriri buni kategoriya tugmasi bilan o'zi qo'yadi.
+
+---
+
+## 10. Keyingi funksiyalar (rejalashtirilgan, boshlanmagan)
+
+| Funksiya | Pul kerakmi | Taxminiy mehnat |
+|---|---|---|
+| **Ovqat vaqti eslatmasi** (lokal bildirishnoma) | ❌ Bepul | ~0,5 kun |
+| **Trener: "bugun kim yedi"** paneli | ❌ Bepul | ~0,5 kun |
+| **Mashg'ulotlar bo'limi** | ❌ Bepul | ~1,5 kun |
+| **Rus tili** | ❌ Bepul | ~1 kun |
+| Kunlik SMS ratsion | ✅ Blaze + Eskiz.uz | ~1 kun |
+| Payme / Click obuna | ✅ Merchant + Blaze | ~3 kun |
+
+**Muhim topilma:** kunlik eslatmani SMS'siz ham qilsa bo'ladi.
+`flutter_local_notifications` bilan telefonning o'zi reja vaqtlarida
+(`Meal.time`: 07:00, 10:30, 13:00, 15:00, 18:00) eslatadi — server ham, Blaze tarifi
+ham, SMS puli ham kerak emas. Kamchiligi: faqat ilova o'rnatganlarga boradi.
+
+---
+
+## 11. Qilingan ishlar (qisqacha tarix)
+
+**2026-09-11 va oldin** — ilova yozildi: mijoz va trener panellari, Kotta Qani
+shabloni (5 mahal, ~1450 kkal), 19 ta mahsulot rasmi (Wikimedia, erkin litsenziya),
+telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
+
+**2026-09-12:**
+1. **Muhit tiklandi** — yangi kompyuterda Flutter, Node, Java, Android SDK,
+   firebase-tools noldan o'rnatildi.
+2. **Hujjatlar tuzatildi** — README haqiqiy holatga moslandi, kirill harf xatolari.
+3. **Dizayn to'liq yangilandi** — avval "expressive minimalism" (issiq qog'oz + ink),
+   so'ng foydalanuvchi spetsifikatsiyasi bo'yicha **Diamond qorong'i tizimi**
+   (to'q grafit + olmos ko'ki, shisha effekti, 8–16 px burchaklar, ingichka ikonkalar,
+   pop-up o'rniga pastdan chiquvchi varaqlar).
+4. **Suv va vazn aniqlashtirildi** — suv "1 stakan = 250 ml" deb yozildi; vazn haftada
+   1 marta, keyingi o'lchovgacha necha kun qolgani ko'rsatiladi, erta kiritilsa
+   ogohlantiradi (to'smaydi).
+5. **Brend nomi** — "Kotta Qani" → **"Diamond"** (ilova ichi, telefondagi nom, web).
+   Firebase loyihasi va havolalar o'zgarmadi (o'zgartirsa akkauntlar yo'qoladi).
+6. **Ilova ikonkasi** — trenerning logotipi (bodibilder silueti) ikonkaga aylantirildi:
+   oq fon shaffofga o'tkazildi, barcha o'lchamlar + adaptiv + monoxrom variantlar.
+7. **Bosh admin roli** — `owner` roli, "Xodimlar" bo'limi, trener tayinlash/olish,
+   shogirdni trenerga biriktirish, akkaunt o'chirish.
+8. **Xavfsizlik qoidalari qayta yozildi** va **33 ta test** bilan sinovdan o'tkazildi.
+9. **Tuzatilgan xato** — akkaunt o'chirilganda ilova cheksiz yuklanishda qolardi;
+   endi 5 soniya kutib, "Akkaunt topilmadi" ekranini ko'rsatadi.
+
+**2026-09-13:**
+10. **Bosh admin qilish / tushirish** amali qo'shildi (avval faqat "trener qilish" bor edi),
+    yagona bosh adminni tushirishga himoya.
+11. **Ikkita alohida akkaunt** yaratildi: `99XXXXXXX` (bosh admin) va `900000000` (trener).
+    Bosh admin akkaunti Firebase REST orqali yaratilib, roli `owner` qilindi; trener
+    `owner` dan `admin` ga tushirildi.
+
+**2026-09-14:**
+12. **DAVOM.md yaratildi** — hamma narsa bitta faylda; qolgan uch hujjatga bu yerga
+    yo'naltiruvchi qator qo'yildi.
+13. **APK qayta yig'ildi** (08:54) — endi "Bosh admin qilish / tushirish" ham ichida.
+    `public/app/` fayllari yangilandi.
+14. **`deploy.ps1` yaxshilandi** — joylashdan oldin `build/` dagi APK `public/app/` dan
+    yangiroq bo'lsa, uni o'zi ko'chiradi. Endi APK'ni qo'lda nusxalash esdan chiqmaydi.
+15. **Doimiy imzo kaliti** yaratildi (`android/diamond-release.jks`) va yig'ishga ulandi —
+    endi APK qaysi kompyuterda yig'ilishidan qat'i nazar bir xil imzoga ega.
+    APK qayta yig'ilib tekshirildi: `CN=Diamond Zal`. Batafsil — 9.4.
+16. **"Boshqa kompyuterga ko'chirish" bo'limi** qo'shildi (5b): nimani ko'chirish,
+    nimani tashlab ketish, yangi kompyuterda nima o'rnatish kerak.
+17. **Boshqa kompyuterga ko'chirishda muammo** — butun papka zip qilinganda 2,3 GB chiqdi
+    va u yerdagi Claude Code "Stewing..." da turib qoldi. Sabab: `build/`, `.dart_tool/`,
+    loyiha ichidagi eski 513 MB zip va plagin havolalari (260 belgidan uzun yo'llar).
+    **`E:\Diamond-toza.zip`** yasaldi — 23 MB, 149 fayl; ochib, `pub get` + `analyze`
+    bilan sinaldi. 5b-bo'limga to'g'ri usul yozildi.
+18. `deploy.ps1` endi natijani `joylash-log.txt` ga yozadi; avvalgi urinishdan qolgan
+    yarim Firebase kirish holati (`tempLoginState`) tozalandi.
+19. **Ikkinchi ozish shabloni** — "Ozish • 60 / 65 / 75 kg (2-versiya)" (trener matni
+    bo'yicha, 6 mahal, ~1630 kkal, ~160 g oqsil). "Shablon" tugmasi endi tanlash
+    varag'ini ochadi (`planTemplates()`). **APK hali qayta yig'ilmagan.**
+20. **Massa nabor kategoriyasi** — 2 ta shablon: "1-versiya (grammli)" (4 mahal, ~2540
+    kkal) va "2-versiya (tanlovli)" (6 mahal, ~2900 kkal; trener matnida gramm yo'q edi,
+    porsiyalar taxminiy). Shablon varag'i kategoriya bo'yicha guruhlanadi
+    (`Plan.category` — sarlavhaning " • " gacha qismi). Qaysi rejani berishni
+    trener tanlaydi.
+21. **Shogird maqsadi** — `users/{uid}.goal`: `'lose'` (Ozish) / `'gain'` (Massa nabor).
+    Anketaning birinchi bo'limi "Maqsad", tanlamasdan saqlab bo'lmaydi. `AuthGate`
+    maqsadi yo'q **eski shogirdlarni ham bir marta anketaga qaytaradi**.
+    Massa nabor uchun norma TDEE +10% (ozishda -20% qoldi).
+    Trener: mijozlar ro'yxatida maqsad belgisi (Ozish ↓ / Massa nabor ↑), mijoz
+    tafsilotida maqsad, reja ro'yxatida mos kategoriya **★ bilan tepada**, boshqa
+    kategoriyadagi reja biriktirilsa ogohlantirish. Profilda ham maqsad ko'rinadi.
+    `AppUser.goalLabel` va `planCategories` bir xil nomlar — reja sarlavhasi
+    "Ozish • ..." / "Massa nabor • ..." bilan boshlanishi kerak. Qoidalar o'zgarmadi
+    (shogird o'z `goal` ini yoza oladi). **APK qayta yig'ilmagan.**
+22. **Trener rasmlaridagi matnlar to'liq** — "Ozish 2-versiya" izohiga trener matni
+    so'zma-so'z qo'shildi. **"Massa nabor • 3-versiya (maslahatlar)"** shabloni:
+    kaloriya hisoblash (1 kg vaznga 31/33/35), metabolizm, gamburger va guruch-tovuq
+    solishtiruvi, massa nabor maslahatlari, sekin singuvchi uglevodlar indeksi.
+    Rasmlarda ovqat jadvali yo'q — mahallari bo'sh, trener qo'shadi. Matn shogirdda
+    "Bugun" ekranidagi "Trener maslahati" kartochkasida chiqadi.
+23. **Trenerlar reytingi** (faqat bosh admin): Xodimlar → "Trenerlar reytingi".
+    So'nggi 7 kun bo'yicha har trenerga 0–100 ball va 1–5 yulduz. Tarkibi: reja berilgan
+    shogirdlar 30%, chatga javob (oxirgi xabar shogirddan emas) 25%, shogirdlarning
+    "yedim" rioyasi 25%, vazn maqsad tomon siljishi 20%. Ma'lumoti yo'q qism hisobga
+    olinmaydi. Trenerlar ko'rsatkichlar bo'yicha yonma-yon solishtiriladi; trener
+    ichida "E'tibor kerak" shogirdlar sababi bilan (reja yo'q, javob kutmoqda, rioya <50%,
+    vazn 14 kundan beri yo'q, natija yo'q). Mantiq — [lib/models/stats.dart](lib/models/stats.dart),
+    yuklash — `Db.trainerStats()`, ekran — `trainer_stats_screen.dart`. Qo'lda baho
+    qo'yish yo'q (qoidalar o'zgarishi kerak bo'lardi).
+24. **Vazn qat'iy haftada 1 marta** — avval faqat ogohlantirardi, endi to'sadi.
+    `WeightLog.canAdd/daysLeft` (kalendar kun bo'yicha, 7 kun). Progress'da tugma
+    "Vazn: N kundan keyin" bo'lib o'chadi; anketada vazn birinchi kiritilgach
+    qulflanadi. Faqat ilova ichida tekshiriladi (qoidalarda emas). Testlar 34/34.
+    Web release yig'ildi (`build\web`), lokal: `python -m http.server 5173 --directory build\web`.
+    Bosh admin va trener loginlari REST orqali tekshirildi — ishlaydi.
+25. **Trener massa nabor rejasini bera olmasdi** — sabab: bazada faqat bitta reja
+    ("Ozish • 80-90 kg") saqlangan, shablonlar esa faqat "Shablon" tugmasida edi.
+    Endi mijoz sahifasida: **Maqsad** tugmalari (shogird tanlamagan bo'lsa trener
+    belgilaydi, `Db.setGoal`) va maqsadga mos **barcha variantlar** ro'yxati (shablonlar +
+    shu kategoriyada saqlangan rejalar). Saqlanmagan shablon tanlansa — avval bazaga reja
+    bo'lib saqlanadi, keyin biriktiriladi (`Db.savePlan` endi id qaytaradi). Mijozlar
+    ro'yxatida maqsadi yo'qlarga "Maqsad ?" belgisi. 14-sentabr holati: 5 shogirddan
+    faqat Axror maqsad tanlagan (gain), qolganlari hali yangi versiyada kirmagan.
+26. **Birinchi joylash** — APK yig'ildi (imzo tekshirildi), `deploy.ps1` bilan qoidalar +
+    hosting joylandi. Firebase CLI bu muhitda kirgan holatda ekan — ishladi.
+27. **Trener faqat maqsadga mos rejani beradi** (foydalanuvchi talabi: "massa tanlagan
+    bo'lsa trener faqat massadan beradi, ozish tanlasa ozishdan"). Mijoz sahifasidagi
+    "barcha rejalar" ro'yxati olib tashlandi — faqat maqsad variantlari va "Rejani olib
+    tashlash". Shogird tanlagan maqsadni trener o'zgartira olmaydi (faqat bo'sh bo'lsa
+    belgilaydi). Reja muharririda **Kategoriya** (Ozish / Massa nabor) majburiy —
+    sarlavha "Kategoriya • nomi" bo'lib saqlanadi. Qayta yig'ilib joylandi.
+28. **Mahsulot rasmlari** — foydalanuvchi: "bir xil mahsulotlarning rasmi yo'q". Sabablar:
+    (a) guruch, banan, sut, bodom, brokkoli, makaron, kartoshka, kefir, pishloq, shokolad,
+    limon, piyoz, kivi, meva, bolgar qalampiri uchun rasm yo'q edi; (b) qoida tartibi
+    tufayli "Yong'oq (yoki protein)" → protein rasmi, "Tovuq / ... / baliq" → baliq.
+    15 ta yangi rasm Wikimedia Commons'dan (ko'z bilan ko'rib tanlandi, mualliflar
+    `credits.txt` da). `foodAsset()` endi so'z boshidan qidiradi va nomdagi **eng oldin
+    kelgan** mahsulotni oladi; teng bo'lsa uzunroq kalit ("tuxum oqi" > "tuxum").
+    "Osh" → guruch rasmi. Test: shablonlardagi har bir mahsulotning rasmi bor; bazadagi
+    20 ta mahsulot ham tekshirildi.
+29. **Oxirgi joylash (14-sent kechqurun)** — testlar 38/38, web + APK qayta yig'ildi,
+    imzo `CN=Diamond Zal`, `deploy.ps1` → qoidalar va hosting joylandi, saytdagi
+    `kq.bin` 21,6 MB (yangi) ekani tekshirildi.
+
+**2026-09-15:**
+30. **Ekranlar ko'z bilan tekshirildi** — headless Chrome + CDP skripti (scratchpad'da,
+    loyihaga kirmaydi), 390×844, trener va bosh admin akkauntlari, bazaga hech narsa
+    yozilmadi. Topilgan va tuzatilgan kamchiliklar:
+    - Mijoz sahifasida **ichma-ich o'ralish** (yuqori 60% o'raladi, progress kartochkasi
+      variantlarni yopardi) → **"Reja" / "Progress" tablari**.
+    - **Maqsad ko'rinmasdi** — ikkala ChoiceChip o'chiq va bir xil kulrang → maqsad bo'lsa
+      `GoalPill`, bo'lmasa ikkita tugma.
+    - `StatTile` sarlavhalari qirqilardi ("REJA B…", "NORMA, …") → `FittedBox` bilan kichrayadi.
+    - "Maqsad ?" belgisi xira edi → sariq.
+    - Vazn o'zgarmaganda (0.0) "pastga" o'qi → tekis o'q; massa naborda vazn oshishi
+      urg'u rangida (avval ogohlantirish rangida edi).
+    - Mahsulotlarda **"Osh" 0 kkal** → "Kaloriya kiritilmagan" qizil belgisi.
+31. **Parolni o'zgartirish** (9.6) — `lib/widgets/change_password.dart`, tekshiruv
+    `validateNewPassword` testlangan.
+32. **Reja berilgan vaqt** — `Db.assignPlan` `planAssignedAt: serverTimestamp` yozadi;
+    `ClientStat.trackedDays` rioyani shu kundan hisoblaydi; `firestore.rules` shogird uni
+    o'zgartira olmasligini tekshiradi (+3 qoida testi: planAssignedAt, goal shogird, goal trener).
+33. **Joylash (09:17)** — testlar 40/40, qoida testlari 36/36 (emulyator), web + APK,
+    imzo `CN=Diamond Zal`, qoidalar + hosting joylandi.
+34. **Foydalanuvchi "hammasini qil" dedi** (trener formulasi, trener faqat o'z shogirdlari,
+    Osh, Abdusamad, maqsadsizlar, massa shablonlari, shogird ekranlarini tekshirish,
+    parolni unutganlar):
+    - Trener formulasi + metabolizm anketada (9.10).
+    - Trener faqat o'z shogirdlari: ilova + qoidalar, 49 qoida testi (9.11).
+    - BMI < 18,5 da ozish bloklangan (9.13).
+    - Massa 2- va 3-versiya qayta tuzildi; bazadagi 2-versiya rejasi yangilandi (9.13).
+    - "Osh" ga taxminiy KBJU yozildi (REST, bosh admin nomidan).
+    - Login'da "Parolni unutdim", `PAROL_TIKLASH.bat` + `tools/parol_tiklash/` (9.6).
+    - Profilda metabolizm katagi.
+35. **Shogird ekranlari tekshirildi** — vaqtinchalik "TEST Claude" (+998 97 777 77 77)
+    akkaunti brauzerda ro'yxatdan o'tkazildi: anketa (BMI 17 da Ozish o'chiq, 55 kg × 35
+    + 10% = 2118 kkal), Bugun, Progress (vazn qulfi "7 kundan keyin"), Profil, parolni
+    o'zgartirish (server tekshirdi), parol tiklash vositasi (2 marta). Keyin **to'liq
+    o'chirildi**: `firebase firestore:delete users/<uid> -r` + Auth `accounts:delete`;
+    bazada yana asl 7 ta akkaunt.
+36. **Joylash (10:10)** — testlar 44/44, qoida testlari 49/49, web + APK (`CN=Diamond Zal`),
+    qoidalar + hosting; haqiqiy bazada trener so'rovlari tekshirildi (o'zinikilar — 2 ta,
+    hammasi — 403).
+37. **Reja kategoriyasi qat'iy** (foydalanuvchi: "shogird kategoriyasiga mos kelmaydigan
+    retsept blokda bo'lsin, ozish narsasi chiqib qolmasin"): `planCategories` models.dart ga
+    ko'chdi, `AppUser.fitsPlan(plan)`; mijoz sahifasida mos kelmaydigan reja nomi o'rniga
+    "bloklangan" yozuvi, BMI past bo'lsa "Ozish" tugmasi yashirin; mijozlar ro'yxatida
+    "Reja mos emas" (Kutmoqda soniga kiradi); shogird "Bugun"da bloklangan reja o'rniga
+    "Reja yangilanmoqda".
+38. **Trener bosh adminni ko'rmaydi** (foydalanuvchi: "trener bosh adminni ko'rmasligi,
+    borligini bilmasligi kerak"): `Db.trainers()` (faqat `admin`) — trener tanlash va
+    reytingda; `_OwnerBootstrap` banneri olib tashlandi; `ChatScreen.onlyMineAndClient` —
+    trener faqat o'zi va shogird xabarlarini ko'radi; qoidalar: trener faqat
+    `trainerId == o'zi` hujjatlarni o'qiydi (+2 test: bosh admin va boshqa trener hujjati).
+    Testlar 45/45, qoida testlari 51/51, joylandi.
+39. **Baza tozalandi** (foydalanuvchi: "trener va admindan boshqa userlarni o'chir"):
+    avval `zaxira/2026-09-15_ochirilgan_shogirdlar.json` ga users hujjati, weights, days,
+    chat saqlandi; keyin `firebase firestore:delete users/<uid> -r` va `chats/<uid> -r`;
+    Auth akkauntlari — vaqtinchalik BCRYPT parol import qilinib `accounts:delete` bilan.
+    Natija: Auth 2 ta, Firestore users 2 ta; ikkala login REST bilan tekshirildi.
+    `tools/parol_tiklash/tiklash.mjs` ham CLI'ning chiqishdagi qulashiga chidamli qilindi.
+40. **Shogird trenerni o'zi tanlaydi; katalogni trener boshqaradi** (foydalanuvchi: "mijoz
+    trener tanlashi kerak va u trenerga chiqishi kerak, adminda emas; admin trenerni va
+    nechta shogirdi borligini ko'radi"; "katalogni trener boshqaradi"):
+    - `trainers/{uid}` katalogi (`TrainerInfo`: name, bio, accepting). Shogird trenerning
+      `users` hujjatini ko'rmaydi (telefon yopiq) — faqat katalog yozuvini.
+    - Anketada "Treneringiz" bo'limi (qabul qilayotgan trenerlar); `AuthGate` katalogda
+      trener bo'lsa trenersiz shogirdni anketaga qaytaradi (`trainerDirectoryProvider`).
+    - Qoidalar: `trainerChoiceOk()` — shogird `trainerId` ni faqat bo'sh bo'lsa va katalogda
+      `accepting == true` trener bo'lsa qo'yadi. Katalog: o'qish — hamma kirganlar; yozish —
+      faqat shu trener (ism ≤ 60, bio ≤ 300, faqat 3 maydon); bosh admin faqat qo'shadi/o'chiradi.
+    - `Db.setRole` trener tayinlanganda yozuv qo'shadi (bor bo'lsa tegmaydi), olinganda o'chiradi;
+      `Db.syncTrainerDirectory()` bosh admin ilovani ochganda yo'q yozuvlarni qo'shadi,
+      trener bo'lmaganlarnikini o'chiradi (trener sozlamalariga tegmaydi).
+    - Trener Mijozlar tepasida "Katalogdagi profilim" (tahrirlash, qabul qilish tugmasi);
+      shogird profilida "Treneringiz".
+    - `AppUser.kcalFormula` — profil va anketada "80 kg × 33 − 20%" ko'rinishi.
+    - Tekshiruv: qoida testlari 64/64 (+13), testlar 46/46; brauzerda to'liq oqim: bosh admin
+      kirdi (katalog yozuvi yaratildi) → test shogird ro'yxatdan o'tib trenerni tanladi →
+      trener Mijozlarida paydo bo'ldi. Test akkaunt o'chirildi.
+41. **Qolgan ishlar + tema + bildirishnomalar** (foydalanuvchi: "qilinmaganlarni qil; tema va
+    notification bitganmi"; tanlovi: yorug'/qorong'i rejim; ovqat, vazn, chat, reja bildirishnomasi):
+    - **Tema**: `AppColors` endi getter (`AppColors.light`), yorug' palitra (urg'u #0891B2);
+      `AppTheme.current()`; 249 ta `const` avtomatik tozalandi (analyzer xatolari bo'yicha skript);
+      `AppSettings` (shared_preferences) — `themeMode`; `MaterialApp` kaliti rejimga bog'liq
+      (almashganda butun daraxt qayta quriladi). `lib/widgets/settings_sheet.dart`.
+    - **Bildirishnomalar**: `flutter_local_notifications` 22 + `timezone` (Asia/Tashkent),
+      `lib/services/notifications.dart` (ovqat — kunlik `zonedSchedule`, vazn — bir martalik,
+      `inexactAllowWhileIdle`), `lib/services/reminders.dart` (sof hisob, testlangan),
+      `lib/widgets/notification_sync.dart` (shogird: reja/vazn/chat/yangi reja; trener: shogird
+      xabarlari; faqat ilova orqa fonda bo'lsa). Android: POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED,
+      receiverlar, core library desugaring.
+    - **Push (FCM)**: `firebase_messaging`, token `users/{uid}.fcmTokens` (chiqishda o'chiriladi),
+      `functions/index.js` (v1 triggerlar, europe-west1): `onChatMessage`, `onPlanAssigned`;
+      `tag` lokal bildirishnoma bilan bir xil — takrorlanmaydi. **Joylanmadi: Blaze kerak**
+      (`firebase deploy --only functions` → "must be on the Blaze plan").
+    - **Qo'lda baho**: `ratings/{trainerId}` (faqat bosh admin; stars 1–5, comment ≤ 500),
+      reyting tafsilotida `_OwnerRatingCard`, kartochkada "Bahongiz: N/5".
+    - **Vazn qulfi serverda**: `Db.addWeight` — batch (weights + `lastWeighIn: serverTimestamp`);
+      qoidalar `weightChangeOk()` va weights create `getAfter(...).lastWeighIn == request.time`.
+    - **O'chirilgan akkaunt**: `_NoProfile` → parol bilan qayta tasdiqlab `currentUser.delete()`
+      (yaqinda kirish talabi tufayli parol so'raladi — birinchi urinishda shu xato topilib tuzatildi);
+      `tools/parol_tiklash/ochirish.mjs` + `AKKAUNT_OCHIRISH.bat` (bosh admin/trenerni o'chirmaydi).
+    - **Trenerni almashtirish**: qoidada "faqat bo'sh bo'lsa" sharti olib tashlandi (faqat
+      qabul qilayotgan trenerga), Profil → "Trenerni almashtirish".
+    - Tekshiruv: testlar 50/50, qoida testlari 77/77; brauzerda (yorug' rejimda): trener
+      Mijozlar, mijoz sahifasi, chat (bo'sh va xabarli), bosh admin baho qo'yish, test shogird
+      anketasi (yangi vazn qoidasi bilan), Progress qulfi, trener almashtirish, "Akkaunt
+      topilmadi" → qayta ro'yxatdan o'tish (Auth o'chgani REST bilan tasdiqlandi). Test baho
+      va test akkaunt o'chirildi. Bildirishnomalar telefonda KO'RILMAGAN (emulyator yo'q).
+
+---
+
+## 12. Holat: nima ishlaydi
+
+| Tekshiruv | Natija |
+|---|---|
+| `flutter analyze` | ✅ 0 xato |
+| `flutter test` | ✅ 54/54 |
+| Qoida testlari | ✅ 84/84 (15-sent, emulyatorda) |
+| APK yig'ish | ✅ ishlaydi (15-sent 17:59, 22,6 MB, `CN=Diamond Zal`) |
+| Web release | ✅ `build\web` — lokal: `python -m http.server 5173 --bind 127.0.0.1 --directory build\web` |
+| Firebase'ga joylash | ✅ qoidalar + hosting (15-sent 17:59); ❌ Cloud Functions — Blaze kerak |
+| Bosh admin / trener login | ✅ REST orqali tekshirilgan (`owner` / `admin`) |
+| Ekranlarni ko'z bilan tekshirish | ✅ trener, bosh admin va shogird (15-sent; chat ko'rilmagan) |
+
+42. **Zal bo'limi** (shogird va trenerda): 3 mashg'ulot — 1) Ko'krak + biceps, 2) Qanot (orqa) + oyoq,
+    3) Yelka + triceps. Shogird ikki variantdan birini tanlaydi: Se/Pay/Sha yoki Du/Chor/Ju
+    (`users.gymDays`, qoidalar faqat shu ikki ro'yxatni qabul qiladi). Shogird: bugungi mashg'ulot,
+    jadval, "Mashqlar — tuzatish ishlari olib borilmoqda" (belgilash yo'q). Trener: bugun kim keladi,
+    kim uyda, hamma jadvali; **"Uyda mashq"** (`homeWorkoutDate`) faqat shogird bugun chatda
+    "kelolmayman / boromiman" kabi yozgan bo'lsa ochiladi (`saysCantCome`), shogird o'zi belgilay
+    olmaydi. `lib/models/gym.dart`, `screens/user/gym_screen.dart`, `screens/admin/gym_admin_screen.dart`.
+    Testlar 54/54, qoida testlari 84/84, joylandi (APK 22,8 MB). Ekranlar brauzerda ko'rilmagan.
+43. **Ilova ikonkasi** (foydalanuvchi: "orqa oq fonni olib tashla, rasm kattaroq, orqa fon shaffof";
+    keyin telefonda qora ramka chiqdi — "ramkani ichida png ga o'xshab orqa fon bilan bir xil bo'lsin"):
+    - `tools/make_icon.dart`: faqat TASHQI oq fon shaffof (chetlardan flood fill) — logotip ichidagi oq
+      detallar saqlanadi; `icon.png` shaffof, logotip 96%.
+    - Birinchi urinish — adaptiv ikonka shaffof fon (`#00000000`) + inset 0: launcher shaffof fonni
+      **qora plashka** bilan to'ldirdi (Android adaptiv ikonkani doim shaklga soladi).
+    - Yakuniy yechim: **adaptiv ikonka olib tashlandi** (pubspec'dan `adaptive_icon_*` kalitlari,
+      `res/mipmap-anydpi-v26/`, `drawable-*/ic_launcher_foreground|monochrome.png`, `values/colors.xml`
+      o'chirildi) — faqat shaffof `mipmap-*/ic_launcher.png`. Burchak alpha 0 tekshirildi.
+    - Eslatma: Samsung "Icon frames" yoqilgan bo'lsa tizim baribir ramka qo'shadi; monoxrom (Android 13
+      mavzuli) ikonka endi yo'q.
+    - APK 17:59 da yig'ildi va saytga joylandi. Telefonda natija hali tasdiqlanmagan.
+44. **Savol: "massa naborda 2 ta versiya chiqyapti"** — tekshirildi: ikkala shogird (Shogird 1, Shogird 2)
+    maqsadi "Ozish" → trener faqat 2 ta ozish variantini ko'radi (to'g'ri). Massa nabor 3 varianti faqat
+    maqsadi massa bo'lgan shogirdda chiqadi. Kod o'zgarmadi.
+45. **Zal bo'limi brauzerda tekshirildi (16-sent)** — vaqtinchalik "TEST Zal" akkaunti bilan to'liq oqim:
+    anketa → Zal → "Kunlarni tanlash" (2 variant: Se/Pay/Sha, Du/Chor/Ju) → jadval va bugungi mashg'ulot
+    ("Chorshanba — Qanot (orqa) + oyoq") → chatda "bugun zalga kelolmayman" → trener Zal bo'limida
+    "Uyda mashq" tugmasi **ochildi** (boshqa shogirdda o'chiq turdi) → bosildi → shogird "Bugun uyda"
+    ro'yxatiga o'tdi, trenerda "Bekor" tugmasi, shogirdda "Uyda mashq" kartochkasi chiqdi.
+    Test akkaunt **`AKKAUNT_OCHIRISH` vositasi bilan** o'chirildi (vosita ham shu bilan sinaldi:
+    Firestore + Auth tozalandi, tekshirildi). Baza: trener, bosh admin, Shogird 1, Shogird 2.
+    Kod o'zgarmadi — testlar 54/54, analyze 0 xato.
+46. **Do'kon bo'limi (16-sent, 45-banddan keyin)** — foydalanuvchi so'rovi: "bita bo'lim bo'ladi forma va
+    anjomla va pitaniyala (protein, kreatin)".
+    - **Model** `lib/models/shop.dart`: `shopCategories` = Forma / Anjomlar / Sport pitaniya;
+      `Product` (nomi, izoh, narx so'mda, qoldiq, rasm havolasi, sotuvda-mi), `ShopOrder`
+      (holatlari: `new` kutilmoqda, `given` berildi, `canceled` bekor), `SalesReport` (30 kunlik savdo),
+      `fmtSum` (450000 → "450 000").
+    - **Shogird** (`lib/screens/user/shop_screen.dart`, pastdagi 4-bo'lim "Do'kon"): bo'limlar bo'yicha
+      filtr, narx, "Qoldi: N" ogohlantirishi, "Olaman" → sonini tanlash → buyurtma. Yuqorida o'z
+      buyurtmalari ("Bekor" tugmasi bilan) va tarix.
+    - **Trener** (`lib/screens/admin/shop_admin_screen.dart`, "Do'kon" bo'limi): ikki varaq —
+      **Buyurtmalar** (30 kunlik summa, "Kutilmoqda" + "Tarix", "Berildi"/"Bekor") va **Tovarlar**
+      (bo'limlarga ajratilgan ro'yxat, "+ Tovar" varag'i, o'chirish). Trener faqat O'Z shogirdlari
+      buyurtmasini ko'radi, bosh admin — hammasini.
+    - **Bog'lanish:** buyurtma berilganda chatga "🛒 Buyurtma: ..." yoziladi — trener mavjud chat
+      bildirishnomasi orqali xabar topadi; "Berildi" bosilganda shogirdga "✅ Buyurtma berildi ..."
+      xabari boradi va tovar qoldig'i tranzaksiya bilan kamayadi.
+    - **Qoidalar** (`firestore.rules`): `shop` — hamma o'qiydi, faqat xodim yozadi; `orders` — shogird
+      faqat o'zi nomidan va **bazadagi narx bilan** yarata oladi (arzon narx yozib bo'lmaydi), trener
+      faqat status/updatedAt ni o'zgartiradi, o'chirish faqat bosh adminda. Qoida testiga 27 ta holat
+      qo'shildi (jami 111, 0 xato — emulyator JDK 21 bilan: `%LOCALAPPDATA%\jdk21\...`).
+    - **Brauzerda to'liq tekshirildi:** trener 2 ta tovar kiritdi (Forma 120 000, Sport pitaniya
+      450 000 / qoldiq 5) → vaqtinchalik "TEST Dokon" shogirdi 2 dona protein buyurtma qildi →
+      chatda xabar chiqdi → trener "Berildi" bosdi → 30 kunlik savdo "900 000 so'm", qoldiq 5 → 3.
+      Yorug' mavzu ham ko'rildi. Test ma'lumotlari (akkaunt, buyurtma, 2 tovar) o'chirildi — baza
+      yana faqat trener, bosh admin, Shogird 1, Shogird 2.
+    - Eslatma: shogird akkaunti o'chirilganda uning **buyurtmalari qoladi** (savdo hisobi uchun) —
+      `AKKAUNT_OCHIRISH` faqat `users/` va `chats/` ni tozalaydi.
+    - To'lov ilovada YO'Q (Payme/Click keyin, Blaze + merchant hujjatlari kerak) — zalda naqd.
+47. **Haftalik reja va ratsion rasmlari (17-sent)** — foydalanuvchi trenerdan olingan 7 ta rasm berdi
+    (1300–1700 kkal, har biri 5 mahal) va "1 haftalik ratsion" so'radi.
+    - **Model** (`lib/models/models.dart`): `Plan` ga ikki maydon qo'shildi —
+      `week` (1..7 → o'sha kun mahallari) va `photos` (1..7 → rasm yo'li).
+      `mealsFor(weekday)`, `kcalFor`, `proteinFor`, `mealsPerDay`, `isWeekly`, `photoFor`.
+      Haftalik bo'lmagan reja ilgarigidek ishlaydi; `kcal` haftalikda 7 kun o'rtachasini beradi.
+      **Eski hujjat xatosi:** `(d['week'] ?? {}) as Map<String, dynamic>` bo'sh `{}` ni
+      `Map<dynamic,dynamic>` deb chiqarib TypeError bergan — rejalar ekrani cheksiz "yuklanmoqda"
+      bo'lib qolgan edi. To'g'risi: `(d['week'] as Map<String, dynamic>?) ?? const {}`.
+      Shu bilan birga `plans_screen` ga xato ko'rsatuvchi blok qo'shildi (avval xato ko'rinmasdi).
+    - **Trener muharriri**: "Har kunga alohida menyu" tugmasi (yoqilganda hozirgi menyu 7 kunga
+      nusxalanadi), Du…Yak chiplar, "Hamma kunga" nusxalash, kun rasmi ko'rinadi.
+      Saqlashda asosiy `meals` — dushanba nusxasi (eski APK'lar uchun).
+    - **Shogird**: "Bugun" ekrani o'sha kun menyusini ko'rsatadi ("REJA · PAYSHANBA"),
+      kaloriya va oqsil shu kunniki, tepasida trener bergan **ratsion rasmi** — bosilsa
+      to'liq ekranda kattalashtirib ko'riladi (`lib/widgets/plan_photo.dart`).
+    - **Rasmlar**: suhbatdagi 7 ta surat `assets/ratsion/1-kun.jpg … 7-kun.jpg` ga yozildi
+      (pubspec'ga qo'shildi, `assets/credits.txt` da manbasi izohlangan).
+    - **Shablon**: `haftalikRatsionTemplate()` — 7 kun × 5 mahal, grammlari rasmdagi ko'rinishga
+      qarab olingan (**taxminiy**), izohda trenerning kirish matni ham bor.
+      Kunlik kaloriya: Du 1458, Se 1320, Chor 1498, Pay 1699, Ju 1452, Sha 1505, Yak 1679.
+    - **Brauzerda tekshirildi**: shablondan reja yaratildi → kun chiplari va kun rasmi trenerda
+      ko'rindi → vaqtinchalik "TEST Rasm" shogirdiga biriktirildi → shogirdda Payshanba menyusi
+      (1699 kkal, 156 g oqsil) va o'sha kunning rasmi chiqdi, rasm to'liq ekranda ochildi.
+      Test akkaunt o'chirildi.
+    - **Do'kon tuzatishi**: tovar rasmi endi nomiga qarab avtomatik chiqadi (protein, gainer …),
+      xuddi ovqat bazasidagidek; rasm havolasi bo'lmasa bo'lim ikonkasi qoladi.
+    - Testlar: 68/68 (haftalik reja uchun 6 ta yangi test), analyze 0 xato.
+48. **Hujjatlar (17-sent)** — `hujjatlar/` papkasi yaratildi:
+    - `Diamond-TZ.docx` — 14 bo'limli texnik topshiriq: maqsad (o'lchanadigan natijalar bilan),
+      rollar, ekranlar, 40+ funksional talab, biznes qoidalari, ma'lumotlar modeli, xavfsizlik,
+      dizayn, stek, hozirgi holat, 6 bosqichli reja, xavflar, qabul mezonlari, ochiq savollar.
+      (Yaratuvchi skript: `python-docx`; web nusxasi ham bor — Claude artifact havolasi.)
+    - `figma/` — 7 ta SVG (dizayn tizimi + 6 ekran), Figma sudrab tashlaganda qatlamga aylanadi.
+    - `figma-plugin/` — `manifest.json` + `code.js`: Figma ichida 7 ramka, 248 matn qatlami va
+      15 rang stilini o'zi chizadi. **Haqiqiy Figma'da sinalmagan** (soxta muhitda ishladi).
+49. **Chiqarish va sayt (17-sent 13:00)**
+    - **Shogird tomoni tekshirildi** (bu band 47-bandning ochiq qolgan qismi): vaqtinchalik
+      "TEST Rasm" shogirdi (62 kg, Ozish) ga haftalik reja biriktirildi → "Bugun" ekranida
+      **"REJA · PAYSHANBA"**, 1699 kkal, 156 g oqsil va **Payshanba ratsion rasmi** chiqdi;
+      rasm bosilganda to'liq ekranda ochildi. Test akkaunt o'chirildi.
+    - **APK** qayta yig'ildi: `app-arm64-v8a-release.apk` **24,4 MB** (rasmlar +1,7 MB),
+      `app-armeabi-v7a` 22,1 MB. `public/app/kq.bin` va `kq-eski.bin` yangilandi.
+    - **Ilovaning web versiyasi joylandi:** `flutter build web` → `public/ilova/`
+      (`index.html` dagi `<base href>` qo'lda `/ilova/` ga o'zgartirildi — `--base-href`
+      bayrog'i shablondagi `$FLUTTER_BASE_HREF` ni almashtirmay qoldi).
+      **https://kotta-qani-09111753.web.app/ilova/** — iPhone'lilar endi ilovadan foydalana oladi,
+      trener kompyuterda ishlaydi. Brauzerda kirish tekshirildi (trener paneli ochildi).
+      Cheklov: brauzerda bildirishnoma yo'q.
+    - ⚠️ **Xavfsizlik tuzatildi:** eski yuklab olish sahifasida **trener telefoni va paroli
+      ochiq yozilgan edi** (`<trener-paroli>`) — havolani bilgan har kim trener paneliga kira olardi.
+      Olib tashlandi. Sahifa qaytadan yozildi: ilova haqida, 3 ta tugma (Android / eski telefon /
+      brauzer), 3 ta ekran surati (`public/img/`, ismlar umumiy — Jasur/Aziz), o'rnatish yo'riqnomasi
+      va Play Protect izohi. **Trener paroli o'zgartirilsa yaxshi bo'ladi** — eski parol
+      ochiq turgan edi.
+    - `assets/credits.txt` ga ratsion rasmlari manbasi yozildi.
+    - `QOLLANMA.md` yangilandi: haftalik reja qanday tuziladi, kun rasmi, web versiya.
+    - Yakuniy tekshiruv: `flutter analyze` 0 xato, `flutter test` 68/68.
+50. **Maketlar to'ldirildi (17-sent)** — foydalanuvchi savoli: "trener uchunligi qani, admin uchun qani".
+    Avval 6 ta ekran bor edi (3 shogird + 3 trener), bosh admin ekranlari umuman yo'q edi.
+    Qo'shildi: **trener** — Zal, Ovqat bazasi; **bosh admin** — Xodimlar, Trenerlar reytingi;
+    **shogird** — Progress, Chat, Profil. Jami **13 ekran + dizayn tizimi taxtasi**.
+    - `hujjatlar/figma/*.svg` — Figma sudrab tashlaganda qatlamga aylanadi (brauzerda ham ishlaydi).
+    - `hujjatlar/figma/png/*.png` — 2x sifatda rasm (Figma kerak emas, Telegramga tashlash uchun).
+    - Generatorlar scratchpad'da edi (`figma_svg.py`, `figma_svg2.py`) — **ular saqlanmagan**,
+      kerak bo'lsa qaytadan yozilishi mumkin; SVG fayllarning o'zi loyihada.
+    - Figma plagini hamon 6 ta ekranni chizadi (qolgan 7 tasi faqat SVG). Plagin haqiqiy
+      Figma'da hali sinalmagan.
+51. **Haftalik ratsion olib tashlandi (17-sent, foydalanuvchi so'rovi)**
+    "1 haftalik bitani ... 7 kunlik retsept, o'shani olib tashlab APK yig'ib ber".
+    - O'chirildi: `haftalikRatsionTemplate()`, `assets/ratsion/*.jpg` (7 rasm), pubspec dagi
+      `assets/ratsion/` yozuvi, `credits.txt` dagi izoh, 2 ta test. Shablonlar: 6 → **5**.
+    - **Haftalik reja imkoniyati qoldi** (model `week`/`photos`, muharrirdagi "Har kunga alohida
+      menyu", kun rasmi ko'rsatuvchi `PlanPhoto`) — trener kelajakda o'zi tuzishi uchun.
+    - Bazadagi "Ozish • 1 haftalik ratsion" rejasi hali **o'chirilmagan** — trener panelidan
+      (Rejalar → ⋯ → O'chirish) yoki so'rov bilan o'chirish kerak. Unga biriktirilgan shogird yo'q.
+    - ⚠️ **Xato va tiklash:** o'chirish skripti qavslarni noto'g'ri hisoblab, yonidagi
+      **`massaNabor3Template()`** ni ham kesib tashladi (loyiha git'da emas — orqaga qaytarish yo'q).
+      Tiklandi: `public/ilova/main.dart.js` (o'chirishdan oldin yig'ilgan web bundle) dagi
+      matn konstantalaridan mahal nomlari, grammlar va KBJU qiymatlari, izoh matni esa suhbat
+      yozuvidan olindi. Tekshirildi: **6 mahal, 2722 kkal, 185 g oqsil** — avvalgisi bilan bir xil.
+    - **Xulosa: loyihada git yo'q.** Shu sababli kod o'chsa faqat build artefaktlaridan tiklanadi.
+      Tavsiya: `git init` qilib, har kun oxirida commit qilish (fayllar kompyuterda qoladi,
+      hech qayerga yuborilmaydi). Buni bir marta sozlash 5 daqiqa.
+    - Yakuniy tekshiruv: `analyze` 0 xato, `flutter test` **66/66**.
+    - **APK yig'ilmadi** — foydalanuvchi "to'xta" dedi, skrinshot savoli bilan (yuqoridagi qaror).

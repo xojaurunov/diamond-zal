@@ -1,0 +1,151 @@
+import 'models.dart';
+
+/// Trenerlar reytingi uchun hisob-kitob. Firestore'ga bog'liq emas — faqat
+/// yuklab olingan ma'lumotdan ball chiqaradi (testlanadi).
+
+/// Reyting davri
+const statsDays = 7;
+
+/// Bitta shogird bo'yicha ko'rsatkichlar
+class ClientStat {
+  final AppUser client;
+
+  /// Biriktirilgan rejadagi mahallar soni (reja yo'q bo'lsa 0)
+  final int mealsPerDay;
+
+  /// So'nggi [trackedDays] kunda "yedim" belgilangan mahallar (har kun reja hajmi bilan cheklangan)
+  final int mealsDone;
+  final List<WeightLog> weights; // eskidan yangiga
+  final List<ChatMessage> messages; // yangidan eskiga
+  final DateTime now;
+
+  ClientStat({
+    required this.client,
+    required this.mealsPerDay,
+    required this.mealsDone,
+    required this.weights,
+    required this.messages,
+    required this.now,
+  });
+
+  bool get hasPlan => client.planId != null && mealsPerDay > 0;
+
+  /// Rioya hisoblanadigan kunlar: reja [statsDays] kundan kam oldin berilgan bo'lsa —
+  /// faqat berilgan kundan bugungacha (kechagi reja 7 kunga bo'linib past chiqmasin).
+  /// Berilgan vaqti noma'lum (eski hujjat) bo'lsa — to'liq davr.
+  int get trackedDays => trackedDaysFor(client.planAssignedAt, now);
+
+  static int trackedDaysFor(DateTime? assignedAt, DateTime now) {
+    if (assignedAt == null) return statsDays;
+    return (WeightLog.daysSince(assignedAt, now) + 1).clamp(1, statsDays);
+  }
+
+  /// Rejaga rioya: 0..1, reja yo'q bo'lsa null
+  double? get adherence =>
+      hasPlan ? (mealsDone / (mealsPerDay * trackedDays)).clamp(0.0, 1.0) : null;
+
+  /// Oxirgi xabarni shogird yozgan va hali javob yo'q
+  bool get waitingReply => messages.isNotEmpty && messages.first.senderId == client.id;
+
+  Duration? get waitingFor => waitingReply ? now.difference(messages.first.createdAt) : null;
+
+  /// Trener (yoki boshqa xodim) so'nggi davrda shogirdga yozgan xabarlar
+  int staffMessages({String? by}) => messages
+      .where((m) =>
+          m.senderId != client.id &&
+          (by == null || m.senderId == by) &&
+          now.difference(m.createdAt).inDays < statsDays)
+      .length;
+
+  double? get weightChange =>
+      weights.length < 2 ? null : weights.last.weight - weights.first.weight;
+
+  /// Maqsad tomon siljiyaptimi: ozish — vazn kamaygan, massa — ko'paygan.
+  /// Vazn 2 martadan kam kiritilgan yoki maqsad tanlanmagan bo'lsa null.
+  bool? get progressing {
+    final d = weightChange;
+    if (d == null || client.goal.isEmpty) return null;
+    return client.isGain ? d > 0 : d < 0;
+  }
+
+  DateTime? get lastWeighIn => weights.isEmpty ? null : weights.last.date;
+
+  /// Trener nimaga e'tibor berishi kerak — bo'sh bo'lsa hammasi joyida
+  List<String> get attention {
+    final r = <String>[];
+    if (!client.profileDone || client.goal.isEmpty) r.add("Anketa to'liq emas");
+    if (client.planId == null) r.add("Reja berilmagan");
+    final w = waitingFor;
+    if (w != null && w.inHours >= 12) {
+      r.add(
+          w.inDays >= 1 ? 'Javob kutmoqda: ${w.inDays} kun' : 'Javob kutmoqda: ${w.inHours} soat');
+    }
+    final a = adherence;
+    if (a != null && a < 0.5) r.add('Rejaga rioya past: ${(a * 100).round()}%');
+    final last = lastWeighIn;
+    if (client.profileDone && (last == null || now.difference(last).inDays > 14)) {
+      r.add('Vazn 2 haftadan beri kiritilmagan');
+    }
+    if (progressing == false) r.add("Vazn maqsadga qarab o'zgarmayapti");
+    return r;
+  }
+}
+
+/// Bitta trener bo'yicha umumiy ko'rsatkichlar va ball
+class TrainerStat {
+  final AppUser trainer;
+  final List<ClientStat> clients;
+  TrainerStat({required this.trainer, required this.clients});
+
+  static double? _share(Iterable<bool> xs) {
+    final l = xs.toList();
+    return l.isEmpty ? null : l.where((x) => x).length / l.length;
+  }
+
+  /// Reja berilgan shogirdlar ulushi
+  double? get planCoverage => _share(clients.map((c) => c.client.planId != null));
+
+  /// Yozgan shogirdlardan javob olganlari ulushi
+  double? get replyRate =>
+      _share(clients.where((c) => c.messages.isNotEmpty).map((c) => !c.waitingReply));
+
+  /// Shogirdlarning rejaga o'rtacha rioyasi
+  double? get adherence {
+    final xs = clients.map((c) => c.adherence).whereType<double>().toList();
+    return xs.isEmpty ? null : xs.reduce((a, b) => a + b) / xs.length;
+  }
+
+  /// Vazni maqsad tomon siljiyotgan shogirdlar ulushi
+  double? get progressRate => _share(clients.map((c) => c.progressing).whereType<bool>());
+
+  int get messagesSent => clients.fold(0, (s, c) => s + c.staffMessages(by: trainer.id));
+
+  List<ClientStat> get needAttention => clients.where((c) => c.attention.isNotEmpty).toList()
+    ..sort((a, b) => b.attention.length.compareTo(a.attention.length));
+
+  /// Ball tarkibi: (nomi, ulush 0..1 yoki null, og'irligi)
+  List<(String, double?, int)> get parts => [
+        ('Reja berilgan', planCoverage, 30),
+        ('Chatga javob', replyRate, 25),
+        ('Shogirdlar rioyasi', adherence, 25),
+        ('Natija (vazn)', progressRate, 20),
+      ];
+
+  /// 0..100. Ma'lumoti yo'q qismlar hisobga olinmaydi; shogird yo'q bo'lsa null.
+  int? get score {
+    if (clients.isEmpty) return null;
+    var sum = 0.0, weight = 0;
+    for (final (_, v, w) in parts) {
+      if (v == null) continue;
+      sum += v * w;
+      weight += w;
+    }
+    return weight == 0 ? null : (sum / weight * 100).round();
+  }
+
+  /// 1..5 yulduz
+  int? get stars {
+    final s = score;
+    return s == null ? null : (s / 20).ceil().clamp(1, 5);
+  }
+}
