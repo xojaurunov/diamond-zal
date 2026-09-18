@@ -16,15 +16,18 @@
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **85/85**, qoida testlari **138/138**.
 
-Oxirgi APK: **18-sentabr, 22,7 MB** — kod bilan mos (haftalik ratsion yo'q).
-Saytda ham, `public/app/kq.bin` da ham shu turibdi.
-**Loyiha endi git'da** (52-band) — kod o'chsa `git checkout` bilan qaytariladi.
-Qoidalar 16-sent do'kon bilan joylandi (`firebase deploy --only firestore:rules`) —
-haftalik reja qoida o'zgarishini talab qilmadi.
+Oxirgi APK: **18-sentabr 19:00, 22,9 MB** (zallar, Eslatma bo'limi, barmen bilan) —
+saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
+Qoidalar **18-sent** qayta joylandi (zallar + barmen).
+**Loyiha git'da** (52-band) — kod o'chsa `git checkout -- <fayl>` bilan qaytariladi.
 
-**Hujjatlar** (17-sent): `hujjatlar\Diamond-TZ.docx` — texnik topshiriq va reja (Word);
-`hujjatlar\figma\` — 7 ta SVG maket (Figma import qiladi);
+**Hujjatlar:** `hujjatlar\Diamond-TZ.docx` — texnik topshiriq va reja (Word);
+`hujjatlar\figma\` — 14 ta SVG maket (13 ekran + dizayn tizimi) va `png/` da rasm nusxasi;
 `hujjatlar\figma-plugin\` — Figma plagini (Figma ichida maketni o'zi chizadi).
+
+**Foydali vositalar:** `node tools/holat/holat.mjs` — bazadagi holatni ko'rsatadi
+(zallar, xodimlar, shogirdlar, rejalar, do'kon, buyurtmalar);
+`node tools/brauzer/cdp.mjs` — ilovani brauzerda boshqarib tekshirish.
 
 ### Kirish
 | Rol | Telefon | Parol | Zal |
@@ -38,10 +41,11 @@ haftalik reja qoida o'zgarishini talab qilmadi.
 Trener parollarini bosh admin `Xodimlar → Qo'shish → Yangi trener akkaunti` orqali
 o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
-Bazadagi shogirdlar (16-sent ertalab): **Shogird 1** (maqsad Ozish, zal kunlari Se/Pay/Sha) va
-**Shogird 2** (Ozish, Du/Chor/Ju) — ikkalasi trener Kotta Qani'da. Ya'ni ular yangi APK'ni
-o'rnatib, Zal bo'limidan kunlarini tanlashgan.
+**Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
+**3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
+tanlagan). Hammasining rejasi bor. Do'kon bo'sh, buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
+Holatni tekshirish: `node tools/holat/holat.mjs`.
 
 ### ✅ Tayyor (qisqa)
 1. Shablonlar: Ozish 2 variant, Massa nabor 3 variant; trener faqat shogird maqsadiga mos rejani beradi,
@@ -78,13 +82,13 @@ o'rnatib, Zal bo'limidan kunlarini tanlashgan.
   o'rnatish; Samsung'da "Icon frames" o'chirish; telefon rusumini so'rash) va **bildirishnomalar**
   (ular hali hech qayerda ko'rilmagan — emulyator yo'q).
   Zal ekranlari 16-sent brauzerda to'liq tekshirildi (45-band) — ishlayapti.
-- **Zal mashqlari** — hozir "tuzatish ishlari / ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
-  (foydalanuvchidan matn kutiladi).
+- **Zal mashqlari** — hozir "ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
+  (trenerdan matn kutiladi: har mashg'ulotga 6–8 mashq, yondashuv va takror).
+- **Barmen hozir hamma zal buyurtmasini ko'radi** (zal bitta bo'lgani uchun). Filial ko'paysa —
+  buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak (56-band).
 - **Do'kon tovarlari** — bo'lim tayyor, baza bo'sh. Foydalanuvchi ro'yxatni (nomi, narxi, qoldiq) beradi,
   keyin kiritiladi. Trener ham "Do'kon → Tovarlar → + Tovar" orqali o'zi kirita oladi.
   (Foydalanuvchi sayt havolasini berishi mumkin — tovar nomi, narxi va rasmi o'sha yerdan olinadi.)
-- **Haftalik ratsion grammlari taxminiy** — trener tasdiqlashi kerak, keyin izohdagi "TAXMINIY"
-  so'zi olib tashlanadi.
 - **Figma** — plagin yozildi, lekin haqiqiy Figma'da sinalmagan (bu kompyuterda Figma yo'q,
   hisobga kirish imkoni ham yo'q). Foydalanuvchi ishga tushirib skrinshot bersa — tuzatiladi.
 - **Blaze** (faqat Firebase Console orqali, bank karta) → `FUNKSIYALAR_JOYLASH.bat` — ilova yopiq bo'lganda
@@ -151,9 +155,10 @@ Saytda ular `public/app/kq.bin` va `kq-eski.bin` nomida turadi (`deploy.ps1` o'z
 
 | Rol (`users/{uid}.role`) | Kim | Nima ko'radi |
 |---|---|---|
-| `user` | shogird | Bugun, Progress, Trener (chat), Profil. Anketada trenerini katalogdan tanlaydi |
-| `admin` | trener | Mijozlar (**faqat o'ziga biriktirilganlar**), Rejalar, Mahsulotlar. Bosh adminni ko'rmaydi |
-| `owner` | **bosh admin** | yuqoridagilar **+ Xodimlar** (4-bo'lim) |
+| `user` | shogird | Bugun, Progress, Zal, Do'kon, Eslatma, Trener (chat), Profil. Anketada trenerini katalogdan tanlaydi |
+| `admin` | trener | Mijozlar (**faqat o'ziga biriktirilganlar**), Zal, Rejalar, Ovqat, Do'kon, Eslatma. Bosh adminni ko'rmaydi |
+| `barmen` | zal bari / sotuvchi | **Faqat** Do'kon, Hisobim (o'z sotuvi), Eslatma. Shogird, reja, chatni ko'rmaydi |
+| `owner` | **bosh admin** | yuqoridagilar **+ Xodimlar** (zallar, trenerlar reytingi, sotuv hisoboti) |
 
 Kodda: `AppUser.isOwner`, `isAdmin` (admin **yoki** owner), `isTrainer` (faqat admin).
 `AppUser.trainerId` — shogird qaysi trenerga biriktirilgan (`null` — biriktirilmagan).
@@ -253,7 +258,11 @@ Yo'llar foydalanuvchi `PATH` iga qo'shilgan — **yangi terminal** ochsangiz ish
 > | `tools/rules_test/node_modules/` | 143 MB | qayta o'rnatiladi |
 > | `windows/flutter/ephemeral/.plugin_symlinks/` | — | plagin **havolalari**: nusxalanganda haqiqiy papkaga aylanib, Windows'ning 260 belgilik yo'l chegarasidan oshadi |
 
-**To'g'ri yo'l — toza nusxa** (41,8 MB, 149 fayl, 14-sentabrda sinalgan: ochildi →
+> ✅ **18-sentabrdan loyiha `git` da.** Endi eng ishonchli yo'l — `.git` papkasi bilan
+> ko'chirish: unda butun tarix bor, ish jarayonida biror fayl buzilsa
+> `git checkout -- <fayl>` bilan qaytariladi.
+
+**To'g'ri yo'l — toza nusxa** (`.git` bilan ~50 MB; 14-sentabrda sinalgan: ochildi →
 `flutter pub get` → `flutter analyze` 0 xato):
 
 ```powershell
@@ -262,9 +271,25 @@ $stage = "$env:TEMP\diamond-stage\kotta_qani_diet"
 robocopy $src $stage /E /XJ `
   /XD "$src\build" "$src\.dart_tool" "$src\android\.gradle" "$src\android\app\.cxx" `
       "$src\tools\rules_test\node_modules" "$src\windows\flutter\ephemeral" `
-  /XF "kotta_qani_diet.zip" "desktop.ini" "joylash-log.txt" "*.log"
+      "$src\public\ilova" `
+  /XF "kotta_qani_diet.zip" "desktop.ini" "joylash-log.txt" "*.log" "kq.bin" "kq-eski.bin"
 tar -a -c -f E:\Diamond-toza.zip -C "$env:TEMP\diamond-stage" kotta_qani_diet
 ```
+
+`public\ilova` (web nusxasi, 47 MB) va `public\app\*.bin` (APK, 45 MB) ko'chirilmaydi —
+ular `flutter build` bilan qayta yig'iladi. `.git` esa **ko'chadi** (robocopy uni oladi).
+
+**Yoki git bilan (yanada ishonchli):**
+
+```powershell
+# eski kompyuterda
+git bundle create E:\diamond.bundle --all
+# yangi kompyuterda
+git clone E:\diamond.bundle kotta_qani_diet
+```
+
+Bundle — bitta fayl, ichida butun tarix. Lekin `.gitignore` ga kirgan fayllar
+(APK, web nusxasi) unda yo'q — ular baribir qayta yig'iladi.
 
 `/XJ` — havolalarni (symlink) kuzatmaslik; aynan shu uzun yo'llar muammosini oldini oladi.
 
@@ -277,7 +302,9 @@ tar -a -c -f E:\Diamond-toza.zip -C "$env:TEMP\diamond-stage" kotta_qani_diet
 | `lib/firebase_options.dart` | Firebase ulanishi |
 | `android/app/google-services.json` | Firebase (Android) |
 | `assets/` | mahsulot rasmlari va logotip |
-| `public/` | yuklab olish sahifasi + APK |
+| `public/index.html`, `public/img/` | yuklab olish sahifasi va suratlari |
+| `.git/` | **butun tarix** — fayl buzilsa qaytarish uchun |
+| `hujjatlar/` | TZ (Word), Figma maketlari va plagini |
 | `DAVOM.md` | shu hujjat |
 
 > Haqiqiy ma'lumotlar (mijozlar, rejalar, chatlar) Firebase'da — ular ko'chmaydi va
@@ -290,6 +317,23 @@ tar -a -c -f E:\Diamond-toza.zip -C "$env:TEMP\diamond-stage" kotta_qani_diet
    > `DAVOM.md faylini o'qib chiq va ishni davom ettir`
 3. "Stewing..." — bu xato emas, "o'ylayapman" degani. 3–4 daqiqadan oshsa, qizil
    to'xtatish tugmasini bosib, xabarni qayta yuboring.
+
+**Birinchi buyruqlar (yangi kompyuterda, shu tartibda):**
+
+```powershell
+flutter pub get                 # paketlar
+flutter analyze                 # 0 xato bo'lishi kerak
+flutter test                    # 85/85
+git log --oneline | select -First 5   # tarix joyidami
+```
+
+Git sozlanmagan bo'lsa (`git log` xato bersa):
+```powershell
+git config user.name "Diamond"
+git config user.email "sizning-email@gmail.com"
+```
+
+Har ish kuni oxirida: `git add -A` → `git commit -m "nima qilindi"`.
 
 ### Yangi kompyuterda nima o'rnatish kerak
 
@@ -363,13 +407,20 @@ lib/
   models/models.dart          AppUser (rol, goal, trainerId, BMI, targetKcal), Food, MealItem,
                               Meal, Plan (category), WeightLog (canAdd/daysLeft), ChatMessage
   models/stats.dart           Trenerlar reytingi hisobi (ClientStat, TrainerStat) — Firestore'siz
+  models/gym.dart             Zal mashg'ulotlari: kun variantlari, guruhlar, "kelolmayman" matni
+  models/shop.dart            Do'kon: Product, ShopOrder, SalesReport (kim nechta sotdi)
+  models/feed.dart            "Eslatma" bo'limi: bildirishnomalar ro'yxatini yig'ish
+  models/hudud.dart           O'zbekiston viloyat va tumanlari (zal manzili uchun)
   services/db.dart            Auth + Firestore, Riverpod providerlar, Db.trainerStats()
   widgets/ui.dart             Umumiy komponentlar (BentoTile, showSheet, ...)
   widgets/food_image.dart     Mahsulot rasmi (nomdagi birinchi mahsulot -> rasm), mualliflar oynasi
   screens/auth/               AuthGate (rolga qarab; maqsadsiz shogird -> anketa), Login
   screens/user/               Bugun, Progress (vazn qulfi), Chat, Profil, Anketa (maqsad)
-  screens/admin/              Mijozlar (maqsad + variantlar), Rejalar (shablonlar, kategoriya),
-                              Mahsulotlar, Xodimlar (bosh admin), trainer_stats_screen (reyting)
+  screens/admin/              Mijozlar, Rejalar (shablonlar, haftalik menyu), Ovqat bazasi,
+                              Zal (trener), Do'kon, Xodimlar (zallar va rollar),
+                              trainer_stats_screen (reyting), sales_report_screen (sotuv hisoboti)
+  screens/barmen/             Barmen paneli (Do'kon · Hisobim · Eslatma)
+  screens/notifications_screen.dart   "Eslatma" bo'limi va menyudagi qizil raqam (FeedBadge)
 assets/foods/                 34 ta mahsulot rasmi; assets/credits.txt — mualliflar (CC litsenziya)
 assets/icon/logo_src.jpg      Ilova logotipi (manba)
 test/widget_test.dart         50 ta test
@@ -377,6 +428,9 @@ tools/make_icon.dart          Logotipdan ikonka rasmlari
 tools/rules_test/             firestore.rules testlari (77 ta holat)
 functions/                    Push bildirishnomalar (Cloud Functions, Blaze kerak) — FUNKSIYALAR_JOYLASH.bat
 tools/parol_tiklash/          Parolni unutganlarga yangi parol (PAROL_TIKLASH.bat chaqiradi)
+                              va akkauntni to'liq o'chirish (ochirish.mjs)
+tools/brauzer/cdp.mjs         Brauzerni buyruq qatoridan boshqarish (ilovani tekshirish uchun)
+hujjatlar/                    Diamond-TZ.docx, figma/ (13 ekran SVG + PNG), figma-plugin/
 firestore.rules               Xavfsizlik qoidalari
 firebase.json, .firebaserc    Firebase sozlamalari
 public/                       Yuklab olish sahifasi + APK fayllari
