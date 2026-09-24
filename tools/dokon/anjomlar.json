@@ -1,6 +1,6 @@
 [
   {
-    "category": "Sport anjomlari",
+    "category": "Suv idishlari",
     "name": "Shaker (oq, bodibilder rasmli)",
     "note": "600 ml, aralashtirgichli qopqoq. Narx AllPituz kanalidan (24-sent).",
     "sizes": [],
@@ -12,7 +12,7 @@
     "images": []
   },
   {
-    "category": "Sport anjomlari",
+    "category": "Suv idishlari",
     "name": "Applied Nutrition shaker (shaffof)",
     "note": "600 ml, ko'k qopqoq, aralashtirgichli. Narx AllPituz kanalidan (24-sent).",
     "sizes": [],
@@ -24,7 +24,7 @@
     "images": []
   },
   {
-    "category": "Sport anjomlari",
+    "category": "Suv idishlari",
     "name": "Applied Nutrition termo-stakan (ko'k)",
     "note": "Metall, issiq va sovuqni ushlaydi. Narx AllPituz kanalidan (24-sent).",
     "sizes": [],
@@ -36,7 +36,7 @@
     "images": []
   },
   {
-    "category": "Sport anjomlari",
+    "category": "Suv idishlari",
     "name": "Applied Nutrition sport shishasi (ko'k)",
     "note": "Klipsali qopqoq, 1 litr. Narx AllPituz kanalidan (24-sent).",
     "sizes": [],
@@ -48,7 +48,7 @@
     "images": []
   },
   {
-    "category": "Sport anjomlari",
+    "category": "Suv idishlari",
     "name": "Applied Nutrition termos (ko'k)",
     "note": "Metall termos shisha. Narx AllPituz kanalidan (24-sent).",
     "sizes": [],
@@ -69,6 +69,30 @@
     "stock": 5,
     "active": true,
     "image": "https://kotta-qani-09111753.web.app/img/tovar/karnitin-liquid-carni-x.jpg",
+    "images": []
+  },
+  {
+    "category": "Anjomlar",
+    "name": "Press roller (qorin uchun g'ildirak)",
+    "note": "Qorin va yelka mushaklari uchun. Tizza ostiga qo'yiladigan gilamcha bilan. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 200000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-press-roller.jpg",
+    "images": []
+  },
+  {
+    "category": "Suv idishlari",
+    "name": "UFC suv shishasi (turli rang)",
+    "note": "Ko'k, qora, sariq va qizil rangda. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 40000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-ufc-shisha.jpg",
     "images": []
   }
 ]

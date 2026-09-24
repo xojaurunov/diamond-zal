@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Zal do'koni: forma, sport anjomlari va dobavkalar (protein, gainer, kreatin ...).
+/// Zal do'koni: forma, suv idishlari, anjomlar va dobavkalar (protein, kreatin ...).
 /// Tovarlarni trener kiritadi, shogird ko'radi va buyurtma beradi.
 /// To'lov ilovada emas — shogird zalga kelganda naqd to'laydi.
 
@@ -15,11 +15,11 @@ const supplementCategories = [
 ];
 
 /// Do'konning asosiy bo'limlari — shogird avval shulardan tanlaydi.
-const shopGroups = ['Forma', 'Sport anjomlari', 'Dobavkalar'];
+const shopGroups = ['Forma', 'Suv idishlari', 'Anjomlar', 'Dobavkalar'];
 
 /// Tovar bo'limlari — bazada aynan shu nomlar saqlanadi.
 /// Tartibi shogirdga ham shu ko'rinishda chiqadi.
-const shopCategories = ['Forma', 'Sport anjomlari', ...supplementCategories];
+const shopCategories = ['Forma', 'Suv idishlari', 'Anjomlar', ...supplementCategories];
 
 /// Tovar qaysi asosiy bo'limga kiradi: `Protein` -> `Dobavkalar`.
 String shopGroupOf(String category) =>
