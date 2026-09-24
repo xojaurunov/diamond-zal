@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 7 ta tovar** (Pro Combat 2 qismli — 30 $; Venum VM2008, UFC VM202101, Reebok R-615 — 35 $; Nike, Under Armour, Pro Combat 5 qismli — 45 $; hammasi Forma, XL–4XL, qoldiq 10 taxminiy), buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 17 ta tovar** — 7 ta komplekt (30–45 $) va 10 ta mayka/kofta (14–23 $); hammasi Forma bo'limida, XL–4XL, qoldiq 10 (taxminiy). Buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -1107,9 +1107,18 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       `Under Armour komplekt (4-5 qismli)` (2 rasm: qora, qora-yashil) va
       `Pro Combat komplekt (5 qismli)` (3 rasm: qora, kulrang, ko'k).
       Eng arzoni — **30 $**: `Pro Combat komplekt (2 qismli)` (rashgard + tayts, 3 rasm).
+    - **Maykalar va kofta (10 ta, 24-sent):** narxi har rasmda yozilgan edi, o'sha olindi —
+      Kapyushonli kofta 23 $; Kapyushonli mayka 17 $; Mayka qora-kulrang / salat / kulrang va
+      Under Armour oq — 15 $; UA Project Rock, UA "Earn Greatness" (oq va qora), Nike — 14 $.
+      Hammasi `tools/dokon/maykalar.json` da.
+    - **Taxmin qilingan joy:** ikkita rasmda narx yorlig'i yo'q edi (qora-kulrang va salat rang
+      maykalarning orqa tomoni ko'rinishi). Ular alohida tovar emas, o'sha maykaning
+      **2-rasmi** qilib qo'yildi. Noto'g'ri bo'lsa — ajratish kerak.
     - **Rasmlardagi begona yozuvlar tozalanadi:** narx yorlig'i kesish bilan, xitoycha
       yozuv esa atrof fon rangi bilan bo'yab yopish bilan (Pillow; `numpy` bilan qizil
       piksellar topiladi). Shunday tozalangan: Nike/UA rasmlari va Pro Combat 2 qismli 1-rasmi.
+      Maykalarda oq narx yorlig'i pastki-o'ng burchakda edi — qatorlardagi oq bo'laklar
+      bo'yicha topilib, rasm o'sha joydan kesildi (1280 → ~1110–1170 px).
     - **Rasmdagi narx yorlig'i olib tashlandi** (foydalanuvchi so'rovi): Nike/UA rasmlarida
       pastki-o'ng burchakda "45 $" oq yorlig'i bor edi — rasm 800×800 dan 800×710 ga
       kesildi (Pillow), narx endi faqat ilovada turadi.
