@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 2 ta tovar** (Venum VM2008 va UFC VM202101 komplektlari, 35 $, XL–4XL), buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 3 ta tovar** (Venum VM2008, UFC VM202101 va Reebok R-615 komplektlari — hammasi 35 $, XL–4XL), buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -94,8 +94,13 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   Tez qo'shish: `node tools/dokon/tovar_qoshish.mjs <fayl.json>`; qo'lda — "Do'kon → Tovarlar → + Tovar".
 - **Do'kondagi qoldiq taxminiy** — ikkala komplektga 10 dona qo'yildi (haqiqiy son so'ralmagan).
   Zal egasi "Do'kon → Tovarlar" dan to'g'rilasin. Qoldiq **o'lcham kesimida emas**, umumiy.
-- **UFC komplekt rasmlari yuklanmagan** — rasmlar chat orqali kelgan, lekin faylga tushmagan;
-  foydalanuvchi qayta yuborsa, `public/img/tovar/` ga qo'yiladi va tovarga biriktiriladi.
+- **Ba'zi rasmlar yuklanmagan** — UFC komplektining 2 ta rasmi va Venumning yana 2 ta
+  modeli (yashil-qora "Technical" va oq-qora "Logos"). Sabab: Claude ishlayotgan paytda
+  yuborilgan xabarning rasmlari diskka tushmaydi. Foydalanuvchi ularni **alohida xabarda**
+  qayta yuborishi kerak — keyin `public/img/tovar/` ga qo'yiladi va tovarga biriktiriladi.
+- **Rang/dizayn tanlash yo'q** — bitta tovarda bir nechta rang rasmi turadi, lekin shogird
+  buyurtmada faqat **o'lchamni** tanlaydi. Kerak bo'lsa o'lcham kabi "rang" tanlovini ham
+  qo'shish mumkin (`Product.sizes` bilan bir xil naqsh).
 - **Figma** — plagin yozildi, lekin haqiqiy Figma'da sinalmagan (bu kompyuterda Figma yo'q,
   hisobga kirish imkoni ham yo'q). Foydalanuvchi ishga tushirib skrinshot bersa — tuzatiladi.
 - **Blaze** (faqat Firebase Console orqali, bank karta) → `FUNKSIYALAR_JOYLASH.bat` — ilova yopiq bo'lganda
@@ -1095,8 +1100,9 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Qoidalar:** buyurtmada `size` (≤ 20 belgi) va `currency` maydonlari ruxsat etildi;
       valyuta tovardagi bilan bir xil bo'lishi shart. 24-sent joylandi.
     - **Rasmlar:** `public/img/tovar/venum-vm2008-{sariq,kulrang,yashil,oq-qora}.jpg` — saytda turadi.
-    - **Kiritilgan tovarlar:** `Venum komplekt (VM2008)` (4 rasm) va `UFC komplekt (VM202101)`
-      (rasmsiz — yuqoriga qarang), ikkalasi ham Forma, 35 $, XL–4XL, qoldiq 10 (taxminiy).
+    - **Kiritilgan tovarlar** (hammasi Forma, 35 $, XL–4XL, qoldiq 10 — taxminiy):
+      `Venum komplekt (VM2008)` (4 rasm), `UFC komplekt (VM202101)` (rasmsiz — yuqoriga qarang),
+      `Reebok komplekt (R-615)` (3 rasm: qora, haki, ko'k).
     - **Yangi vosita:** `tools/dokon/tovar_qoshish.mjs` — JSON fayldan tovar qo'shadi
       (bosh admin nomidan, Firestore REST orqali). Namunalar: `tools/dokon/*.json`.
     - Tekshiruv: `flutter analyze` 0 xato, `flutter test` **90/90**.
