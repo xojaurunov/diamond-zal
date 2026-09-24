@@ -533,14 +533,16 @@ void main() {
           reason: 'narxi kiritilmagan');
     });
 
-    test('bo-limlar: forma, anjomlar, protein, kreatin, qo-shimcha', () {
+    test('bo-limlar: forma, anjomlar, protein, gainer, kreatin, dobavkalar', () {
       expect(shopCategories.length, 8);
-      expect(shopCategories, contains('Gainer'));
-      expect(shopCategories, contains('L-Karnitin'));
-      expect(shopCategories, contains('L-Arginin'));
-      expect(shopCategories, contains('Protein'));
-      expect(shopCategories, contains('Kreatin'));
-      expect(shopCategories, contains("Qo'shimcha"));
+      expect(shopGroups, ['Forma', 'Anjomlar', 'Dobavkalar']);
+      // dobavkalar ichidagi kichik bo'limlar
+      for (final c in ['Protein', 'Gainer', 'Kreatin', 'L-Karnitin', 'L-Arginin', 'Boshqa']) {
+        expect(shopCategories, contains(c));
+        expect(shopGroupOf(c), 'Dobavkalar');
+      }
+      expect(shopGroupOf('Forma'), 'Forma');
+      expect(shopGroupOf('Anjomlar'), 'Anjomlar');
     });
 
     ShopOrder order({int qty = 1, int price = 450000, String status = orderNew, DateTime? at}) =>

@@ -231,6 +231,37 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
+/// Kichik sarlavha — [SectionHeader] ichidagi kichik bo'lim uchun
+/// (masalan "Dobavkalar" ichida "Protein", "Gainer" ...).
+class SubHeader extends StatelessWidget {
+  final String title;
+  final int? count;
+  final Color? color;
+  const SubHeader(this.title, {super.key, this.count, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(2, AppSpace.xs, 2, AppSpace.sm),
+      child: Row(children: [
+        Container(
+          width: 3,
+          height: 16,
+          margin: const EdgeInsets.only(right: AppSpace.sm),
+          decoration: BoxDecoration(
+            color: color ?? AppColors.accent,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        Expanded(child: Text(title, style: t.titleSmall)),
+        if (count != null)
+          Text('$count', style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+      ]),
+    );
+  }
+}
+
 /// Shisha kartochka — olmosning shaffofligiga ishora.
 ///
 /// `blur: true` orqa fonni haqiqatan xiralashtiradi (BackdropFilter). U qimmat

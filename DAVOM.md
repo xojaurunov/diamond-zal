@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 107 ta tovar**, 8 bo'lim: **Forma** 17 (7 komplekt 30–45 $ va 10 mayka/kofta 14–23 $, XL–4XL, qoldiq 10); **Qo'shimcha** 29, **Protein** 21, **Gainer** 14, **Kreatin** 12, **L-Karnitin** 9, **L-Arginin** 5 — hammasi so'mda (180 000 – 2 200 000), qoldiq 5. **Anjomlar** bo'sh. Hammasi taxminiy qoldiq. Buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 107 ta tovar**, 3 asosiy bo'lim: **Forma** 17 (7 komplekt 30–45 $ va 10 mayka/kofta 14–23 $, XL–4XL, qoldiq 10); **Anjomlar** bo'sh; **Dobavkalar** 90 ta — ichida Protein 21, Gainer 14, Kreatin 12, L-Karnitin 9, L-Arginin 5, Boshqa 29 (180 000 – 2 200 000 so'm, qoldiq 5). Hammasi taxminiy qoldiq. Buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -1119,11 +1119,20 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       **2-rasmi** qilib qo'yildi. Noto'g'ri bo'lsa — ajratish kerak.
 58. **"Qo'shimcha" bo'limi va sport pitaniya (24-sent)** — "Qo'shimcha deb bo'lim qo'sh,
     t.me/AllPituz kanalidan kreatin va proteinlarning rasmi va narxini ol".
-    - Bo'limlar: `shopCategories` endi **8 ta** — `Forma`, `Anjomlar`, `Protein`,
-      `Gainer`, `Kreatin`, `L-Karnitin`, `L-Arginin`, `Qo'shimcha` (foydalanuvchi so'rovi:
-      "qo'shimchalarning nomi bir xil, firmasi har xil — kategoriyaga bo'l").
-      Bo'sh turgan `Sport pitaniya` olib tashlandi. Har bo'limga o'z ikonkasi va rangi
-      (`lib/widgets/product_image.dart`).
+    - **Bo'limlar ikki darajali** (foydalanuvchi so'rovi: "Dobavkalar degan bo'lim bo'lsin,
+      Protein, Gainer, Kreatin, L-Karnitin, L-Arginin o'shaning ichida"):
+      - `shopGroups` — asosiy bo'limlar: `Forma`, `Anjomlar`, `Dobavkalar`;
+      - `supplementCategories` — Dobavkalar ichidagilar: `Protein`, `Gainer`, `Kreatin`,
+        `L-Karnitin`, `L-Arginin`, `Boshqa`;
+      - `shopCategories` = Forma + Anjomlar + yuqoridagilar (bazada shu nomlar saqlanadi);
+      - `shopGroupOf(category)` — tovar qaysi asosiy bo'limga kirishini aytadi.
+      Shogirdda: birinchi qator chiplari — asosiy bo'lim; `Dobavkalar` tanlansa, ostida
+      ikkinchi qator chiplari chiqadi. Trener/barmenda: `Dobavkalar` sarlavhasi ostida
+      har turga `SubHeader` (yangi vidjet, `lib/widgets/ui.dart`).
+      Har bo'limga o'z ikonkasi va rangi (`lib/widgets/product_image.dart`).
+      Bo'sh turgan `Sport pitaniya` olib tashlandi.
+    - Tekshiruv (brauzer, vaqtinchalik TEST shogird): shogirdda ikki qatorli chip ishlaydi,
+      trener ro'yxatida "Dobavkalar → Protein (21)" ko'rinishi chiqdi. Test akkaunt o'chirildi.
     - Kanal ochiq ko'rinishdan (`https://t.me/s/AllPituz`, 5 sahifa) 71 ta post va 74 rasm
       yuklandi; javon suratlaridan **har bir mahsulot alohida kesib olindi**.
     - **Yangi vosita:** `tools/dokon/narx_kesish.py` — suratdagi oq narx yorliqlarini topib

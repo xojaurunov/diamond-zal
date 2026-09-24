@@ -228,7 +228,7 @@ class _ProductsTab extends StatelessWidget {
           return EmptyState(
             icon: Icons.storefront_outlined,
             title: "Do'kon bo'sh",
-            subtitle: "Forma, anjomlar, protein, kreatin va boshqa qo'shimchalar shu yerga kiritiladi. "
+            subtitle: 'Forma, anjomlar, protein, gainer, kreatin va dobavkalar shu yerga kiritiladi. '
                 "Shogird narxini ko'radi va buyurtma beradi, to'lov zalda naqd.",
             action: FilledButton.icon(
               onPressed: () => editProduct(context),
@@ -240,14 +240,22 @@ class _ProductsTab extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, 0, AppSpace.lg, 96),
           children: [
-            for (final c in shopCategories)
-              if (all.any((p) => p.category == c)) ...[
+            for (final c in shopCategories) ...[
+              // Dobavkalar guruhining boshi — bitta umumiy sarlavha
+              if (c == supplementCategories.first &&
+                  all.any((p) => supplementCategories.contains(p.category)))
                 SectionHeader(
-                  c,
+                  'Dobavkalar',
                   trailing: Pill(
-                    text: '${all.where((p) => p.category == c).length}',
-                    color: shopColor(c),
+                    text: '${all.where((p) => supplementCategories.contains(p.category)).length}',
+                    color: shopColor('Boshqa'),
                   ),
+                ),
+              if (all.any((p) => p.category == c)) ...[
+                SubHeader(
+                  c,
+                  count: all.where((p) => p.category == c).length,
+                  color: shopColor(c),
                 ),
                 for (final p in all.where((p) => p.category == c))
                   Padding(
@@ -255,6 +263,7 @@ class _ProductsTab extends StatelessWidget {
                     child: _ProductAdminTile(product: p),
                   ),
               ],
+            ],
             // Bo'limi noto'g'ri yozilgan eski yozuvlar ko'rinmay qolmasin
             for (final p in all.where((p) => !shopCategories.contains(p.category)))
               Padding(

@@ -6,7 +6,7 @@ import '../../theme.dart';
 import '../../widgets/product_image.dart';
 import '../../widgets/ui.dart';
 
-/// Shogird uchun do'kon: forma, anjomlar, protein, kreatin va qo'shimchalar.
+/// Shogird uchun do'kon: forma, anjomlar, protein, gainer, kreatin va dobavkalar.
 /// Buyurtma berilganda trenerga chatga xabar tushadi, to'lov zalda naqd.
 class ShopScreen extends StatefulWidget {
   final AppUser user;
@@ -21,6 +21,10 @@ class _ShopScreenState extends State<ShopScreen> {
   late final _orders = Db.myOrders(widget.user.id);
 
   /// null — hamma bo'limlar
+  /// Asosiy bo'lim (`Forma` / `Anjomlar` / `Dobavkalar`), null — hammasi
+  String? _group;
+
+  /// Dobavkalar ichidagi kichik bo'lim (`Protein` ...), null — hammasi
   String? _category;
 
   Future<void> _order(Product p) async {
@@ -170,7 +174,10 @@ class _ShopScreenState extends State<ShopScreen> {
         // lekin tugmasi ochilmaydi — trener yana keltiradi)
         final all = snap.data!.where((p) => p.active && p.price > 0).toList();
         final list =
-            _category == null ? all : all.where((p) => p.category == _category).toList();
+            all
+                .where((p) => _group == null || shopGroupOf(p.category) == _group)
+                .where((p) => _category == null || p.category == _category)
+                .toList();
 
         return StreamBuilder<List<ShopOrder>>(
           stream: _orders,
@@ -222,19 +229,47 @@ class _ShopScreenState extends State<ShopScreen> {
                     child: Row(children: [
                       _CatChip(
                         label: 'Hammasi',
-                        selected: _category == null,
-                        onTap: () => setState(() => _category = null),
+                        selected: _group == null,
+                        onTap: () => setState(() {
+                          _group = null;
+                          _category = null;
+                        }),
                       ),
-                      for (final c in shopCategories)
-                        if (all.any((p) => p.category == c))
+                      for (final g in shopGroups)
+                        if (all.any((p) => shopGroupOf(p.category) == g))
                           _CatChip(
-                            label: c,
-                            icon: shopIcon(c),
-                            selected: _category == c,
-                            onTap: () => setState(() => _category = c),
+                            label: g,
+                            icon: shopIcon(g == 'Dobavkalar' ? 'Boshqa' : g),
+                            selected: _group == g,
+                            onTap: () => setState(() {
+                              _group = g;
+                              _category = null;
+                            }),
                           ),
                     ]),
                   ),
+                  // Dobavkalar tanlansa — ichidagi kichik bo'limlar
+                  if (_group == 'Dobavkalar') ...[
+                    const SizedBox(height: AppSpace.sm),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(children: [
+                        _CatChip(
+                          label: 'Hammasi',
+                          selected: _category == null,
+                          onTap: () => setState(() => _category = null),
+                        ),
+                        for (final c in supplementCategories)
+                          if (all.any((p) => p.category == c))
+                            _CatChip(
+                              label: c,
+                              icon: shopIcon(c),
+                              selected: _category == c,
+                              onTap: () => setState(() => _category = c),
+                            ),
+                      ]),
+                    ),
+                  ],
                   const SizedBox(height: AppSpace.md),
                   Text(
                     "To'lov zalda, naqd — ilovada karta so'ralmaydi.",

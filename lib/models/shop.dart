@@ -1,20 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Zal do'koni: forma, anjomlar, protein, kreatin va boshqa qo'shimchalar.
+/// Zal do'koni: forma, anjomlar, protein, gainer, kreatin va boshqa dobavkalar.
 /// Tovarlarni trener kiritadi, shogird ko'radi va buyurtma beradi.
 /// To'lov ilovada emas — shogird zalga kelganda naqd to'laydi.
 
-/// Do'kon bo'limlari. Tartibi shogirdga ham shu ko'rinishda chiqadi.
-const shopCategories = [
-  'Forma',
-  'Anjomlar',
+/// Dobavkalar ichidagi kichik bo'limlar (sport pitaniya turlari).
+const supplementCategories = [
   'Protein',
   'Gainer',
   'Kreatin',
   'L-Karnitin',
   'L-Arginin',
-  "Qo'shimcha",
+  'Boshqa',
 ];
+
+/// Do'konning asosiy bo'limlari — shogird avval shulardan tanlaydi.
+const shopGroups = ['Forma', 'Anjomlar', 'Dobavkalar'];
+
+/// Tovar bo'limlari — bazada aynan shu nomlar saqlanadi.
+/// Tartibi shogirdga ham shu ko'rinishda chiqadi.
+const shopCategories = ['Forma', 'Anjomlar', ...supplementCategories];
+
+/// Tovar qaysi asosiy bo'limga kiradi: `Protein` -> `Dobavkalar`.
+String shopGroupOf(String category) =>
+    supplementCategories.contains(category) ? 'Dobavkalar' : category;
 
 /// Valyutalar: so'm (asosiy) va dollar (chetdan keltirilgan tovarlar uchun)
 const uzs = 'UZS';
