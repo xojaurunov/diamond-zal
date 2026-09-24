@@ -1,0 +1,74 @@
+[
+  {
+    "category": "Sport anjomlari",
+    "name": "Shaker (oq, bodibilder rasmli)",
+    "note": "600 ml, aralashtirgichli qopqoq. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 40000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-shaker-oq.jpg",
+    "images": []
+  },
+  {
+    "category": "Sport anjomlari",
+    "name": "Applied Nutrition shaker (shaffof)",
+    "note": "600 ml, ko'k qopqoq, aralashtirgichli. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 60000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-shaker-shaffof.jpg",
+    "images": []
+  },
+  {
+    "category": "Sport anjomlari",
+    "name": "Applied Nutrition termo-stakan (ko'k)",
+    "note": "Metall, issiq va sovuqni ushlaydi. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 100000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-stakan-kok.jpg",
+    "images": []
+  },
+  {
+    "category": "Sport anjomlari",
+    "name": "Applied Nutrition sport shishasi (ko'k)",
+    "note": "Klipsali qopqoq, 1 litr. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 65000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-shisha-kok.jpg",
+    "images": []
+  },
+  {
+    "category": "Sport anjomlari",
+    "name": "Applied Nutrition termos (ko'k)",
+    "note": "Metall termos shisha. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 90000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/anjom-termos-kok.jpg",
+    "images": []
+  },
+  {
+    "category": "L-Karnitin",
+    "name": "Liquid Carni-X 100 000",
+    "note": "Suyuq L-karnitin, 500 ml. Narx AllPituz kanalidan (24-sent).",
+    "sizes": [],
+    "price": 270000,
+    "currency": "UZS",
+    "stock": 5,
+    "active": true,
+    "image": "https://kotta-qani-09111753.web.app/img/tovar/karnitin-liquid-carni-x.jpg",
+    "images": []
+  }
+]
