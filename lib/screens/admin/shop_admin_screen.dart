@@ -228,7 +228,7 @@ class _ProductsTab extends StatelessWidget {
           return EmptyState(
             icon: Icons.storefront_outlined,
             title: "Do'kon bo'sh",
-            subtitle: 'Forma, anjomlar va sport pitaniya (protein, kreatin) shu yerga kiritiladi. '
+            subtitle: "Forma, anjomlar va qo'shimcha (protein, kreatin) shu yerga kiritiladi. "
                 "Shogird narxini ko'radi va buyurtma beradi, to'lov zalda naqd.",
             action: FilledButton.icon(
               onPressed: () => editProduct(context),

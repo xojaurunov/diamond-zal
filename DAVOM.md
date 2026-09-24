@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 17 ta tovar** — 7 ta komplekt (30–45 $) va 10 ta mayka/kofta (14–23 $); hammasi Forma bo'limida, XL–4XL, qoldiq 10 (taxminiy). Buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 47 ta tovar**: Forma — 7 ta komplekt (30–45 $) va 10 ta mayka/kofta (14–23 $), XL–4XL, qoldiq 10; **Qo'shimcha** — 9 ta kreatin va 21 ta protein (320 000 – 2 200 000 so'm), qoldiq 5. Hammasi taxminiy qoldiq. Buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -87,6 +87,9 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   Zal ekranlari 16-sent brauzerda to'liq tekshirildi (45-band) — ishlayapti.
 - **Zal mashqlari** — hozir "ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
   (trenerdan matn kutiladi: har mashg'ulotga 6–8 mashq, yondashuv va takror).
+- **Razmer tanlash tekshirildi (24-sent):** vaqtinchalik TEST shogird akkaunti bilan
+  brauzerda: Do'kon → Olaman → "O'lchamni tanlang" (XL/XXL/3XL/4XL), tanlanmaguncha
+  tugma o'chiq ("Avval o'lchamni tanlang"). Test akkaunt keyin o'chirildi.
 - **Barmen hozir hamma zal buyurtmasini ko'radi** (zal bitta bo'lgani uchun). Filial ko'paysa —
   buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak (56-band).
 - **Do'kon tovarlari** — 2 ta komplekt kiritildi (57-band). Qolganlari foydalanuvchidan
@@ -1114,6 +1117,23 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Taxmin qilingan joy:** ikkita rasmda narx yorlig'i yo'q edi (qora-kulrang va salat rang
       maykalarning orqa tomoni ko'rinishi). Ular alohida tovar emas, o'sha maykaning
       **2-rasmi** qilib qo'yildi. Noto'g'ri bo'lsa — ajratish kerak.
+58. **"Qo'shimcha" bo'limi va sport pitaniya (24-sent)** — "Qo'shimcha deb bo'lim qo'sh,
+    t.me/AllPituz kanalidan kreatin va proteinlarning rasmi va narxini ol".
+    - Bo'lim: `shopCategories` dagi bo'sh turgan `Sport pitaniya` **`Qo'shimcha`** deb
+      o'zgartirildi (ikkita bir xil ma'noli bo'lim bo'lmasligi uchun).
+    - Kanal ochiq ko'rinishdan (`https://t.me/s/AllPituz`, 5 sahifa) 71 ta post va 74 rasm
+      yuklandi; javon suratlaridan **har bir mahsulot alohida kesib olindi**.
+    - **Yangi vosita:** `tools/dokon/narx_kesish.py` — suratdagi oq narx yorliqlarini topib
+      (bog'langan oq sohalar), har yorliqqa tegishli mahsulot ustunini kesadi.
+      Joylashuv: `tepa` / `past` / `aralash` (yorliq mahsulot ustidami yoki ostidami).
+    - **Kiritildi: 30 ta tovar** — 9 ta Optimum Nutrition kreatini (340 000 – 900 000 so'm)
+      va 21 ta protein (320 000 – 2 200 000 so'm: ON Gold Standard, Hydro Whey, Isolate,
+      Isopure, Dymatize ISO100, Labrada, MuscleTech, BSN Syntha-6, Ultimate Nutrition).
+      Ro'yxat: `tools/dokon/qoshimchalar.json`. Qoldiq 5 (taxminiy).
+    - **Diqqat:** narxlar 24-sent holatiga, AllPituz'niki (yetkazib beruvchi narxi) — zal
+      o'z ustamasini qo'shishi mumkin. Ta'm/hajm nomlari suratdan o'qilgan, ba'zilari taxminiy.
+    - **Kiritilmadi:** gainerlar, BCAA/amino, L-karnitin, L-arginin javonlari (kanalda bor);
+      shuningdek Executioner Whey va Atomic Whey — ularda narx yorlig'i yo'q edi.
     - **Rasmlardagi begona yozuvlar tozalanadi:** narx yorlig'i kesish bilan, xitoycha
       yozuv esa atrof fon rangi bilan bo'yab yopish bilan (Pillow; `numpy` bilan qizil
       piksellar topiladi). Shunday tozalangan: Nike/UA rasmlari va Pro Combat 2 qismli 1-rasmi.

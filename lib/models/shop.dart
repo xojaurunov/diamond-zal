@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Zal do'koni: forma, anjomlar va sport pitaniya (protein, kreatin ...).
+/// Zal do'koni: forma, anjomlar va qo'shimcha (protein, kreatin ...).
 /// Tovarlarni trener kiritadi, shogird ko'radi va buyurtma beradi.
 /// To'lov ilovada emas — shogird zalga kelganda naqd to'laydi.
 
 /// Do'kon bo'limlari. Tartibi shogirdga ham shu ko'rinishda chiqadi.
-const shopCategories = ['Forma', 'Anjomlar', 'Sport pitaniya'];
+const shopCategories = ['Forma', 'Anjomlar', "Qo'shimcha"];
 
 /// Valyutalar: so'm (asosiy) va dollar (chetdan keltirilgan tovarlar uchun)
 const uzs = 'UZS';

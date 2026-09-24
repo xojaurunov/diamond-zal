@@ -15,7 +15,8 @@
 import { writeFileSync } from 'node:fs';
 
 const [cmd, ...args] = process.argv.slice(2);
-const targets = await (await fetch('http://127.0.0.1:9222/json')).json();
+const PORT = process.env.PORT ?? '9222';
+const targets = await (await fetch(`http://127.0.0.1:${PORT}/json`)).json();
 const page = targets.find((t) => t.type === 'page');
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 await new Promise((r) => ws.addEventListener('open', r, { once: true }));

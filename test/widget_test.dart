@@ -533,9 +533,9 @@ void main() {
           reason: 'narxi kiritilmagan');
     });
 
-    test('bo-limlar: forma, anjomlar, sport pitaniya', () {
+    test('bo-limlar: forma, anjomlar, qo-shimcha', () {
       expect(shopCategories.length, 3);
-      expect(shopCategories, contains('Sport pitaniya'));
+      expect(shopCategories, contains("Qo'shimcha"));
     });
 
     ShopOrder order({int qty = 1, int price = 450000, String status = orderNew, DateTime? at}) =>

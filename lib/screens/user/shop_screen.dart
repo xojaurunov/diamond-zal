@@ -6,7 +6,7 @@ import '../../theme.dart';
 import '../../widgets/product_image.dart';
 import '../../widgets/ui.dart';
 
-/// Shogird uchun do'kon: forma, anjomlar va sport pitaniya.
+/// Shogird uchun do'kon: forma, anjomlar va qo'shimcha.
 /// Buyurtma berilganda trenerga chatga xabar tushadi, to'lov zalda naqd.
 class ShopScreen extends StatefulWidget {
   final AppUser user;
