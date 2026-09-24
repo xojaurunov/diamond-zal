@@ -16,8 +16,11 @@
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **90/90**, qoida testlari **138/138**.
 
-Oxirgi APK: **18-sentabr 19:00, 22,9 MB** (zallar, Eslatma bo'limi, barmen bilan) —
+Oxirgi APK: **24-sentabr 18:00, 25,2 MB** (do'kon to'liq, yangi ikonka bilan) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
+Fayl: `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk` (asosiy),
+`app-armeabi-v7a-release.apk` (eski telefon). Yuklab olish:
+<https://kotta-qani-09111753.web.app> → `app/kq.bin`.
 Qoidalar **24-sent** qayta joylandi (zallar + barmen + valyuta tekshiruvi).
 **Loyiha git'da** (52-band) — kod o'chsa `git checkout -- <fayl>` bilan qaytariladi.
 
@@ -27,7 +30,12 @@ Qoidalar **24-sent** qayta joylandi (zallar + barmen + valyuta tekshiruvi).
 
 **Foydali vositalar:** `node tools/holat/holat.mjs` — bazadagi holatni ko'rsatadi
 (zallar, xodimlar, shogirdlar, rejalar, do'kon, buyurtmalar);
-`node tools/brauzer/cdp.mjs` — ilovani brauzerda boshqarib tekshirish.
+`node tools/brauzer/cdp.mjs` — ilovani brauzerda boshqarib tekshirish
+(`PORT=9223` bilan boshqa portda; `cdp.mjs yop` — faqat o'sha brauzerni yopadi,
+**`taskkill /IM chrome.exe` ishlatilmaydi**, u foydalanuvchining oynalarini ham yopadi);
+`node tools/dokon/tovar_qoshish.mjs <fayl.json>` — do'konga tovar qo'shadi/yangilaydi;
+`python tools/dokon/narx_kesish.py <rasm> <papka> <nom> [tepa|past|aralash]` —
+javon suratidan har bir mahsulotni narx yorlig'i bo'yicha alohida kesib oladi.
 
 ### Kirish
 | Rol | Telefon | Parol | Zal |
@@ -74,6 +82,11 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 16. **Do'konda o'lcham, rasm galereyasi va dollar narxi** (57-band): tovarga bir nechta rasm
     va o'lchamlar (XL–4XL) qo'shiladi, narx so'mda yoki dollarda bo'ladi; shogird
     buyurtmada o'lchamni tanlaydi, hisobot valyuta bo'yicha alohida chiqadi.
+17. **Do'kon to'ldirildi — 115 ta tovar** (57–60-band): Forma 17, Suv idishlari 6,
+    Anjomlar 1, Dobavkalar 91 (Protein 21, Gainer 14, Kreatin 12, L-Karnitin 10,
+    L-Arginin 5, Boshqa 29). Rasm va narxlar AllPituz kanalidan olingan, rasmlardagi
+    begona yozuvlar tozalangan.
+18. **Yangi ko'rinish** (59-band): pahlavon rasmi — kirish ekrani foni va ilova ikonkasi.
 
 ### ⏳ Ertaga / ochiq
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
@@ -87,20 +100,6 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   Zal ekranlari 16-sent brauzerda to'liq tekshirildi (45-band) — ishlayapti.
 - **Zal mashqlari** — hozir "ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
   (trenerdan matn kutiladi: har mashg'ulotga 6–8 mashq, yondashuv va takror).
-59. **Yangi ko'rinish: pahlavon rasmi (24-sent)** — foydalanuvchi sticker rasm berdi:
-    "glavni fonga shu rasmni qo'y, yozuvlarini olib tashla, APK yuzi ham shunaqa bo'lsin".
-    - Rasm tozalandi (Pillow): "TRAIN HARD OR STAY WEAK" yozuvi rasmning chap yarmida edi —
-      o'ng tomondagi figura kesib olindi; shaxmat (shaffoflik) foni chekkadan to'lqin bilan
-      topilib shaffofga aylantirildi → `assets/brand/pahlavon.png` (748×1394).
-    - **Kirish ekrani foni:** `login_screen.dart` dagi `GradientHeader` ichiga `Stack` bilan
-      o'ngdan qo'yildi (opacity 0.38); sarlavha ostidagi matn 260 px ga cheklandi.
-    - **Ilova ikonkasi almashtirildi:** figuraning yuqori qismi (bosh + yelka + orqa) kvadratga
-      solinib `assets/icon/icon.png` va `icon_foreground.png` yasaldi, so'ng
-      `dart run flutter_launcher_icons`. `mipmap-anydpi-v26` yaratilmadi (tekshirildi).
-      Eski "Diamond" ikonkasi git tarixida qoldi.
-    - **Eslatma:** web'da eski nusxa service worker'da saqlanadi — yangisini ko'rish uchun
-      `Ctrl+Shift+R` (qattiq yangilash) kerak.
-
 - **Suv idishlari 6 ta** (3873 va 3370-postlar), **Anjomlar 1 ta** (press roller,
   foydalanuvchi rasm berdi — 200 000 so'm). Kanalning **476 ta posti** (3370–4069)
   ko'rildi; kamar, qo'lqop, bint, lyamka kabi anjomlar hali topilmadi — undan eski
@@ -1181,3 +1180,35 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       (bosh admin nomidan, Firestore REST orqali). **Nomi bir xil tovar bazada bo'lsa —
       nusxa yaratmay, o'sha yozuvni yangilaydi.** Namunalar: `tools/dokon/*.json`.
     - Tekshiruv: `flutter analyze` 0 xato, `flutter test` **90/90**.
+
+59. **Yangi ko'rinish: pahlavon rasmi (24-sent)** — foydalanuvchi sticker rasm berdi:
+    "glavni fonga shu rasmni qo'y, yozuvlarini olib tashla, APK yuzi ham shunaqa bo'lsin".
+    - Rasm tozalandi (Pillow): "TRAIN HARD OR STAY WEAK" yozuvi rasmning chap yarmida edi —
+      o'ng tomondagi figura kesib olindi; shaxmat (shaffoflik) foni chekkadan to'lqin bilan
+      topilib shaffofga aylantirildi → `assets/brand/pahlavon.png` (748×1394).
+    - **Kirish ekrani foni:** `login_screen.dart` dagi `GradientHeader` ichiga `Stack` bilan
+      o'ngdan qo'yildi (opacity 0.38); sarlavha ostidagi matn 260 px ga cheklandi.
+    - **Ilova ikonkasi almashtirildi:** figuraning yuqori qismi (bosh + yelka + orqa) kvadratga
+      solinib `assets/icon/icon.png` va `icon_foreground.png` yasaldi, so'ng
+      `dart run flutter_launcher_icons`. `mipmap-anydpi-v26` yaratilmadi (tekshirildi).
+      Eski "Diamond" ikonkasi git tarixida qoldi.
+    - **Eslatma:** web'da eski nusxa service worker'da saqlanadi — yangisini ko'rish uchun
+      `Ctrl+Shift+R` (qattiq yangilash) kerak.
+
+60. **Do'kon bo'limlari yakuniy ko'rinishi (24-sent kechqurun)** — foydalanuvchi bir necha
+    bosqichda aniqlashtirdi: "Dobavkalar degan bo'lim bo'lsin, Protein/Gainer/Kreatin/
+    L-Karnitin/L-Arginin o'shaning ichida" → "Hammasi degan narsa kerakmas" →
+    "2 ta bo'lim: suv idishlari va anjomlar".
+    - `shopGroups` = `Forma`, `Suv idishlari`, `Anjomlar`, `Dobavkalar`;
+      `supplementCategories` = Protein, Gainer, Kreatin, L-Karnitin, L-Arginin, Boshqa;
+      `shopGroupOf()` tovarni asosiy bo'limga bog'laydi.
+    - Shogird do'konida **"Hammasi" chiplari olib tashlandi** — bo'limlardan biri doim
+      tanlangan turadi (birinchi to'la bo'lim), Dobavkalar tanlansa ichidagi turlardan biri.
+    - Trener/barmen ro'yxatida "Dobavkalar" katta sarlavhasi ostida `SubHeader` bilan
+      har bir tur (yangi vidjet: `lib/widgets/ui.dart`).
+    - **Anjomlar:** kanalning 476 ta posti ko'rildi (3370–4069) — shakerlar (3873),
+      UFC suv shishasi (3370) topildi; press rollerni foydalanuvchi o'zi berdi (200 000).
+      Rasmdagi "200 000" va ruscha yozuv olib tashlandi.
+    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 1, Dobavkalar 91.
+    - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
+      sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
