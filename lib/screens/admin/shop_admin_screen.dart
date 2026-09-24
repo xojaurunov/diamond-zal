@@ -116,7 +116,7 @@ class _OrdersTab extends StatelessWidget {
                 const SizedBox(width: AppSpace.md),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text("30 kunda: ${fmtSum(month.sum)} so'm", style: t.titleMedium),
+                    Text('30 kunda: ${month.money}', style: t.titleMedium),
                     Text('${month.count} ta buyurtma berildi',
                         style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
                   ]),
@@ -170,7 +170,7 @@ class _OrderTile extends StatelessWidget {
           const SizedBox(width: AppSpace.md),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${o.productName} × ${o.qty}', style: t.titleSmall),
+              Text('${o.title} × ${o.qty}', style: t.titleSmall),
               Text(
                 '$who${o.createdAt == null ? '' : ' • ${uzDate(o.createdAt!)}'}',
                 style: t.bodySmall?.copyWith(color: AppColors.textMuted),
@@ -180,7 +180,7 @@ class _OrderTile extends StatelessWidget {
             ]),
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text("${fmtSum(o.total)} so'm", style: t.titleSmall),
+            Text(o.totalText, style: t.titleSmall),
             if (!o.isNew)
               Pill(
                 text: o.statusLabel,
@@ -292,11 +292,15 @@ class _ProductAdminTile extends StatelessWidget {
             Text(p.name, style: t.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
             const SizedBox(height: 4),
             Wrap(spacing: 6, runSpacing: 4, children: [
-              Pill(text: "${fmtSum(p.price)} so'm", color: AppColors.accent),
+              Pill(text: p.priceText, color: AppColors.accent),
               Pill(
                 text: p.stock > 0 ? 'Qoldiq: ${p.stock}' : 'Tugagan',
                 color: p.stock > 0 ? AppColors.textMuted : AppColors.danger,
               ),
+              if (p.sizes.isNotEmpty)
+                Pill(text: p.sizes.join(' · '), color: AppColors.water),
+              if (p.gallery.length > 1)
+                Pill(text: '${p.gallery.length} rasm', color: AppColors.textMuted),
               if (!p.active) Pill(text: 'Sotuvda emas', color: AppColors.warning),
             ]),
           ]),
@@ -313,8 +317,10 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
   final note = TextEditingController(text: p?.note);
   final price = TextEditingController(text: p == null || p.price == 0 ? '' : '${p.price}');
   final stock = TextEditingController(text: '${p?.stock ?? 1}');
-  final image = TextEditingController(text: p?.image);
+  final image = TextEditingController(text: p?.gallery.join('\n'));
+  final sizes = TextEditingController(text: p?.sizes.join(', '));
   var category = p?.category ?? shopCategories.first;
+  var currency = p?.currency ?? uzs;
   var active = p?.active ?? true;
   int n(TextEditingController c) => int.tryParse(c.text.replaceAll(RegExp(r'\D'), '')) ?? 0;
 
@@ -325,7 +331,12 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const SizedBox(height: AppSpace.md),
           Row(children: [
-            ProductImage(category: category, name: name.text, url: image.text, size: 52),
+            ProductImage(
+              category: category,
+              name: name.text,
+              url: image.text.split(RegExp(r'[\n,]')).first.trim(),
+              size: 52,
+            ),
             const SizedBox(width: AppSpace.md),
             Expanded(
               child: Text(p == null ? "Yangi tovar" : 'Tovarni tahrirlash',
@@ -370,7 +381,10 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
               child: TextField(
                 controller: price,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Narxi', suffixText: "so'm"),
+                decoration: InputDecoration(
+                  labelText: 'Narxi',
+                  suffixText: currencyLabel(currency),
+                ),
               ),
             ),
             const SizedBox(width: AppSpace.sm),
@@ -382,14 +396,38 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
               ),
             ),
           ]),
+          const SizedBox(height: AppSpace.sm),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Wrap(spacing: AppSpace.sm, children: [
+              for (final c in currencies)
+                ChoiceChip(
+                  selected: currency == c,
+                  onSelected: (_) => setS(() => currency = c),
+                  label: Text(c == usd ? 'Dollar (\$)' : "So'm"),
+                ),
+            ]),
+          ),
           const SizedBox(height: AppSpace.md),
           TextField(
             controller: image,
             keyboardType: TextInputType.url,
+            minLines: 1,
+            maxLines: 4,
             onChanged: (_) => setS(() {}),
             decoration: const InputDecoration(
-              labelText: 'Rasm havolasi (ixtiyoriy)',
+              labelText: 'Rasm havolalari (ixtiyoriy)',
               hintText: 'https://...',
+              helperText: 'Bir nechta bo\'lsa — har birini yangi qatorga yozing',
+            ),
+          ),
+          const SizedBox(height: AppSpace.md),
+          TextField(
+            controller: sizes,
+            decoration: const InputDecoration(
+              labelText: "O'lchamlar (ixtiyoriy)",
+              hintText: 'XL, XXL, 3XL, 4XL',
+              helperText: "Vergul bilan. Yozilsa — shogird buyurtmada o'lchamni tanlaydi",
             ),
           ),
           SwitchListTile(
@@ -429,13 +467,25 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
 
   if (saved == true) {
     if (name.text.trim().isEmpty) return;
+    final urls = image.text
+        .split(RegExp(r'[\n,]'))
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
     await Db.saveProduct(Product(
       id: p?.id ?? '',
       category: category,
       name: name.text.trim(),
       note: note.text.trim(),
-      image: image.text.trim(),
+      image: urls.isEmpty ? '' : urls.first,
+      images: urls.length > 1 ? urls.sublist(1) : const [],
+      sizes: sizes.text
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList(),
       price: n(price),
+      currency: currency,
       stock: n(stock),
       active: active,
     ));

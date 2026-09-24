@@ -171,7 +171,11 @@ service cloud.firestore {
         let d = request.resource.data;
         let product = get(/databases/$(database)/documents/shop/$(d.productId)).data;
         return d.keys().hasOnly(['clientId', 'clientName', 'clientPhone', 'trainerId',
-              'productId', 'productName', 'category', 'price', 'qty', 'status', 'createdAt'])
+              'productId', 'productName', 'category', 'size', 'price', 'currency', 'qty',
+              'status', 'createdAt'])
+          && d.get('size', '') is string && d.get('size', '').size() <= 20
+          // valyuta tovardagi bilan bir xil bo'lishi shart
+          && d.get('currency', 'UZS') == product.get('currency', 'UZS')
           && d.clientId == request.auth.uid
           && d.status == 'new'
           && d.qty is int && d.qty >= 1 && d.qty <= 20

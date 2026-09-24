@@ -120,7 +120,7 @@ List<FeedItem> studentFeed({
         orderCanceled => 'Buyurtma bekor qilindi',
         _ => 'Buyurtma kutilmoqda',
       },
-      body: '${o.productName} × ${o.qty} — ${fmtSum(o.total)} so‘m',
+      body: '${o.title} × ${o.qty} — ${o.totalText}',
       at: at,
     ));
   }
@@ -164,7 +164,7 @@ List<FeedItem> trainerFeed({
       kind: FeedKind.order,
       title: o.isNew ? 'Yangi buyurtma' : 'Buyurtma: ${o.statusLabel.toLowerCase()}',
       body: '${o.clientName.isEmpty ? 'Shogird' : o.clientName} · '
-          '${o.productName} × ${o.qty}',
+          '${o.title} × ${o.qty}',
       at: at,
       action: o.isNew,
     ));
@@ -207,7 +207,7 @@ List<FeedItem> barmenFeed({List<ShopOrder> orders = const []}) {
       kind: FeedKind.order,
       title: o.isNew ? 'Yangi buyurtma' : 'Buyurtma: ${o.statusLabel.toLowerCase()}',
       body: '${o.clientName.isEmpty ? 'Shogird' : o.clientName} · '
-          '${o.productName} × ${o.qty} — ${fmtSum(o.total)} so‘m',
+          '${o.title} × ${o.qty} — ${o.totalText}',
       at: at,
       action: o.isNew,
     ));

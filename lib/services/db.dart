@@ -371,7 +371,8 @@ class Db {
 
   /// Shogird buyurtma beradi. Yozuv bilan birga chatga xabar ketadi —
   /// trener buyurtmani bildirishnoma sifatida ham ko'radi.
-  static Future<void> createOrder(AppUser client, Product p, int qty) async {
+  static Future<void> createOrder(AppUser client, Product p, int qty,
+      {String size = ''}) async {
     final o = ShopOrder(
       clientId: client.id,
       clientName: client.name,
@@ -380,7 +381,9 @@ class Db {
       productId: p.id,
       productName: p.name,
       category: p.category,
+      size: size,
       price: p.price,
+      currency: p.currency,
       qty: qty,
     );
     await _fs.collection('orders').add({
@@ -391,7 +394,9 @@ class Db {
       'productId': o.productId,
       'productName': o.productName,
       'category': o.category,
+      if (o.size.isNotEmpty) 'size': o.size,
       'price': o.price,
+      'currency': o.currency,
       'qty': o.qty,
       'status': orderNew,
       'createdAt': FieldValue.serverTimestamp(),
@@ -422,8 +427,8 @@ class Db {
       o.clientId,
       byId,
       status == orderGiven
-          ? "✅ Buyurtma berildi: ${o.productName} × ${o.qty} — ${fmtSum(o.total)} so'm"
-          : '❌ Buyurtma bekor qilindi: ${o.productName}',
+          ? '✅ Buyurtma berildi: ${o.title} × ${o.qty} — ${o.totalText}'
+          : '❌ Buyurtma bekor qilindi: ${o.title}',
     );
   }
 

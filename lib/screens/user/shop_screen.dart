@@ -25,6 +25,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _order(Product p) async {
     var qty = 1;
+    String? size = p.sizes.length == 1 ? p.sizes.first : null;
     final max = p.stock < 20 ? p.stock : 20;
     final ok = await showSheet<bool>(
       context,
@@ -33,17 +34,59 @@ class _ShopScreenState extends State<ShopScreen> {
           final t = Theme.of(ctx).textTheme;
           return Column(mainAxisSize: MainAxisSize.min, children: [
             const SizedBox(height: AppSpace.md),
+            // rasm galereyasi — rang variantlari
+            if (p.gallery.length > 1) ...[
+              SizedBox(
+                height: 150,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: p.gallery.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: AppSpace.sm),
+                  itemBuilder: (_, i) => ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                    child: Image.network(
+                      p.gallery[i],
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpace.md),
+            ],
             Row(children: [
               ProductImage(category: p.category, name: p.name, url: p.image, size: 56),
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(p.name, style: t.titleMedium),
-                  Text("${fmtSum(p.price)} so'm",
+                  Text(p.priceText,
                       style: t.bodyMedium?.copyWith(color: AppColors.accent)),
                 ]),
               ),
             ]),
+            if (p.sizes.isNotEmpty) ...[
+              const SizedBox(height: AppSpace.lg),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("O'lchamni tanlang",
+                    style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
+              ),
+              const SizedBox(height: AppSpace.sm),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+                  for (final sz in p.sizes)
+                    ChoiceChip(
+                      selected: size == sz,
+                      onSelected: (_) => setS(() => size = sz),
+                      label: Text(sz),
+                    ),
+                ]),
+              ),
+            ],
             const SizedBox(height: AppSpace.lg),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               IconButton.filledTonal(
@@ -60,7 +103,7 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ]),
             const SizedBox(height: AppSpace.md),
-            Text("Jami: ${fmtSum(p.price * qty)} so'm", style: t.titleLarge),
+            Text('Jami: ${fmtMoney(p.price * qty, p.currency)}', style: t.titleLarge),
             const SizedBox(height: AppSpace.sm),
             Text(
               "To'lov zalda, naqd. Trener buyurtmani ko'radi va tayyorlab qo'yadi.",
@@ -71,8 +114,12 @@ class _ShopScreenState extends State<ShopScreen> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Buyurtma berish'),
+                onPressed: p.sizes.isNotEmpty && size == null
+                    ? null
+                    : () => Navigator.pop(ctx, true),
+                child: Text(p.sizes.isNotEmpty && size == null
+                    ? "Avval o'lchamni tanlang"
+                    : 'Buyurtma berish'),
               ),
             ),
             const SizedBox(height: AppSpace.sm),
@@ -89,7 +136,7 @@ class _ShopScreenState extends State<ShopScreen> {
     );
     if (ok != true || !mounted) return;
     try {
-      await Db.createOrder(widget.user, p, qty);
+      await Db.createOrder(widget.user, p, qty, size: size ?? '');
       if (mounted) showSnack(context, 'Buyurtma yuborildi — trener xabardor bo\'ldi');
     } catch (e) {
       if (mounted) showSnack(context, "Bo'lmadi: $e");
@@ -147,9 +194,9 @@ class _ShopScreenState extends State<ShopScreen> {
                           const SizedBox(width: AppSpace.md),
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Text('${o.productName} × ${o.qty}', style: t.titleSmall),
+                              Text('${o.title} × ${o.qty}', style: t.titleSmall),
                               Text(
-                                "${fmtSum(o.total)} so'm • ${o.statusLabel}",
+                                '${o.totalText} • ${o.statusLabel}',
                                 style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                               ),
                             ]),
@@ -208,7 +255,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       padding: const EdgeInsets.only(bottom: AppSpace.xs),
                       child: Row(children: [
                         Expanded(
-                          child: Text('${o.productName} × ${o.qty}',
+                          child: Text('${o.title} × ${o.qty}',
                               style: t.bodyMedium, overflow: TextOverflow.ellipsis),
                         ),
                         const SizedBox(width: AppSpace.sm),
@@ -273,8 +320,14 @@ class _ProductTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis),
               ),
             const SizedBox(height: AppSpace.sm),
+            if (p.sizes.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text("O'lchamlar: ${p.sizes.join(' · ')}",
+                    style: t.bodySmall?.copyWith(color: AppColors.water)),
+              ),
             Row(children: [
-              Text("${fmtSum(p.price)} so'm",
+              Text(p.priceText,
                   style: t.titleSmall?.copyWith(color: AppColors.accent)),
               const SizedBox(width: AppSpace.sm),
               if (p.stock <= 0)

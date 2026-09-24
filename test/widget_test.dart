@@ -931,4 +931,54 @@ void main() {
       expect(yangi.body, contains('Aziz'));
     });
   });
+
+  group("Tovar rasmlari va o-lchamlari", () {
+    test('galereya: asosiy rasm birinchi, takror yo-q', () {
+      const p = Product(
+        category: 'Forma',
+        name: 'Venum',
+        image: 'a.jpg',
+        images: ['b.jpg', 'a.jpg', '  ', 'c.jpg'],
+      );
+      expect(p.gallery, ['a.jpg', 'b.jpg', 'c.jpg']);
+    });
+
+    test('rasmsiz tovarda galereya bo-sh', () {
+      const p = Product(category: 'Forma', name: 'X');
+      expect(p.gallery, isEmpty);
+    });
+
+    test('o-lchamlar saqlanadi', () {
+      const p = Product(
+        category: 'Forma',
+        name: 'Venum',
+        sizes: ['XL', 'XXL', '3XL', '4XL'],
+      );
+      expect(p.toMap()['sizes'], ['XL', 'XXL', '3XL', '4XL']);
+      expect(p.copyWith(stock: 2).sizes, hasLength(4));
+    });
+
+    test('buyurtma nomi o-lcham bilan chiqadi', () {
+      const o = ShopOrder(
+        clientId: 'c',
+        productId: 'p',
+        productName: 'Venum komplekt',
+        size: 'XL',
+        price: 450000,
+        qty: 2,
+      );
+      expect(o.title, 'Venum komplekt (XL)');
+      expect(o.chatText, contains('Venum komplekt (XL) x 2'.replaceAll('x', String.fromCharCode(215))));
+    });
+
+    test('o-lchamsiz tovarda nom o-zgarmaydi', () {
+      const o = ShopOrder(
+        clientId: 'c',
+        productId: 'p',
+        productName: 'Protein',
+        price: 450000,
+      );
+      expect(o.title, 'Protein');
+    });
+  });
 }

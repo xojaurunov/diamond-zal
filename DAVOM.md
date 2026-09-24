@@ -11,14 +11,14 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (18-sentabr, 19:00 holati)
+## 0. ▶ SHU YERDAN BOSHLANG (24-sentabr holati)
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **85/85**, qoida testlari **138/138**.
+`flutter test` **90/90**, qoida testlari **138/138**.
 
 Oxirgi APK: **18-sentabr 19:00, 22,9 MB** (zallar, Eslatma bo'limi, barmen bilan) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
-Qoidalar **18-sent** qayta joylandi (zallar + barmen).
+Qoidalar **24-sent** qayta joylandi (zallar + barmen + valyuta tekshiruvi).
 **Loyiha git'da** (52-band) — kod o'chsa `git checkout -- <fayl>` bilan qaytariladi.
 
 **Hujjatlar:** `hujjatlar\Diamond-TZ.docx` — texnik topshiriq va reja (Word);
@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. Do'kon bo'sh, buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 2 ta tovar** (Venum VM2008 va UFC VM202101 komplektlari, 35 $, XL–4XL), buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -71,6 +71,9 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
     bildirishnoma o'chirilgan bo'lsa ham hamma narsa shu yerda turadi.
 15. **Barmen roli va sotuv hisoboti** (56-band): 4-rol — faqat do'kon; zal egasi
     "kim nechta sotdi" hisobotini ko'radi.
+16. **Do'konda o'lcham, rasm galereyasi va dollar narxi** (57-band): tovarga bir nechta rasm
+    va o'lchamlar (XL–4XL) qo'shiladi, narx so'mda yoki dollarda bo'ladi; shogird
+    buyurtmada o'lchamni tanlaydi, hisobot valyuta bo'yicha alohida chiqadi.
 
 ### ⏳ Ertaga / ochiq
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
@@ -86,9 +89,13 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   (trenerdan matn kutiladi: har mashg'ulotga 6–8 mashq, yondashuv va takror).
 - **Barmen hozir hamma zal buyurtmasini ko'radi** (zal bitta bo'lgani uchun). Filial ko'paysa —
   buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak (56-band).
-- **Do'kon tovarlari** — bo'lim tayyor, baza bo'sh. Foydalanuvchi ro'yxatni (nomi, narxi, qoldiq) beradi,
-  keyin kiritiladi. Trener ham "Do'kon → Tovarlar → + Tovar" orqali o'zi kirita oladi.
-  (Foydalanuvchi sayt havolasini berishi mumkin — tovar nomi, narxi va rasmi o'sha yerdan olinadi.)
+- **Do'kon tovarlari** — 2 ta komplekt kiritildi (57-band). Qolganlari foydalanuvchidan
+  kutiladi ("keyingilarini qo'shamiz"): nomi, narxi, o'lchamlari, rasmi.
+  Tez qo'shish: `node tools/dokon/tovar_qoshish.mjs <fayl.json>`; qo'lda — "Do'kon → Tovarlar → + Tovar".
+- **Do'kondagi qoldiq taxminiy** — ikkala komplektga 10 dona qo'yildi (haqiqiy son so'ralmagan).
+  Zal egasi "Do'kon → Tovarlar" dan to'g'rilasin. Qoldiq **o'lcham kesimida emas**, umumiy.
+- **UFC komplekt rasmlari yuklanmagan** — rasmlar chat orqali kelgan, lekin faylga tushmagan;
+  foydalanuvchi qayta yuborsa, `public/img/tovar/` ga qo'yiladi va tovarga biriktiriladi.
 - **Figma** — plagin yozildi, lekin haqiqiy Figma'da sinalmagan (bu kompyuterda Figma yo'q,
   hisobga kirish imkoni ham yo'q). Foydalanuvchi ishga tushirib skrinshot bersa — tuzatiladi.
 - **Blaze** (faqat Firebase Console orqali, bank karta) → `FUNKSIYALAR_JOYLASH.bat` — ilova yopiq bo'lganda
@@ -1073,3 +1080,23 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       (+998 90 000 00 03 / <barmen-paroli>) → barmen kirdi va faqat do'kon panelini ko'rdi.
     - **Eslatma:** hozir barmen **hamma zal** buyurtmasini ko'radi (zal bittaligi uchun).
       Filial ko'paysa, buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak.
+
+57. **Do'kon: o'lcham, rasm galereyasi, dollar narxi va birinchi tovarlar (24-sent)** —
+    foydalanuvchi Venum komplekt rasmlarini berdi: "XL-XXL-3XL-4XL razmerlar bor, narxi 35 $".
+    - **O'lchamlar:** `Product.sizes` (masalan `XL, XXL, 3XL, 4XL`) — trener vergul bilan
+      yozadi; shogird buyurtmada o'lchamni tanlamaguncha tugma ishlamaydi. Tanlangani
+      `ShopOrder.size` ga yoziladi va hamma joyda `Venum komplekt (XL)` ko'rinishida chiqadi.
+    - **Rasm galereyasi:** `Product.images` — muharrirda har bir havola yangi qatorda;
+      buyurtma oynasida rang variantlari yonma-yon ko'rinadi (`gallery` getteri).
+    - **Valyuta:** `Product.currency` — `UZS` yoki `USD` (muharrirda tugmacha).
+      `fmtMoney(35, 'USD')` → `35 $`. Buyurtmaga valyuta ham yoziladi (keyin kurs
+      o'zgarsa ham eski buyurtma o'z narxida qoladi). Sotuv hisoboti valyutalarni
+      **qo'shmaydi**, alohida ko'rsatadi: `450 000 so'm · 70 $` (`SalesReport.sums`).
+    - **Qoidalar:** buyurtmada `size` (≤ 20 belgi) va `currency` maydonlari ruxsat etildi;
+      valyuta tovardagi bilan bir xil bo'lishi shart. 24-sent joylandi.
+    - **Rasmlar:** `public/img/tovar/venum-vm2008-{sariq,kulrang,yashil,oq-qora}.jpg` — saytda turadi.
+    - **Kiritilgan tovarlar:** `Venum komplekt (VM2008)` (4 rasm) va `UFC komplekt (VM202101)`
+      (rasmsiz — yuqoriga qarang), ikkalasi ham Forma, 35 $, XL–4XL, qoldiq 10 (taxminiy).
+    - **Yangi vosita:** `tools/dokon/tovar_qoshish.mjs` — JSON fayldan tovar qo'shadi
+      (bosh admin nomidan, Firestore REST orqali). Namunalar: `tools/dokon/*.json`.
+    - Tekshiruv: `flutter analyze` 0 xato, `flutter test` **90/90**.
