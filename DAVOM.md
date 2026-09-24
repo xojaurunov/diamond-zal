@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 6 ta tovar** (Venum VM2008, UFC VM202101, Reebok R-615 — 35 $; Nike, Under Armour va Pro Combat komplektlari — 45 $; hammasi Forma, XL–4XL, qoldiq 10 taxminiy), buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 7 ta tovar** (Pro Combat 2 qismli — 30 $; Venum VM2008, UFC VM202101, Reebok R-615 — 35 $; Nike, Under Armour, Pro Combat 5 qismli — 45 $; hammasi Forma, XL–4XL, qoldiq 10 taxminiy), buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -1106,6 +1106,10 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       Yana uchtasi — **45 $**: `Nike komplekt (4-5 qismli)` (1 rasm),
       `Under Armour komplekt (4-5 qismli)` (2 rasm: qora, qora-yashil) va
       `Pro Combat komplekt (5 qismli)` (3 rasm: qora, kulrang, ko'k).
+      Eng arzoni — **30 $**: `Pro Combat komplekt (2 qismli)` (rashgard + tayts, 3 rasm).
+    - **Rasmlardagi begona yozuvlar tozalanadi:** narx yorlig'i kesish bilan, xitoycha
+      yozuv esa atrof fon rangi bilan bo'yab yopish bilan (Pillow; `numpy` bilan qizil
+      piksellar topiladi). Shunday tozalangan: Nike/UA rasmlari va Pro Combat 2 qismli 1-rasmi.
     - **Rasmdagi narx yorlig'i olib tashlandi** (foydalanuvchi so'rovi): Nike/UA rasmlarida
       pastki-o'ng burchakda "45 $" oq yorlig'i bor edi — rasm 800×800 dan 800×710 ga
       kesildi (Pillow), narx endi faqat ilovada turadi.
