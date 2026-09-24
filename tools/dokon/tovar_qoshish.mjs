@@ -1,5 +1,6 @@
 // Do'konga tovar qo'shish (bosh admin nomidan).
 // Ishga tushirish: node tools/dokon/tovar_qoshish.mjs <fayl.json>
+// Nomi bir xil tovar bazada bor bo'lsa — yangilanadi (nusxa yaratilmaydi).
 // JSON: { "category": "Forma", "name": "...", "note": "...", "price": 35,
 //         "currency": "USD", "stock": 10, "active": true,
 //         "sizes": ["XL"], "image": "https://...", "images": ["https://..."] }
@@ -46,6 +47,12 @@ const val = (v) => {
   throw new Error('nomalum tur: ' + JSON.stringify(v));
 };
 
+// mavjud tovarlar — nomi bir xil bo'lsa yangilanadi, yangi yozuv yaratilmaydi
+const bor = await fetch(`${base}/shop?pageSize=300`, { headers: auth }).then((x) => x.json());
+const byName = new Map(
+  (bor.documents ?? []).map((d) => [d.fields?.name?.stringValue ?? '', d.name.split('/').pop()]),
+);
+
 for (const p of list) {
   const doc = {
     category: p.category ?? 'Forma',
@@ -59,17 +66,20 @@ for (const p of list) {
     stock: p.stock ?? 0,
     active: p.active ?? true,
   };
-  const r = await fetch(`${base}/shop`, {
-    method: 'POST',
+  const fields = Object.fromEntries(Object.entries(doc).map(([k, v]) => [k, val(v)]));
+  const id = byName.get(doc.name);
+  const url = id
+    ? `${base}/shop/${id}?` + Object.keys(doc).map((k) => `updateMask.fieldPaths=${k}`).join('&')
+    : `${base}/shop`;
+  const r = await fetch(url, {
+    method: id ? 'PATCH' : 'POST',
     headers: auth,
-    body: JSON.stringify({ fields: Object.fromEntries(
-      Object.entries(doc).map(([k, v]) => [k, val(v)]),
-    ) }),
+    body: JSON.stringify({ fields }),
   }).then((x) => x.json());
   if (r.error) {
     console.error('XATO:', doc.name, r.error.message);
   } else {
-    console.log('qoshildi:', doc.name, '|', doc.price, doc.currency,
-      '| qoldiq:', doc.stock, '|', doc.sizes.join(', '));
+    console.log(id ? 'yangilandi:' : 'qoshildi:', doc.name, '|', doc.price, doc.currency,
+      '| qoldiq:', doc.stock, '|', doc.sizes.join(', '), '|', doc.images.length + 1, 'rasm');
   }
 }

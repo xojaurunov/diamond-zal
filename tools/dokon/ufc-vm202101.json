@@ -7,6 +7,6 @@
   "currency": "USD",
   "stock": 10,
   "active": true,
-  "image": "",
-  "images": []
+  "image": "https://kotta-qani-09111753.web.app/img/tovar/ufc-vm202101-haki.jpg",
+  "images": ["https://kotta-qani-09111753.web.app/img/tovar/ufc-vm202101-qora.jpg"]
 }
