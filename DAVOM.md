@@ -43,7 +43,7 @@ o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.
 
 **Bazada (18-sent 19:00):** 1 zal (Kotta Qani zali), 3 trener, 1 barmen, 1 bosh admin,
 **3 shogird** — Shogird 1, Shogird 2 va **Shogird 3** (18-sent ro'yxatdan o'tgan, Kotta Qani'ni
-tanlagan). Hammasining rejasi bor. **Do'konda 3 ta tovar** (Venum VM2008 — 4 rasm, UFC VM202101 — 2 rasm, Reebok R-615 — 3 rasm; hammasi 35 $, XL–4XL, qoldiq 10 taxminiy), buyurtma yo'q. 3 ta reja shabloni saqlangan.
+tanlagan). Hammasining rejasi bor. **Do'konda 5 ta tovar** (Venum VM2008, UFC VM202101, Reebok R-615 — 35 $; Nike va Under Armour komplektlari — 45 $; hammasi Forma, XL–4XL, qoldiq 10 taxminiy), buyurtma yo'q. 3 ta reja shabloni saqlangan.
 (15-sent 12:00 da eski 5 shogird o'chirilgan — zaxira `zaxira/2026-09-15_ochirilgan_shogirdlar.json`.)
 Holatni tekshirish: `node tools/holat/holat.mjs`.
 
@@ -1103,6 +1103,11 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Kiritilgan tovarlar** (hammasi Forma, 35 $, XL–4XL, qoldiq 10 — taxminiy):
       `Venum komplekt (VM2008)` (4 rasm), `UFC komplekt (VM202101)` (2 rasm: haki, qora),
       `Reebok komplekt (R-615)` (3 rasm: qora, haki, ko'k).
+      Yana ikkitasi — **45 $**: `Nike komplekt (4-5 qismli)` (1 rasm) va
+      `Under Armour komplekt (4-5 qismli)` (2 rasm: qora, qora-yashil).
+    - **Rasmdagi narx yorlig'i olib tashlandi** (foydalanuvchi so'rovi): Nike/UA rasmlarida
+      pastki-o'ng burchakda "45 $" oq yorlig'i bor edi — rasm 800×800 dan 800×710 ga
+      kesildi (Pillow), narx endi faqat ilovada turadi.
     - **Yangi vosita:** `tools/dokon/tovar_qoshish.mjs` — JSON fayldan tovar qo'shadi
       (bosh admin nomidan, Firestore REST orqali). **Nomi bir xil tovar bazada bo'lsa —
       nusxa yaratmay, o'sha yozuvni yangilaydi.** Namunalar: `tools/dokon/*.json`.
