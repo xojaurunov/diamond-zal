@@ -6,7 +6,7 @@ import 'ui.dart';
 /// Do'kon bo'limining ikonkasi va rangi — rasmi yo'q tovarlar uchun
 IconData shopIcon(String category) => switch (category) {
       'Forma' => Icons.checkroom_outlined,
-      'Anjomlar' => Icons.fitness_center_outlined,
+      'Sport anjomlari' => Icons.fitness_center_outlined,
       'Protein' => Icons.local_drink_outlined,
       'Gainer' => Icons.inventory_2_outlined,
       'Kreatin' => Icons.science_outlined,
@@ -17,7 +17,7 @@ IconData shopIcon(String category) => switch (category) {
 
 Color shopColor(String category) => switch (category) {
       'Forma' => AppColors.water,
-      'Anjomlar' => AppColors.warning,
+      'Sport anjomlari' => AppColors.warning,
       'Gainer' => AppColors.accent,
       'Kreatin' => AppColors.success,
       'L-Karnitin' => AppColors.danger,

@@ -535,14 +535,14 @@ void main() {
 
     test('bo-limlar: forma, anjomlar, protein, gainer, kreatin, dobavkalar', () {
       expect(shopCategories.length, 8);
-      expect(shopGroups, ['Forma', 'Anjomlar', 'Dobavkalar']);
+      expect(shopGroups, ['Forma', 'Sport anjomlari', 'Dobavkalar']);
       // dobavkalar ichidagi kichik bo'limlar
       for (final c in ['Protein', 'Gainer', 'Kreatin', 'L-Karnitin', 'L-Arginin', 'Boshqa']) {
         expect(shopCategories, contains(c));
         expect(shopGroupOf(c), 'Dobavkalar');
       }
       expect(shopGroupOf('Forma'), 'Forma');
-      expect(shopGroupOf('Anjomlar'), 'Anjomlar');
+      expect(shopGroupOf('Sport anjomlari'), 'Sport anjomlari');
     });
 
     ShopOrder order({int qty = 1, int price = 450000, String status = orderNew, DateTime? at}) =>
