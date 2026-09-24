@@ -533,8 +533,10 @@ void main() {
           reason: 'narxi kiritilmagan');
     });
 
-    test('bo-limlar: forma, anjomlar, qo-shimcha', () {
-      expect(shopCategories.length, 3);
+    test('bo-limlar: forma, anjomlar, protein, kreatin, qo-shimcha', () {
+      expect(shopCategories.length, 5);
+      expect(shopCategories, contains('Protein'));
+      expect(shopCategories, contains('Kreatin'));
       expect(shopCategories, contains("Qo'shimcha"));
     });
 

@@ -7,12 +7,15 @@ import 'ui.dart';
 IconData shopIcon(String category) => switch (category) {
       'Forma' => Icons.checkroom_outlined,
       'Anjomlar' => Icons.fitness_center_outlined,
-      _ => Icons.local_drink_outlined,
+      'Protein' => Icons.local_drink_outlined,
+      'Kreatin' => Icons.science_outlined,
+      _ => Icons.medication_liquid_outlined,
     };
 
 Color shopColor(String category) => switch (category) {
       'Forma' => AppColors.water,
       'Anjomlar' => AppColors.warning,
+      'Kreatin' => AppColors.success,
       _ => AppColors.protein,
     };
 
