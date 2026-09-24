@@ -534,7 +534,10 @@ void main() {
     });
 
     test('bo-limlar: forma, anjomlar, protein, kreatin, qo-shimcha', () {
-      expect(shopCategories.length, 5);
+      expect(shopCategories.length, 8);
+      expect(shopCategories, contains('Gainer'));
+      expect(shopCategories, contains('L-Karnitin'));
+      expect(shopCategories, contains('L-Arginin'));
       expect(shopCategories, contains('Protein'));
       expect(shopCategories, contains('Kreatin'));
       expect(shopCategories, contains("Qo'shimcha"));

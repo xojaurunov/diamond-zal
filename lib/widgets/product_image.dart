@@ -8,14 +8,20 @@ IconData shopIcon(String category) => switch (category) {
       'Forma' => Icons.checkroom_outlined,
       'Anjomlar' => Icons.fitness_center_outlined,
       'Protein' => Icons.local_drink_outlined,
+      'Gainer' => Icons.inventory_2_outlined,
       'Kreatin' => Icons.science_outlined,
+      'L-Karnitin' => Icons.water_drop_outlined,
+      'L-Arginin' => Icons.bolt_outlined,
       _ => Icons.medication_liquid_outlined,
     };
 
 Color shopColor(String category) => switch (category) {
       'Forma' => AppColors.water,
       'Anjomlar' => AppColors.warning,
+      'Gainer' => AppColors.accent,
       'Kreatin' => AppColors.success,
+      'L-Karnitin' => AppColors.danger,
+      'L-Arginin' => AppColors.water,
       _ => AppColors.protein,
     };
 

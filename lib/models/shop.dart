@@ -5,7 +5,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// To'lov ilovada emas — shogird zalga kelganda naqd to'laydi.
 
 /// Do'kon bo'limlari. Tartibi shogirdga ham shu ko'rinishda chiqadi.
-const shopCategories = ['Forma', 'Anjomlar', 'Protein', 'Kreatin', "Qo'shimcha"];
+const shopCategories = [
+  'Forma',
+  'Anjomlar',
+  'Protein',
+  'Gainer',
+  'Kreatin',
+  'L-Karnitin',
+  'L-Arginin',
+  "Qo'shimcha",
+];
 
 /// Valyutalar: so'm (asosiy) va dollar (chetdan keltirilgan tovarlar uchun)
 const uzs = 'UZS';
