@@ -173,11 +173,18 @@ class _ShopScreenState extends State<ShopScreen> {
         // Shogird faqat sotuvdagi tovarlarni ko'radi (qoldig'i tugagani ham ko'rinadi,
         // lekin tugmasi ochilmaydi — trener yana keltiradi)
         final all = snap.data!.where((p) => p.active && p.price > 0).toList();
-        final list =
-            all
-                .where((p) => _group == null || shopGroupOf(p.category) == _group)
-                .where((p) => _category == null || p.category == _category)
-                .toList();
+        // Tovari bor bo'limlar; biri doim tanlangan turadi ("Hammasi" yo'q)
+        final groups =
+            shopGroups.where((g) => all.any((p) => shopGroupOf(p.category) == g)).toList();
+        final group = groups.contains(_group) ? _group! : (groups.isEmpty ? '' : groups.first);
+        final subs = group == 'Dobavkalar'
+            ? supplementCategories.where((c) => all.any((p) => p.category == c)).toList()
+            : const <String>[];
+        final sub = subs.contains(_category) ? _category! : (subs.isEmpty ? '' : subs.first);
+        final list = all
+            .where((p) => shopGroupOf(p.category) == group)
+            .where((p) => subs.isEmpty || p.category == sub)
+            .toList();
 
         return StreamBuilder<List<ShopOrder>>(
           stream: _orders,
@@ -227,46 +234,31 @@ class _ShopScreenState extends State<ShopScreen> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(children: [
-                      _CatChip(
-                        label: 'Hammasi',
-                        selected: _group == null,
-                        onTap: () => setState(() {
-                          _group = null;
-                          _category = null;
-                        }),
-                      ),
-                      for (final g in shopGroups)
-                        if (all.any((p) => shopGroupOf(p.category) == g))
-                          _CatChip(
-                            label: g,
-                            icon: shopIcon(g == 'Dobavkalar' ? 'Boshqa' : g),
-                            selected: _group == g,
-                            onTap: () => setState(() {
-                              _group = g;
-                              _category = null;
-                            }),
-                          ),
+                      for (final g in groups)
+                        _CatChip(
+                          label: g,
+                          icon: shopIcon(g == 'Dobavkalar' ? 'Boshqa' : g),
+                          selected: group == g,
+                          onTap: () => setState(() {
+                            _group = g;
+                            _category = null;
+                          }),
+                        ),
                     ]),
                   ),
                   // Dobavkalar tanlansa — ichidagi kichik bo'limlar
-                  if (_group == 'Dobavkalar') ...[
+                  if (subs.isNotEmpty) ...[
                     const SizedBox(height: AppSpace.sm),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(children: [
-                        _CatChip(
-                          label: 'Hammasi',
-                          selected: _category == null,
-                          onTap: () => setState(() => _category = null),
-                        ),
-                        for (final c in supplementCategories)
-                          if (all.any((p) => p.category == c))
-                            _CatChip(
-                              label: c,
-                              icon: shopIcon(c),
-                              selected: _category == c,
-                              onTap: () => setState(() => _category = c),
-                            ),
+                        for (final c in subs)
+                          _CatChip(
+                            label: c,
+                            icon: shopIcon(c),
+                            selected: sub == c,
+                            onTap: () => setState(() => _category = c),
+                          ),
                       ]),
                     ),
                   ],
