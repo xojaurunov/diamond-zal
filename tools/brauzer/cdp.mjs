@@ -11,6 +11,7 @@
 //   node tools/brauzer/cdp.mjs key Enter
 //   node tools/brauzer/cdp.mjs scroll 195 500 400
 //   node tools/brauzer/cdp.mjs eval "document.title"
+//   node tools/brauzer/cdp.mjs yop        — faqat shu brauzerni yopadi
 import { writeFileSync } from 'node:fs';
 
 const [cmd, ...args] = process.argv.slice(2);
@@ -79,6 +80,13 @@ switch (cmd) {
     await send('Input.dispatchMouseEvent', { type: 'mouseWheel', x, y, deltaX: 0, deltaY: dy });
     break;
   }
+  // Faqat shu tekshiruv brauzerini yopadi (9222-portdagisini).
+  // DIQQAT: hech qachon `taskkill /IM chrome.exe` ishlatmang — u foydalanuvchining
+  // ochiq Chrome oynalarini ham yopib yuboradi.
+  case 'yop':
+    await send('Browser.close');
+    process.exit(0);
+    break;
   case 'eval': {
     const r = await send('Runtime.evaluate', {
       expression: args.join(' '), returnByValue: true, awaitPromise: true,
