@@ -71,7 +71,22 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(children: [
           // Editorial bosh blok: chapga tekislangan yirik matn, laym urg'u
           GradientHeader(
-            child: Padding(
+            child: Stack(children: [
+              // Bosh blok foni — zal ruhi
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Opacity(
+                    opacity: 0.38,
+                    child: Image.asset(
+                      'assets/brand/pahlavon.png',
+                      fit: BoxFit.fitHeight,
+                      alignment: Alignment.centerRight,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
               padding: const EdgeInsets.fromLTRB(AppSpace.xl, 44, AppSpace.xl, 40),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
@@ -98,12 +113,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: t.headlineLarge?.copyWith(color: AppColors.accent),
                 ),
                 const SizedBox(height: AppSpace.md),
-                Text(
-                  'Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.',
-                  style: t.bodyMedium?.copyWith(color: AppColors.textMuted),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 260),
+                  child: Text(
+                    'Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.',
+                    style: t.bodyMedium?.copyWith(color: AppColors.textMuted),
+                  ),
                 ),
               ]),
-            ),
+              ),
+            ]),
           ),
           Center(
             child: ConstrainedBox(

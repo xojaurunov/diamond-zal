@@ -87,6 +87,20 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   Zal ekranlari 16-sent brauzerda to'liq tekshirildi (45-band) — ishlayapti.
 - **Zal mashqlari** — hozir "ishlab chiqilmoqda" yozuvi; mashqlar ro'yxati keyin qo'shiladi
   (trenerdan matn kutiladi: har mashg'ulotga 6–8 mashq, yondashuv va takror).
+59. **Yangi ko'rinish: pahlavon rasmi (24-sent)** — foydalanuvchi sticker rasm berdi:
+    "glavni fonga shu rasmni qo'y, yozuvlarini olib tashla, APK yuzi ham shunaqa bo'lsin".
+    - Rasm tozalandi (Pillow): "TRAIN HARD OR STAY WEAK" yozuvi rasmning chap yarmida edi —
+      o'ng tomondagi figura kesib olindi; shaxmat (shaffoflik) foni chekkadan to'lqin bilan
+      topilib shaffofga aylantirildi → `assets/brand/pahlavon.png` (748×1394).
+    - **Kirish ekrani foni:** `login_screen.dart` dagi `GradientHeader` ichiga `Stack` bilan
+      o'ngdan qo'yildi (opacity 0.38); sarlavha ostidagi matn 260 px ga cheklandi.
+    - **Ilova ikonkasi almashtirildi:** figuraning yuqori qismi (bosh + yelka + orqa) kvadratga
+      solinib `assets/icon/icon.png` va `icon_foreground.png` yasaldi, so'ng
+      `dart run flutter_launcher_icons`. `mipmap-anydpi-v26` yaratilmadi (tekshirildi).
+      Eski "Diamond" ikonkasi git tarixida qoldi.
+    - **Eslatma:** web'da eski nusxa service worker'da saqlanadi — yangisini ko'rish uchun
+      `Ctrl+Shift+R` (qattiq yangilash) kerak.
+
 - **Sport anjomlari bo'limi bo'sh** — nomi qo'yildi, lekin tovar yo'q.
   **Sabab:** AllPituz kanalida (t.me/s/AllPituz) faqat sport pitaniya sotiladi — 190 ta
   post (3814–4069) ko'rildi, anjom (shaker, kamar, qo'lqop, bint, arqon) surati yo'q.

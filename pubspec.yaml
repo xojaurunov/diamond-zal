@@ -31,6 +31,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/foods/
+    - assets/brand/
     - assets/credits.txt
 
 # Ilova ikonkasi: assets/icon/logo_src.jpg dan tools/make_icon.dart yasab beradi,
