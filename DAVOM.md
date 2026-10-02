@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-09-18 (19:00)**
+> Oxirgi yangilanish: **2026-10-02**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -12,6 +12,8 @@
 ---
 
 ## 0. ▶ SHU YERDAN BOSHLANG (24-sentabr holati)
+
+**2-oktabr:** kodda o'zgarish yo'q (oxirgi commit 24-sent). Keyingi ish rejasi — **13-bo'lim: Tavsiyalar** (abonement, narxga ustama, parollar va zaxira, Blaze, QR).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **90/90**, qoida testlari **138/138**.
@@ -866,11 +868,11 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
 | Tekshiruv | Natija |
 |---|---|
 | `flutter analyze` | ✅ 0 xato |
-| `flutter test` | ✅ 54/54 |
-| Qoida testlari | ✅ 84/84 (15-sent, emulyatorda) |
-| APK yig'ish | ✅ ishlaydi (15-sent 17:59, 22,6 MB, `CN=Diamond Zal`) |
+| `flutter test` | ✅ 90/90 (24-sent) |
+| Qoida testlari | ✅ 138/138 (24-sent, emulyatorda) |
+| APK yig'ish | ✅ ishlaydi (24-sent 18:00, 25,2 MB arm64, `CN=Diamond Zal`) |
 | Web release | ✅ `build\web` — lokal: `python -m http.server 5173 --bind 127.0.0.1 --directory build\web` |
-| Firebase'ga joylash | ✅ qoidalar + hosting (15-sent 17:59); ❌ Cloud Functions — Blaze kerak |
+| Firebase'ga joylash | ✅ qoidalar + hosting (24-sent); ❌ Cloud Functions — Blaze kerak |
 | Bosh admin / trener login | ✅ REST orqali tekshirilgan (`owner` / `admin`) |
 | Ekranlarni ko'z bilan tekshirish | ✅ trener, bosh admin va shogird (15-sent; chat ko'rilmagan) |
 
@@ -1212,3 +1214,93 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 1, Dobavkalar 91.
     - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
       sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
+
+---
+
+## 13. Tavsiyalar — nimani keyingi navbatda qilish kerak (2-oktabr)
+
+Loyihaning hozirgi holatiga qarab tuzilgan ro'yxat. Tartib muhimlik bo'yicha: yuqoridagisi
+ko'proq foyda beradi yoki ko'proq xavfni yopadi. Kod o'zgarmagan — bu faqat reja.
+
+### 13.1. Abonement va davomat yo'q (eng muhim)
+
+Ilovada ovqat rejasi, do'kon, chat, zal jadvali bor, lekin **zalning asosiy daromadi —
+abonement — hisobga olinmaydi**. Hozir zal egasi kim to'lagan, kimning muddati tugaganini
+ilovadan ko'rmaydi.
+
+Kerak bo'ladigan narsalar:
+- Abonement yozuvi: boshlanish sanasi, muddati (1 oy / 3 oy / yillik), narxi, to'langan sana.
+- Muddat tugashiga 3 kun qolganda shogirdga va zal egasiga eslatma (`Eslatma` bo'limi tayyor,
+  55-band — faqat yangi tur qo'shiladi).
+- Davomat: trener bugun kelgan shogirdlarni belgilaydi. Zal bo'limida "bugun kim keladi"
+  ro'yxati allaqachon bor (42-band) — unga belgilash qo'shiladi.
+- Bosh adminda oylik hisobot: nechta abonement sotildi, qancha tushum. Sotuv hisoboti
+  naqshi tayyor (56-band, `SalesReport`) — shu naqsh takrorlanadi.
+
+Bu do'kondan ko'proq pul keltiradi; do'kon — qo'shimcha daromad.
+
+### 13.2. Do'kon narxlari hozir foyda bermaydi
+
+- Narxlar **AllPituz kanalidan** olingan, ya'ni yetkazib beruvchining narxi. Shu narxda
+  sotilsa foyda nolga teng.
+- Ustama foiz qo'yish kerak (masalan 15–30%). Bir buyruq bilan hamma tovarga qo'shiladi:
+  `tools/dokon/` dagi skriptga ustama hisoblash qo'shilsa kifoya.
+- **Qoldiq o'lcham kesimida emas** (9-bo'limda ham yozilgan): "XL 2 ta, 4XL yo'q" deb
+  bo'lmaydi. Kiyimda bu muammo — shogird 4XL buyurtma beradi, mol bo'lmaydi. Ikki yo'l:
+  a) `Product.stock` ni o'lcham bo'yicha xaritaga aylantirish (`{XL: 2, XXL: 0}`);
+  b) kiyimni "buyurtma asosida" deb belgilab, qoldiqni katta son qilib qo'yish.
+- Haqiqiy qoldiq sonlari hali so'ralmagan — hozir Forma 10, qolganlar 5 (taxminiy).
+
+### 13.3. Xavfsizlik — hozir tuzatish kerak
+
+- **Bosh admin paroli skript ichida ochiq turadi** va git tarixida saqlanadi:
+  `tools/dokon/tovar_qoshish.mjs` va shunga o'xshash `tools/*.mjs` fayllarida
+  `OWNER_PASS = '<bosh-admin-paroli>'`. Loyiha papkasi yoki git nusxasi birovga berilsa — parol ketadi.
+  Yechim: parolni muhit o'zgaruvchisiga chiqarish (`process.env.OWNER_PASS`) va lokal
+  `.env` faylida saqlash (`.env` ni `.git/info/exclude` ga qo'shish).
+- **`<trener-paroli>` paroli** saytda ochiq turgan edi (49-band) — hali almashtirilmagan.
+- **Bazaning zaxirasi yo'q.** Kimdir adashib o'chirsa qaytarib bo'lmaydi. Haftalik eksport
+  kerak: `tools/holat/holat.mjs` naqshida barcha to'plamlarni JSON ga yozadigan skript
+  (`zaxira/` papkasi allaqachon ishlatilgan — 15-sent shogirdlar zaxirasi shu yerda).
+
+### 13.4. Foydalanuvchi kam
+
+Do'konda 115 ta tovar bor, bazada esa 3 shogird. Nomutanosib — ilova to'ldirilgan, lekin
+undan foydalanadigan odam yo'q.
+
+- Zal eshigiga QR kod: skanerlaydi → `https://kotta-qani-09111753.web.app` → ro'yxatdan o'tadi.
+- Trener har yangi mijozga ilovani o'zi o'rnatib beradi (5 daqiqa).
+- Birinchi 20 ta shogirddan keyin qaysi bo'lim ishlatilayotgani ko'rinadi va keyingi ish
+  taxmin emas, ma'lumot asosida tanlanadi.
+
+### 13.5. Push bildirishnoma — Blaze kerak
+
+Ilova yopiq bo'lganda xabar bormaydi (Cloud Functions joylanmagan, 0-bo'limda yozilgan).
+Chat va yangi reja bildirishnomasi ishlamasa shogird ilovaga qaytmaydi.
+
+Blaze tarifi — bank karta bog'lash kerak, lekin bu hajmda (3–50 foydalanuvchi) hisob
+amalda nolga yaqin. Limit qo'yib yoqish tavsiya qilinadi → `FUNKSIYALAR_JOYLASH.bat`.
+
+### 13.6. Kichik, lekin sezilarli
+
+- **Xatolarni yig'ish yo'q** (Crashlytics yoki shunga o'xshash): hozir ilova
+  foydalanuvchining telefonida qulasa, bu haqda hech kim bilmaydi.
+- **Vazn/o'lcham tarixi rasm bilan** ("oldin / keyin"): vazn allaqachon haftada bir marta
+  yoziladi — unga rasm va o'lchov (bel, ko'krak) qo'shilsa, shogird natijani ko'radi va
+  ilovada qoladi.
+- **Trener haqi hisobi:** trener reytingi bor (4-band), lekin har trener nechta shogirddan
+  qancha pul olgani hisoblanmaydi.
+
+### 13.7. Rasm va narx haqida ogohlantirish
+
+Do'kondagi rasmlar va narxlar **AllPituz do'konining** suratlaridan olingan (57–60-band).
+Agar AllPituz yetkazib beruvchi bo'lsa — muammo yo'q. Agar raqobatchi bo'lsa, o'z
+suratlarini qo'yish kerak, aks holda da'vo kelishi mumkin. Buni zal egasi aniqlasin.
+
+### Taklif qilingan tartib
+
+1. Abonement + davomat (13.1)
+2. Narxga ustama va o'lcham bo'yicha qoldiq (13.2)
+3. Parollarni muhit o'zgaruvchisiga chiqarish + bazaning haftalik zaxirasi (13.3)
+4. Blaze va push (13.5)
+5. QR bilan mijoz yig'ish (13.4)
