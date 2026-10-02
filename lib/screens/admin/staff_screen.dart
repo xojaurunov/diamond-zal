@@ -601,7 +601,7 @@ class _StaffScreenState extends State<StaffScreen> {
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   labelText: 'Ism',
-                  hintText: isBarmen ? 'Barmen' : 'Trener 1',
+                  hintText: isBarmen ? 'Anvar aka' : 'Bekzod aka',
                 ),
               ),
               const SizedBox(height: AppSpace.md),

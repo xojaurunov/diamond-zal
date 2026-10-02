@@ -3,11 +3,12 @@
 // Bosh admin nomidan o'qiydi (faqat ko'rsatadi, hech narsa o'zgartirmaydi).
 import { readFileSync } from 'node:fs';
 import { setDefaultResultOrder } from 'node:dns';
+import { maxfiy } from '../maxfiy.mjs';
 setDefaultResultOrder('ipv4first');
 
 const PROJECT = 'kotta-qani-09111753';
-const OWNER_EMAIL = '998XXXXXXXXX@phone.kottaqani.uz';
-const OWNER_PASS = '<bosh-admin-paroli>';
+const OWNER_EMAIL = maxfiy('OWNER_EMAIL');
+const OWNER_PASS = maxfiy('OWNER_PASS');
 
 const root = new URL('../..', import.meta.url);
 const key = readFileSync(new URL('lib/firebase_options.dart', root), 'utf8')

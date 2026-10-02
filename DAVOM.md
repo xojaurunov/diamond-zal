@@ -40,13 +40,18 @@ Qoidalar **24-sent** qayta joylandi (zallar + barmen + valyuta tekshiruvi).
 javon suratidan har bir mahsulotni narx yorlig'i bo'yicha alohida kesib oladi.
 
 ### Kirish
+
+> **Haqiqiy telefon raqamlar va parollar `PAROLLAR.md` faylida** — u git'ga tushmaydi
+> (`.gitignore`), shuning uchun faqat shu kompyuterda turadi. Bu repo ochiq (public)
+> bo'lgani uchun hujjatlarda parol yozilmaydi.
+
 | Rol | Telefon | Parol | Zal |
 |---|---|---|---|
-| Bosh admin | `99XXXXXXX` | `<bosh-admin-paroli>` | — |
-| Trener — Kotta Qani | `900000000` | `<trener-paroli>` | Kotta Qani zali |
-| Trener — Trener 1 | `900000001` | `<trener-paroli>` | Kotta Qani zali |
-| Trener — Trener 2 | `900000002` | `<trener-paroli>` | Kotta Qani zali |
-| **Barmen — Barmen** | `900000003` | `<barmen-paroli>` | Kotta Qani zali |
+| Bosh admin | `PAROLLAR.md` da | `PAROLLAR.md` da | — |
+| Trener 1 (Kotta Qani) | `900000000` | `PAROLLAR.md` da | Kotta Qani zali |
+| Trener 2 | `900000001` | `PAROLLAR.md` da | Kotta Qani zali |
+| Trener 3 | `900000002` | `PAROLLAR.md` da | Kotta Qani zali |
+| **Barmen** | `900000003` | `PAROLLAR.md` da | Kotta Qani zali |
 
 Trener parollarini bosh admin `Xodimlar → Qo'shish → Yangi trener akkaunti` orqali
 o'zi belgilaydi; qo'shilgandan keyin ekranda telefon va parol ko'rsatiladi.

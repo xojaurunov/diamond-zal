@@ -23,6 +23,21 @@ desktop.ini
 .vscode/
 *.iml
 
-# DIQQAT: android/diamond-release.jks va android/key.properties ATAYLAB saqlanadi —
-# imzo kaliti yo'qolsa hamma mijoz ilovani o'chirib qayta o'rnatishga majbur bo'ladi.
-# Bu repo faqat shu kompyuterda turadi, hech qayerga yuborilmaydi.
+# DIQQAT: imzo kaliti android/diamond-release.jks va android/key.properties
+# git'ga QO'SHILMAYDI (android/.gitignore ularni to'sadi) — bu repo ochiq (public).
+# Kalit yo'qolsa yangi versiyani eski ilova ustiga o'rnatib bo'lmaydi: hamma mijoz
+# ilovani o'chirib qayta o'rnatishga majbur bo'ladi. Shuning uchun kalitning nusxasini
+# repodan TASHQARIDA, xavfsiz joyda saqlang (PAROLLAR.md ga qarang).
+
+# Haqiqiy parollar - faqat shu kompyuterda turadi
+PAROLLAR.md
+
+# Shogirdlarning shaxsiy malumoti (ism, telefon, chat, vazn) - public repoga chiqmaydi
+zaxira/
+
+# Maxfiy qiymatlar — parol va email shu yerda, hech qachon commit qilinmaydi.
+# Namuna: .env.namuna
+.env
+
+# Firebase emulyatori eksporti — ichida parol hash'lari va email bo'ladi
+.emulator-data/
