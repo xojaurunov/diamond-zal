@@ -1331,7 +1331,7 @@ Olib tashlangani:
 | Bosh admin paroli | `tools/holat/holat.mjs`, `tools/dokon/tovar_qoshish.mjs` | `.env` (git'da yo'q) |
 | Hamma rol paroli | `DAVOM.md`, `HOLAT.md`, `QOLLANMA.md`, `README.md`, `start.ps1` | `PAROLLAR.md` (git'da yo'q) |
 | Zal egasining haqiqiy raqami | hujjatlar | `PAROLLAR.md` |
-| `xojaurunov@gmail.com` | hujjatlar, `deploy.ps1`, `JOYLASH.bat`, `tiklash.mjs` | `PAROLLAR.md` |
+| Shaxsiy Gmail manzil | hujjatlar, `deploy.ps1`, `JOYLASH.bat`, `tiklash.mjs` | `PAROLLAR.md` |
 | Shogird va xodim ismlari | `DAVOM.md`, Figma maketlari (SVG + plagin) | namuna: Shogird 1/2/3, Trener 1/2, Barmen |
 | Emulyator parol hash'lari | `.emulator-data/` | git'dan chiqdi, diskda qoldi |
 | O'chirilgan 5 shogirdning ismi, telefoni, chati, vazni | `zaxira/2026-09-15_ochirilgan_shogirdlar.json` | git'dan chiqdi, diskda qoldi |
@@ -1378,3 +1378,36 @@ git clone https://github.com/xojaurunov/diamond-zal.git   # yangi kompyuterda
 Yangi kompyuterda `clone` qilgandan keyin `.env` va `PAROLLAR.md` yo'q bo'ladi —
 ularni qo'lda ko'chirish kerak (`.env.namuna` dan nusxa olib to'ldirish).
 Imzo kalitisiz APK yig'ilmaydi.
+
+### To'liq tekshiruv (2-oktabr kechqurun)
+
+| Tekshiruv | Natija |
+|---|---|
+| `flutter analyze` | ✅ 0 xato |
+| `flutter test` | ✅ 90/90 |
+| Qoida testlari (emulyator) | ✅ 138/138 |
+| Hosting: bosh sahifa, `/ilova/` | ✅ 200 |
+| Hosting: `app/kq.bin` | ✅ 200, 25 202 368 bayt — lokal `app-arm64-v8a-release.apk` bilan aynan bir xil |
+| 5 ta rol bilan kirish (REST) | ✅ hammasi kirdi |
+| Baza | 1 zal, 5 xodim, 3 shogird, 3 reja, 115 tovar, 0 buyurtma |
+| GitHub | ✅ public, shox `main`, lokal bilan sinxron |
+| Kuzatiladigan fayllarda parol/telefon/ism | ✅ topilmadi |
+| Imzo kaliti zaxirasi | ✅ `C:\Users\n_urunov\Music\diamond-imzo-kaliti-zaxira\` (SHA-256 mos) |
+
+**Qolgan ikki ish — zal egasi o'zi qiladi** (Claude'ning ruxsat tizimi bu ikkisini to'xtatdi):
+
+1. **Trener paroli (`900000000`) hali eski.** `PAROL_TIKLASH.bat` ni ishga tushiring,
+   telefon `900000000` va yangi parolni kiriting. So'ng `PAROLLAR.md` dagi qiymatni
+   yangilang va trenerga ayting.
+2. **`35d632a` commit'ida shaxsiy email qolgan** — muallif sifatida va `DAVOM.md` ning
+   o'sha nusxasida. Keyingi commit'larda u yo'q (repo sozlamasi
+   `xojaurunov@users.noreply.github.com` ga o'zgartirildi). Tarixdan butunlay olish uchun
+   `git filter-repo` va `git push --force` kerak. Email sizning o'zingizniki va GitHub
+   profilingizda baribir ko'rinishi mumkin, shuning uchun bu shart emas — o'zingiz hal qiling.
+
+**Imzo kaliti zaxirasi o'sha diskda turibdi.** Disk buzilsa ikkala nusxa ham ketadi —
+`diamond-imzo-kaliti-zaxira` papkasini flesh kartaga yoki bulutga ham ko'chiring.
+
+GitHub sozlamasi (tavsiya): **Settings → Emails → "Keep my email addresses private"** va
+**"Block command line pushes that expose my email"** ni yoqing — keyin shaxsiy email bilan
+qilingan commit'ni GitHub o'zi qabul qilmaydi.
