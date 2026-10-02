@@ -10,7 +10,7 @@ va **owner** (bosh admin).
 > **Istalgan kompyuterda davom ettirish:** `powershell -ExecutionPolicy Bypass -File .\start.ps1`
 > Ishlab chiqish holati va ochiq masalalar — [HOLAT.md](HOLAT.md).
 >
-> 📱 Ilovani yuklab olish: **https://kotta-qani-09111753.web.app** · Trener: `+998 90 000 00 00` / `<trener-paroli>`
+> 📱 Ilovani yuklab olish: **https://kotta-qani-09111753.web.app**
 
 ## Imkoniyatlar
 

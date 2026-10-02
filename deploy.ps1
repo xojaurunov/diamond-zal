@@ -1,7 +1,7 @@
 # Diamond — Firebase'ga joylash (qoidalar + yuklab olish sahifasi).
 #   powershell -ExecutionPolicy Bypass -File .\deploy.ps1
 #
-# Birinchi marta brauzer ochilib, Google akkauntingizni so'raydi (sizning-email@gmail.com).
+# Birinchi marta brauzer ochilib, Google akkauntingizni so'raydi (loyiha egasining akkaunti).
 # Keyingi safar so'ramaydi.
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot

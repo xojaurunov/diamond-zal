@@ -2,7 +2,7 @@
 //   node tools/parol_tiklash/tiklash.mjs <telefon> <yangi_parol>
 //   masalan: node tools/parol_tiklash/tiklash.mjs 901234567 Yangi123
 //
-// Qanday ishlaydi: Firebase CLI (bu kompyuterda sizning-email@gmail.com bilan kirgan) orqali
+// Qanday ishlaydi: Firebase CLI (bu kompyuterda loyiha egasi akkaunti bilan kirgan) orqali
 // akkaunt eksport qilinadi, yangi parolning BCRYPT xeshi bilan shu uid qayta import qilinadi —
 // Firebase shu foydalanuvchining parolini almashtiradi. Boshqa akkauntlarga tegilmaydi.
 // Vaqtinchalik fayllar (ularda parol xeshlari bor) ish tugashi bilan o'chiriladi.

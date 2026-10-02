@@ -78,8 +78,8 @@ powershell -ExecutionPolicy Bypass -File .\start.ps1
 |---|---|
 | **Ilovani yuklab olish** (telefonda oching) | **https://kotta-qani-09111753.web.app** |
 | **Trener telefon** | `+998 90 000 00 00` (maydonga `900000000`) |
-| **Trener parol** | `<trener-paroli>` |
-| Firebase loyiha | `kotta-qani-09111753` (akkaunt: sizning-email@gmail.com) |
+| **Trener parol** | lokal `PAROLLAR.md` faylida |
+| Firebase loyiha | `kotta-qani-09111753` (CLI akkaunti: `PAROLLAR.md` da) |
 | Firebase konsol | https://console.firebase.google.com/project/kotta-qani-09111753 |
 
 APK fayl kompyuterda:
@@ -111,7 +111,7 @@ tez kiritadi.
 
 ## 3. Trener (admin) sifatida ishlash
 
-Kirish: telefon `+998 90 000 00 00`, parol `<trener-paroli>`.
+Kirish: telefon `+998 90 000 00 00`. Parol lokal `PAROLLAR.md` faylida.
 
 Pastda 5 bo'lim bor:
 

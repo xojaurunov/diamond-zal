@@ -7,7 +7,7 @@ echo   Diamond - yuklab olish sahifasini yangilash
 echo   ==========================================
 echo.
 echo   Birinchi marta brauzer ochiladi - Google akkauntingizni
-echo   (sizning-email@gmail.com) tanlang va ruxsat bering.
+echo   (loyiha egasining Google akkauntini) tanlang va ruxsat bering.
 echo.
 pause
 powershell -ExecutionPolicy Bypass -File "%~dp0deploy.ps1"

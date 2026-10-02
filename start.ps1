@@ -11,6 +11,6 @@ if (-not (Get-Command flutter -ErrorAction SilentlyContinue)) {
 }
 Write-Host 'flutter pub get...'
 flutter pub get | Out-Null
-Write-Host '[OK] Haqiqiy Firebase (kotta-qani-09111753). Trener: +998 90 000 00 00 / <trener-paroli>'
+Write-Host '[OK] Haqiqiy Firebase (kotta-qani-09111753). Trener: +998 90 000 00 00 (parol: PAROLLAR.md)'
 Write-Host 'Ilova yuklab olish sahifasi: https://kotta-qani-09111753.web.app'
 flutter run -d chrome --web-port 5173

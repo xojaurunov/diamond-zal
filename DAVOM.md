@@ -13,7 +13,7 @@
 
 ## 0. ▶ SHU YERDAN BOSHLANG (24-sentabr holati)
 
-**2-oktabr:** kodda o'zgarish yo'q (oxirgi commit 24-sent). Keyingi ish rejasi — **13-bo'lim: Tavsiyalar** (abonement, narxga ustama, parollar va zaxira, Blaze, QR).
+**2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da). Keyingi ish rejasi — **13-bo'lim: Tavsiyalar** (abonement, narxga ustama, parollar va zaxira, Blaze, QR).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **90/90**, qoida testlari **138/138**.
@@ -171,11 +171,11 @@ Kirish **telefon raqam + parol** bilan, SMS yo'q.
 
 | Nima | Qiymat |
 |---|---|
-| **Bosh admin** | maydonga `99XXXXXXX` · parol `<bosh-admin-paroli>` (+998 XX XXX XX XX) |
-| **Trener** | maydonga `900000000` · parol `<trener-paroli>` (+998 90 000 00 00) |
+| **Bosh admin** | telefon va parol lokal `PAROLLAR.md` faylida |
+| **Trener** | maydonga `900000000` · parol `PAROLLAR.md` da (+998 90 000 00 00) |
 | Ilovani yuklab olish | https://kotta-qani-09111753.web.app |
 | **Ilova brauzerda (iPhone, kompyuter)** | https://kotta-qani-09111753.web.app/ilova/ |
-| Firebase loyiha | `kotta-qani-09111753` (akkaunt: sizning-email@gmail.com) |
+| Firebase loyiha | `kotta-qani-09111753` (CLI akkaunti: `PAROLLAR.md` da) |
 | Firebase konsol | https://console.firebase.google.com/project/kotta-qani-09111753 |
 | Tarif | **Spark** (bepul) — hozircha yetarli |
 | Parolni unutgan foydalanuvchi | `PAROL_TIKLASH.bat` (shu kompyuterda, Firebase CLI kirgan bo'lsa) |
@@ -369,7 +369,7 @@ git log --oneline | select -First 5   # tarix joyidami
 Git sozlanmagan bo'lsa (`git log` xato bersa):
 ```powershell
 git config user.name "Diamond"
-git config user.email "sizning-email@gmail.com"
+git config user.email "sizning-email@example.com"   # sizning email
 ```
 
 Har ish kuni oxirida: `git add -A` → `git commit -m "nima qilindi"`.
@@ -990,7 +990,7 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       trener kompyuterda ishlaydi. Brauzerda kirish tekshirildi (trener paneli ochildi).
       Cheklov: brauzerda bildirishnoma yo'q.
     - ⚠️ **Xavfsizlik tuzatildi:** eski yuklab olish sahifasida **trener telefoni va paroli
-      ochiq yozilgan edi** (`<trener-paroli>`) — havolani bilgan har kim trener paneliga kira olardi.
+      ochiq yozilgan edi** — havolani bilgan har kim trener paneliga kira olardi.
       Olib tashlandi. Sahifa qaytadan yozildi: ilova haqida, 3 ta tugma (Android / eski telefon /
       brauzer), 3 ta ekran surati (`public/img/`, ismlar umumiy — Jasur/Aziz), o'rnatish yo'riqnomasi
       va Play Protect izohi. **Trener paroli o'zgartirilsa yaxshi bo'ladi** — eski parol
@@ -1109,7 +1109,7 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       `users`, `chats`, `plans`, `gyms` ga tegmaydi. Qoida testlariga 11 ta holat qo'shildi —
       jami **138, 0 xato**. Dart testlari **85/85**.
     - Brauzerda sinaldi: bosh admin "Yangi barmen akkaunti" orqali Barmenni yaratdi
-      (+998 90 000 00 03 / <barmen-paroli>) → barmen kirdi va faqat do'kon panelini ko'rdi.
+      (+998 90 000 00 03, parol `PAROLLAR.md` da) → barmen kirdi va faqat do'kon panelini ko'rdi.
     - **Eslatma:** hozir barmen **hamma zal** buyurtmasini ko'radi (zal bittaligi uchun).
       Filial ko'paysa, buyurtmaga zal biriktirib, barmenni o'z zaliga cheklash kerak.
 
@@ -1256,14 +1256,14 @@ Bu do'kondan ko'proq pul keltiradi; do'kon — qo'shimcha daromad.
   b) kiyimni "buyurtma asosida" deb belgilab, qoldiqni katta son qilib qo'yish.
 - Haqiqiy qoldiq sonlari hali so'ralmagan — hozir Forma 10, qolganlar 5 (taxminiy).
 
-### 13.3. Xavfsizlik — hozir tuzatish kerak
+### 13.3. Xavfsizlik
 
-- **Bosh admin paroli skript ichida ochiq turadi** va git tarixida saqlanadi:
-  `tools/dokon/tovar_qoshish.mjs` va shunga o'xshash `tools/*.mjs` fayllarida
-  `OWNER_PASS = '<bosh-admin-paroli>'`. Loyiha papkasi yoki git nusxasi birovga berilsa — parol ketadi.
-  Yechim: parolni muhit o'zgaruvchisiga chiqarish (`process.env.OWNER_PASS`) va lokal
-  `.env` faylida saqlash (`.env` ni `.git/info/exclude` ga qo'shish).
-- **`<trener-paroli>` paroli** saytda ochiq turgan edi (49-band) — hali almashtirilmagan.
+- ~~**Bosh admin paroli skript ichida ochiq turadi**~~ — **HAL BO'LDI (2-okt, 14-bo'lim).**
+  Parol endi `.env` da, skriptlar `tools/maxfiy.mjs` orqali o'qiydi. Git tarixidan ham
+  olib tashlandi (`git filter-repo`).
+- **Trener paroli almashtirilmagan** — u saytda ochiq turgan edi (49-band). Parolning
+  o'zi hujjatlardan olib tashlandi, lekin **Firebase'da hali o'sha parol turadi**.
+  Zal egasi `Xodimlar` bo'limidan almashtirsin. Haqiqiy qiymat `PAROLLAR.md` da.
 - **Bazaning zaxirasi yo'q.** Kimdir adashib o'chirsa qaytarib bo'lmaydi. Haftalik eksport
   kerak: `tools/holat/holat.mjs` naqshida barcha to'plamlarni JSON ga yozadigan skript
   (`zaxira/` papkasi allaqachon ishlatilgan — 15-sent shogirdlar zaxirasi shu yerda).
@@ -1306,6 +1306,75 @@ suratlarini qo'yish kerak, aks holda da'vo kelishi mumkin. Buni zal egasi aniqla
 
 1. Abonement + davomat (13.1)
 2. Narxga ustama va o'lcham bo'yicha qoldiq (13.2)
-3. Parollarni muhit o'zgaruvchisiga chiqarish + bazaning haftalik zaxirasi (13.3)
+3. ~~Parollarni muhit o'zgaruvchisiga chiqarish~~ (2-okt qilindi) + trener parolini
+   almashtirish va bazaning haftalik zaxirasi (13.3)
 4. Blaze va push (13.5)
 5. QR bilan mijoz yig'ish (13.4)
+
+---
+
+## 14. GitHub — ochiq repo (2-oktabr)
+
+Loyiha **<https://github.com/xojaurunov/diamond-zal>** manzilida **ochiq (public)**.
+Shox: `main`. 26 commit.
+
+### Nima qilingan
+
+Repo ochiq bo'lgani uchun maxfiy ma'lumot push'dan **oldin** butunlay olib tashlandi —
+ishchi nusxadan ham, 25 commit tarixidan ham (`git filter-repo`). Shuning uchun
+**Firebase parollari o'zgarmadi**: hamma eski parol bilan kirishda davom etadi.
+
+Olib tashlangani:
+
+| Nima | Qayerda edi | Endi qayerda |
+|---|---|---|
+| Bosh admin paroli | `tools/holat/holat.mjs`, `tools/dokon/tovar_qoshish.mjs` | `.env` (git'da yo'q) |
+| Hamma rol paroli | `DAVOM.md`, `HOLAT.md`, `QOLLANMA.md`, `README.md`, `start.ps1` | `PAROLLAR.md` (git'da yo'q) |
+| Zal egasining haqiqiy raqami | hujjatlar | `PAROLLAR.md` |
+| `xojaurunov@gmail.com` | hujjatlar, `deploy.ps1`, `JOYLASH.bat`, `tiklash.mjs` | `PAROLLAR.md` |
+| Shogird va xodim ismlari | `DAVOM.md`, Figma maketlari (SVG + plagin) | namuna: Shogird 1/2/3, Trener 1/2, Barmen |
+| Emulyator parol hash'lari | `.emulator-data/` | git'dan chiqdi, diskda qoldi |
+| O'chirilgan 5 shogirdning ismi, telefoni, chati, vazni | `zaxira/2026-09-15_ochirilgan_shogirdlar.json` | git'dan chiqdi, diskda qoldi |
+| Commit muallifi email'i | 25 commit metama'lumoti | `xojaurunov@users.noreply.github.com` |
+
+### Yangi qoida — buni buzmaslik kerak
+
+**Hech qanday parol, haqiqiy telefon raqam, email yoki mijoz ma'lumoti kuzatiladigan
+faylga yozilmaydi.** Repo ochiq — commit qilingan narsa darhol hammaga ko'rinadi.
+
+- Skriptga parol kerak bo'lsa: `import { maxfiy } from '../maxfiy.mjs'` →
+  `maxfiy('OWNER_PASS')`. Qiymat `.env` da turadi.
+- Yangi kalit qo'shilsa, `.env.namuna` ga ham **qiymatsiz** holda yoziladi.
+- Hujjatda parol kerak bo'lsa — `PAROLLAR.md` ga yoziladi (u `.gitignore` da).
+- Shogird yoki xodimning haqiqiy ismi hujjatga yozilmaydi.
+
+### Git'ga tushmaydigan fayllar (lokal, muhim)
+
+| Fayl | Nima | Yo'qolsa |
+|---|---|---|
+| `PAROLLAR.md` | hamma rolning paroli, Firebase va GitHub ma'lumotlari | parollarni ilovadan tiklash kerak |
+| `.env` | `OWNER_EMAIL`, `OWNER_PASS` — vositalar uchun | `.env.namuna` dan nusxa olib to'ldiriladi |
+| `android/diamond-release.jks` | APK imzo kaliti | **yangi versiya eski ilova ustiga o'rnatilmaydi** — hamma mijoz qayta o'rnatadi |
+| `android/key.properties` | imzo kaliti parollari | yuqoridagi bilan bir xil |
+| `zaxira/` | o'chirilgan shogirdlarning ma'lumoti | zaxira yo'qoladi |
+| `.emulator-data/` | emulyator eksporti | qayta yaratiladi |
+
+Imzo kalitini **repodan tashqarida** ham saqlang (flesh karta, bulut).
+
+### Zaxira
+
+Tarix qayta yozilishidan oldingi to'liq nusxa (haqiqiy parollar bilan, 25 commit):
+`C:\Users\n_urunov\Music\diamond-zaxira-2026-10-02.bundle`.
+Qaytarish: `git clone <bundle-yoli> qaytarilgan-nusxa`.
+
+### Buyruqlar
+
+```
+git push                      # o'zgarishni GitHub'ga yuborish
+git pull                      # boshqa kompyuterdan kelgan o'zgarishni olish
+git clone https://github.com/xojaurunov/diamond-zal.git   # yangi kompyuterda
+```
+
+Yangi kompyuterda `clone` qilgandan keyin `.env` va `PAROLLAR.md` yo'q bo'ladi —
+ularni qo'lda ko'chirish kerak (`.env.namuna` dan nusxa olib to'ldirish).
+Imzo kalitisiz APK yig'ilmaydi.

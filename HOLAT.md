@@ -8,12 +8,13 @@
 
 ## 0. HOZIRGI HOLAT — haqiqiy Firebase'ga ulangan (2026-09-11)
 
-- **Firebase loyiha:** `kotta-qani-09111753` (akkaunt: sizning-email@gmail.com).
+- **Firebase loyiha:** `kotta-qani-09111753` (CLI akkaunti lokal `PAROLLAR.md` da).
   Auth = Email/Password (telefon+parol) yoqilgan, Firestore (eur3) yaratilgan,
   qoidalar joylangan. `lib/main.dart`: `useEmulator = false`, `firebase_options.dart` ulangan.
 - **Ilovani telefonga yuklab olish (istalgan joyda ishlaydi):**
   **https://kotta-qani-09111753.web.app** — sahifadagi tugma APK beradi.
-- **Trener:** telefon `+998 90 000 00 00` (maydonga `900000000`), parol `<trener-paroli>`.
+- **Trener:** telefon `+998 90 000 00 00` (maydonga `900000000`); parol lokal `PAROLLAR.md` da
+  (repo ochiq, shuning uchun hujjatda parol yozilmaydi).
 - **Kompyuterda:** `powershell -ExecutionPolicy Bypass -File .\start.ps1` — Chrome'da ochiladi,
   o'sha haqiqiy bazaga ulanadi (kompyuter va telefon bir xil ma'lumotni ko'radi).
 - APK'ni qayta yig'ish: `flutter build apk --release --split-per-abi`. Yangi APK'ni
@@ -42,8 +43,8 @@ Ilova to'g'ridan-to'g'ri haqiqiy Firebase'ga ulanadi — emulyator kerak emas.
 | Java 21 + Android SDK | faqat APK yig'ish uchun |
 
 **Kirish faqat telefon raqam + parol bilan.**
-**Trener (admin) akkaunti:** telefon **`+998 90 000 00 00`** (maydonga `900000000`),
-parol **`<trener-paroli>`**
+**Trener (admin) akkaunti:** telefon **`+998 90 000 00 00`** (maydonga `900000000`).
+Parol lokal **`PAROLLAR.md`** faylida.
 
 ### Boshqa kompyuterga ko'chirishda
 Butun papkani nusxalang. Quyidagilarni **o'tkazib yuborsa bo'ladi** (qayta yaratiladi):
