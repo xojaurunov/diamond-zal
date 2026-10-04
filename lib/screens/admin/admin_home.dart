@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/change_password.dart';
+import '../../widgets/join_qr_sheet.dart';
 import '../../widgets/notification_sync.dart';
 import '../../widgets/settings_sheet.dart';
 import '../../widgets/ui.dart';
@@ -13,6 +14,7 @@ import 'plans_screen.dart';
 import 'foods_screen.dart';
 import 'shop_admin_screen.dart';
 import 'staff_screen.dart';
+import 'subscriptions_screen.dart';
 
 class AdminHome extends ConsumerStatefulWidget {
   const AdminHome({super.key});
@@ -27,6 +29,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
   // Bosh adminda qo'shimcha "Xodimlar" bo'limi bo'ladi
   static const _trainerTitles = [
     'Mijozlar',
+    'Abonement',
     'Zal',
     'Ovqatlanish rejalari',
     'Mahsulotlar bazasi',
@@ -77,6 +80,11 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         ),
         actions: [
           IconButton(
+            tooltip: 'QR kod',
+            onPressed: () => showJoinQr(context),
+            icon: const Icon(Icons.qr_code_2_outlined),
+          ),
+          IconButton(
             tooltip: 'Sozlamalar',
             onPressed: () => showSettings(context, student: false),
             icon: const Icon(Icons.tune),
@@ -96,6 +104,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
             index: tab,
             children: [
               ClientsScreen(admin: me),
+              SubscriptionsScreen(admin: me),
               GymAdminScreen(admin: me),
               const PlansScreen(),
               const FoodsScreen(),
@@ -114,6 +123,8 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         // Faqat ingichka chiziqli ikonkalar (dizayn qoidasi)
         destinations: [
           const NavigationDestination(icon: Icon(Icons.people_outline), label: 'Mijozlar'),
+          const NavigationDestination(
+              icon: Icon(Icons.card_membership_outlined), label: 'Abonement'),
           const NavigationDestination(icon: Icon(Icons.fitness_center_outlined), label: 'Zal'),
           const NavigationDestination(icon: Icon(Icons.menu_book_outlined), label: 'Rejalar'),
           const NavigationDestination(icon: Icon(Icons.egg_alt_outlined), label: 'Ovqat'),

@@ -1,6 +1,7 @@
 import 'gym.dart';
 import 'models.dart';
 import 'shop.dart';
+import 'subscription.dart';
 
 /// Ilova ichidagi bildirishnomalar ro'yxati ("Eslatma" bo'limi).
 ///
@@ -8,7 +9,7 @@ import 'shop.dart';
 /// chat xabarlari, biriktirilgan reja, vazn muddati, bugungi mahallar, buyurtmalar.
 /// Shuning uchun telefonda bildirishnoma o'chirilgan bo'lsa ham hammasi shu yerda ko'rinadi.
 
-enum FeedKind { chat, plan, weighIn, meal, order, attention, gym }
+enum FeedKind { chat, plan, weighIn, meal, order, attention, gym, subscription }
 
 class FeedItem {
   final FeedKind kind;
@@ -87,6 +88,18 @@ List<FeedItem> studentFeed({
           ? 'Birinchi o‘lchov — ertalab, nahorga tortiling'
           : 'Oxirgi o‘lchovdan ${WeightLog.daysSince(last.date, n)} kun o‘tdi',
       at: last == null ? n : last.date.add(const Duration(days: weighInIntervalDays)),
+      action: true,
+    ));
+  }
+
+  // 3b. Abonement tugashi yaqinlashgan
+  if (Subscription.isExpiringSoon(user.subscriptionExpiresAt, n)) {
+    final left = Subscription.daysLeft(user.subscriptionExpiresAt, n);
+    items.add(FeedItem(
+      kind: FeedKind.subscription,
+      title: left <= 0 ? 'Abonement tugadi' : 'Abonement tugashi yaqinlashdi',
+      body: left <= 0 ? 'Yangilash uchun trenerga murojaat qiling' : '$left kundan keyin tugaydi',
+      at: n,
       action: true,
     ));
   }
@@ -190,6 +203,19 @@ List<FeedItem> trainerFeed({
       title: 'Zal kunlari tanlanmagan',
       body: '${nameOf[c.id]} — mashg‘ulot kunlarini tanlamagan',
       at: n.subtract(const Duration(seconds: 1)),
+      action: true,
+    ));
+  }
+
+  // 5. E'tibor: abonementi tugayotgan shogirdlar
+  for (final c in clients) {
+    if (!Subscription.isExpiringSoon(c.subscriptionExpiresAt, n)) continue;
+    final left = Subscription.daysLeft(c.subscriptionExpiresAt, n);
+    items.add(FeedItem(
+      kind: FeedKind.subscription,
+      title: 'Abonement tugashi yaqinlashdi',
+      body: '${nameOf[c.id]} — ${left <= 0 ? 'tugadi' : '$left kundan keyin tugaydi'}',
+      at: n.subtract(const Duration(seconds: 2)),
       action: true,
     ));
   }

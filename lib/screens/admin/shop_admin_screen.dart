@@ -303,11 +303,13 @@ class _ProductAdminTile extends StatelessWidget {
             Wrap(spacing: 6, runSpacing: 4, children: [
               Pill(text: p.priceText, color: AppColors.accent),
               Pill(
-                text: p.stock > 0 ? 'Qoldiq: ${p.stock}' : 'Tugagan',
-                color: p.stock > 0 ? AppColors.textMuted : AppColors.danger,
+                text: p.totalStock > 0 ? 'Qoldiq: ${p.totalStock}' : 'Tugagan',
+                color: p.totalStock > 0 ? AppColors.textMuted : AppColors.danger,
               ),
               if (p.sizes.isNotEmpty)
                 Pill(text: p.sizes.join(' · '), color: AppColors.water),
+              if (p.margin > 0)
+                Pill(text: 'Foyda: ${fmtSum(p.margin)}', color: AppColors.success),
               if (p.gallery.length > 1)
                 Pill(text: '${p.gallery.length} rasm', color: AppColors.textMuted),
               if (!p.active) Pill(text: 'Sotuvda emas', color: AppColors.warning),
@@ -326,8 +328,13 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
   final note = TextEditingController(text: p?.note);
   final price = TextEditingController(text: p == null || p.price == 0 ? '' : '${p.price}');
   final stock = TextEditingController(text: '${p?.stock ?? 1}');
+  final costPrice =
+      TextEditingController(text: p == null || p.costPrice == 0 ? '' : '${p.costPrice}');
   final image = TextEditingController(text: p?.gallery.join('\n'));
   final sizes = TextEditingController(text: p?.sizes.join(', '));
+  final sizeStockControllers = <String, TextEditingController>{};
+  TextEditingController sizeStockCtrl(String sz) => sizeStockControllers.putIfAbsent(
+      sz, () => TextEditingController(text: '${p?.sizeStock[sz] ?? 0}'));
   var category = p?.category ?? shopCategories.first;
   var currency = p?.currency ?? uzs;
   var active = p?.active ?? true;
@@ -390,6 +397,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
               child: TextField(
                 controller: price,
                 keyboardType: TextInputType.number,
+                onChanged: (_) => setS(() {}),
                 decoration: InputDecoration(
                   labelText: 'Narxi',
                   suffixText: currencyLabel(currency),
@@ -399,12 +407,23 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             const SizedBox(width: AppSpace.sm),
             Expanded(
               child: TextField(
-                controller: stock,
+                controller: costPrice,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Qoldiq', suffixText: 'dona'),
+                onChanged: (_) => setS(() {}),
+                decoration: const InputDecoration(labelText: 'Tan narxi (ixtiyoriy)'),
               ),
             ),
           ]),
+          if (n(costPrice) > 0) ...[
+            const SizedBox(height: AppSpace.xs),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Foyda: ${fmtSum(n(price) - n(costPrice))} ${currencyLabel(currency)}',
+                style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
+              ),
+            ),
+          ],
           const SizedBox(height: AppSpace.sm),
           Align(
             alignment: Alignment.centerLeft,
@@ -433,12 +452,41 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
           const SizedBox(height: AppSpace.md),
           TextField(
             controller: sizes,
+            onChanged: (_) => setS(() {}),
             decoration: const InputDecoration(
               labelText: "O'lchamlar (ixtiyoriy)",
               hintText: 'XL, XXL, 3XL, 4XL',
               helperText: "Vergul bilan. Yozilsa — shogird buyurtmada o'lchamni tanlaydi",
             ),
           ),
+          const SizedBox(height: AppSpace.md),
+          if (sizes.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).isEmpty)
+            TextField(
+              controller: stock,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Qoldiq', suffixText: 'dona'),
+            )
+          else
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text("Qoldiq (o'lcham bo'yicha)",
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12.5)),
+                const SizedBox(height: AppSpace.xs),
+                Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+                  for (final sz in sizes.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty))
+                    SizedBox(
+                      width: 90,
+                      child: TextField(
+                        controller: sizeStockCtrl(sz),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: sz),
+                      ),
+                    ),
+                ]),
+              ]),
+            ),
+          const SizedBox(height: AppSpace.md),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             value: active,
@@ -481,6 +529,8 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
+    final sizeList =
+        sizes.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
     await Db.saveProduct(Product(
       id: p?.id ?? '',
       category: category,
@@ -488,14 +538,12 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
       note: note.text.trim(),
       image: urls.isEmpty ? '' : urls.first,
       images: urls.length > 1 ? urls.sublist(1) : const [],
-      sizes: sizes.text
-          .split(',')
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList(),
+      sizes: sizeList,
       price: n(price),
       currency: currency,
       stock: n(stock),
+      sizeStock: {for (final sz in sizeList) sz: n(sizeStockCtrl(sz))},
+      costPrice: n(costPrice),
       active: active,
     ));
   } else if (saved == false && p != null && context.mounted) {

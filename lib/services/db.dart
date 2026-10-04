@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
 import '../models/stats.dart';
+import '../models/subscription.dart';
 import 'notifications.dart';
 import 'push.dart';
 
@@ -419,8 +420,18 @@ class Db {
       await _fs.runTransaction((tx) async {
         final d = await tx.get(ref);
         if (!d.exists) return;
-        final left = (((d.data() as Map<String, dynamic>)['stock'] ?? 0) as num).toInt() - o.qty;
-        tx.update(ref, {'stock': left < 0 ? 0 : left});
+        final data = d.data() as Map<String, dynamic>;
+        if (o.size.isNotEmpty) {
+          // O'lchamli tovar: faqat tanlangan o'lcham kamayadi, jamlangan `stock` ham yangilanadi.
+          final sizeStock = Map<String, dynamic>.from(data['sizeStock'] as Map? ?? const {});
+          final left = ((sizeStock[o.size] ?? 0) as num).toInt() - o.qty;
+          sizeStock[o.size] = left < 0 ? 0 : left;
+          final total = sizeStock.values.fold<int>(0, (s, v) => s + (v as num).toInt());
+          tx.update(ref, {'sizeStock.${o.size}': left < 0 ? 0 : left, 'stock': total});
+        } else {
+          final left = ((data['stock'] ?? 0) as num).toInt() - o.qty;
+          tx.update(ref, {'stock': left < 0 ? 0 : left});
+        }
       });
     }
     await send(
@@ -478,6 +489,68 @@ class Db {
       ..set(user.collection('weights').doc(), {'date': Timestamp.now(), 'weight': w})
       ..update(user, {'weight': w, 'lastWeighIn': FieldValue.serverTimestamp()});
     await batch.commit();
+  }
+
+  // ---------- abonement ----------
+  static Stream<List<Subscription>> subscriptions(String uid) => _fs
+      .collection('users')
+      .doc(uid)
+      .collection('subscriptions')
+      .orderBy('startDate', descending: true)
+      .snapshots()
+      .map((s) => s.docs.map(Subscription.fromDoc).toList());
+
+  /// Abonement qo'shish — yozuv va profildagi tugash sanasi BITTA batch'da (`addWeight` kabi).
+  static Future<void> addSubscription(String uid, Subscription s) async {
+    final user = _fs.collection('users').doc(uid);
+    final batch = _fs.batch()
+      ..set(user.collection('subscriptions').doc(), s.toMap())
+      ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(s.expiresAt)});
+    await batch.commit();
+  }
+
+  // ---------- davomat ----------
+  static DocumentReference _attendanceRef(String uid, String day) =>
+      _fs.collection('users').doc(uid).collection('attendance').doc(day);
+
+  static Stream<bool> attendance(String uid, String day) => _attendanceRef(uid, day)
+      .snapshots()
+      .map((d) => (d.data() as Map<String, dynamic>?)?['present'] == true);
+
+  static Future<void> markAttendance(String uid, String day, bool present, String byId) =>
+      _attendanceRef(uid, day).set({
+        'present': present,
+        'markedBy': byId,
+        'markedAt': FieldValue.serverTimestamp(),
+      });
+
+  // ---------- eslatmalar (abonement tugashi haqida jo'natilgan jurnal) ----------
+  static Stream<List<Reminder>> remindersOf(String trainerId) => _fs
+      .collection('reminders')
+      .where('trainerId', isEqualTo: trainerId)
+      .snapshots()
+      .map((s) => s.docs.map(Reminder.fromDoc).toList());
+
+  static Stream<List<Reminder>> allReminders() =>
+      _fs.collection('reminders').snapshots().map((s) => s.docs.map(Reminder.fromDoc).toList());
+
+  /// Abonement tugashi haqida eslatma: jurnalga yoziladi va shogirdga chatga xabar boradi.
+  static Future<void> sendSubscriptionReminder(AppUser client, int daysLeft, String byId) async {
+    final r = Reminder(
+      clientId: client.id,
+      clientName: client.name,
+      trainerId: client.trainerId ?? '',
+      sentBy: byId,
+      daysLeft: daysLeft,
+    );
+    await _fs.collection('reminders').add(r.toMap());
+    await send(
+      client.id,
+      byId,
+      daysLeft <= 0
+          ? '⏰ Abonementingiz tugadi — yangilang'
+          : '⏰ Abonementingiz $daysLeft kundan keyin tugaydi',
+    );
   }
 
   // ---------- trenerlar reytingi (faqat bosh admin) ----------

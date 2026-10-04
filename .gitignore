@@ -32,8 +32,9 @@ desktop.ini
 # Haqiqiy parollar - faqat shu kompyuterda turadi
 PAROLLAR.md
 
-# Shogirdlarning shaxsiy malumoti (ism, telefon, chat, vazn) - public repoga chiqmaydi
-zaxira/
+# Shogirdlarning shaxsiy malumoti (ism, telefon, chat, vazn) - public repoga chiqmaydi.
+# Faqat ildizdagi papka (/zaxira/) - tools/zaxira/ skripti bilan adashmasin.
+/zaxira/
 
 # Maxfiy qiymatlar — parol va email shu yerda, hech qachon commit qilinmaydi.
 # Namuna: .env.namuna

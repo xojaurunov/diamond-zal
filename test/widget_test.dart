@@ -5,6 +5,7 @@ import 'package:kotta_qani_diet/models/hudud.dart';
 import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/shop.dart';
 import 'package:kotta_qani_diet/models/stats.dart';
+import 'package:kotta_qani_diet/models/subscription.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
 import 'package:kotta_qani_diet/screens/notifications_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
@@ -987,6 +988,90 @@ void main() {
         price: 450000,
       );
       expect(o.title, 'Protein');
+    });
+
+    test('o-lcham bo-yicha qoldiq: bor tovarda sizeStock yig-indisi', () {
+      const p = Product(
+        category: 'Forma',
+        name: 'Venum',
+        price: 450000,
+        sizes: ['XL', 'XXL'],
+        sizeStock: {'XL': 3, 'XXL': 0},
+      );
+      expect(p.totalStock, 3);
+      expect(p.stockFor('XL'), 3);
+      expect(p.stockFor('XXL'), 0);
+      expect(p.stockFor(null), 0);
+      expect(p.onSale, isTrue);
+    });
+
+    test('o-lchamsiz tovarda stockFor flat stock-ni qaytaradi', () {
+      const p = Product(category: 'Dobavkalar', name: 'Protein', stock: 5);
+      expect(p.totalStock, 5);
+      expect(p.stockFor(null), 5);
+      expect(p.stockFor('XL'), 5);
+    });
+
+    test('tan narx kiritilmagan bo-lsa foyda 0', () {
+      const p = Product(category: 'Forma', name: 'Venum', price: 500000);
+      expect(p.margin, 0);
+    });
+
+    test('tan narx bilan foyda hisoblanadi', () {
+      const p = Product(category: 'Forma', name: 'Venum', price: 500000, costPrice: 350000);
+      expect(p.margin, 150000);
+    });
+  });
+
+  group('Abonement', () {
+    test('tugash sanasi oy qo-shib hisoblanadi', () {
+      expect(Subscription.expiryOf(DateTime(2026, 1, 15), 3), DateTime(2026, 4, 15));
+    });
+
+    test('qolgan kun va holat', () {
+      final exp = DateTime(2026, 10, 10);
+      final now = DateTime(2026, 10, 8);
+      expect(Subscription.daysLeft(exp, now), 2);
+      expect(Subscription.isActive(exp, now), isTrue);
+      expect(Subscription.isExpiringSoon(exp, now), isTrue);
+      expect(Subscription.isExpired(exp, now), isFalse);
+    });
+
+    test('muddati o-tgan abonement', () {
+      final exp = DateTime(2026, 10, 1);
+      final now = DateTime(2026, 10, 8);
+      expect(Subscription.daysLeft(exp, now), -7);
+      expect(Subscription.isActive(exp, now), isFalse);
+      expect(Subscription.isExpiringSoon(exp, now), isFalse);
+      expect(Subscription.isExpired(exp, now), isTrue);
+    });
+
+    test('maydon yo-q bo-lsa amal qilmaydi deb hisoblanadi', () {
+      expect(Subscription.isActive(null), isFalse);
+      expect(Subscription.isExpiringSoon(null), isFalse);
+      expect(Subscription.isExpired(null), isFalse);
+    });
+  });
+
+  group('Eslatma hisoboti', () {
+    test('kuni nechta eslatma jo-natilgani sanaladi', () {
+      final now = DateTime(2026, 10, 4, 18);
+      final list = [
+        Reminder(clientId: 'a', sentBy: 't', daysLeft: 2, sentAt: DateTime(2026, 10, 4, 9)),
+        Reminder(clientId: 'b', sentBy: 't', daysLeft: 1, sentAt: DateTime(2026, 10, 4, 10)),
+        Reminder(clientId: 'c', sentBy: 't', daysLeft: 0, sentAt: DateTime(2026, 10, 2, 9)),
+      ];
+      final byDay = ReminderReport.byDay(list, days: 7, now: now);
+      expect(byDay.length, 7);
+      expect(byDay['2026-10-04'], 2);
+      expect(byDay['2026-10-02'], 1);
+      expect(byDay['2026-10-03'], 0);
+    });
+
+    test('bo-sh ro-yxatda hamma kun 0', () {
+      final byDay = ReminderReport.byDay(const [], days: 3, now: DateTime(2026, 10, 4));
+      expect(byDay.values.every((v) => v == 0), isTrue);
+      expect(byDay.length, 3);
     });
   });
 }

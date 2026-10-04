@@ -247,6 +247,7 @@ class _FeedTile extends StatelessWidget {
         FeedKind.order => (Icons.storefront_outlined, AppColors.protein),
         FeedKind.attention => (Icons.error_outline, AppColors.danger),
         FeedKind.gym => (Icons.fitness_center_outlined, AppColors.warning),
+        FeedKind.subscription => (Icons.card_membership_outlined, AppColors.danger),
       };
 
   @override

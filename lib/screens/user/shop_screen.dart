@@ -30,12 +30,14 @@ class _ShopScreenState extends State<ShopScreen> {
   Future<void> _order(Product p) async {
     var qty = 1;
     String? size = p.sizes.length == 1 ? p.sizes.first : null;
-    final max = p.stock < 20 ? p.stock : 20;
     final ok = await showSheet<bool>(
       context,
       StatefulBuilder(
         builder: (ctx, setS) {
           final t = Theme.of(ctx).textTheme;
+          final avail = p.stockFor(size);
+          final max = avail < 20 ? avail : 20;
+          if (qty > max && max > 0) qty = max;
           return Column(mainAxisSize: MainAxisSize.min, children: [
             const SizedBox(height: AppSpace.md),
             // rasm galereyasi — rang variantlari
@@ -118,12 +120,14 @@ class _ShopScreenState extends State<ShopScreen> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: p.sizes.isNotEmpty && size == null
+                onPressed: (p.sizes.isNotEmpty && size == null) || avail <= 0
                     ? null
                     : () => Navigator.pop(ctx, true),
                 child: Text(p.sizes.isNotEmpty && size == null
                     ? "Avval o'lchamni tanlang"
-                    : 'Buyurtma berish'),
+                    : avail <= 0
+                        ? 'Tugagan'
+                        : 'Buyurtma berish'),
               ),
             ),
             const SizedBox(height: AppSpace.sm),
@@ -357,17 +361,17 @@ class _ProductTile extends StatelessWidget {
               Text(p.priceText,
                   style: t.titleSmall?.copyWith(color: AppColors.accent)),
               const SizedBox(width: AppSpace.sm),
-              if (p.stock <= 0)
+              if (p.totalStock <= 0)
                 Pill(text: 'Hozir yo\'q', color: AppColors.danger)
-              else if (p.stock <= 3)
-                Pill(text: 'Qoldi: ${p.stock}', color: AppColors.warning),
+              else if (p.totalStock <= 3)
+                Pill(text: 'Qoldi: ${p.totalStock}', color: AppColors.warning),
             ]),
           ]),
         ),
         const SizedBox(width: AppSpace.sm),
         FilledButton(
           style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
-          onPressed: p.stock > 0 ? onOrder : null,
+          onPressed: p.totalStock > 0 ? onOrder : null,
           child: const Text('Olaman'),
         ),
       ]),

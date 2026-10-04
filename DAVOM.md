@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-02**
+> Oxirgi yangilanish: **2026-10-04**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,12 +11,22 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (24-sentabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (4-oktabr holati)
 
-**2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da). Keyingi ish rejasi — **13-bo'lim: Tavsiyalar** (abonement, narxga ustama, parollar va zaxira, Blaze, QR).
+**4-oktabr:** 13-bo'limdagi tavsiyalardan 5 tasi qilindi — **abonement + davomat + haftalik
+eslatma jurnali, do'kon narxiga ustama, o'lcham bo'yicha qoldiq, QR ro'yxat kodi, haftalik
+zaxira skripti** (batafsil — **61–65-band**). Hammasi lokal emulyatorda brauzer orqali
+(headless Chrome + `tools/brauzer/cdp.mjs`) qo'lda sinaldi — real xato topildi va tuzatildi
+(o'lchami tugagan tovarni baribir buyurtma qilish mumkin edi, 63-bandga qarang).
+**Hali haqiqiy Firebase'ga joylanmagan** — bu kompyuterda `.env` yo'q (parollar), shuning
+uchun `narx_ustama.mjs`/`zaxira.mjs` skriptlari va APK/web joylash haqiqiy bazaga qarshi
+tekshirilmagan. Qolgan 13-bo'lim band: narxga ustamani haqiqiy do'konga qo'llash, haftalik
+zaxirani birinchi marta olish, deploy.
 
-**Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **90/90**, qoida testlari **138/138**.
+**2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
+
+**Hammasi lokal tekshirilgan, joylash kutilmoqda** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
+`flutter test` **100/100**, qoida testlari **164/164**.
 
 Oxirgi APK: **24-sentabr 18:00, 25,2 MB** (do'kon to'liq, yangi ikonka bilan) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -94,6 +104,8 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
     L-Arginin 5, Boshqa 29). Rasm va narxlar AllPituz kanalidan olingan, rasmlardagi
     begona yozuvlar tozalangan.
 18. **Yangi ko'rinish** (59-band): pahlavon rasmi — kirish ekrani foni va ilova ikonkasi.
+19. **Abonement, davomat, do'kon ustamasi/o'lchami, QR, zaxira** (4-okt, 61–65-band):
+    kod tayyor va lokal emulyatorda sinaldi, **haqiqiy bazaga hali joylanmagan**.
 
 ### ⏳ Ertaga / ochiq
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
@@ -873,9 +885,10 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
 | Tekshiruv | Natija |
 |---|---|
 | `flutter analyze` | ✅ 0 xato |
-| `flutter test` | ✅ 90/90 (24-sent) |
-| Qoida testlari | ✅ 138/138 (24-sent, emulyatorda) |
-| APK yig'ish | ✅ ishlaydi (24-sent 18:00, 25,2 MB arm64, `CN=Diamond Zal`) |
+| `flutter test` | ✅ 100/100 (4-okt) |
+| Qoida testlari | ✅ 164/164 (4-okt, emulyatorda) |
+| 61–65-band (abonement/davomat/ustama/o'lcham/QR/zaxira) | ✅ lokal emulyatorda brauzerda sinaldi; ❌ haqiqiy bazaga hali joylanmagan |
+| APK yig'ish | ✅ ishlaydi (24-sent 18:00, 25,2 MB arm64, `CN=Diamond Zal`) — 61–65-band o'zgarishlari bilan **hali qayta yig'ilmagan** |
 | Web release | ✅ `build\web` — lokal: `python -m http.server 5173 --bind 127.0.0.1 --directory build\web` |
 | Firebase'ga joylash | ✅ qoidalar + hosting (24-sent); ❌ Cloud Functions — Blaze kerak |
 | Bosh admin / trener login | ✅ REST orqali tekshirilgan (`owner` / `admin`) |
@@ -1220,6 +1233,92 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
       sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
 
+61. **Abonement + davomat + haftalik eslatma jurnali (4-okt)** — 13.1-bandning eng muhim
+    qismi: zalning asosiy daromadi (abonement) endi hisobga olinadi.
+    - **Model** (`lib/models/subscription.dart`, yangi): `Subscription` (`users/{uid}/subscriptions/{id}`
+      — boshlanish sana, oy soni 1/3/6/12, narx, to'langan sana; `WeightLog` uslubida sof statik
+      `daysLeft`/`isActive`/`isExpiringSoon`/`isExpired`); `Reminder` (top-level `reminders/{id}`
+      — yuborilgan eslatma jurnali); `ReminderReport.byDay` — `SalesReport` uslubida haftalik sanoq.
+      `AppUser.subscriptionExpiresAt` — `homeWorkoutDate` kabi faqat trener/bosh admin yozadi,
+      `toMap()` ga kirmaydi.
+    - **Davomat**: `users/{uid}/attendance/{kun}` (`present`/`markedBy`/`markedAt`) — `gym_admin_screen.dart`
+      dagi mavjud "bugun kim keladi" qatoriga qo'shildi (yangi ekran emas), uyda-mashq
+      tugmasi yonida "Keldi"/"Bekor" tugmasi.
+    - **Qoidalar**: `subscriptions`/`attendance` subcollectionlari (`canManage(uid)`-gated,
+      `gyms` uslubidagi `hasOnly` validatori), yangi top-level `reminders` (`orders` uslubidagi
+      cross-check: trener faqat o'z shogirdiga, bosh admin — hammaga). `users` update blokiga
+      `same('subscriptionExpiresAt')` qo'shildi. Qoida testlariga 26 ta yangi holat (ABONEMENT/
+      DAVOMAT/ESLATMALAR bo'limlari) — jami **164, 0 xato**.
+    - **Yangi ekran** `lib/screens/admin/subscriptions_screen.dart` — "Abonement" bo'limi
+      (trener va bosh adminda, Mijozlar yonida): "Mijozlar" varag'i (har kimda qolgan kun
+      `Pill`i — yashil/sariq/qizil, bosilsa abonement qo'shish varag'i, tugashi yaqin bo'lsa
+      "Eslatma yubor" tugmasi) va "Haftalik eslatmalar" varag'i (oxirgi 7 kun, kuni nechta
+      eslatma jo'natilgani). Eslatma yuborish — `Db.sendSubscriptionReminder`: jurnalga yozadi
+      va shogirdga chatga "⏰ Abonementingiz N kundan keyin tugaydi" xabari yuboradi.
+    - **Eslatma feed**: `FeedKind.subscription` — shogirdda "Abonement tugashi yaqinlashdi"
+      (tugashiga 0–3 kun qolganda), trenerda har shogird uchun xuddi shunday "E'tibor" elementi.
+    - **Brauzerda to'liq sinaldi** (lokal emulyator, `node tools/brauzer/cdp.mjs`): test shogirdga
+      3 oylik abonement qo'shildi ("92 kun qoldi" yashil belgi to'g'ri chiqdi); REST orqali
+      muddat 2 kunga qisqartirilib "tugashi yaqin" holat va "Eslatma yubor" tugmasi tekshirildi;
+      eslatma yuborilgach haftalik hisobotda bugungi kunga "1" yozildi; shogird tomonida
+      bildirishnoma qizil belgisida "1" chiqdi (feed ishlayapti). **Davomat tugmasi jonli
+      tekshirilmadi** — bugun yakshanba, ikkala zal kunlari varianti ham (Se/Pay/Sha, Du/Chor/Ju)
+      yakshanbani o'z ichiga olmaydi; kod `homeWorkoutDate` tugmasi bilan bir xil naqsh.
+
+62. **Do'kon narxiga ustama (4-okt)** — 13.2-band: narxlar yetkazib beruvchi narxida edi, foyda yo'q.
+    - `Product.costPrice` (tan narx) qo'shildi, `margin` getter (`price - costPrice`).
+    - `shop_admin_screen.dart` tovar varag'ida "Tan narxi" maydoni + jonli "Foyda: N" matni;
+      `_ProductAdminTile`da foyda `Pill`i (yashil).
+    - **Yangi skript** `tools/dokon/narx_ustama.mjs <foiz>` — hamma tovarga bir martalik
+      `costPrice` belgilaydi (joriy narxdan) va `price = costPrice × (1+foiz/100)` qiladi;
+      qayta ishga tushirish narxni ikki marta oshirmaydi (har doim `costPrice`dan hisoblanadi).
+      Root launcher `NARX_USTAMA.bat`. **`.env` yo'qligi sababli haqiqiy bazaga qarshi
+      sinalmagan** — faqat `node --check` bilan sintaksis tekshirildi.
+    - `firestore.rules` — o'zgarishsiz (tasdiqlandi: `shop/{id}` yozuvi validatorsiz,
+      `costPrice` uchun qoida kerak emas).
+    - Brauzerda sinaldi: "Test Mayka" 150 000 so'm, tan narx 100 000 kiritilganda
+      "Foyda: 50 000 so'm" jonli chiqdi, saqlangach tovar kartochkasida "Foyda: 50 000" pilli.
+
+63. **Do'kon — o'lcham bo'yicha qoldiq (4-okt)** — 13.2/9-band: "XL bor, 4XL yo'q" deyish
+    imkonsiz edi, hammasi bitta sonda edi.
+    - `Product.sizeStock` (`Map<String,int>`, `sizes` bo'yicha kalitlangan), `totalStock`
+      (jamlangan), `stockFor(size)` getterlari. Flat `stock` saqlanadi — endi u jamlangan qiymat
+      (`toMap()` har doim `totalStock`ni yozadi), eski kod buzilmaydi.
+    - `shop_admin_screen.dart`: `sizes` bo'sh bo'lmasa, yagona "Qoldiq" maydoni o'rniga har
+      o'lcham uchun alohida son maydoni (jonli, `sizes` matni o'zgarganda qayta chiziladi).
+    - `Db.setOrderStatus` — "Berildi" bosilganda, o'lchami bor buyurtmada faqat o'sha o'lcham
+      (`sizeStock.<o'lcham>`) kamayadi, jamlangan `stock` ham birga yangilanadi (tranzaksiyada).
+    - `shop_screen.dart` (shogird): qoldiq va "Olaman" tugmasi endi `totalStock`ga, buyurtma
+      varag'idagi dona stepperi tanlangan o'lchamning `stockFor(size)`iga qaraydi.
+    - ⚠️ **Brauzerda topilgan va tuzatilgan xato:** tugagan o'lchamni (qoldiq 0) tanlasa ham
+      "Buyurtma berish" tugmasi yoqilib qolardi (dona stepperi 0 ga tushmagani uchun eski
+      "o'lcham tanlanganmi" sharti yetarli emas edi). Tuzatildi: tugma endi `stockFor(size) <= 0`
+      bo'lsa ham o'chadi va "Tugagan" deb yozadi.
+    - `firestore.rules` — o'zgarishsiz (tasdiqlandi: `shop/{id}` validatorsiz).
+    - **To'liq oqim brauzerda sinaldi**: "Test Mayka" (XL: 5, XXL: 0) yaratildi → shogird
+      XXL tanlaganda tugma "Tugagan" deb o'chdi (tuzatishdan keyin) → XL tanlab buyurtma berdi →
+      trener "Berildi" bosdi → tovar qoldig'i 5 dan **4**ga tushdi (XL kamaydi, XXL tegilmadi).
+
+64. **QR kod bilan ro'yxatdan o'tish (4-okt)** — 13.4-band: zal eshigiga osish uchun QR yo'q edi.
+    - `pubspec.yaml`ga `qr_flutter: ^4.1.0`. Yangi `lib/widgets/join_qr_sheet.dart` —
+      `showJoinQr(context)`, `https://kotta-qani-09111753.web.app/ilova/` manzilini QR qilib
+      ko'rsatadi + "Havolani nusxalash" tugmasi. `admin_home.dart` AppBar'iga QR tugmasi
+      qo'shildi (trener va bosh adminda).
+    - Qoidalar/`Db` — kerak emas, sof UI.
+    - Brauzerda ochib tekshirildi — QR kod to'g'ri chizildi.
+
+65. **Haftalik zaxira skripti (4-okt)** — 13.3-band: bazaning hech qanday zaxirasi yo'q edi.
+    - `tools/zaxira/zaxira.mjs` — `holat.mjs`/`tovar_qoshish.mjs` bilan bir xil auth+REST
+      naqshi: barcha top-level kolleksiyalar (`users`, `trainers`, `ratings`, `gyms`, `foods`,
+      `plans`, `shop`, `orders`, yangi `reminders`) va har foydalanuvchining subcollectionlari
+      (`weights`, `days`, `subscriptions`, `attendance`, chat xabarlari) bitta JSON ga yig'ilib
+      `zaxira/YYYY-MM-DD_bazaning-zaxirasi.json` ga yoziladi (`zaxira/` allaqachon gitignore'da).
+      Root launcher `ZAXIRA.bat`. Avtomatik jadval (Task Scheduler) qilinmadi — qo'lda,
+      haftada bir marta ishga tushiriladi.
+    - **`.env` yo'qligi sababli haqiqiy bazaga qarshi hali bir marta ham ishga tushirilmagan** —
+      faqat `node --check` bilan sintaksis tekshirildi. Zal egasi birinchi marta qo'lda
+      ishga tushirib ko'rishi kerak.
+
 ---
 
 ## 13. Tavsiyalar — nimani keyingi navbatda qilish kerak (2-oktabr)
@@ -1227,34 +1326,23 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
 Loyihaning hozirgi holatiga qarab tuzilgan ro'yxat. Tartib muhimlik bo'yicha: yuqoridagisi
 ko'proq foyda beradi yoki ko'proq xavfni yopadi. Kod o'zgarmagan — bu faqat reja.
 
-### 13.1. Abonement va davomat yo'q (eng muhim)
+### 13.1. ~~Abonement va davomat yo'q~~ — ASOSAN HAL BO'LDI (4-okt, 61-band)
 
-Ilovada ovqat rejasi, do'kon, chat, zal jadvali bor, lekin **zalning asosiy daromadi —
-abonement — hisobga olinmaydi**. Hozir zal egasi kim to'lagan, kimning muddati tugaganini
-ilovadan ko'rmaydi.
+Abonement yozuvi (boshlanish/oy/narx/to'langan sana), status va haftalik eslatma jurnali
+qilindi; davomat — mavjud "bugun kim keladi" ro'yxatiga belgilash qo'shildi. **Qolgani:**
+bosh adminda oylik/yillik moliyaviy hisobot (nechta abonement sotildi, qancha tushum —
+`SalesReport` naqshida qilish mumkin, hali qilinmagan); eslatmalarni **avtomatik** (trener
+kirmasa ham) yuborish yo'q — hozir faqat trener/bosh admin "Eslatma yubor" bosganda yuboriladi
+(Cloud Functions/Blaze bo'lmagani uchun chinakam fon vazifasi yo'q).
 
-Kerak bo'ladigan narsalar:
-- Abonement yozuvi: boshlanish sanasi, muddati (1 oy / 3 oy / yillik), narxi, to'langan sana.
-- Muddat tugashiga 3 kun qolganda shogirdga va zal egasiga eslatma (`Eslatma` bo'limi tayyor,
-  55-band — faqat yangi tur qo'shiladi).
-- Davomat: trener bugun kelgan shogirdlarni belgilaydi. Zal bo'limida "bugun kim keladi"
-  ro'yxati allaqachon bor (42-band) — unga belgilash qo'shiladi.
-- Bosh adminda oylik hisobot: nechta abonement sotildi, qancha tushum. Sotuv hisoboti
-  naqshi tayyor (56-band, `SalesReport`) — shu naqsh takrorlanadi.
+### 13.2. ~~Do'kon narxlari foyda bermasdi~~ — HAL BO'LDI (4-okt, 62–63-band)
 
-Bu do'kondan ko'proq pul keltiradi; do'kon — qo'shimcha daromad.
-
-### 13.2. Do'kon narxlari hozir foyda bermaydi
-
-- Narxlar **AllPituz kanalidan** olingan, ya'ni yetkazib beruvchining narxi. Shu narxda
-  sotilsa foyda nolga teng.
-- Ustama foiz qo'yish kerak (masalan 15–30%). Bir buyruq bilan hamma tovarga qo'shiladi:
-  `tools/dokon/` dagi skriptga ustama hisoblash qo'shilsa kifoya.
-- **Qoldiq o'lcham kesimida emas** (9-bo'limda ham yozilgan): "XL 2 ta, 4XL yo'q" deb
-  bo'lmaydi. Kiyimda bu muammo — shogird 4XL buyurtma beradi, mol bo'lmaydi. Ikki yo'l:
-  a) `Product.stock` ni o'lcham bo'yicha xaritaga aylantirish (`{XL: 2, XXL: 0}`);
-  b) kiyimni "buyurtma asosida" deb belgilab, qoldiqni katta son qilib qo'yish.
-- Haqiqiy qoldiq sonlari hali so'ralmagan — hozir Forma 10, qolganlar 5 (taxminiy).
+`costPrice`/`margin` va bir martalik ustama skripti (`narx_ustama.mjs`) qilindi — **lekin
+hali haqiqiy do'konga qo'llanmagan** (`.env` yo'qligi uchun sinalmagan, faqat UI va sintaksis
+tekshirildi). Qoldiq endi o'lcham bo'yicha (`Product.sizeStock`) — "XL 2 ta, 4XL yo'q" ishlaydi.
+**Qolgani:** zal egasi `NARX_USTAMA.bat` ni ishga tushirib haqiqiy foiz tanlashi va har
+tovarning haqiqiy qoldiq sonini `shop_admin_screen.dart` orqali kiritishi kerak (hozir
+taxminiy raqamlar turibdi).
 
 ### 13.3. Xavfsizlik
 
@@ -1264,16 +1352,17 @@ Bu do'kondan ko'proq pul keltiradi; do'kon — qo'shimcha daromad.
 - **Trener paroli almashtirilmagan** — u saytda ochiq turgan edi (49-band). Parolning
   o'zi hujjatlardan olib tashlandi, lekin **Firebase'da hali o'sha parol turadi**.
   Zal egasi `Xodimlar` bo'limidan almashtirsin. Haqiqiy qiymat `PAROLLAR.md` da.
-- **Bazaning zaxirasi yo'q.** Kimdir adashib o'chirsa qaytarib bo'lmaydi. Haftalik eksport
-  kerak: `tools/holat/holat.mjs` naqshida barcha to'plamlarni JSON ga yozadigan skript
-  (`zaxira/` papkasi allaqachon ishlatilgan — 15-sent shogirdlar zaxirasi shu yerda).
+- ~~**Bazaning zaxirasi yo'q.**~~ — **Skript tayyor (4-okt, 65-band)**, `ZAXIRA.bat`.
+  **Hali bir marta ham haqiqiy bazaga qarshi ishga tushirilmagan** (`.env` yo'q edi) —
+  zal egasi birinchi marta qo'lda ishga tushirsin, keyin haftada bir marta takrorlasin.
 
-### 13.4. Foydalanuvchi kam
+### 13.4. ~~Foydalanuvchi kam~~ — QR TAYYOR (4-okt, 64-band), qolgani ochiq
 
 Do'konda 115 ta tovar bor, bazada esa 3 shogird. Nomutanosib — ilova to'ldirilgan, lekin
 undan foydalanadigan odam yo'q.
 
-- Zal eshigiga QR kod: skanerlaydi → `https://kotta-qani-09111753.web.app` → ro'yxatdan o'tadi.
+- ~~Zal eshigiga QR kod~~ — tayyor: trener/bosh admin panelida QR tugmasi (`/ilova/` ga olib
+  boradi), chop etib osish mumkin.
 - Trener har yangi mijozga ilovani o'zi o'rnatib beradi (5 daqiqa).
 - Birinchi 20 ta shogirddan keyin qaysi bo'lim ishlatilayotgani ko'rinadi va keyingi ish
   taxmin emas, ma'lumot asosida tanlanadi.
@@ -1304,12 +1393,16 @@ suratlarini qo'yish kerak, aks holda da'vo kelishi mumkin. Buni zal egasi aniqla
 
 ### Taklif qilingan tartib
 
-1. Abonement + davomat (13.1)
-2. Narxga ustama va o'lcham bo'yicha qoldiq (13.2)
+1. ~~Abonement + davomat~~ (13.1, 4-okt qilindi — kod tayyor)
+2. ~~Narxga ustama va o'lcham bo'yicha qoldiq~~ (13.2, 4-okt qilindi — kod tayyor)
 3. ~~Parollarni muhit o'zgaruvchisiga chiqarish~~ (2-okt qilindi) + trener parolini
-   almashtirish va bazaning haftalik zaxirasi (13.3)
+   almashtirish (hali qilinmagan) va ~~bazaning haftalik zaxirasi~~ (13.3, skript tayyor)
 4. Blaze va push (13.5)
-5. QR bilan mijoz yig'ish (13.4)
+5. ~~QR bilan mijoz yig'ish~~ (13.4, 4-okt qilindi)
+
+**Keyingi navbatdagi ish:** 61–65-bandni haqiqiy Firebase'ga joylash — APK/web qayta
+yig'ish, `deploy.ps1`, so'ng `ZAXIRA.bat` va `NARX_USTAMA.bat` ni bir marta qo'lda ishga
+tushirish (`.env` kerak). Shundan keyin trener parolini almashtirish va Blaze/push qoladi.
 
 ---
 

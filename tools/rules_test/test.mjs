@@ -353,6 +353,88 @@ await check('trener buyurtmani ochira OLMAYDI', () =>
 await check('bosh admin buyurtmani ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(OWNER), 'orders', 'o1'))));
 
+console.log('\n== ABONEMENT ==');
+await check('trener oz shogirdiga abonement qoshadi', () =>
+  assertSucceeds(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'),
+    { startDate: new Date(), months: 3, price: 300000, currency: 'UZS', createdAt: serverTimestamp() })));
+await check('trener BOSHQANING shogirdiga abonement qosha OLMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER3, 'subscriptions'),
+    { startDate: new Date(), months: 1, price: 100000, currency: 'UZS', createdAt: serverTimestamp() })));
+await check('shogird ozi abonement qosha OLMAYDI', () =>
+  assertFails(addDoc(collection(as(USER), 'users', USER, 'subscriptions'),
+    { startDate: new Date(), months: 1, price: 0, currency: 'UZS', createdAt: serverTimestamp() })));
+await check('bosh admin istalgan shogirdga abonement qoshadi', () =>
+  assertSucceeds(addDoc(collection(as(OWNER), 'users', USER3, 'subscriptions'),
+    { startDate: new Date(), months: 12, price: 1000000, currency: 'UZS', createdAt: serverTimestamp() })));
+await check('notogri oy soni (25) OTMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'),
+    { startDate: new Date(), months: 25, price: 100000, currency: 'UZS', createdAt: serverTimestamp() })));
+await check('ortiqcha maydonli abonement OTMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'),
+    { startDate: new Date(), months: 1, price: 100000, currency: 'UZS', createdAt: serverTimestamp(), izoh: 'x' })));
+await check('shogird oz abonementlar royxatini oqiydi', () =>
+  assertSucceeds(getDocs(collection(as(USER), 'users', USER, 'subscriptions'))));
+await check('boshqa trener abonementni oqiy OLMAYDI', () =>
+  assertFails(getDocs(collection(as(TRAINER3), 'users', USER, 'subscriptions'))));
+await check('trener oz shogirdiga abonement muddatini belgilaydi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { subscriptionExpiresAt: new Date(2027, 0, 1) })));
+await check('shogird ozi abonement muddatini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER), { subscriptionExpiresAt: new Date(2099, 0, 1) })));
+
+console.log('\n== DAVOMAT ==');
+await check('trener oz shogirdining davomatini belgilaydi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'users', USER, 'attendance', '2026-10-04'),
+    { present: true, markedBy: TRAINER, markedAt: serverTimestamp() })));
+await check('boshqa trener davomat belgilay OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER3), 'users', USER, 'attendance', '2026-10-04'),
+    { present: true, markedBy: TRAINER3, markedAt: serverTimestamp() })));
+await check('shogird ozi davomat belgilay OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'attendance', '2026-10-04'),
+    { present: true, markedBy: USER, markedAt: serverTimestamp() })));
+await check('boshqa odam nomidan davomat belgilab bolmaydi', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'users', USER, 'attendance', '2026-10-05'),
+    { present: true, markedBy: OWNER, markedAt: serverTimestamp() })));
+await check('present notogri turda OTMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'users', USER, 'attendance', '2026-10-06'),
+    { present: 'ha', markedBy: TRAINER, markedAt: serverTimestamp() })));
+await check('shogird oz davomatini oqiydi', () =>
+  assertSucceeds(getDoc(doc(as(USER), 'users', USER, 'attendance', '2026-10-04'))));
+await check('boshqa trener davomatni oqiy OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER3), 'users', USER, 'attendance', '2026-10-04'))));
+
+console.log('\n== ESLATMALAR ==');
+await check('trener oz shogirdiga eslatma yozadi', () =>
+  assertSucceeds(addDoc(collection(as(TRAINER), 'reminders'),
+    { clientId: USER, clientName: 'Shogird', trainerId: TRAINER, sentBy: TRAINER,
+      sentAt: serverTimestamp(), daysLeft: 2 })));
+await check('trener BOSHQANING shogirdiga eslatma yoza OLMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'reminders'),
+    { clientId: USER3, clientName: 'Boshqa', trainerId: TRAINER, sentBy: TRAINER,
+      sentAt: serverTimestamp(), daysLeft: 1 })));
+await check('bosh admin istalgan mijozga eslatma yozadi', () =>
+  assertSucceeds(addDoc(collection(as(OWNER), 'reminders'),
+    { clientId: USER3, clientName: 'Boshqa', trainerId: TRAINER3, sentBy: OWNER,
+      sentAt: serverTimestamp(), daysLeft: 0 })));
+await check('barmen eslatma yoza OLMAYDI', () =>
+  assertFails(addDoc(collection(as(BARMEN), 'reminders'),
+    { clientId: USER, clientName: 'Shogird', trainerId: TRAINER, sentBy: BARMEN,
+      sentAt: serverTimestamp(), daysLeft: 2 })));
+await check('shogird eslatma yoza OLMAYDI', () =>
+  assertFails(addDoc(collection(as(USER), 'reminders'),
+    { clientId: USER, clientName: 'Shogird', trainerId: TRAINER, sentBy: USER,
+      sentAt: serverTimestamp(), daysLeft: 2 })));
+await check('boshqa odam nomidan eslatma yozib bolmaydi', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'reminders'),
+    { clientId: USER, clientName: 'Shogird', trainerId: TRAINER, sentBy: OWNER,
+      sentAt: serverTimestamp(), daysLeft: 2 })));
+await check('trener oz (filtrlangan) eslatmalarini oqiydi', () =>
+  assertSucceeds(getDocs(query(collection(as(TRAINER), 'reminders'),
+    where('trainerId', '==', TRAINER)))));
+await check('trener filtrsiz eslatmalarni sorayolmaydi', () =>
+  assertFails(getDocs(collection(as(TRAINER), 'reminders'))));
+await check('bosh admin hamma eslatmani koradi', () =>
+  assertSucceeds(getDocs(collection(as(OWNER), 'reminders'))));
+
 console.log('\n== ZALLAR ==');
 await check('bosh admin zal qoshadi', () =>
   assertSucceeds(setDoc(doc(as(OWNER), 'gyms', 'zal1'),

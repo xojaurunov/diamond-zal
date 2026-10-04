@@ -74,8 +74,16 @@ class Product {
   /// Narx valyutasi: `UZS` (so'm) yoki `USD` (dollar)
   final String currency;
 
-  /// Zaldagi qoldiq. 0 bo'lsa buyurtma tugmasi ochilmaydi.
+  /// Zaldagi qoldiq (jamlangan — [sizes] bo'lsa [sizeStock] yig'indisi). 0 bo'lsa buyurtma
+  /// tugmasi ochilmaydi. [sizes] bo'sh tovarlarda bu qiymat to'g'ridan-to'g'ri tahrirlanadi.
   final int stock;
+
+  /// O'lcham bo'yicha qoldiq ([sizes] dagi nomlar bilan kalitlangan). [sizes] bo'sh bo'lgan
+  /// tovarlarda ishlatilmaydi — ular [stock] dan to'g'ridan-to'g'ri foydalanadi.
+  final Map<String, int> sizeStock;
+
+  /// Tan narx (yetkazib beruvchidan) — ustama hisoblash uchun, ixtiyoriy (0 — kiritilmagan).
+  final int costPrice;
 
   /// false — vaqtincha sotuvda yo'q, shogirdga ko'rinmaydi
   final bool active;
@@ -91,6 +99,8 @@ class Product {
     this.price = 0,
     this.currency = uzs,
     this.stock = 0,
+    this.sizeStock = const {},
+    this.costPrice = 0,
     this.active = true,
   });
 
@@ -104,11 +114,21 @@ class Product {
     return all;
   }
 
+  /// Jami qoldiq — [sizes] bo'lsa [sizeStock] yig'indisi, bo'lmasa [stock].
+  int get totalStock => sizes.isEmpty ? stock : sizeStock.values.fold(0, (a, b) => a + b);
+
+  /// Berilgan o'lchamdagi qoldiq ([sizes] bo'sh bo'lsa — [stock], o'lcham ko'rsatilmasa — 0).
+  int stockFor(String? size) =>
+      sizes.isEmpty ? stock : (size == null ? 0 : (sizeStock[size] ?? 0));
+
   /// Shogirdga ko'rinadimi va buyurtma berish mumkinmi
-  bool get onSale => active && stock > 0 && price > 0;
+  bool get onSale => active && totalStock > 0 && price > 0;
 
   /// Narx yozuvi: "450 000 so'm" yoki "35 \$"
   String get priceText => fmtMoney(price, currency);
+
+  /// Foyda ([costPrice] kiritilmagan bo'lsa 0 — hali hisoblanmagan)
+  int get margin => costPrice > 0 ? price - costPrice : 0;
 
   factory Product.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
@@ -123,6 +143,11 @@ class Product {
       price: ((d['price'] ?? 0) as num).toInt(),
       currency: (d['currency'] ?? uzs) as String,
       stock: ((d['stock'] ?? 0) as num).toInt(),
+      sizeStock: Map<String, int>.from(
+        (d['sizeStock'] as Map? ?? const {})
+            .map((k, v) => MapEntry(k as String, (v as num).toInt())),
+      ),
+      costPrice: ((d['costPrice'] ?? 0) as num).toInt(),
       active: (d['active'] ?? true) as bool,
     );
   }
@@ -136,11 +161,13 @@ class Product {
         'sizes': sizes,
         'price': price,
         'currency': currency,
-        'stock': stock,
+        'stock': totalStock,
+        'sizeStock': sizeStock,
+        'costPrice': costPrice,
         'active': active,
       };
 
-  Product copyWith({int? stock}) => Product(
+  Product copyWith({int? stock, Map<String, int>? sizeStock}) => Product(
         id: id,
         category: category,
         name: name,
@@ -151,6 +178,8 @@ class Product {
         price: price,
         currency: currency,
         stock: stock ?? this.stock,
+        sizeStock: sizeStock ?? this.sizeStock,
+        costPrice: costPrice,
         active: active,
       );
 }

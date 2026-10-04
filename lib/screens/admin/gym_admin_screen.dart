@@ -42,15 +42,16 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
             SectionHeader('Bugun zalga keladi',
                 trailing: Pill(text: '${coming.length}', color: AppColors.accent)),
             if (coming.isEmpty) _empty(context, "Bugun hech kimning mashg'uloti yo'q"),
-            for (final u in coming) _ClientGymTile(client: u, today: today),
+            for (final u in coming) _ClientGymTile(client: u, today: today, adminId: widget.admin.id),
             const SizedBox(height: AppSpace.lg),
             SectionHeader('Bugun uyda',
                 trailing: Pill(text: '${home.length}', color: AppColors.water)),
             if (home.isEmpty) _empty(context, "Hech kim uyda mashq qilmaydi"),
-            for (final u in home) _ClientGymTile(client: u, today: today),
+            for (final u in home) _ClientGymTile(client: u, today: today, adminId: widget.admin.id),
             const SizedBox(height: AppSpace.lg),
             const SectionHeader('Hamma shogirdlar jadvali'),
-            for (final u in all) _ClientGymTile(client: u, today: today, showWeek: true),
+            for (final u in all)
+              _ClientGymTile(client: u, today: today, adminId: widget.admin.id, showWeek: true),
             if (noDays.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpace.sm),
@@ -89,14 +90,31 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
 class _ClientGymTile extends StatelessWidget {
   final AppUser client;
   final int today;
+  final String adminId;
   final bool showWeek;
-  const _ClientGymTile({required this.client, required this.today, this.showWeek = false});
+  const _ClientGymTile({
+    required this.client,
+    required this.today,
+    required this.adminId,
+    this.showWeek = false,
+  });
 
   Future<void> _toggleHome(BuildContext context, bool isHome) async {
     try {
       await Db.setHomeWorkout(client.id, isHome ? null : todayKey());
       if (context.mounted) {
         showSnack(context, isHome ? 'Uyda mashq bekor qilindi' : 'Bugun uyda mashq belgilandi');
+      }
+    } catch (e) {
+      if (context.mounted) showSnack(context, "Bo'lmadi: $e");
+    }
+  }
+
+  Future<void> _toggleAttendance(BuildContext context, bool present) async {
+    try {
+      await Db.markAttendance(client.id, todayKey(), !present, adminId);
+      if (context.mounted) {
+        showSnack(context, present ? 'Davomat bekor qilindi' : 'Bugun keldi deb belgilandi');
       }
     } catch (e) {
       if (context.mounted) showSnack(context, "Bo'lmadi: $e");
@@ -179,6 +197,33 @@ class _ClientGymTile extends StatelessWidget {
                       onPressed: isHome || wrote ? () => _toggleHome(context, isHome) : null,
                       icon: Icon(isHome ? Icons.close : Icons.home_outlined, size: 18),
                       label: Text(isHome ? 'Bekor' : 'Uyda mashq'),
+                    ),
+                  ]),
+                );
+              },
+            ),
+          // Davomat — faqat bugun mashg'ulot kuni bo'lsa va uyda mashq qilmayotgan bo'lsa
+          if (!showWeek && todayWorkout != null && !isHome)
+            StreamBuilder<bool>(
+              stream: Db.attendance(u.id, todayKey()),
+              builder: (context, attSnap) {
+                final present = attSnap.data ?? false;
+                return Padding(
+                  padding: const EdgeInsets.only(top: AppSpace.sm),
+                  child: Row(children: [
+                    Expanded(
+                      child: Text(
+                        present ? 'Bugun keldi deb belgilangan' : 'Hali kelgani belgilanmagan',
+                        style: t.bodySmall
+                            ?.copyWith(color: present ? AppColors.success : AppColors.textFaint),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpace.sm),
+                    OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(minimumSize: const Size(0, 40)),
+                      onPressed: () => _toggleAttendance(context, present),
+                      icon: Icon(present ? Icons.close : Icons.check, size: 18),
+                      label: Text(present ? 'Bekor' : 'Keldi'),
                     ),
                   ]),
                 );

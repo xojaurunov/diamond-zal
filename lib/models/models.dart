@@ -43,6 +43,10 @@ class AppUser {
   /// Trener "bugun uyda mashq" belgilagan sana (yyyy-MM-dd) — faqat trener yozadi. toMap() ga kirmaydi.
   final String? homeWorkoutDate;
 
+  /// Abonement qachon tugaydi — `Db.addSubscription` yozadi (subscription qo'shilganda).
+  /// Faqat trener/bosh admin yozadi. toMap() ga kirmaydi.
+  final DateTime? subscriptionExpiresAt;
+
   AppUser({
     required this.id,
     required this.name,
@@ -62,6 +66,7 @@ class AppUser {
     this.gymId,
     this.gymDays = const [],
     this.homeWorkoutDate,
+    this.subscriptionExpiresAt,
   });
 
   /// Bosh admin — zal egasi: trener tayinlaydi, hammani ko'radi, o'chira oladi
@@ -167,6 +172,7 @@ class AppUser {
         gymId: gymId,
         gymDays: gymDays,
         homeWorkoutDate: homeWorkoutDate,
+        subscriptionExpiresAt: subscriptionExpiresAt,
       );
 
   factory AppUser.fromDoc(DocumentSnapshot doc) {
@@ -190,6 +196,7 @@ class AppUser {
       gymId: d['gymId'],
       gymDays: ((d['gymDays'] ?? []) as List).map((e) => (e as num).toInt()).toList(),
       homeWorkoutDate: d['homeWorkoutDate'] as String?,
+      subscriptionExpiresAt: (d['subscriptionExpiresAt'] as Timestamp?)?.toDate(),
     );
   }
 
