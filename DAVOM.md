@@ -23,6 +23,13 @@ uchun `narx_ustama.mjs`/`zaxira.mjs` skriptlari va APK/web joylash haqiqiy bazag
 tekshirilmagan. Qolgan 13-bo'lim band: narxga ustamani haqiqiy do'konga qo'llash, haftalik
 zaxirani birinchi marta olish, deploy.
 
+> ⚠️ **Commit `62dd0a2` faqat shu kompyuterda — GitHub'ga hali push qilinmagan**
+> (foydalanuvchi so'rovi: ertaga boshqa joydan davom ettiriladi). **Boshqa kompyuterda
+> ishni davom ettirishdan oldin birinchi navbatda shu kompyuterdan `git push` qiling**
+> — aks holda bugungi 61–65-band (abonement, davomat, do'kon ustamasi, o'lcham bo'yicha
+> qoldiq, QR, zaxira) boshqa joyda ko'rinmaydi. Tekshirish: `git log origin/main..HEAD`
+> bo'sh bo'lmasa — hali push qilinmagan.
+
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi lokal tekshirilgan, joylash kutilmoqda** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
