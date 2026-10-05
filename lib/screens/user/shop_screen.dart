@@ -196,7 +196,10 @@ class _ShopScreenState extends State<ShopScreen> {
             final orders = oSnap.data ?? const <ShopOrder>[];
             final waiting = orders.where((o) => o.isNew).toList();
 
-            return ListView(
+            // AppBar yo'q - ro'yxat telefon status bari ostiga kirib ketmasin
+            return SafeArea(
+              bottom: false,
+              child: ListView(
               padding:
                   const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
               children: [
@@ -298,6 +301,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ),
                 ],
               ],
+              ),
             );
           },
         );

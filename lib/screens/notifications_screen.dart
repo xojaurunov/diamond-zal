@@ -197,7 +197,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         final action = items.where((i) => i.action).toList();
         final rest = items.where((i) => !i.action).toList();
 
-        return ListView(
+        // AppBar yo'q - ro'yxat telefon status bari ostiga kirib ketmasin
+        return SafeArea(
+          bottom: false,
+          child: ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
           children: [
             Text('Eslatmalar', style: t.headlineSmall),
@@ -226,6 +229,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 child: _FeedTile(item: i, isNew: _isNew(i)),
               ),
           ],
+          ),
         );
       },
     );
