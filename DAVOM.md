@@ -1475,6 +1475,13 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       qoidalar, web va APK joylandi. Ekranlar telefonda sinalmagan.
       Reja: `specs/abonement/` (lokal).
 
+79. **Qarorlar (5-okt, zal egasi)** — pedalli ekspander narxi bozorga tushirildi:
+    172 500 → **60 000** (tan narx 52 000; `anjomlar-2.json` ham yangilandi). Trener haqi
+    qoidasi tasdiqlandi: o'z shogirdlari abonement tushumining 40%. Kunlik mijozga
+    "abonement tugayapti" eslatmasi chiqaveradi. Ovqat vaqti eslatmasi allaqachon bor
+    (`Notifications.scheduleMeals`, Sozlamalar → "Ovqat vaqti eslatmasi") — yangi ish emas.
+    **Zal egasida qoldi:** Crashlytics'ni Console'da yoqish, Blaze tarifi.
+
 ---
 
 ## 13. Tavsiyalar — nimani keyingi navbatda qilish kerak (2-oktabr)
