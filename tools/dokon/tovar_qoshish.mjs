@@ -3,7 +3,7 @@
 // Nomi bir xil tovar bazada bor bo'lsa — yangilanadi (nusxa yaratilmaydi).
 // JSON: { "category": "Forma", "name": "...", "note": "...", "price": 35,
 //         "currency": "USD", "stock": 10, "active": true,
-//         "sizes": ["XL"], "image": "https://...", "images": ["https://..."] }
+//         "sizes": ["XL"], "colors": ["qora"], "image": "https://...", "images": ["https://..."] }
 import { readFileSync } from 'node:fs';
 import { setDefaultResultOrder } from 'node:dns';
 import { maxfiy } from '../maxfiy.mjs';
@@ -69,6 +69,19 @@ for (const p of list) {
   };
   const fields = Object.fromEntries(Object.entries(doc).map(([k, v]) => [k, val(v)]));
   const id = byName.get(doc.name);
+  if (p.colors) {
+    doc.colors = p.colors;
+    fields.colors = val(p.colors);
+  }
+  // Yangi o'lchamli tovar: umumiy qoldiq o'lchamlarga teng bo'linadi. Usiz ilova tovarni
+  // "Tugagan" deb ko'rsatadi (jami qoldiq = sizeStock yig'indisi). Mavjud tovarda
+  // qo'lda kiritilgan o'lcham qoldig'iga tegilmaydi.
+  if (!id && doc.sizes.length) {
+    const n = doc.sizes.length;
+    doc.sizeStock = true; // updateMask/kalit ro'yxati uchun
+    fields.sizeStock = { mapValue: { fields: Object.fromEntries(doc.sizes.map((sz, i) =>
+      [sz, { integerValue: String(Math.floor(doc.stock / n) + (i < doc.stock % n ? 1 : 0)) }])) } };
+  }
   const url = id
     ? `${base}/shop/${id}?` + Object.keys(doc).map((k) => `updateMask.fieldPaths=${k}`).join('&')
     : `${base}/shop`;
