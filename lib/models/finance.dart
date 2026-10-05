@@ -87,8 +87,51 @@ class MonthlyReport {
     );
   }
 
+  /// Trenerlar kesimida: har trenerning shogirdlari soni va shu oyda ular to'lagan abonement.
+  /// [subs] — (shogird uid, abonement); [clientTrainer] — shogird uid -> trener uid.
+  /// Treneri yo'q shogirdlar '' kaliti ostida yig'iladi.
+  static Map<String, TrainerShare> byTrainer(
+    DateTime month, {
+    List<(String, Subscription)> subs = const [],
+    Map<String, String> clientTrainer = const {},
+  }) {
+    final clients = <String, int>{};
+    for (final t in clientTrainer.values) {
+      clients[t] = (clients[t] ?? 0) + 1;
+    }
+    final count = <String, int>{};
+    final sums = <String, Map<String, int>>{};
+    for (final (uid, s) in subs) {
+      if (!inMonth(paidAt(s), month)) continue;
+      final t = clientTrainer[uid] ?? '';
+      count[t] = (count[t] ?? 0) + 1;
+      _add(sums.putIfAbsent(t, () => {}), s.currency, s.price);
+    }
+    return {
+      for (final t in {...clients.keys, ...count.keys})
+        t: TrainerShare(
+          clients: clients[t] ?? 0,
+          subsCount: count[t] ?? 0,
+          sums: sums[t] ?? const {},
+        ),
+    };
+  }
+
   /// Ko'rsatish uchun: "450 000 so'm · 70 $" (bo'sh bo'lsa "0 so'm")
   static String money(Map<String, int> sums) => sums.isEmpty
       ? fmtMoney(0)
       : sums.entries.map((e) => fmtMoney(e.value, e.key)).join(' · ');
+}
+
+/// Bitta trenerning oylik ko'rsatkichi: shogirdlari, sotilgan abonementlar va ulardan ulushi
+class TrainerShare {
+  final int clients, subsCount;
+
+  /// Shogirdlari shu oyda to'lagan abonement summasi, valyuta bo'yicha
+  final Map<String, int> sums;
+  const TrainerShare({this.clients = 0, this.subsCount = 0, this.sums = const {}});
+
+  /// Trener ulushi: tushumning [percent] foizi (butun songa yaxlitlanadi)
+  Map<String, int> share(int percent) =>
+      sums.map((k, v) => MapEntry(k, (v * percent / 100).round()));
 }

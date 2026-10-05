@@ -4,6 +4,7 @@ import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../models/subscription.dart';
 import '../../services/db.dart';
+import '../../services/settings.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
 
@@ -26,6 +27,14 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   /// null — hamma zallar, '' — zalsiz (treneri yo'q yoki trener zalsiz)
   String? _gym;
+
+  /// Trener ulushi, foiz
+  var _pct = AppSettings.trainerSharePct;
+
+  void _setPct(int v) {
+    setState(() => _pct = v.clamp(0, 100));
+    AppSettings.setTrainerSharePct(_pct);
+  }
 
   late final _subs = Db.allSubscriptions();
   late final _orders = Db.allOrders();
@@ -76,10 +85,27 @@ class _FinanceScreenState extends State<FinanceScreen> {
                       for (final c in cSnap.data ?? const <AppUser>[])
                         c.id: trainerGym[c.trainerId] ?? ''
                     };
-                    final subs = sSnap.data!
+                    final gymSubs = sSnap.data!
                         .where((e) => _gym == null || (clientGym[e.$1] ?? '') == _gym)
-                        .map((e) => e.$2)
                         .toList();
+                    final subs = gymSubs.map((e) => e.$2).toList();
+                    // trenerlar kesimi: tanlangan zalning shogirdlari
+                    final staff = stSnap.data ?? const <AppUser>[];
+                    final byTrainer = MonthlyReport.byTrainer(
+                      _month,
+                      subs: gymSubs,
+                      clientTrainer: {
+                        for (final c in cSnap.data ?? const <AppUser>[])
+                          if (_gym == null || (clientGym[c.id] ?? '') == _gym)
+                            c.id: c.trainerId ?? '',
+                      },
+                    );
+                    final trainerIds = byTrainer.keys.toList()
+                      ..sort((a, b) => (byTrainer[b]!.sums.values.fold(0, (x, y) => x + y))
+                          .compareTo(byTrainer[a]!.sums.values.fold(0, (x, y) => x + y)));
+                    String trainerName(String id) => id.isEmpty
+                        ? 'Trenersiz'
+                        : (staff.where((s) => s.id == id).firstOrNull?.name ?? "O'chirilgan trener");
                     final orders =
                         oSnap.data!.where((o) => _gym == null || o.gymId == _gym).toList();
                     final r = MonthlyReport.build(
@@ -163,10 +189,60 @@ class _FinanceScreenState extends State<FinanceScreen> {
                               : '${r.noCostOrders} ta buyurtmada tan narx yo\'q — '
                                   'foydaga qo\'shilmadi',
                         ),
+                        const SizedBox(height: AppSpace.xl),
+                        SectionHeader(
+                          'Trenerlar haqi',
+                          eyebrow: 'Abonement tushumidan ulush',
+                          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                            IconButton(
+                              onPressed: _pct > 0 ? () => _setPct(_pct - 5) : null,
+                              icon: const Icon(Icons.remove_circle_outline),
+                            ),
+                            Text('$_pct%', style: t.titleMedium),
+                            IconButton(
+                              onPressed: _pct < 100 ? () => _setPct(_pct + 5) : null,
+                              icon: const Icon(Icons.add_circle_outline),
+                            ),
+                          ]),
+                        ),
+                        if (trainerIds.isEmpty)
+                          Text("Shogird yo'q",
+                              style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
+                        for (final id in trainerIds)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                            child: BentoTile(
+                              padding: const EdgeInsets.all(AppSpace.md),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(trainerName(id), style: t.titleSmall),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          '${byTrainer[id]!.clients} shogird · '
+                                          '${byTrainer[id]!.subsCount} abonement · '
+                                          '${MonthlyReport.money(byTrainer[id]!.sums)}',
+                                          style:
+                                              t.bodySmall?.copyWith(color: AppColors.textMuted),
+                                        ),
+                                      ]),
+                                ),
+                                const SizedBox(width: AppSpace.sm),
+                                Pill(
+                                  text: MonthlyReport.money(byTrainer[id]!.share(_pct)),
+                                  color: AppColors.success,
+                                ),
+                              ]),
+                            ),
+                          ),
                         const SizedBox(height: AppSpace.lg),
                         Text(
                           "Abonement to'langan sanasi bo'yicha, do'kon — buyurtma berilgan "
-                          "sanasi bo'yicha hisoblanadi. Foyda tovarning hozirgi tan narxidan.",
+                          "sanasi bo'yicha hisoblanadi. Foyda tovarning hozirgi tan narxidan. "
+                          "Trener haqi — shogirdlari to'lagan abonementning tanlangan foizi; "
+                          'foiz shu qurilmada eslab qolinadi.',
                           style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                         ),
                       ],

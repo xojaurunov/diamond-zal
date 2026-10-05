@@ -6,6 +6,7 @@ import '../../theme.dart';
 import '../../widgets/food_image.dart';
 import '../../widgets/plan_photo.dart';
 import '../../widgets/ui.dart';
+import '../../widgets/watermark.dart';
 
 /// "Bugun" — bento setka: yirik ink bloki + kichik ko'rsatkich kataklari,
 /// so'ng ovqatlar ro'yxati. Har blok ochilishda pastdan suzib chiqadi.
@@ -22,7 +23,10 @@ class TodayScreen extends StatelessWidget {
         );
 
     return Scaffold(
-      body: SafeArea(
+      // Suv belgisi: reja skrinshot qilib tarqatilsa, kimniki ekani ko'rinib turadi
+      body: Watermark(
+        text: [user.name, if (user.phone.isNotEmpty) '+${user.phone}'].join(' · '),
+        child: SafeArea(
         child: user.planId == null
             ? page(const [SizedBox(height: AppSpace.xxl), _NoPlan()])
             : StreamBuilder<Plan?>(
@@ -123,6 +127,7 @@ class TodayScreen extends StatelessWidget {
                   );
                 },
               ),
+      ),
       ),
     );
   }

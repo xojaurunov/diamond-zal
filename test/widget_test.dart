@@ -1130,6 +1130,37 @@ void main() {
     });
   });
 
+  group('Trener haqi', () {
+    final oct = DateTime(2026, 10);
+    Subscription sub(int price, DateTime paid, [String cur = 'UZS']) =>
+        Subscription(startDate: paid, months: 1, price: price, currency: cur, paidDate: paid);
+
+    test('trenerlar bo-yicha yig-iladi, boshqa oy kirmaydi', () {
+      final r = MonthlyReport.byTrainer(oct, clientTrainer: {
+        'a': 't1', 'b': 't1', 'c': 't2', 'd': '',
+      }, subs: [
+        ('a', sub(300000, DateTime(2026, 10, 2))),
+        ('b', sub(200000, DateTime(2026, 10, 9))),
+        ('c', sub(50, DateTime(2026, 10, 3), 'USD')),
+        ('a', sub(300000, DateTime(2026, 9, 2))), // o'tgan oy
+        ('d', sub(100000, DateTime(2026, 10, 5))), // trenersiz
+      ]);
+      expect(r['t1']!.clients, 2);
+      expect(r['t1']!.subsCount, 2);
+      expect(r['t1']!.sums, {'UZS': 500000});
+      expect(r['t1']!.share(40), {'UZS': 200000});
+      expect(r['t2']!.share(50), {'USD': 25});
+      expect(r['']!.subsCount, 1);
+    });
+
+    test('abonement sotmagan trener ham ro-yxatda, ulushi bo-sh', () {
+      final r = MonthlyReport.byTrainer(oct, clientTrainer: {'a': 't1'});
+      expect(r['t1']!.clients, 1);
+      expect(r['t1']!.subsCount, 0);
+      expect(r['t1']!.share(40), isEmpty);
+    });
+  });
+
   group('Rang tanlash', () {
     test('nomda o-lcham va rang chiqadi', () {
       const o = ShopOrder(
