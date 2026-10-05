@@ -306,6 +306,8 @@ class _ProductAdminTile extends StatelessWidget {
               ),
               if (p.sizes.isNotEmpty)
                 Pill(text: p.sizes.join(' · '), color: AppColors.water),
+              if (p.colors.isNotEmpty)
+                Pill(text: p.colors.join(' · '), color: AppColors.protein),
               if (p.margin > 0)
                 Pill(text: 'Foyda: ${fmtSum(p.margin)}', color: AppColors.success),
               if (p.gallery.length > 1)
@@ -330,6 +332,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
       TextEditingController(text: p == null || p.costPrice == 0 ? '' : '${p.costPrice}');
   final image = TextEditingController(text: p?.gallery.join('\n'));
   final sizes = TextEditingController(text: p?.sizes.join(', '));
+  final colors = TextEditingController(text: p?.colors.join(', '));
   final sizeStockControllers = <String, TextEditingController>{};
   TextEditingController sizeStockCtrl(String sz) => sizeStockControllers.putIfAbsent(
       sz, () => TextEditingController(text: '${p?.sizeStock[sz] ?? 0}'));
@@ -458,6 +461,15 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             ),
           ),
           const SizedBox(height: AppSpace.md),
+          TextField(
+            controller: colors,
+            decoration: const InputDecoration(
+              labelText: 'Ranglar (ixtiyoriy)',
+              hintText: 'sariq, kulrang, yashil',
+              helperText: 'Vergul bilan. Yozilsa — shogird buyurtmada rangni tanlaydi',
+            ),
+          ),
+          const SizedBox(height: AppSpace.md),
           if (sizes.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).isEmpty)
             TextField(
               controller: stock,
@@ -537,6 +549,12 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
       image: urls.isEmpty ? '' : urls.first,
       images: urls.length > 1 ? urls.sublist(1) : const [],
       sizes: sizeList,
+      colors: colors.text
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .map((e) => e.length > 30 ? e.substring(0, 30) : e)
+          .toList(),
       price: n(price),
       currency: currency,
       stock: n(stock),

@@ -1075,6 +1075,27 @@ void main() {
     });
   });
 
+  group('Rang tanlash', () {
+    test('nomda o-lcham va rang chiqadi', () {
+      const o = ShopOrder(
+          clientId: 'c', productId: 'p', productName: 'Venum', price: 1, size: 'XL', color: 'sariq');
+      expect(o.title, 'Venum (XL, sariq)');
+    });
+    test('faqat rang', () {
+      const o = ShopOrder(clientId: 'c', productId: 'p', productName: 'Shaker', price: 1, color: 'qora');
+      expect(o.title, 'Shaker (qora)');
+    });
+    test('rangsiz va o-lchamsiz nom o-zgarmaydi', () {
+      const o = ShopOrder(clientId: 'c', productId: 'p', productName: 'Protein', price: 1);
+      expect(o.title, 'Protein');
+    });
+    test('tovar ranglari saqlanadi', () {
+      const p = Product(category: 'Forma', name: 'X', colors: ['sariq', 'yashil']);
+      expect(p.toMap()['colors'], ['sariq', 'yashil']);
+      expect(p.copyWith(stock: 2).colors, ['sariq', 'yashil']);
+    });
+  });
+
   group('Barmen - o-z zali', () {
     test('trener katalogi zal ko-zgusini yozadi', () {
       const t = TrainerInfo('t1', 'Ali', gymId: 'zal1');

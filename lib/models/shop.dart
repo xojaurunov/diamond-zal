@@ -68,6 +68,10 @@ class Product {
   /// Mavjud o'lchamlar: XL, XXL, 3XL … Bo'sh bo'lsa o'lcham so'ralmaydi.
   final List<String> sizes;
 
+  /// Mavjud ranglar: sariq, kulrang … Bo'sh bo'lsa rang so'ralmaydi.
+  /// Qoldiq rang bo'yicha yuritilmaydi — faqat o'lcham bo'yicha.
+  final List<String> colors;
+
   /// Narx — butun son, [currency] valyutasida
   final int price;
 
@@ -96,6 +100,7 @@ class Product {
     this.image = '',
     this.images = const [],
     this.sizes = const [],
+    this.colors = const [],
     this.price = 0,
     this.currency = uzs,
     this.stock = 0,
@@ -140,6 +145,7 @@ class Product {
       image: (d['image'] ?? '') as String,
       images: List<String>.from(d['images'] ?? const []),
       sizes: List<String>.from(d['sizes'] ?? const []),
+      colors: List<String>.from(d['colors'] ?? const []),
       price: ((d['price'] ?? 0) as num).toInt(),
       currency: (d['currency'] ?? uzs) as String,
       stock: ((d['stock'] ?? 0) as num).toInt(),
@@ -159,6 +165,7 @@ class Product {
         'image': image,
         'images': images,
         'sizes': sizes,
+        'colors': colors,
         'price': price,
         'currency': currency,
         'stock': totalStock,
@@ -175,6 +182,7 @@ class Product {
         image: image,
         images: images,
         sizes: sizes,
+        colors: colors,
         price: price,
         currency: currency,
         stock: stock ?? this.stock,
@@ -204,6 +212,9 @@ class ShopOrder {
 
   /// Tanlangan o'lcham (bo'sh — tovarda o'lcham yo'q)
   final String size;
+
+  /// Tanlangan rang (bo'sh — tovarda rang yo'q)
+  final String color;
   final int price, qty;
 
   /// Narx valyutasi (buyurtma berilgan paytdagi)
@@ -226,6 +237,7 @@ class ShopOrder {
     required this.productName,
     this.category = '',
     this.size = '',
+    this.color = '',
     required this.price,
     this.currency = uzs,
     this.qty = 1,
@@ -249,8 +261,11 @@ class ShopOrder {
         _ => 'Kutilmoqda',
       };
 
-  /// Nomi o'lchami bilan: "Venum komplekt (XL)"
-  String get title => size.isEmpty ? productName : '$productName ($size)';
+  /// Nomi o'lchami va rangi bilan: "Venum komplekt (XL, sariq)"
+  String get title {
+    final extra = [size, color].where((e) => e.isNotEmpty).join(', ');
+    return extra.isEmpty ? productName : '$productName ($extra)';
+  }
 
   /// Chatga yoziladigan matn — trener xabarnoma sifatida ko'radi
   String get chatText => '🛒 Buyurtma: $title × $qty — $totalText';
@@ -268,6 +283,7 @@ class ShopOrder {
       productName: (d['productName'] ?? '') as String,
       category: (d['category'] ?? '') as String,
       size: (d['size'] ?? '') as String,
+      color: (d['color'] ?? '') as String,
       price: ((d['price'] ?? 0) as num).toInt(),
       currency: (d['currency'] ?? uzs) as String,
       qty: ((d['qty'] ?? 1) as num).toInt(),

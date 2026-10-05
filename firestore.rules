@@ -204,9 +204,10 @@ service cloud.firestore {
         let d = request.resource.data;
         let product = get(/databases/$(database)/documents/shop/$(d.productId)).data;
         return d.keys().hasOnly(['clientId', 'clientName', 'clientPhone', 'trainerId', 'gymId',
-              'productId', 'productName', 'category', 'size', 'price', 'currency', 'qty',
+              'productId', 'productName', 'category', 'size', 'color', 'price', 'currency', 'qty',
               'status', 'createdAt'])
           && d.get('size', '') is string && d.get('size', '').size() <= 20
+          && d.get('color', '') is string && d.get('color', '').size() <= 30
           // valyuta tovardagi bilan bir xil bo'lishi shart
           && d.get('currency', 'UZS') == product.get('currency', 'UZS')
           && d.clientId == request.auth.uid

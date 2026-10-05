@@ -412,7 +412,7 @@ class Db {
   /// Shogird buyurtma beradi. Yozuv bilan birga chatga xabar ketadi —
   /// trener buyurtmani bildirishnoma sifatida ham ko'radi.
   static Future<void> createOrder(AppUser client, Product p, int qty,
-      {String size = ''}) async {
+      {String size = '', String color = ''}) async {
     final trainerId = client.trainerId ?? '';
     // zal trener katalogidan (shogird trenerning `users` hujjatini o'qiy olmaydi)
     final gymId = trainerId.isEmpty
@@ -429,6 +429,7 @@ class Db {
       productName: p.name,
       category: p.category,
       size: size,
+      color: color,
       price: p.price,
       currency: p.currency,
       qty: qty,
@@ -443,6 +444,7 @@ class Db {
       'productName': o.productName,
       'category': o.category,
       if (o.size.isNotEmpty) 'size': o.size,
+      if (o.color.isNotEmpty) 'color': o.color,
       'price': o.price,
       'currency': o.currency,
       'qty': o.qty,

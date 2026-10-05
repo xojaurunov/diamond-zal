@@ -299,6 +299,10 @@ await check('oz trenerinikidan boshqasiga yozib bolmaydi', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ trainerId: TRAINER3 }))));
 await check('darhol "berildi" qilib yarata OLMAYDI', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ status: 'given' }))));
+await check('shogird rang bilan buyurtma beradi', () =>
+  assertSucceeds(addDoc(collection(as(USER), 'orders'), order({ color: 'sariq' }))));
+await check('30 belgidan uzun rang OTMAYDI', () =>
+  assertFails(addDoc(collection(as(USER), 'orders'), order({ color: 'x'.repeat(31) }))));
 await check('shogird buyurtmaga soxta zal yoza OLMAYDI', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ gymId: 'zalX' }))));
 await check('0 dona buyurtma OTMAYDI', () =>

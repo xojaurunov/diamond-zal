@@ -30,6 +30,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Future<void> _order(Product p) async {
     var qty = 1;
     String? size = p.sizes.length == 1 ? p.sizes.first : null;
+    String? color = p.colors.length == 1 ? p.colors.first : null;
     final ok = await showSheet<bool>(
       context,
       StatefulBuilder(
@@ -93,6 +94,26 @@ class _ShopScreenState extends State<ShopScreen> {
                 ]),
               ),
             ],
+            if (p.colors.isNotEmpty) ...[
+              const SizedBox(height: AppSpace.lg),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Rangni tanlang',
+                    style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
+              ),
+              const SizedBox(height: AppSpace.sm),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+                  for (final c in p.colors)
+                    ChoiceChip(
+                      selected: color == c,
+                      onSelected: (_) => setS(() => color = c),
+                      label: Text(c),
+                    ),
+                ]),
+              ),
+            ],
             const SizedBox(height: AppSpace.lg),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               IconButton.filledTonal(
@@ -120,14 +141,18 @@ class _ShopScreenState extends State<ShopScreen> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: (p.sizes.isNotEmpty && size == null) || avail <= 0
+                onPressed: (p.sizes.isNotEmpty && size == null) ||
+                        (p.colors.isNotEmpty && color == null) ||
+                        avail <= 0
                     ? null
                     : () => Navigator.pop(ctx, true),
                 child: Text(p.sizes.isNotEmpty && size == null
                     ? "Avval o'lchamni tanlang"
-                    : avail <= 0
-                        ? 'Tugagan'
-                        : 'Buyurtma berish'),
+                    : p.colors.isNotEmpty && color == null
+                        ? 'Avval rangni tanlang'
+                        : avail <= 0
+                            ? 'Tugagan'
+                            : 'Buyurtma berish'),
               ),
             ),
             const SizedBox(height: AppSpace.sm),
@@ -144,7 +169,7 @@ class _ShopScreenState extends State<ShopScreen> {
     );
     if (ok != true || !mounted) return;
     try {
-      await Db.createOrder(widget.user, p, qty, size: size ?? '');
+      await Db.createOrder(widget.user, p, qty, size: size ?? '', color: color ?? '');
       if (mounted) showSnack(context, 'Buyurtma yuborildi — trener xabardor bo\'ldi');
     } catch (e) {
       if (mounted) showSnack(context, "Bo'lmadi: $e");
