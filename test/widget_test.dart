@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kotta_qani_diet/models/feed.dart';
+import 'package:kotta_qani_diet/models/finance.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/hudud.dart';
 import 'package:kotta_qani_diet/models/models.dart';
@@ -1072,6 +1073,60 @@ void main() {
       final byDay = ReminderReport.byDay(const [], days: 3, now: DateTime(2026, 10, 4));
       expect(byDay.values.every((v) => v == 0), isTrue);
       expect(byDay.length, 3);
+    });
+  });
+
+  group('Oylik hisobot', () {
+    final oct = DateTime(2026, 10);
+    ShopOrder given(String pid, int price, int qty, DateTime at, [String cur = 'UZS']) => ShopOrder(
+        clientId: 'c', productId: pid, productName: pid, price: price, qty: qty,
+        currency: cur, status: orderGiven, givenAt: at);
+
+    test('oy chegarasi: 31-kun 23:59 kiradi, keyingi oyning 1-kuni kirmaydi', () {
+      expect(MonthlyReport.inMonth(DateTime(2026, 10, 31, 23, 59), oct), isTrue);
+      expect(MonthlyReport.inMonth(DateTime(2026, 11, 1), oct), isFalse);
+      expect(MonthlyReport.inMonth(DateTime(2026, 10, 1), oct), isTrue);
+      expect(MonthlyReport.inMonth(DateTime(2026, 9, 30, 23, 59), oct), isFalse);
+    });
+
+    test('bo-sh oy', () {
+      final r = MonthlyReport.build(oct);
+      expect(r.subsCount, 0);
+      expect(r.ordersCount, 0);
+      expect(MonthlyReport.money(r.income), fmtMoney(0));
+    });
+
+    test('abonement to-langan sanasi bo-yicha', () {
+      final r = MonthlyReport.build(oct, subs: [
+        Subscription(startDate: DateTime(2026, 9, 20), months: 1, price: 300000,
+            paidDate: DateTime(2026, 10, 2)),
+        Subscription(startDate: DateTime(2026, 10, 5), months: 3, price: 800000,
+            paidDate: DateTime(2026, 9, 30)),
+      ]);
+      expect(r.subsCount, 1);
+      expect(r.subsSums['UZS'], 300000);
+    });
+
+    test('aralash valyuta, foyda va tan narxsiz buyurtma', () {
+      final products = {
+        'prot': const Product(id: 'prot', category: 'Protein', name: 'P', price: 115, costPrice: 100),
+        'venum': const Product(id: 'venum', category: 'Forma', name: 'V', price: 40, costPrice: 35, currency: 'USD'),
+        'eski': const Product(id: 'eski', category: 'Forma', name: 'E', price: 10),
+      };
+      final r = MonthlyReport.build(oct, products: products, orders: [
+        given('prot', 115, 2, DateTime(2026, 10, 3)),
+        given('venum', 40, 1, DateTime(2026, 10, 4), 'USD'),
+        given('eski', 10, 1, DateTime(2026, 10, 5)),
+        given('prot', 115, 1, DateTime(2026, 11, 1)), // keyingi oy
+        const ShopOrder(clientId: 'c', productId: 'prot', productName: 'P', price: 115), // berilmagan
+      ], subs: [
+        Subscription(startDate: DateTime(2026, 10, 1), months: 1, price: 300, paidDate: DateTime(2026, 10, 1)),
+      ]);
+      expect(r.ordersCount, 3);
+      expect(r.shopSums, {'UZS': 240, 'USD': 40});
+      expect(r.profit, {'UZS': 30, 'USD': 5});
+      expect(r.noCostOrders, 1);
+      expect(r.income, {'UZS': 540, 'USD': 40});
     });
   });
 

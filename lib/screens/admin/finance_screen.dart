@@ -1,0 +1,222 @@
+import 'package:flutter/material.dart';
+import '../../models/finance.dart';
+import '../../models/models.dart';
+import '../../models/shop.dart';
+import '../../models/subscription.dart';
+import '../../services/db.dart';
+import '../../theme.dart';
+import '../../widgets/ui.dart';
+
+const _oylar = [
+  'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+  'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr',
+];
+
+/// Oylik moliyaviy hisobot — faqat bosh admin: abonement va do'kon tushumi, do'kon foydasi,
+/// zal bo'yicha ajratib.
+class FinanceScreen extends StatefulWidget {
+  const FinanceScreen({super.key});
+
+  @override
+  State<FinanceScreen> createState() => _FinanceScreenState();
+}
+
+class _FinanceScreenState extends State<FinanceScreen> {
+  var _month = DateTime(DateTime.now().year, DateTime.now().month);
+
+  /// null — hamma zallar, '' — zalsiz (treneri yo'q yoki trener zalsiz)
+  String? _gym;
+
+  late final _subs = Db.allSubscriptions();
+  late final _orders = Db.allOrders();
+  late final _products = Db.products();
+  late final _clients = Db.clients();
+  late final _staff = Db.staff();
+  late final _gyms = Db.gyms();
+
+  void _shift(int d) => setState(() => _month = DateTime(_month.year, _month.month + d));
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    final now = DateTime.now();
+    final isCurrent = _month.year == now.year && _month.month == now.month;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Oylik hisobot')),
+      body: StreamBuilder<List<(String, Subscription)>>(
+        stream: _subs,
+        builder: (context, sSnap) => StreamBuilder<List<ShopOrder>>(
+          stream: _orders,
+          builder: (context, oSnap) => StreamBuilder<List<Product>>(
+            stream: _products,
+            builder: (context, pSnap) => StreamBuilder<List<AppUser>>(
+              stream: _clients,
+              builder: (context, cSnap) => StreamBuilder<List<AppUser>>(
+                stream: _staff,
+                builder: (context, stSnap) => StreamBuilder<List<Gym>>(
+                  stream: _gyms,
+                  builder: (context, gSnap) {
+                    final err = sSnap.error ?? oSnap.error ?? pSnap.error;
+                    if (err != null) {
+                      return EmptyState(
+                        icon: Icons.error_outline,
+                        title: "Ma'lumot olinmadi",
+                        subtitle: '$err',
+                      );
+                    }
+                    if (!sSnap.hasData || !oSnap.hasData || !pSnap.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final gyms = gSnap.data ?? const <Gym>[];
+                    // shogird -> treneri -> zali
+                    final trainerGym = {
+                      for (final s in stSnap.data ?? const <AppUser>[]) s.id: s.gymId ?? ''
+                    };
+                    final clientGym = {
+                      for (final c in cSnap.data ?? const <AppUser>[])
+                        c.id: trainerGym[c.trainerId] ?? ''
+                    };
+                    final subs = sSnap.data!
+                        .where((e) => _gym == null || (clientGym[e.$1] ?? '') == _gym)
+                        .map((e) => e.$2)
+                        .toList();
+                    final orders =
+                        oSnap.data!.where((o) => _gym == null || o.gymId == _gym).toList();
+                    final r = MonthlyReport.build(
+                      _month,
+                      subs: subs,
+                      orders: orders,
+                      products: {for (final p in pSnap.data!) p.id: p},
+                    );
+
+                    return ListView(
+                      padding: const EdgeInsets.fromLTRB(
+                          AppSpace.lg, AppSpace.md, AppSpace.lg, AppSpace.xxl),
+                      children: [
+                        Row(children: [
+                          IconButton(
+                            onPressed: () => _shift(-1),
+                            icon: const Icon(Icons.chevron_left),
+                          ),
+                          Expanded(
+                            child: Text('${_oylar[_month.month - 1]} ${_month.year}',
+                                textAlign: TextAlign.center, style: t.titleLarge),
+                          ),
+                          IconButton(
+                            onPressed: isCurrent ? null : () => _shift(1),
+                            icon: const Icon(Icons.chevron_right),
+                          ),
+                        ]),
+                        if (gyms.isNotEmpty) ...[
+                          const SizedBox(height: AppSpace.sm),
+                          Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+                            ChoiceChip(
+                              label: const Text('Hamma zallar'),
+                              selected: _gym == null,
+                              onSelected: (_) => setState(() => _gym = null),
+                            ),
+                            for (final g in gyms)
+                              ChoiceChip(
+                                label: Text(g.name),
+                                selected: _gym == g.id,
+                                onSelected: (_) => setState(() => _gym = g.id),
+                              ),
+                            ChoiceChip(
+                              label: const Text('Zalsiz'),
+                              selected: _gym == '',
+                              onSelected: (_) => setState(() => _gym = ''),
+                            ),
+                          ]),
+                        ],
+                        const SizedBox(height: AppSpace.lg),
+                        _Card(
+                          icon: Icons.account_balance_wallet_outlined,
+                          color: AppColors.accent,
+                          title: 'Jami tushum',
+                          value: MonthlyReport.money(r.income),
+                          feature: true,
+                        ),
+                        const SizedBox(height: AppSpace.md),
+                        _Card(
+                          icon: Icons.card_membership_outlined,
+                          color: AppColors.water,
+                          title: 'Abonement',
+                          value: MonthlyReport.money(r.subsSums),
+                          subtitle: '${r.subsCount} ta abonement sotildi',
+                        ),
+                        const SizedBox(height: AppSpace.md),
+                        _Card(
+                          icon: Icons.storefront_outlined,
+                          color: AppColors.protein,
+                          title: "Do'kon tushumi",
+                          value: MonthlyReport.money(r.shopSums),
+                          subtitle: '${r.ordersCount} ta buyurtma berildi',
+                        ),
+                        const SizedBox(height: AppSpace.md),
+                        _Card(
+                          icon: Icons.trending_up,
+                          color: AppColors.success,
+                          title: "Do'kon foydasi",
+                          value: MonthlyReport.money(r.profit),
+                          subtitle: r.noCostOrders == 0
+                              ? 'Sotilgan narx − tan narx'
+                              : '${r.noCostOrders} ta buyurtmada tan narx yo\'q — '
+                                  'foydaga qo\'shilmadi',
+                        ),
+                        const SizedBox(height: AppSpace.lg),
+                        Text(
+                          "Abonement to'langan sanasi bo'yicha, do'kon — buyurtma berilgan "
+                          "sanasi bo'yicha hisoblanadi. Foyda tovarning hozirgi tan narxidan.",
+                          style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String title, value;
+  final String? subtitle;
+  final bool feature;
+  const _Card({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.value,
+    this.subtitle,
+    this.feature = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return BentoTile(
+      feature: feature,
+      child: Row(children: [
+        IconBadge(icon, color: color, size: 40),
+        const SizedBox(width: AppSpace.md),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
+            const SizedBox(height: 2),
+            Text(value, style: t.titleLarge),
+            if (subtitle != null) ...[
+              const SizedBox(height: 2),
+              Text(subtitle!, style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+            ],
+          ]),
+        ),
+      ]),
+    );
+  }
+}

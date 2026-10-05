@@ -549,6 +549,13 @@ class Db {
       .snapshots()
       .map((s) => s.docs.map(Subscription.fromDoc).toList());
 
+  /// Hamma shogirdlarning abonementlari (shogird uid bilan) — faqat bosh admin, oylik hisobot uchun.
+  /// Qoidalar trener va barmenga bu so'rovni bermaydi.
+  static Stream<List<(String, Subscription)>> allSubscriptions() =>
+      _fs.collectionGroup('subscriptions').snapshots().map((s) => s.docs
+          .map((d) => (d.reference.parent.parent?.id ?? '', Subscription.fromDoc(d)))
+          .toList());
+
   /// Abonement qo'shish — yozuv va profildagi tugash sanasi BITTA batch'da (`addWeight` kabi).
   static Future<void> addSubscription(String uid, Subscription s) async {
     final user = _fs.collection('users').doc(uid);

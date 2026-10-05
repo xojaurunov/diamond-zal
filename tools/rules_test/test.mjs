@@ -6,7 +6,7 @@ import {
   assertSucceeds,
 } from '@firebase/rules-unit-testing';
 import {
-  doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, query, where,
+  doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, collectionGroup, query, where,
   writeBatch, serverTimestamp,
 } from 'firebase/firestore';
 
@@ -554,6 +554,20 @@ await check('barmen reja yoza OLMAYDI', () =>
   assertFails(setDoc(doc(as(BARMEN), 'plans', 'pb1'), { title: 'X', meals: [] })));
 await check('barmen zal qosha OLMAYDI', () =>
   assertFails(setDoc(doc(as(BARMEN), 'gyms', 'zalb'), { name: 'Yangi' })));
+
+console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'users', USER, 'subscriptions', 'sh1'),
+    { startDate: new Date(), months: 1, price: 300000, currency: 'UZS', paidDate: new Date() });
+});
+await check('bosh admin hamma abonementlarni bir sorovda oqiydi', () =>
+  assertSucceeds(getDocs(collectionGroup(as(OWNER), 'subscriptions'))));
+await check('trener hamma abonementlarni oqiy OLMAYDI', () =>
+  assertFails(getDocs(collectionGroup(as(TRAINER), 'subscriptions'))));
+await check('barmen hamma abonementlarni oqiy OLMAYDI', () =>
+  assertFails(getDocs(collectionGroup(as(BARMEN), 'subscriptions'))));
+await check('shogird hamma abonementlarni oqiy OLMAYDI', () =>
+  assertFails(getDocs(collectionGroup(as(USER), 'subscriptions'))));
 
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();

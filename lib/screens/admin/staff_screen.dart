@@ -6,6 +6,7 @@ import '../../theme.dart';
 import '../../widgets/ui.dart';
 import 'clients_screen.dart';
 import 'sales_report_screen.dart';
+import 'finance_screen.dart';
 import 'trainer_stats_screen.dart';
 
 /// "Xodimlar" — faqat bosh admin (zal egasi) uchun.
@@ -203,6 +204,31 @@ class _StaffScreenState extends State<StaffScreen> {
                             const SizedBox(height: 2),
                             Text(
                               'Kim nechta sotdi, qaysi tovar, qancha pul',
+                              style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
+                            ),
+                          ]),
+                        ),
+                        Icon(Icons.chevron_right, size: 20, color: AppColors.textFaint),
+                      ]),
+                    ),
+                    const SizedBox(height: AppSpace.md),
+                    BentoTile(
+                      padding: const EdgeInsets.all(AppSpace.md),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const FinanceScreen()),
+                      ),
+                      child: Row(children: [
+                        IconBadge(Icons.account_balance_wallet_outlined,
+                            color: AppColors.accent, size: 38),
+                        const SizedBox(width: AppSpace.md),
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text('Oylik hisobot',
+                                style: Theme.of(context).textTheme.titleMedium),
+                            const SizedBox(height: 2),
+                            Text(
+                              "Abonement va do'kon tushumi, foyda — oy va zal bo'yicha",
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                             ),
                           ]),

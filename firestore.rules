@@ -121,6 +121,12 @@ service cloud.firestore {
 
     // Trenerlar katalogi: hamma kirganlar o'qiydi (shogird trener tanlaydi).
     // Yozuvni trenerning O'ZI boshqaradi; bosh admin faqat qo'shadi/o'chiradi (rol o'zgarganda).
+    // Oylik moliyaviy hisobot: hamma abonementlarni bitta so'rovda (collectionGroup)
+    // faqat bosh admin o'qiydi
+    match /{path=**}/subscriptions/{id} {
+      allow read: if isOwner();
+    }
+
     match /trainers/{tid} {
       function validEntry() {
         return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId'])
