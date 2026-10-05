@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-04**
+> Oxirgi yangilanish: **2026-10-05**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,7 +11,13 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (4-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (5-oktabr holati)
+
+**5-oktabr:** 4-oktabr ishlari **haqiqiy Firebase'ga joylandi** — qoidalar, web (`/ilova/`) va
+yangi APK (25,3 MB, `CN=Diamond Zal`). Do'kondagi **hamma 115 tovarga 15% ustama** qo'yildi
+(tan narx `costPrice` da saqlandi). **Birinchi haftalik zaxira** olindi:
+`zaxira/2026-10-05_bazaning-zaxirasi.json`. Haqiqiy qoldiqlar hali kiritilmagan
+(foydalanuvchi: keyinroq). Batafsil — **66-band**.
 
 **4-oktabr:** 13-bo'limdagi tavsiyalardan 5 tasi qilindi — **abonement + davomat + haftalik
 eslatma jurnali, do'kon narxiga ustama, o'lcham bo'yicha qoldiq, QR ro'yxat kodi, haftalik
@@ -23,24 +29,17 @@ uchun `narx_ustama.mjs`/`zaxira.mjs` skriptlari va APK/web joylash haqiqiy bazag
 tekshirilmagan. Qolgan 13-bo'lim band: narxga ustamani haqiqiy do'konga qo'llash, haftalik
 zaxirani birinchi marta olish, deploy.
 
-> ⚠️ **Commit `62dd0a2` faqat shu kompyuterda — GitHub'ga hali push qilinmagan**
-> (foydalanuvchi so'rovi: ertaga boshqa joydan davom ettiriladi). **Boshqa kompyuterda
-> ishni davom ettirishdan oldin birinchi navbatda shu kompyuterdan `git push` qiling**
-> — aks holda bugungi 61–65-band (abonement, davomat, do'kon ustamasi, o'lcham bo'yicha
-> qoldiq, QR, zaxira) boshqa joyda ko'rinmaydi. Tekshirish: `git log origin/main..HEAD`
-> bo'sh bo'lmasa — hali push qilinmagan.
-
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
-**Hammasi lokal tekshirilgan, joylash kutilmoqda** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
+**Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
 `flutter test` **100/100**, qoida testlari **164/164**.
 
-Oxirgi APK: **24-sentabr 18:00, 25,2 MB** (do'kon to'liq, yangi ikonka bilan) —
+Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
 Fayl: `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk` (asosiy),
 `app-armeabi-v7a-release.apk` (eski telefon). Yuklab olish:
 <https://kotta-qani-09111753.web.app> → `app/kq.bin`.
-Qoidalar **24-sent** qayta joylandi (zallar + barmen + valyuta tekshiruvi).
+Qoidalar **5-okt** qayta joylandi (abonement, davomat, eslatmalar jurnali qo'shilgan).
 **Loyiha git'da** (52-band) — kod o'chsa `git checkout -- <fayl>` bilan qaytariladi.
 
 **Hujjatlar:** `hujjatlar\Diamond-TZ.docx` — texnik topshiriq va reja (Word);
@@ -1326,6 +1325,25 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       faqat `node --check` bilan sintaksis tekshirildi. Zal egasi birinchi marta qo'lda
       ishga tushirib ko'rishi kerak.
 
+66. **Joylash, ustama va birinchi zaxira (5-okt)** — foydalanuvchi ro'yxatdan 1, 2, 3 va
+    5-ishni tanladi; 5-ish (haqiqiy qoldiq) "hozircha tursin, keyin qilamiz" deb qoldirildi.
+    - **Zaxira (birinchi):** `node tools/zaxira/zaxira.mjs` →
+      `zaxira/2026-10-05_bazaning-zaxirasi.json` (202 KB): users 9, trainers 3, gyms 1, foods 20,
+      plans 3, shop 115, orders 0, reminders 0 + har foydalanuvchining subcollectionlari.
+      Ustamadan **oldin** olindi — eski narxlar shu faylda saqlangan.
+    - **Ustama:** `node tools/dokon/narx_ustama.mjs 15` — 115 tovar, 0 xato. Foydalanuvchi
+      "yaxlitlamaslik"ni tanladi; so'm narxlari butun son bo'lib chiqdi (masalan 280 000 →
+      322 000), dollar narxlari skript ichida butun dollarga yaxlitlanadi (35 $ → 40 $,
+      30 $ → 35 $, 23 $ → 26 $). Ustamani qayta ishga tushirish ikki marta qo'shmaydi.
+    - **Tekshiruv:** `flutter analyze` 0 xato, `flutter test` 100/100, qoida testlari 164/164.
+    - **Joylash:** web `--base-href /ilova/` bilan PowerShell'da yig'ildi (Git Bash `/ilova/`
+      yo'lini Windows yo'liga aylantirib buzadi — web'ni Bash'da yig'mang);
+      `public/ilova/` ga ko'chirildi. APK `--split-per-abi`, imzo `CN=Diamond Zal` tekshirildi.
+      `deploy.ps1` — qoidalar + hosting. Saytdagi `kq.bin` (25 333 852 bayt) va
+      `ilova/main.dart.js` (3 630 141 bayt) lokal fayllar bilan aynan bir xil.
+    - Eslatma: telefondagi ilovani yangilash uchun saytdan yangi APK'ni yuklab, ustiga
+      o'rnatish kerak; web'da `Ctrl+Shift+R`.
+
 ---
 
 ## 13. Tavsiyalar — nimani keyingi navbatda qilish kerak (2-oktabr)
@@ -1344,10 +1362,9 @@ kirmasa ham) yuborish yo'q — hozir faqat trener/bosh admin "Eslatma yubor" bos
 
 ### 13.2. ~~Do'kon narxlari foyda bermasdi~~ — HAL BO'LDI (4-okt, 62–63-band)
 
-`costPrice`/`margin` va bir martalik ustama skripti (`narx_ustama.mjs`) qilindi — **lekin
-hali haqiqiy do'konga qo'llanmagan** (`.env` yo'qligi uchun sinalmagan, faqat UI va sintaksis
-tekshirildi). Qoldiq endi o'lcham bo'yicha (`Product.sizeStock`) — "XL 2 ta, 4XL yo'q" ishlaydi.
-**Qolgani:** zal egasi `NARX_USTAMA.bat` ni ishga tushirib haqiqiy foiz tanlashi va har
+`costPrice`/`margin` va bir martalik ustama skripti (`narx_ustama.mjs`) qilindi va
+**5-oktabrda haqiqiy do'konga qo'llandi: +15%**, 115 tovar, xato yo'q (66-band). Qoldiq endi o'lcham bo'yicha (`Product.sizeStock`) — "XL 2 ta, 4XL yo'q" ishlaydi.
+**Qolgani:** har
 tovarning haqiqiy qoldiq sonini `shop_admin_screen.dart` orqali kiritishi kerak (hozir
 taxminiy raqamlar turibdi).
 
@@ -1360,8 +1377,8 @@ taxminiy raqamlar turibdi).
   o'zi hujjatlardan olib tashlandi, lekin **Firebase'da hali o'sha parol turadi**.
   Zal egasi `Xodimlar` bo'limidan almashtirsin. Haqiqiy qiymat `PAROLLAR.md` da.
 - ~~**Bazaning zaxirasi yo'q.**~~ — **Skript tayyor (4-okt, 65-band)**, `ZAXIRA.bat`.
-  **Hali bir marta ham haqiqiy bazaga qarshi ishga tushirilmagan** (`.env` yo'q edi) —
-  zal egasi birinchi marta qo'lda ishga tushirsin, keyin haftada bir marta takrorlasin.
+  **Birinchi zaxira 5-oktabrda olindi** (`zaxira/2026-10-05_bazaning-zaxirasi.json`, 202 KB).
+  Keyin haftada bir marta `ZAXIRA.bat` ni takrorlash kerak.
 
 ### 13.4. ~~Foydalanuvchi kam~~ — QR TAYYOR (4-okt, 64-band), qolgani ochiq
 
