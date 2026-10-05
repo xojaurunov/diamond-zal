@@ -137,13 +137,22 @@ class Db {
     final staff = await _fs.collection('users').where('gymId', isEqualTo: id).get();
     for (final d in staff.docs) {
       await d.reference.update({'gymId': null});
+      await _mirrorTrainerGym(d.id, null);
     }
     await _fs.collection('gyms').doc(id).delete();
   }
 
   /// Trenerni zalga biriktirish (null — zaldan chiqarish). Faqat bosh admin.
-  static Future<void> setUserGym(String uid, String? gymId) =>
-      _fs.collection('users').doc(uid).update({'gymId': gymId});
+  static Future<void> setUserGym(String uid, String? gymId) async {
+    await _fs.collection('users').doc(uid).update({'gymId': gymId});
+    await _mirrorTrainerGym(uid, gymId);
+  }
+
+  /// Trener katalogidagi zal ko'zgusini yangilaydi (trener bo'lmasa — yozuv yo'q, tegilmaydi)
+  static Future<void> _mirrorTrainerGym(String uid, String? gymId) async {
+    final ref = _fs.collection('trainers').doc(uid);
+    if ((await ref.get()).exists) await ref.update({'gymId': gymId ?? ''});
+  }
 
   /// Yangi trener akkaunti — bosh admin yaratadi.
   ///
@@ -212,14 +221,22 @@ class Db {
       .snapshots()
       .map((d) => d.exists ? TrainerInfo.fromDoc(d) : null);
 
-  static Future<void> saveTrainerProfile(TrainerInfo t) =>
-      _fs.collection('trainers').doc(t.id).set(t.toMap());
+  /// Zal har doim trenerning o'z hujjatidan olinadi — bosh admin zalni almashtirgan
+  /// bo'lsa ham eski qiymat yozilib qolmaydi.
+  static Future<void> saveTrainerProfile(TrainerInfo t) async {
+    final gymId = await _gymOf(t.id);
+    await _fs.collection('trainers').doc(t.id).set(
+        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap());
+  }
+
+  static Future<String> _gymOf(String uid) async =>
+      ((await _fs.collection('users').doc(uid).get()).data()?['gymId'] ?? '') as String;
 
   /// Yangi trener uchun katalog yozuvi (bor bo'lsa — trener sozlamalariga tegilmaydi)
   static Future<void> _ensureTrainerEntry(String uid, String name) async {
     final ref = _fs.collection('trainers').doc(uid);
     if (!(await ref.get()).exists) {
-      await ref.set(TrainerInfo(uid, name).toMap());
+      await ref.set(TrainerInfo(uid, name, gymId: await _gymOf(uid)).toMap());
     }
   }
 
@@ -259,11 +276,16 @@ class Db {
     final trainersNow = await trainers().first;
     final dir = await _fs.collection('trainers').get();
     for (final t in trainersNow) {
-      if (!dir.docs.any((d) => d.id == t.id)) {
+      final gymId = t.gymId ?? '';
+      final entry = dir.docs.where((d) => d.id == t.id).firstOrNull;
+      if (entry == null) {
         await _fs
             .collection('trainers')
             .doc(t.id)
-            .set(TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name).toMap());
+            .set(TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap());
+      } else if ((entry.data()['gymId'] ?? '') != gymId) {
+        // zal ko'zgusi eskirgan (yoki eski yozuvda yo'q) — to'g'rilanadi
+        await entry.reference.update({'gymId': gymId});
       }
     }
     for (final d in dir.docs) {
@@ -365,20 +387,44 @@ class Db {
       .snapshots()
       .map(_sortedOrders);
 
-  /// Hamma buyurtmalar — bosh admin va barmen uchun
-  /// (qoidalar trenerga bu so'rovni bermaydi)
+  /// Hamma buyurtmalar — faqat bosh admin uchun
+  /// (qoidalar trener va barmenga bu so'rovni bermaydi)
   static Stream<List<ShopOrder>> allOrders() =>
       _fs.collection('orders').snapshots().map(_sortedOrders);
+
+  /// Barmen: faqat o'z zalining buyurtmalari. Zalga biriktirilmagan barmen hech narsa ko'rmaydi.
+  static Stream<List<ShopOrder>> gymOrders(String? gymId) => (gymId ?? '').isEmpty
+      ? Stream.value(const <ShopOrder>[])
+      : _fs
+          .collection('orders')
+          .where('gymId', isEqualTo: gymId)
+          .snapshots()
+          .map(_sortedOrders);
+
+  /// Kim qaysi buyurtmalarni ko'radi: bosh admin — hammasi, barmen — o'z zali,
+  /// trener — o'z shogirdlariniki
+  static Stream<List<ShopOrder>> ordersFor(AppUser u) => u.isOwner
+      ? allOrders()
+      : u.isBarmen
+          ? gymOrders(u.gymId)
+          : ordersOf(u.id);
 
   /// Shogird buyurtma beradi. Yozuv bilan birga chatga xabar ketadi —
   /// trener buyurtmani bildirishnoma sifatida ham ko'radi.
   static Future<void> createOrder(AppUser client, Product p, int qty,
       {String size = ''}) async {
+    final trainerId = client.trainerId ?? '';
+    // zal trener katalogidan (shogird trenerning `users` hujjatini o'qiy olmaydi)
+    final gymId = trainerId.isEmpty
+        ? ''
+        : ((await _fs.collection('trainers').doc(trainerId).get()).data()?['gymId'] ?? '')
+            as String;
     final o = ShopOrder(
       clientId: client.id,
       clientName: client.name,
       clientPhone: client.phone,
-      trainerId: client.trainerId ?? '',
+      trainerId: trainerId,
+      gymId: gymId,
       productId: p.id,
       productName: p.name,
       category: p.category,
@@ -392,6 +438,7 @@ class Db {
       'clientName': o.clientName,
       'clientPhone': o.clientPhone,
       'trainerId': o.trainerId,
+      'gymId': o.gymId,
       'productId': o.productId,
       'productName': o.productName,
       'category': o.category,

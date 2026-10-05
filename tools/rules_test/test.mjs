@@ -24,6 +24,7 @@ const USER5 = 'user5'; // hali trener tanlamagan
 const TRAINER4 = 'trainer4'; // shogird qabul qiladigan ikkinchi trener
 const W1 = 'w1', W2 = 'w2', W3 = 'w3';
 const BARMEN = 'barmen1';
+const BARMEN2 = 'barmen2'; // boshqa zal barmeni
 
 let pass = 0, fail = 0;
 async function check(name, fn) {
@@ -298,6 +299,8 @@ await check('oz trenerinikidan boshqasiga yozib bolmaydi', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ trainerId: TRAINER3 }))));
 await check('darhol "berildi" qilib yarata OLMAYDI', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ status: 'given' }))));
+await check('shogird buyurtmaga soxta zal yoza OLMAYDI', () =>
+  assertFails(addDoc(collection(as(USER), 'orders'), order({ gymId: 'zalX' }))));
 await check('0 dona buyurtma OTMAYDI', () =>
   assertFails(addDoc(collection(as(USER), 'orders'), order({ qty: 0 }))));
 await check('sotuvda yoq tovarga buyurtma OTMAYDI', async () => {
@@ -482,13 +485,44 @@ await check('barmen tovar qoshadi', () =>
     price: 250000, stock: 4, active: true })));
 await check('barmen tovar qoldigini ozgartiradi', () =>
   assertSucceeds(updateDoc(doc(as(BARMEN), 'shop', 'bar1'), { stock: 3 })));
-await check('barmen hamma buyurtmani koradi', () =>
-  assertSucceeds(getDocs(collection(as(BARMEN), 'orders'))));
+await env.withSecurityRulesDisabled(async (ctx) => {
+  const db = ctx.firestore();
+  // TRAINER yuqorida zal1 ga biriktirilgan; barmenlar — zal1 va zal2
+  await updateDoc(doc(db, 'users', BARMEN), { gymId: 'zal1' });
+  await setDoc(doc(db, 'users', BARMEN2), { name: 'Barmen2', role: 'barmen', phone: '998906060606', gymId: 'zal2' });
+  await setDoc(doc(db, 'orders', 'og2'), {
+    clientId: USER3, clientName: 'Boshqa', trainerId: TRAINER3, gymId: 'zal2',
+    productId: 'bar1', productName: 'Kreatin', category: 'Sport pitaniya',
+    price: 250000, qty: 1, status: 'new', createdAt: new Date() });
+});
+await check('barmen oz zali buyurtmalarini soraydi (filtr bilan)', () =>
+  assertSucceeds(getDocs(query(collection(as(BARMEN), 'orders'), where('gymId', '==', 'zal1')))));
+await check('barmen filtrsiz hamma buyurtmani sora OLMAYDI', () =>
+  assertFails(getDocs(collection(as(BARMEN), 'orders'))));
+await check('barmen boshqa zal buyurtmalarini sora OLMAYDI', () =>
+  assertFails(getDocs(query(collection(as(BARMEN), 'orders'), where('gymId', '==', 'zal2')))));
+await check('barmen boshqa zal buyurtmasini kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(BARMEN), 'orders', 'og2'))));
+await check('barmen boshqa zal buyurtmasini "berildi" qila OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(BARMEN), 'orders', 'og2'), {
+    status: 'given', updatedAt: serverTimestamp(), givenBy: BARMEN, givenAt: serverTimestamp() })));
+await check('ikkinchi zal barmeni oz buyurtmasini koradi', () =>
+  assertSucceeds(getDoc(doc(as(BARMEN2), 'orders', 'og2'))));
+await check('zali bor trener shogirdi buyurtmaga trener zalini yozadi', () =>
+  assertSucceeds(addDoc(collection(as(USER), 'orders'), order({ gymId: 'zal1' }))));
+await check('zali bor trener shogirdi zalsiz buyurtma bera OLMAYDI', () =>
+  assertFails(addDoc(collection(as(USER), 'orders'), order())));
+await check('bosh admin katalogdagi zal kozgusini togrilaydi', () =>
+  assertSucceeds(updateDoc(doc(as(OWNER), 'trainers', TRAINER), { gymId: 'zal1' })));
+await check('katalogdagi zal haqiqiy zaldan farq qila OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(OWNER), 'trainers', TRAINER), { gymId: 'zal2' })));
+await check('trener katalogga soxta zal yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'trainers', TRAINER), { name: 'Ali', bio: '', accepting: true, gymId: 'zal2' })));
 await check('barmen "berildi" deb belgilaydi va kim bergani yoziladi', async () => {
   await env.withSecurityRulesDisabled(async (ctx) => {
     await setDoc(doc(ctx.firestore(), 'orders', 'ob1'), {
       clientId: USER, clientName: 'Shogird', clientPhone: '998903333333', trainerId: TRAINER,
-      productId: 'bar1', productName: 'Kreatin 300 g', category: 'Sport pitaniya',
+      gymId: 'zal1', productId: 'bar1', productName: 'Kreatin 300 g', category: 'Sport pitaniya',
       price: 250000, qty: 1, status: 'new', createdAt: new Date() });
   });
   await assertSucceeds(updateDoc(doc(as(BARMEN), 'orders', 'ob1'), {
@@ -497,7 +531,7 @@ await check('barmen "berildi" deb belgilaydi va kim bergani yoziladi', async () 
 await check('boshqa nomdan "men berdim" deb yozib bolmaydi', async () => {
   await env.withSecurityRulesDisabled(async (ctx) => {
     await setDoc(doc(ctx.firestore(), 'orders', 'ob2'), {
-      clientId: USER, clientName: 'Shogird', trainerId: TRAINER,
+      clientId: USER, clientName: 'Shogird', trainerId: TRAINER, gymId: 'zal1',
       productId: 'bar1', productName: 'Kreatin', category: 'Sport pitaniya',
       price: 250000, qty: 1, status: 'new', createdAt: new Date() });
   });

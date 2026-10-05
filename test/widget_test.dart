@@ -1074,4 +1074,19 @@ void main() {
       expect(byDay.length, 3);
     });
   });
+
+  group('Barmen - o-z zali', () {
+    test('trener katalogi zal ko-zgusini yozadi', () {
+      const t = TrainerInfo('t1', 'Ali', gymId: 'zal1');
+      expect(t.toMap()['gymId'], 'zal1');
+      expect(const TrainerInfo('t2', 'Vali').toMap()['gymId'], '');
+    });
+
+    test('buyurtmada zal bo-lmasa bo-sh qator', () {
+      const o = ShopOrder(clientId: 'c', productId: 'p', productName: 'X', price: 1);
+      expect(o.gymId, '');
+      const g = ShopOrder(clientId: 'c', productId: 'p', productName: 'X', price: 1, gymId: 'zal1');
+      expect(g.gymId, 'zal1');
+    });
+  });
 }

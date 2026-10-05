@@ -17,10 +17,8 @@ class ShopAdminScreen extends StatefulWidget {
 }
 
 class _ShopAdminScreenState extends State<ShopAdminScreen> {
-  // bosh admin va barmen — hamma buyurtma; trener — faqat o'z shogirdlariniki
-  late final _orders = widget.admin.isOwner || widget.admin.isBarmen
-      ? Db.allOrders()
-      : Db.ordersOf(widget.admin.id);
+  // bosh admin — hamma buyurtma; barmen — o'z zali; trener — faqat o'z shogirdlariniki
+  late final _orders = Db.ordersFor(widget.admin);
   late final _products = Db.products();
   int _tab = 0;
 

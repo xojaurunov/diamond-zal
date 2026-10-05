@@ -25,6 +25,13 @@ service cloud.firestore {
     }
     function canManage(uid) { return isOwner() || isTrainerOf(uid); }
 
+    // Foydalanuvchining zali ('' — zalsiz; zal o'chirilganda maydon null bo'lib qoladi)
+    function gymOf(uid) {
+      let path = /databases/$(database)/documents/users/$(uid);
+      let g = exists(path) ? get(path).data.get('gymId', '') : '';
+      return g == null ? '' : g;
+    }
+
     // Yo'q bo'lishi mumkin bo'lgan maydonlarni xavfsiz solishtirish
     function same(field) {
       return request.resource.data.get(field, null) == resource.data.get(field, null);
@@ -116,7 +123,9 @@ service cloud.firestore {
     // Yozuvni trenerning O'ZI boshqaradi; bosh admin faqat qo'shadi/o'chiradi (rol o'zgarganda).
     match /trainers/{tid} {
       function validEntry() {
-        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting'])
+        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId'])
+          // zal — users/{tid}.gymId ko'zgusi: soxta qilib bo'lmaydi (shogird buyurtmasiga shundan yoziladi)
+          && request.resource.data.get('gymId', '') == gymOf(tid)
           && request.resource.data.name is string && request.resource.data.name.size() <= 60
           && request.resource.data.get('bio', '') is string
           && request.resource.data.get('bio', '').size() <= 300
@@ -126,7 +135,10 @@ service cloud.firestore {
 
       allow read: if signedIn();
       allow create: if validEntry() && (isOwner() || isThisTrainer());
-      allow update: if validEntry() && isThisTrainer();
+      // bosh admin faqat zal ko'zgusini to'g'rilaydi (trenerni boshqa zalga o'tkazganda);
+      // ism, ma'lumot, qabul sozlamasi — trenerning o'zida
+      allow update: if validEntry() && (isThisTrainer() || (isOwner()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId'])));
       allow delete: if isOwner();
     }
 
@@ -191,7 +203,7 @@ service cloud.firestore {
       function validNewOrder() {
         let d = request.resource.data;
         let product = get(/databases/$(database)/documents/shop/$(d.productId)).data;
-        return d.keys().hasOnly(['clientId', 'clientName', 'clientPhone', 'trainerId',
+        return d.keys().hasOnly(['clientId', 'clientName', 'clientPhone', 'trainerId', 'gymId',
               'productId', 'productName', 'category', 'size', 'price', 'currency', 'qty',
               'status', 'createdAt'])
           && d.get('size', '') is string && d.get('size', '').size() <= 20
@@ -201,6 +213,8 @@ service cloud.firestore {
           && d.status == 'new'
           && d.qty is int && d.qty >= 1 && d.qty <= 20
           && d.trainerId == myTrainer()
+          // zal — shogird trenerining zali (bo'sh trener — bo'sh zal)
+          && d.get('gymId', '') == (d.trainerId == '' ? '' : gymOf(d.trainerId))
           && d.price == product.price
           && product.get('active', true) == true;
       }
@@ -216,12 +230,17 @@ service cloud.firestore {
       function isMyClientOrder() {
         return isStaff() && resource.data.get('trainerId', '') == request.auth.uid;
       }
+      // Barmen — faqat o'z zalining buyurtmasi (zalsiz barmen hech narsani ko'rmaydi)
+      function isMyGymOrder() {
+        return isBarmen() && gymOf(request.auth.uid) != ''
+          && resource.data.get('gymId', '') == gymOf(request.auth.uid);
+      }
 
       allow read: if signedIn()
-        && (isMyOrder() || isMyClientOrder() || isOwner() || isBarmen());
+        && (isMyOrder() || isMyClientOrder() || isOwner() || isMyGymOrder());
       allow create: if signedIn() && validNewOrder();
       allow update: if onlyStatusChanged() && (
-        ((isOwner() || isMyClientOrder() || isBarmen())
+        ((isOwner() || isMyClientOrder() || isMyGymOrder())
           && request.resource.data.status in ['given', 'canceled'])
         // shogird faqat hali berilmagan buyurtmasini bekor qiladi
         || (isMyOrder() && resource.data.status == 'new'

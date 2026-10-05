@@ -280,7 +280,12 @@ class TrainerInfo {
 
   /// false — trener hozir yangi shogird qabul qilmaydi, anketada ko'rinmaydi
   final bool accepting;
-  const TrainerInfo(this.id, this.name, {this.bio = '', this.accepting = true});
+
+  /// Trener zali — `users/{id}.gymId` ning ko'zgusi. Shogird trener hujjatini o'qiy olmaydi,
+  /// katalogni esa o'qiydi: buyurtmaga zal shu yerdan yoziladi (barmen faqat o'z zalini ko'radi).
+  /// Qoidalar uni `users` dagi qiymatga teng bo'lishga majbur qiladi.
+  final String gymId;
+  const TrainerInfo(this.id, this.name, {this.bio = '', this.accepting = true, this.gymId = ''});
 
   factory TrainerInfo.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
@@ -289,10 +294,12 @@ class TrainerInfo {
       (d['name'] ?? '') as String,
       bio: (d['bio'] ?? '') as String,
       accepting: (d['accepting'] ?? true) as bool,
+      gymId: (d['gymId'] ?? '') as String,
     );
   }
 
-  Map<String, dynamic> toMap() => {'name': name, 'bio': bio, 'accepting': accepting};
+  Map<String, dynamic> toMap() =>
+      {'name': name, 'bio': bio, 'accepting': accepting, 'gymId': gymId};
 }
 
 /// Bosh admin trenerga qo'ygan baho (`ratings/{trainerId}`) — faqat bosh admin ko'radi va yozadi

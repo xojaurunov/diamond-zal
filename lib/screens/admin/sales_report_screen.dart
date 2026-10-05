@@ -29,7 +29,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Sotuv hisoboti')),
       body: StreamBuilder<List<ShopOrder>>(
-        stream: Db.allOrders(),
+        stream: Db.ordersFor(widget.me),
         builder: (context, snap) {
           if (!snap.hasData) return const Center(child: CircularProgressIndicator());
           final all = snap.data!;

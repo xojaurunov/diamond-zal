@@ -196,6 +196,10 @@ class ShopOrder {
 
   /// Shogirdning treneri (bo'sh — trener tanlanmagan, buyurtmani bosh admin ko'radi)
   final String trainerId;
+
+  /// Trener zali (buyurtma paytida) — barmen faqat o'z zalining buyurtmalarini ko'radi.
+  /// Bo'sh — shogirdda trener yo'q, buyurtmani faqat bosh admin ko'radi.
+  final String gymId;
   final String productId, productName, category;
 
   /// Tanlangan o'lcham (bo'sh — tovarda o'lcham yo'q)
@@ -217,6 +221,7 @@ class ShopOrder {
     this.clientName = '',
     this.clientPhone = '',
     this.trainerId = '',
+    this.gymId = '',
     required this.productId,
     required this.productName,
     this.category = '',
@@ -258,6 +263,7 @@ class ShopOrder {
       clientName: (d['clientName'] ?? '') as String,
       clientPhone: (d['clientPhone'] ?? '') as String,
       trainerId: (d['trainerId'] ?? '') as String,
+      gymId: (d['gymId'] ?? '') as String,
       productId: (d['productId'] ?? '') as String,
       productName: (d['productName'] ?? '') as String,
       category: (d['category'] ?? '') as String,

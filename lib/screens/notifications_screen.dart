@@ -55,7 +55,7 @@ class _FeedBuilderState extends State<FeedBuilder> {
 
   void _start() {
     if (_isBarmen) {
-      _add(Db.allOrders(), (v) => _orders = v);
+      _add(Db.gymOrders(widget.user.gymId), (v) => _orders = v);
       return;
     }
     if (_isStaff) {
