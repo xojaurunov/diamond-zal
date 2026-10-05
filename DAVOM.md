@@ -34,7 +34,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **110/110**, qoida testlari **181/181**.
+`flutter test` **112/112**, qoida testlari **191/191**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1237,7 +1237,7 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Anjomlar:** kanalning 476 ta posti ko'rildi (3370–4069) — shakerlar (3873),
       UFC suv shishasi (3370) topildi; press rollerni foydalanuvchi o'zi berdi (200 000).
       Rasmdagi "200 000" va ruscha yozuv olib tashlandi.
-    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 13, Dobavkalar 91.
+    - **Do'konda jami 115 ta tovar:** Forma 19, Suv idishlari 23, Anjomlar 13, Dobavkalar 91.
     - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
       sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
 
@@ -1409,6 +1409,43 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     **5-okt yakuni:** `flutter analyze` 0, `flutter test` **110/110**, qoida testlari
     **181/181**. Qoidalar, web va APK (CN=Diamond Zal) joylandi. Rejalar: `specs/okt-paket/`
     (lokal). **Qolgan: 05-blaze-push** — zal egasi Blaze'ni yoqishi kerak.
+
+73. **Xato tuzatildi: o'lchamli tovarlar "Tugagan" chiqardi (5-okt)** — 4-oktabrda
+    `sizeStock` qo'shilganda mavjud 17 ta Forma tovariga o'lcham bo'yicha qoldiq yozilmagan
+    edi; `totalStock` = `sizeStock` yig'indisi = 0, ya'ni yangi ilovada Forma'ni buyurtma
+    qilib bo'lmasdi. `node tools/dokon/olcham_qoldiq.mjs` umumiy qoldiqni o'lchamlarga teng
+    bo'ldi (10 → XL 3, XXL 3, 3XL 2, 4XL 2). `tovar_qoshish.mjs` endi yangi o'lchamli
+    tovarga `sizeStock` ni o'zi yozadi va `colors` ni qabul qiladi. Tekshirildi: bazada
+    o'lchamli-yu qoldig'i 0 bo'lgan tovar yo'q.
+
+74. **Venum Logos va Technical (5-okt)** — kanalning 2791-postidan topildi (2790-post:
+    "4-1 Venum"). `tools/dokon/venum-2.json`, 35 $ + 15% = 40 $, XL–4XL. Do'konda jami
+    **146 ta tovar**. Sport sumka (Puma/Motodor, 2601-post) — kanalda rasmi yo'q, qo'shilmadi.
+
+75. **Suv belgisi (5-okt)** — skrinshot masalasida A varianti tanlandi (foydalanuvchi:
+    "buni ham qil"; tavsiya qilingan variant). `lib/widgets/watermark.dart`: shogirdning
+    "Bugun" ekrani ustida ism va telefon xira (5,5%), qiya takrorlanadi; bosishga xalaqit
+    bermaydi. Skrinshot bloklanmaydi (`FLAG_SECURE` qilinmadi).
+
+76. **Trenerlar haqi (5-okt)** — oylik hisobot pastida: har trener — shogirdlar soni, shu
+    oyda sotilgan abonement soni va summasi, ulush. Foiz ekranda −/+ bilan tanlanadi (5 qadam,
+    standart 40%), qurilmada saqlanadi (`AppSettings.trainerSharePct`). `MonthlyReport.byTrainer`,
+    `TrainerShare`. **Taxmin:** trener o'z shogirdlari abonement tushumidan foiz oladi —
+    qoida foydalanuvchi tomonidan berilmagan, boshqacha bo'lsa o'zgartiriladi.
+
+77. **Rasmli progress — "oldin / keyin" (5-okt)** — Progress ekranida "Rasmlar" bo'limi:
+    shogird kamera yoki galereyadan rasm qo'shadi, birinchi va oxirgisi yonma-yon, bosilsa
+    kattalashadi va o'chiriladi. Trener va bosh admin shogird progressida ko'radi (o'chira
+    olmaydi). **Cloud Storage ishlatilmadi** (Blaze kerak): rasm `image_picker` bilan
+    kichraytirilib (720 px, sifat 60) `users/{uid}/photos/{id}.data` ga bayt sifatida yoziladi,
+    350 KB gacha (qoida). `lib/models/photo.dart`, `lib/widgets/progress_photos.dart`.
+    **Telefonda sinalmagan** — kamera va galereya faqat haqiqiy qurilmada tekshiriladi.
+
+    **Tekshiruvlar (5-okt kechqurun):** davomat "Keldi"/"Bekor" haqiqiy saytda trener nomidan
+    sinaldi — ishlaydi (iz qoldirilmadi). Anjom narxlari Toshkent do'konlari bilan
+    solishtirildi: hammasi bozor oralig'ida, **pedalli ekspander bundan mustasno** — bizda
+    172 500, bozorda 36 000–60 000 (kanalning 2020 yilgi narxi shubhali). `flutter test`
+    **112/112**, qoida testlari **191/191**. Reja: `specs/okt-paket-2/` (lokal).
 
 ---
 
