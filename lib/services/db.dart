@@ -325,6 +325,7 @@ class Db {
       await d.reference.update({'trainerId': null});
     }
     await _fs.collection('trainers').doc(uid).delete();
+    await _fs.collection('memberships').doc(uid).delete();
     await _fs.collection('users').doc(uid).delete();
   }
 
@@ -581,12 +582,30 @@ class Db {
           .toList());
 
   /// Abonement qo'shish — yozuv va profildagi tugash sanasi BITTA batch'da (`addWeight` kabi).
-  static Future<void> addSubscription(String uid, Subscription s) async {
-    final user = _fs.collection('users').doc(uid);
+  /// Shu batch'da `memberships/{uid}` ko'zgusi ham yoziladi — zalning boshqa xodimlari to'lovni
+  /// shundan ko'radi. Zal — mijoz trenerining zali (qoidalar ham shuni tekshiradi).
+  static Future<void> addSubscription(AppUser client, Subscription s) async {
+    final user = _fs.collection('users').doc(client.id);
+    final tid = client.trainerId ?? '';
+    final gymId = tid.isEmpty ? '' : await _gymOf(tid);
     final batch = _fs.batch()
       ..set(user.collection('subscriptions').doc(), s.toMap())
-      ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(s.expiresAt)});
+      ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(s.expiresAt)})
+      ..set(_fs.collection('memberships').doc(client.id), Membership.mapOf(client.name, gymId, s));
     await batch.commit();
+  }
+
+  /// Zal mijozlarining oxirgi to'lovlari: bosh admin — hammasi, trener va barmen — o'z zali
+  /// (zalsiz xodim — bo'sh; qoidalar boshqa zalni bermaydi).
+  static Stream<List<Membership>> memberships(AppUser me) {
+    final col = _fs.collection('memberships');
+    if (me.isOwner) return col.snapshots().map((s) => s.docs.map(Membership.fromDoc).toList());
+    final gym = me.gymId ?? '';
+    if (gym.isEmpty) return Stream.value(const <Membership>[]);
+    return col
+        .where('gymId', isEqualTo: gym)
+        .snapshots()
+        .map((s) => s.docs.map(Membership.fromDoc).toList());
   }
 
   // ---------- davomat ----------

@@ -4,6 +4,7 @@ import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/settings_sheet.dart';
+import '../../widgets/subscription_card.dart';
 import '../../widgets/ui.dart';
 import 'profile_setup_screen.dart';
 
@@ -196,6 +197,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ]),
+              const SizedBox(height: 10),
+              MySubscriptionCard(uid: user.id),
               if (user.trainerId != null) ...[
                 const SizedBox(height: 10),
                 StreamBuilder<TrainerInfo?>(

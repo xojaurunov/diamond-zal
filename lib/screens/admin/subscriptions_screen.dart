@@ -4,6 +4,7 @@ import '../../models/subscription.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
+import '../payments_screen.dart';
 
 /// Trener (va bosh admin) uchun abonement: mijozlar holati (qolgan kun, eslatma yuborish)
 /// va abonement tugashi haqida yuborilgan eslatmalarning haftalik hisoboti.
@@ -30,7 +31,8 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
           showSelectedIcon: false,
           segments: const [
             ButtonSegment(value: 0, label: Text('Mijozlar')),
-            ButtonSegment(value: 1, label: Text('Haftalik eslatmalar')),
+            ButtonSegment(value: 1, label: Text("To'lovlar")),
+            ButtonSegment(value: 2, label: Text('Eslatmalar')),
           ],
           selected: {_tab},
           onSelectionChanged: (s) => setState(() => _tab = s.first),
@@ -39,6 +41,8 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
       Expanded(
         child: IndexedStack(index: _tab, children: [
           _ClientsTab(stream: _clients, adminId: widget.admin.id),
+          // zalning hamma mijozlari (boshqa trenerniki ham) — faqat ko'rish
+          PaymentsScreen(me: widget.admin),
           _ReminderReportTab(stream: _reminders),
         ]),
       ),
@@ -139,8 +143,10 @@ class _SubscriptionTile extends StatelessWidget {
 
 /// Mijozga yangi abonement qo'shish — tugash sanasi avtomatik hisoblanadi (boshlanish + oy soni).
 Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
-  final price = TextEditingController();
+  // 0 — kunlik tashrif, aks holda oy soni
   var months = subscriptionMonths.first;
+  int stdPrice() => months == 0 ? Subscription.priceOf(days: 1) : Subscription.priceOf(months: months);
+  final price = TextEditingController(text: '${stdPrice()}');
 
   final saved = await showSheet<bool>(
     context,
@@ -151,21 +157,24 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
         const SizedBox(height: AppSpace.lg),
         Align(
           alignment: Alignment.centerLeft,
-          child: Wrap(spacing: AppSpace.sm, children: [
-            for (final m in subscriptionMonths)
+          child: Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
+            for (final m in [0, ...subscriptionMonths])
               ChoiceChip(
                 selected: months == m,
-                onSelected: (_) => setS(() => months = m),
-                label: Text('$m oy'),
+                // tur almashganda narx belgilangan qiymatga qaytadi
+                onSelected: (_) => setS(() {
+                  months = m;
+                  price.text = '${stdPrice()}';
+                }),
+                label: Text(m == 0 ? 'Kunlik' : '$m oy'),
               ),
           ]),
         ),
         const SizedBox(height: AppSpace.md),
         TextField(
           controller: price,
-          autofocus: true,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: "Narxi (ixtiyoriy)", suffixText: "so'm"),
+          decoration: const InputDecoration(labelText: 'Narxi', suffixText: "so'm"),
         ),
         const SizedBox(height: AppSpace.lg),
         SizedBox(
@@ -182,10 +191,11 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
 
   if (saved == true) {
     await Db.addSubscription(
-      client.id,
+      client,
       Subscription(
         startDate: DateTime.now(),
         months: months,
+        days: months == 0 ? 1 : 0,
         price: int.tryParse(price.text.replaceAll(RegExp(r'\D'), '')) ?? 0,
         paidDate: DateTime.now(),
       ),

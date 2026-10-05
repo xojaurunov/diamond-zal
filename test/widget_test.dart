@@ -1029,6 +1029,37 @@ void main() {
       expect(Subscription.expiryOf(DateTime(2026, 1, 15), 3), DateTime(2026, 4, 15));
     });
 
+    test('kunlik: faqat shu kuni amal qiladi', () {
+      final s = Subscription(startDate: DateTime(2026, 10, 5, 14), months: 0, days: 1);
+      expect(s.expiresAt, DateTime(2026, 10, 5));
+      expect(s.kindLabel, 'Kunlik');
+      expect(Subscription.isActive(s.expiresAt, DateTime(2026, 10, 5, 23)), isTrue);
+      expect(Subscription.isActive(s.expiresAt, DateTime(2026, 10, 6, 1)), isFalse);
+      expect(s.toMap()['days'], 1);
+    });
+
+    test('eski yozuv (days yo-q) oy bo-yicha hisoblanadi', () {
+      final s = Subscription(startDate: DateTime(2026, 10, 3), months: 1);
+      expect(s.isDaily, isFalse);
+      expect(s.expiresAt, DateTime(2026, 11, 3));
+      expect(s.kindLabel, 'Oylik');
+      expect(s.toMap().containsKey('days'), isFalse);
+    });
+
+    test('to-lov ko-zgusi: tur va sana yorlig-i', () {
+      const m = Membership(uid: 'u1', name: 'Ali', gymId: 'zal1', days: 1, price: 50000);
+      expect(m.kindLabel, 'Kunlik');
+      expect(const Membership(uid: 'u2', months: 3).kindLabel, '3 oy');
+      expect(fmtDay(DateTime(2026, 10, 3)), '03.10.2026');
+      expect(fmtDay(null), '');
+    });
+
+    test('belgilangan narx', () {
+      expect(Subscription.priceOf(days: 1), 50000);
+      expect(Subscription.priceOf(months: 1), 500000);
+      expect(Subscription.priceOf(months: 3), 1500000);
+    });
+
     test('qolgan kun va holat', () {
       final exp = DateTime(2026, 10, 10);
       final now = DateTime(2026, 10, 8);

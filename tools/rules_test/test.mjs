@@ -379,6 +379,17 @@ await check('notogri oy soni (25) OTMAYDI', () =>
 await check('ortiqcha maydonli abonement OTMAYDI', () =>
   assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'),
     { startDate: new Date(), months: 1, price: 100000, currency: 'UZS', createdAt: serverTimestamp(), izoh: 'x' })));
+const abon = (x) => ({ startDate: new Date(), price: 50000, currency: 'UZS', createdAt: serverTimestamp(), ...x });
+await check('kunlik abonement (days 1, months 0) otadi', () =>
+  assertSucceeds(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'), abon({ months: 0, days: 1 }))));
+await check('oy ham kun ham 0 — OTMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'), abon({ months: 0, days: 0 }))));
+await check('oy va kun birga — OTMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'), abon({ months: 1, days: 1 }))));
+await check('32 kunlik — OTMAYDI', () =>
+  assertFails(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'), abon({ months: 0, days: 32 }))));
+await check('days maydonisiz oylik avvalgidek otadi', () =>
+  assertSucceeds(addDoc(collection(as(TRAINER), 'users', USER, 'subscriptions'), abon({ months: 1 }))));
 await check('shogird oz abonementlar royxatini oqiydi', () =>
   assertSucceeds(getDocs(collection(as(USER), 'users', USER, 'subscriptions'))));
 await check('boshqa trener abonementni oqiy OLMAYDI', () =>
@@ -577,6 +588,54 @@ await check('trener shogird rasmini ochira OLMAYDI', () =>
   assertFails(deleteDoc(doc(as(TRAINER), 'users', USER, 'photos', 'r1'))));
 await check('shogird oz rasmini ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'r1'))));
+
+console.log('\n== TOLOV KOZGUSI (memberships) ==');
+await env.withSecurityRulesDisabled(async (ctx) => {
+  const db = ctx.firestore();
+  await setDoc(doc(db, 'users', USER), { trainerId: TRAINER }, { merge: true });
+  await setDoc(doc(db, 'users', TRAINER), { gymId: 'zal1' }, { merge: true });
+  await setDoc(doc(db, 'users', TRAINER2), { role: 'admin', gymId: 'zal1' }, { merge: true });
+  await setDoc(doc(db, 'users', TRAINER3), { role: 'admin', gymId: 'zal2' }, { merge: true });
+  await setDoc(doc(db, 'users', TRAINER4), { gymId: null }, { merge: true });
+  await setDoc(doc(db, 'users', BARMEN), { gymId: 'zal1' }, { merge: true });
+  await setDoc(doc(db, 'users', BARMEN2), { name: 'Barmen2', role: 'barmen', gymId: 'zal2' }, { merge: true });
+});
+const kozgu = (x) => ({ name: 'Shogird', gymId: 'zal1', months: 1, days: 0, price: 500000, currency: 'UZS',
+  paidDate: new Date(), expiresAt: new Date(), updatedAt: serverTimestamp(), ...x });
+await check('trener oz shogirdi tolov kozgusini yozadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'memberships', USER), kozgu())));
+await check('kozguga notogri zal yozib bolmaydi', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'memberships', USER), kozgu({ gymId: 'zal2' }))));
+await check('kozguga ortiqcha maydon qoshib bolmaydi', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'memberships', USER), kozgu({ phone: '99890' }))));
+await check('boshqa trener kozguni yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER2), 'memberships', USER), kozgu())));
+await check('shogird oz kozgusini yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'memberships', USER), kozgu())));
+await check('bosh admin kozguni yozadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'memberships', USER), kozgu({ months: 0, days: 1, price: 50000 }))));
+await check('shu zalning boshqa treneri tolovni koradi', () =>
+  assertSucceeds(getDocs(query(collection(as(TRAINER2), 'memberships'), where('gymId', '==', 'zal1')))));
+await check('shu zal barmeni tolovni koradi', () =>
+  assertSucceeds(getDocs(query(collection(as(BARMEN), 'memberships'), where('gymId', '==', 'zal1')))));
+await check('boshqa zal treneri kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER3), 'memberships', USER))));
+await check('boshqa zal barmeni kora OLMAYDI', () =>
+  assertFails(getDocs(query(collection(as(BARMEN2), 'memberships'), where('gymId', '==', 'zal1')))));
+await check('zalsiz trener kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER4), 'memberships', USER))));
+await check('xodim hamma zal tolovlarini filtrsiz ola OLMAYDI', () =>
+  assertFails(getDocs(collection(as(TRAINER2), 'memberships'))));
+await check('shogird oz tolov kozgusini oqiydi', () =>
+  assertSucceeds(getDoc(doc(as(USER), 'memberships', USER))));
+await check('boshqa shogird kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(USER3), 'memberships', USER))));
+await check('bosh admin hamma tolovlarni oqiydi', () =>
+  assertSucceeds(getDocs(collection(as(OWNER), 'memberships'))));
+await check('boshqa trener tolov kozgusi orqali shogird hujjatini ocha OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER2), 'users', USER))));
+await check('trener kozguni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
 
 console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {

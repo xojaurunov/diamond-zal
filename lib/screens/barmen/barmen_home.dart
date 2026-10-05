@@ -7,10 +7,11 @@ import '../../widgets/ui.dart';
 import '../admin/sales_report_screen.dart';
 import '../admin/shop_admin_screen.dart';
 import '../notifications_screen.dart';
+import '../payments_screen.dart';
 
 /// Barmen paneli — zal bari/sotuvchisi uchun.
 /// Faqat do'kon: tovar, buyurtma, qoldiq va o'z sotuv hisoboti.
-/// Shogirdlar, rejalar va chatni ko'rmaydi.
+/// Shogirdlar, rejalar va chatni ko'rmaydi; zal mijozlarining abonement to'lovini ko'radi.
 class BarmenHome extends ConsumerStatefulWidget {
   const BarmenHome({super.key});
 
@@ -21,7 +22,7 @@ class BarmenHome extends ConsumerStatefulWidget {
 class _BarmenHomeState extends ConsumerState<BarmenHome> {
   int _tab = 0;
 
-  static const _titles = ["Do'kon", 'Sotuv hisobim', 'Eslatmalar'];
+  static const _titles = ["Do'kon", 'Sotuv hisobim', "To'lovlar", 'Eslatmalar'];
 
   Future<void> _signOut() async {
     final ok = await confirm(
@@ -77,6 +78,8 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
           ShopAdminScreen(admin: me),
           // o'z sotuvi: nechta va qancha — zal egasiga shu bo'yicha hisob beradi
           SalesReportScreen(me: me, ownerView: false),
+          // zal mijozlarining abonement to'lovlari — faqat ko'rish
+          PaymentsScreen(me: me),
           NotificationsScreen(user: me),
         ],
       ),
@@ -86,6 +89,8 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
         destinations: [
           const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
           const NavigationDestination(icon: Icon(Icons.payments_outlined), label: 'Hisobim'),
+          const NavigationDestination(
+              icon: Icon(Icons.card_membership_outlined), label: "To'lovlar"),
           NavigationDestination(
             icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
             label: 'Eslatma',

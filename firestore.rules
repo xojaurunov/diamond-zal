@@ -116,9 +116,14 @@ service cloud.firestore {
         allow read: if isSelf(uid) || canManage(uid);
         allow create: if canManage(uid)
           && request.resource.data.keys().hasOnly(
-               ['startDate', 'months', 'price', 'currency', 'paidDate', 'createdAt'])
+               ['startDate', 'months', 'days', 'price', 'currency', 'paidDate', 'createdAt'])
           && request.resource.data.months is int
-          && request.resource.data.months >= 1 && request.resource.data.months <= 24
+          && request.resource.data.months >= 0 && request.resource.data.months <= 24
+          // kunlik tashrif — `days`; oylik yoki kunlik, ikkalasi birga emas
+          && request.resource.data.get('days', 0) is int
+          && request.resource.data.get('days', 0) >= 0
+          && request.resource.data.get('days', 0) <= 31
+          && (request.resource.data.months > 0) != (request.resource.data.get('days', 0) > 0)
           && request.resource.data.price is int && request.resource.data.price >= 0
           && request.resource.data.get('currency', 'UZS') in ['UZS', 'USD'];
       }
@@ -139,6 +144,34 @@ service cloud.firestore {
     // faqat bosh admin o'qiydi
     match /{path=**}/subscriptions/{id} {
       allow read: if isOwner();
+    }
+
+    // Mijozning OXIRGI to'lovi ko'zgusi — zalning hamma treneri va barmeni ko'radi (faqat ism
+    // va to'lov; `users` hujjati ochilmaydi). Yozish — abonement qo'sha oladigan odam.
+    match /memberships/{uid} {
+      // mijoz trenerining zali ('' — trenersiz yoki trener zalsiz)
+      function clientGym() {
+        let t = get(/databases/$(database)/documents/users/$(uid)).data.get('trainerId', null);
+        return (t == null || t == '') ? '' : gymOf(t);
+      }
+      function validMembership() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['name', 'gymId', 'months', 'days', 'price', 'currency',
+                                 'paidDate', 'expiresAt', 'updatedAt'])
+          && d.name is string && d.name.size() <= 60
+          && d.gymId == clientGym()
+          && d.months is int && d.months >= 0 && d.months <= 24
+          && d.days is int && d.days >= 0 && d.days <= 31
+          && d.price is int && d.price >= 0
+          && d.currency in ['UZS', 'USD']
+          && d.paidDate is timestamp && d.expiresAt is timestamp
+          && d.updatedAt == request.time;
+      }
+      allow read: if isSelf(uid) || isOwner()
+        || ((isStaff() || isBarmen()) && gymOf(request.auth.uid) != ''
+            && resource.data.get('gymId', '') == gymOf(request.auth.uid));
+      allow create, update: if canManage(uid) && validMembership();
+      allow delete: if isOwner();
     }
 
     match /trainers/{tid} {

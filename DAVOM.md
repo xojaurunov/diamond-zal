@@ -34,7 +34,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **112/112**, qoida testlari **191/191**.
+`flutter test` **116/116**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1446,6 +1446,34 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     solishtirildi: hammasi bozor oralig'ida, **pedalli ekspander bundan mustasno** — bizda
     172 500, bozorda 36 000–60 000 (kanalning 2020 yilgi narxi shubhali). `flutter test`
     **112/112**, qoida testlari **191/191**. Reja: `specs/okt-paket-2/` (lokal).
+
+78. **Abonement: narx, kunlik tur, to'lov ko'rinishi (5-okt)** — zal egasi narxni aytdi:
+    **kunlik 50 000, oylik 500 000 so'm** (`subscriptionDayPrice`, `subscriptionMonthPrice` —
+    `lib/models/subscription.dart`).
+    - **Kunlik tur:** abonement oynasida `Kunlik` chipi; yozuvda `days: 1, months: 0`, faqat
+      shu kuni amal qiladi. Narx tanlangan turga qarab o'zi to'ladi (qo'lda o'zgaradi).
+      Qoida: `months` 0..24, `days` 0..31, ikkalasidan aynan bittasi > 0.
+    - **Mijoz o'z to'lovini ko'radi:** Profil ekranida `MySubscriptionCard`
+      (`lib/widgets/subscription_card.dart`) — tur, summa, to'langan sana, tugash sanasi,
+      qolgan kun, oldingi to'lovlar.
+    - **Xodimlar zal to'lovlarini ko'radi:** yangi ko'zgu to'plam `memberships/{uid}`
+      (`name, gymId, months, days, price, currency, paidDate, expiresAt, updatedAt`) —
+      `Db.addSubscription` abonement bilan bitta batch'da yozadi. O'qish: bosh admin — hammasi;
+      trener va barmen — faqat o'z zali (`gymId`), zalsiz xodim — hech narsa; mijoz — o'ziniki.
+      Yozish: faqat `canManage`, `gymId` = mijoz trenerining zali (soxta qilib bo'lmaydi).
+      `users/{uid}` boshqa trenerga ochilmadi — vazn, telefon, reja yopiq.
+      Ekran: `lib/screens/payments_screen.dart` — trenerda Abonement → "To'lovlar",
+      barmenda alohida tab.
+    - `node tools/holat/tolovlar_kozgu.mjs` — mavjud abonementlardan ko'zguni to'ldiradi
+      (eski APK ko'zgu yozmaydi; kerak bo'lsa qayta ishga tushiriladi).
+    - Bir shogirdning 3-oktabrdagi oylik to'lovi bazaga o'tgan sana bilan yozildi (ilova
+      boshlanish sanasini faqat "bugun" qiladi).
+    - **Ma'lum cheklovlar:** mijoz trenerini almashtirsa ko'zgudagi zal keyingi to'lovgacha
+      eskicha qoladi; abonement yozuvini ilovadan o'chirib/tahrirlab bo'lmaydi (faqat Firebase
+      Console); kunlik mijozga shu kuni "abonement tugayapti" eslatmasi chiqadi.
+    - Tekshirildi: `flutter analyze` 0, `flutter test` **116/116**, qoida testlari **213/213**;
+      qoidalar, web va APK joylandi. Ekranlar telefonda sinalmagan.
+      Reja: `specs/abonement/` (lokal).
 
 ---
 
