@@ -42,3 +42,7 @@ PAROLLAR.md
 
 # Firebase emulyatori eksporti — ichida parol hash'lari va email bo'ladi
 .emulator-data/
+
+# Flutter avtomatik yaratadi; ichida kompyuterdagi yo'llar (foydalanuvchi nomi) bo'ladi
+.flutter-plugins-dependencies
+.flutter-plugins
