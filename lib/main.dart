@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'screens/auth/auth_gate.dart';
@@ -54,24 +51,8 @@ Future<void> main() async {
     runApp(_FirebaseMissing(error: '$e'));
     return;
   }
-  _initCrashlytics();
   await AppSettings.init();
   runApp(const ProviderScope(child: App()));
-}
-
-/// Ilova qulasa yoki tutilmagan xato bo'lsa — Firebase Console → Crashlytics'ga yuboriladi.
-/// Faqat telefonda (web'da Crashlytics yo'q) va faqat release'da (ishlab chiqishda shovqin bo'lmasin).
-/// Shaxsiy ma'lumot yuborilmaydi — faqat foydalanuvchi uid'i.
-void _initCrashlytics() {
-  if (kIsWeb || useEmulator) return;
-  final c = FirebaseCrashlytics.instance;
-  c.setCrashlyticsCollectionEnabled(kReleaseMode);
-  FlutterError.onError = c.recordFlutterFatalError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    c.recordError(error, stack, fatal: true);
-    return true;
-  };
-  FirebaseAuth.instance.authStateChanges().listen((u) => c.setUserIdentifier(u?.uid ?? ''));
 }
 
 class App extends StatefulWidget {

@@ -1480,7 +1480,17 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     qoidasi tasdiqlandi: o'z shogirdlari abonement tushumining 40%. Kunlik mijozga
     "abonement tugayapti" eslatmasi chiqaveradi. Ovqat vaqti eslatmasi allaqachon bor
     (`Notifications.scheduleMeals`, Sozlamalar → "Ovqat vaqti eslatmasi") — yangi ish emas.
-    **Zal egasida qoldi:** Crashlytics'ni Console'da yoqish, Blaze tarifi.
+    **Zal egasida qoldi:** Blaze tarifi.
+
+80. **Yangi ikonka; Crashlytics olib tashlandi (5-okt)** — ilova ikonkasi almashtirildi
+    (`assets/icon/logo_src_2.png` → `icon.png`, burchaklari yumaloq kvadrat).
+    **Crashlytics (`867bef6`) butunlay olindi:** u qo'shilgan APK telefonda ochilmadi —
+    "Firebase sozlanmagan", `NullPointerException: FirebaseCrashlytics component is not present`
+    (`Firebase.initializeApp()` ichida). Manifestda registrar ham, build ID ham bor edi —
+    sabab logcat'siz aniqlanmadi (taxmin: Crashlytics gradle plagini 3.0.3 + AGP 9.1.0).
+    Qayta qo'shish — faqat telefonda sinab, alohida ish. **Saboq:** Android plagini qo'shilgan
+    APK telefonda ochib ko'rilmaguncha saytga joylanmaydi. 5-okt 17:41 gacha saytda turgan
+    APK'lar (Crashlytics bilan) ishlamaydi — 17:55 dagi APK ishlatiladi.
 
 ---
 

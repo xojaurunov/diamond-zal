@@ -46,3 +46,6 @@ PAROLLAR.md
 # Flutter avtomatik yaratadi; ichida kompyuterdagi yo'llar (foydalanuvchi nomi) bo'ladi
 .flutter-plugins-dependencies
 .flutter-plugins
+
+# Gradle xotira dampi (yig'ish xotiradan chiqsa paydo bo'ladi)
+*.hprof
