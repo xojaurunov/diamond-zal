@@ -7,7 +7,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, collectionGroup, query, where,
-  writeBatch, serverTimestamp,
+  writeBatch, serverTimestamp, Bytes,
 } from 'firebase/firestore';
 
 const RULES = readFileSync(new URL('../../firestore.rules', import.meta.url), 'utf8');
@@ -554,6 +554,29 @@ await check('barmen reja yoza OLMAYDI', () =>
   assertFails(setDoc(doc(as(BARMEN), 'plans', 'pb1'), { title: 'X', meals: [] })));
 await check('barmen zal qosha OLMAYDI', () =>
   assertFails(setDoc(doc(as(BARMEN), 'gyms', 'zalb'), { name: 'Yangi' })));
+
+console.log('\n== RASMLAR (oldin / keyin) ==');
+const rasm = (n = 1000) => ({ data: Bytes.fromUint8Array(new Uint8Array(n)), takenAt: serverTimestamp(), weight: 80 });
+await check('shogird ozi rasm qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(USER), 'users', USER, 'photos', 'r1'), rasm())));
+await check('350 KB dan katta rasm OTMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'r2'), rasm(400 * 1024))));
+await check('rasmga ortiqcha maydon qoshib bolmaydi', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'r3'), { ...rasm(), izoh: 'x' })));
+await check('boshqa shogird nomiga rasm qoshib bolmaydi', () =>
+  assertFails(setDoc(doc(as(USER3), 'users', USER, 'photos', 'r4'), rasm())));
+await check('trener shogirdi rasmini koradi', () =>
+  assertSucceeds(getDoc(doc(as(TRAINER), 'users', USER, 'photos', 'r1'))));
+await check('boshqa trener rasmni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER3), 'users', USER, 'photos', 'r1'))));
+await check('boshqa shogird rasmni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(USER3), 'users', USER, 'photos', 'r1'))));
+await check('barmen rasmni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(BARMEN), 'users', USER, 'photos', 'r1'))));
+await check('trener shogird rasmini ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER), 'users', USER, 'photos', 'r1'))));
+await check('shogird oz rasmini ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'r1'))));
 
 console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {

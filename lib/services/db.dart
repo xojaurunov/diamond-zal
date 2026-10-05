@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
 import '../models/stats.dart';
+import '../models/photo.dart';
 import '../models/subscription.dart';
 import 'notifications.dart';
 import 'push.dart';
@@ -539,6 +542,27 @@ class Db {
       ..update(user, {'weight': w, 'lastWeighIn': FieldValue.serverTimestamp()});
     await batch.commit();
   }
+
+  // ---------- "oldin / keyin" rasmlari ----------
+  /// Eskisi birinchi — "oldin" chapda, "keyin" o'ngda
+  static Stream<List<ProgressPhoto>> photos(String uid) => _fs
+      .collection('users')
+      .doc(uid)
+      .collection('photos')
+      .orderBy('takenAt')
+      .snapshots()
+      .map((s) => s.docs.map(ProgressPhoto.fromDoc).toList());
+
+  /// Rasm hujjatning o'zida saqlanadi (siqilgan, [ProgressPhoto.maxBytes] gacha)
+  static Future<void> addPhoto(String uid, Uint8List bytes, double weight) =>
+      _fs.collection('users').doc(uid).collection('photos').add({
+        'data': Blob(bytes),
+        'takenAt': FieldValue.serverTimestamp(),
+        'weight': weight,
+      });
+
+  static Future<void> deletePhoto(String uid, String id) =>
+      _fs.collection('users').doc(uid).collection('photos').doc(id).delete();
 
   // ---------- abonement ----------
   static Stream<List<Subscription>> subscriptions(String uid) => _fs

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/progress_photos.dart';
 import '../../widgets/ui.dart';
 
 class ProgressScreen extends StatelessWidget {
@@ -253,6 +254,7 @@ class ProgressScreen extends StatelessWidget {
                     ]),
                   ),
                   const SizedBox(height: AppSpace.lg),
+                  ProgressPhotos(uid: user.id, weight: last, readOnly: readOnly),
                   const SectionHeader('Tarix', eyebrow: "O'lchovlar"),
                   BentoTile(
                     padding: EdgeInsets.zero,

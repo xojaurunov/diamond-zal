@@ -97,6 +97,20 @@ service cloud.firestore {
           getAfter(/databases/$(database)/documents/users/$(uid)).data.get('lastWeighIn', null) == request.time;
       }
 
+      // "Oldin / keyin" rasmlari — shogird o'zi qo'shadi va o'chiradi; o'zi, treneri va
+      // bosh admin ko'radi. Rasm hujjat ichida (bytes), 350 KB gacha.
+      match /photos/{id} {
+        allow read: if isSelf(uid) || canManage(uid);
+        allow create: if isSelf(uid)
+          && request.resource.data.keys().hasOnly(['data', 'takenAt', 'weight'])
+          && request.resource.data.data is bytes
+          && request.resource.data.data.size() > 0
+          && request.resource.data.data.size() <= 358400
+          && request.resource.data.takenAt == request.time
+          && request.resource.data.get('weight', 0) is number;
+        allow delete: if isSelf(uid);
+      }
+
       // Abonement yozuvlari — faqat trener/bosh admin qo'shadi, mijoz va xodim o'qiydi
       match /subscriptions/{id} {
         allow read: if isSelf(uid) || canManage(uid);
