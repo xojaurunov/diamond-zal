@@ -106,7 +106,7 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
     va o'lchamlar (XL–4XL) qo'shiladi, narx so'mda yoki dollarda bo'ladi; shogird
     buyurtmada o'lchamni tanlaydi, hisobot valyuta bo'yicha alohida chiqadi.
 17. **Do'kon to'ldirildi — 115 ta tovar** (57–60-band): Forma 17, Suv idishlari 6,
-    Anjomlar 1, Dobavkalar 91 (Protein 21, Gainer 14, Kreatin 12, L-Karnitin 10,
+    Anjomlar 12, Dobavkalar 91 (Protein 21, Gainer 14, Kreatin 12, L-Karnitin 10,
     L-Arginin 5, Boshqa 29). Rasm va narxlar AllPituz kanalidan olingan, rasmlardagi
     begona yozuvlar tozalangan.
 18. **Yangi ko'rinish** (59-band): pahlavon rasmi — kirish ekrani foni va ilova ikonkasi.
@@ -1235,7 +1235,7 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Anjomlar:** kanalning 476 ta posti ko'rildi (3370–4069) — shakerlar (3873),
       UFC suv shishasi (3370) topildi; press rollerni foydalanuvchi o'zi berdi (200 000).
       Rasmdagi "200 000" va ruscha yozuv olib tashlandi.
-    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 1, Dobavkalar 91.
+    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 12, Dobavkalar 91.
     - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
       sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
 
@@ -1343,6 +1343,23 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       `ilova/main.dart.js` (3 630 141 bayt) lokal fayllar bilan aynan bir xil.
     - Eslatma: telefondagi ilovani yangilash uchun saytdan yangi APK'ni yuklab, ustiga
       o'rnatish kerak; web'da `Ctrl+Shift+R`.
+
+67. **Anjomlar: 11 ta yangi tovar (5-okt)** — foydalanuvchi: "anjomlarda faqat bitta narsa
+    turibdi, o'sha kanaldan qo'sh".
+    - AllPituz kanali **to'liq** yig'ildi: 2095 post (1–4069, 2018–2024); matn bo'yicha
+      qidiruv + matnsiz 174 ta rasmli post kollajda ko'z bilan ko'rildi. Anjomlar asosan
+      **1594 va 1615-postlarda** (2020-aprel) topildi.
+    - Qo'shildi (`tools/dokon/anjomlar-2.json`): otjimaniya tayanchi, turnik palka 1 / 1,2 /
+      1,5 m (3 ta alohida tovar — narxi har xil), devor turnigi 2 in 1, pedalli ekspander,
+      4 g'ildirakli press roller, elektron tarozi, boks lapasi (Venum/Reebok, 2 rasm),
+      Everlast kik lapasi, yoga mat. Rasmlardagi narx va yozuvlar olib tashlandi
+      (`public/img/tovar/anjom-*.jpg`).
+    - Narxlar kanaldagi 2020 yil narxi + 15% ustama (`narx_ustama.mjs 15` — eski tovarlar
+      o'zgarmadi). **Narxlar eski — zal egasi tekshirsin.**
+    - Topilgan, lekin qo'shilmagan: TRX lentalari (1609–1613, 1615 — narx yo'q),
+      sport sumkalar Puma 35 $ / Motodor 30 $ (2601 — rasm yo'q), shakerlar va suv idishlari
+      (2182, 2366, 2376, 2423, 2830, 2840, 3365–3368 — "Suv idishlari" bo'limi uchun, so'ralmadi).
+    - Do'konda jami **126 ta tovar**.
 
 ---
 
