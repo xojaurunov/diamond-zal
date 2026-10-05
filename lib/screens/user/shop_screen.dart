@@ -200,8 +200,9 @@ class _ShopScreenState extends State<ShopScreen> {
             return SafeArea(
               bottom: false,
               child: ListView(
+              // tepadan bo'sh joy - bo'lim tugmalari ekran chetiga yopishib qolmasin
               padding:
-                  const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
+                  const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.lg, AppSpace.lg, AppSpace.xxl),
               children: [
                 if (waiting.isNotEmpty) ...[
                   SectionHeader('Mening buyurtmalarim',
