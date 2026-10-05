@@ -18,6 +18,8 @@ yangi APK (25,3 MB, `CN=Diamond Zal`). Do'kondagi **hamma 115 tovarga 15% ustama
 (tan narx `costPrice` da saqlandi). **Birinchi haftalik zaxira** olindi:
 `zaxira/2026-10-05_bazaning-zaxirasi.json`. Haqiqiy qoldiqlar hali kiritilmagan
 (foydalanuvchi: keyinroq). Batafsil — **66-band**.
+O'sha kuni yana: 28 ta yangi tovar (jami 144), **barmen faqat o'z zali, rang tanlash, oylik
+moliyaviy hisobot, Crashlytics** — **67–72-band**. ⚠️ Eski APK'da buyurtma ishlamaydi — yangilash shart.
 
 **4-oktabr:** 13-bo'limdagi tavsiyalardan 5 tasi qilindi — **abonement + davomat + haftalik
 eslatma jurnali, do'kon narxiga ustama, o'lcham bo'yicha qoldiq, QR ro'yxat kodi, haftalik
@@ -32,7 +34,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **100/100**, qoida testlari **164/164**.
+`flutter test` **110/110**, qoida testlari **181/181**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -106,7 +108,7 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
     va o'lchamlar (XL–4XL) qo'shiladi, narx so'mda yoki dollarda bo'ladi; shogird
     buyurtmada o'lchamni tanlaydi, hisobot valyuta bo'yicha alohida chiqadi.
 17. **Do'kon to'ldirildi — 115 ta tovar** (57–60-band): Forma 17, Suv idishlari 6,
-    Anjomlar 12, Dobavkalar 91 (Protein 21, Gainer 14, Kreatin 12, L-Karnitin 10,
+    Anjomlar 13, Dobavkalar 91 (Protein 21, Gainer 14, Kreatin 12, L-Karnitin 10,
     L-Arginin 5, Boshqa 29). Rasm va narxlar AllPituz kanalidan olingan, rasmlardagi
     begona yozuvlar tozalangan.
 18. **Yangi ko'rinish** (59-band): pahlavon rasmi — kirish ekrani foni va ilova ikonkasi.
@@ -1235,7 +1237,7 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Anjomlar:** kanalning 476 ta posti ko'rildi (3370–4069) — shakerlar (3873),
       UFC suv shishasi (3370) topildi; press rollerni foydalanuvchi o'zi berdi (200 000).
       Rasmdagi "200 000" va ruscha yozuv olib tashlandi.
-    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 12, Dobavkalar 91.
+    - **Do'konda jami 115 ta tovar:** Forma 17, Suv idishlari 6, Anjomlar 13, Dobavkalar 91.
     - Tekshiruv: brauzerda vaqtinchalik TEST shogird akkaunti bilan ikkala daraja ham
       sinaldi; akkaunt keyin o'chirildi. `flutter analyze` 0 xato, `flutter test` 90/90.
 
@@ -1360,6 +1362,53 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       sport sumkalar Puma 35 $ / Motodor 30 $ (2601 — rasm yo'q), shakerlar va suv idishlari
       (2182, 2366, 2376, 2423, 2830, 2840, 3365–3368 — "Suv idishlari" bo'limi uchun, so'ralmadi).
     - Do'konda jami **126 ta tovar**.
+
+68. **Do'kon: 17 ta suv idishi va TRX (5-okt)** — `tools/dokon/suv-idishlari-2.json`
+    (kanalning 2830, 2840, 3365–3368-postlari: 400 ml shakerdan 3 L butilkagacha, 2 ta to'plam)
+    va `tools/dokon/trx.json` (rasm kanaldan 1609/1611-post, narx internetdan — mihome.uz,
+    490 000). Hammasiga +15% ustama. Do'konda jami **144 ta tovar**: Forma 17,
+    Suv idishlari 23, Anjomlar 13, Dobavkalar 91.
+    Qo'shilmadi: Venum Technical/Logos (rasm kerak — foydalanuvchi alohida xabarda yuboradi),
+    sport sumka (kanalda rasm yo'q; uzum/mihome/sello avtomatik yuklashni bloklaydi).
+
+69. **Barmen faqat o'z zali (5-okt)** — har zalda bitta barmen bo'ladi.
+    - Buyurtmaga `gymId` yoziladi (shogird trenerining zali). Shogird trenerning `users`
+      hujjatini o'qiy olmaydi, shuning uchun zal **trenerlar katalogida ko'zgu** sifatida
+      saqlanadi (`trainers/{id}.gymId`); qoida uni `users/{tid}.gymId` ga teng bo'lishga
+      majbur qiladi. Ko'zgu yoziladigan joylar: `Db.setUserGym`, `deleteGym`,
+      `_ensureTrainerEntry`, `syncTrainerDirectory`, `saveTrainerProfile`.
+    - Qoidalar: `gymOf(uid)`; `orders` yaratishda `gymId` trener zaliga teng bo'lishi shart;
+      barmen o'qish/yangilash faqat `resource.data.gymId == gymOf(barmen)`. Katalogni bosh
+      admin faqat `gymId` bo'yicha yangilay oladi.
+    - `Db.gymOrders(gymId)`, `Db.ordersFor(user)` (bosh admin — hammasi, barmen — o'z zali,
+      trener — o'z shogirdlari). Zalsiz barmen hech narsa ko'rmaydi.
+    - Bir martalik: `node tools/holat/katalog_zal.mjs` — 3 trener katalogiga zal yozildi.
+    - Haqiqiy bazada barmen nomidan tekshirildi: o'z zali — OK, filtrsiz va boshqa zal — rad.
+    - ⚠️ **Eski APK'da buyurtma berish va barmen ekrani ishlamaydi** — hamma yangilasin.
+
+70. **Buyurtmada rang tanlash (5-okt)** — `Product.colors`, `ShopOrder.color`; shogird
+    o'lcham kabi rangni tanlaydi (tanlanmaguncha tugma "Avval rangni tanlang"), buyurtma nomi
+    "Venum komplekt (XL, sariq)". Tovar formasida "Ranglar" maydoni. Qoida: `color` ≤ 30 belgi.
+    Qoldiq rang bo'yicha yuritilmaydi. 6 ta komplektga ranglar yozildi
+    (`node tools/dokon/ranglar.mjs tools/dokon/forma-ranglar.json`).
+
+71. **Oylik moliyaviy hisobot (5-okt)** — bosh admin: Xodimlar → "Oylik hisobot".
+    Oy (← →) va zal tanlanadi; kartalar: jami tushum, abonement (soni, summasi — to'langan
+    sana bo'yicha), do'kon tushumi (berilgan buyurtmalar), do'kon foydasi (sotilgan narx −
+    hozirgi tan narx; tan narxsiz buyurtmalar alohida sanaladi). Valyuta bo'yicha alohida.
+    `lib/models/finance.dart` (`MonthlyReport`, sof hisob), `finance_screen.dart`,
+    `Db.allSubscriptions()` (collectionGroup; qoida `/{path=**}/subscriptions` — faqat bosh admin).
+    Saytda bosh admin nomidan ochib ko'rildi — ishlaydi (hozir bazada sotuv yo'q, 0 chiqadi).
+
+72. **Crashlytics (5-okt)** — `firebase_crashlytics`; ilova qulasa yoki tutilmagan xato bo'lsa
+    Firebase Console → Crashlytics'ga yuboriladi. Faqat Android release'da (web va emulyatorda
+    o'chiq), faqat `uid` yuboriladi. Gradle: `com.google.firebase.crashlytics` 3.0.3,
+    `google-services` 4.3.15 → 4.4.2. **Telefonda hali tasdiqlanmagan** — birinchi ma'lumot
+    Console'da ilova yangi APK bilan ochilgandan keyin paydo bo'ladi.
+
+    **5-okt yakuni:** `flutter analyze` 0, `flutter test` **110/110**, qoida testlari
+    **181/181**. Qoidalar, web va APK (CN=Diamond Zal) joylandi. Rejalar: `specs/okt-paket/`
+    (lokal). **Qolgan: 05-blaze-push** — zal egasi Blaze'ni yoqishi kerak.
 
 ---
 
