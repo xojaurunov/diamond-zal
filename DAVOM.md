@@ -1522,10 +1522,11 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       (`python tools/l10n/l10n.py gen`), qo'lda tahrirlanmaydi.
     - Vosita `tools/l10n/l10n.py`: `scan` (matnlarni topadi), `wrap` (o'raydi), `unconst`,
       `add`, `gen`, `check` (tarjimasi yo'q kalitlar).
-    - **Tayyor:** kirish, ro'yxatdan o'tish, anketa, sozlamalar, parol; shogirdning hamma
-      ekrani; holat yorliqlari, lenta, eslatma matnlari, do'kon bo'limlari, sana (318 kalit).
-    - **Qoldi:** trener / bosh admin / barmen ekranlari (~750 matn), tayyor reja shablonlari,
-      viloyat-tuman nomlari. Ular hozircha har tilda o'zbekcha chiqadi.
+    - **Tayyor (711 kalit):** hamma ekran — kirish, anketa, sozlamalar, shogird, trener,
+      bosh admin, barmen; holat yorliqlari, lenta, eslatmalar, do'kon bo'limlari, sana.
+    - **O'zbekcha qoldi:** tayyor reja shablonlari va standart mahsulotlar (bazaga yoziladigan
+      ma'lumot), viloyat-tuman nomlari (`hudud.dart`), Android bildirishnoma kanali nomi,
+      tizim oynalaridagi tugmalar (vaqt tanlash — inglizcha, `flutter_localizations` yo'q).
     - **Tarjima qilinmaydi:** foydalanuvchi kiritgan matn (tovar, reja va taom nomi, chat,
       ism) va chatga yoziladigan buyurtma xabarlari.
     - Bazadagi kalit qiymatlar (`Forma`, `Ozish`, hafta kunlari) o'zgarmadi — faqat ekranda
