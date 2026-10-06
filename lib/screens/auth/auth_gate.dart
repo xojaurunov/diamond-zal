@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
@@ -98,9 +99,9 @@ class _ErrorView extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         body: EmptyState(
           icon: Icons.error_outline,
-          title: 'Xatolik yuz berdi',
+          title: tr('Xatolik yuz berdi'),
           subtitle: message,
-          action: const OutlinedButton(onPressed: AuthService.signOut, child: Text('Qayta kirish')),
+          action: OutlinedButton(onPressed: AuthService.signOut, child: Text(tr('Qayta kirish'))),
         ),
       );
 }
@@ -144,16 +145,16 @@ class _NoProfileState extends State<_NoProfile> {
     return Scaffold(
       body: EmptyState(
         icon: Icons.no_accounts_outlined,
-        title: 'Akkaunt topilmadi',
-        subtitle: "Akkauntingiz o'chirilgan bo'lishi mumkin. Shu raqam bilan qaytadan "
-            "ro'yxatdan o'tishingiz mumkin.",
+        title: tr('Akkaunt topilmadi'),
+        subtitle: tr("Akkauntingiz o'chirilgan bo'lishi mumkin. Shu raqam bilan qaytadan "
+            "ro'yxatdan o'tishingiz mumkin."),
         action: Column(mainAxisSize: MainAxisSize.min, children: [
           FilledButton(
             onPressed: _busy ? null : _restart,
-            child: const Text("Qaytadan ro'yxatdan o'tish"),
+            child: Text(tr("Qaytadan ro'yxatdan o'tish")),
           ),
           const SizedBox(height: AppSpace.sm),
-          const OutlinedButton(onPressed: AuthService.signOut, child: Text('Chiqish')),
+          OutlinedButton(onPressed: AuthService.signOut, child: Text(tr('Chiqish'))),
         ]),
       ),
     );
@@ -171,11 +172,11 @@ class _NoProfileState extends State<_NoProfile> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Qaytadan ro'yxatdan o'tish", style: Theme.of(context).textTheme.titleLarge),
+            Text(tr("Qaytadan ro'yxatdan o'tish"), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpace.sm),
             Text(
-              "Eski kirish ma'lumotlari o'chiriladi, keyin shu raqam bilan yangidan ro'yxatdan "
-              "o'tasiz. Tasdiqlash uchun hozirgi parolingizni kiriting.",
+              tr("Eski kirish ma'lumotlari o'chiriladi, keyin shu raqam bilan yangidan ro'yxatdan "
+              "o'tasiz. Tasdiqlash uchun hozirgi parolingizni kiriting."),
               style: TextStyle(color: AppColors.textMuted),
             ),
             const SizedBox(height: AppSpace.lg),
@@ -183,17 +184,17 @@ class _NoProfileState extends State<_NoProfile> {
               controller: pass,
               obscureText: true,
               autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Parol',
-                prefixIcon: Icon(Icons.lock_outline),
+              decoration: InputDecoration(
+                labelText: tr('Parol'),
+                prefixIcon: const Icon(Icons.lock_outline),
               ),
             ),
             const SizedBox(height: AppSpace.lg),
             FilledButton(
-                onPressed: () => Navigator.pop(context, true), child: const Text('Davom etish')),
+                onPressed: () => Navigator.pop(context, true), child: Text(tr('Davom etish'))),
             const SizedBox(height: AppSpace.sm),
             OutlinedButton(
-                onPressed: () => Navigator.pop(context, false), child: const Text('Bekor qilish')),
+                onPressed: () => Navigator.pop(context, false), child: Text(tr('Bekor qilish'))),
           ]),
     );
     if (ok != true || pass.text.isEmpty || !mounted) return;
@@ -206,12 +207,12 @@ class _NoProfileState extends State<_NoProfile> {
         showSnack(
           context,
           e.code == 'wrong-password' || e.code == 'invalid-credential'
-              ? "Parol noto'g'ri"
-              : "Bo'lmadi: ${e.code}",
+              ? tr("Parol noto'g'ri")
+              : trf("Bo'lmadi: {0}", [e.code]),
         );
       }
     } catch (e) {
-      if (mounted) showSnack(context, "Bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

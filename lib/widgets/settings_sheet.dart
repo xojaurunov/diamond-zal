@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../services/notifications.dart';
 import '../services/settings.dart';
 import '../theme.dart';
+import 'lang_picker.dart';
 import 'ui.dart';
 
 /// Sozlamalar: ko'rinish (tema) va bildirishnomalar.
@@ -37,27 +39,27 @@ class _SettingsSheetState extends State<_SettingsSheet> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
       child: ListView(shrinkWrap: true, children: [
-        Text('Sozlamalar', style: t.titleLarge),
+        Text(tr('Sozlamalar'), style: t.titleLarge),
         const SizedBox(height: AppSpace.lg),
-        const Eyebrow("Ko'rinish"),
+        Eyebrow(tr("Ko'rinish")),
         const SizedBox(height: AppSpace.sm),
         ValueListenableBuilder<ThemeMode>(
           valueListenable: AppSettings.themeMode,
           builder: (context, mode, _) => SegmentedButton<ThemeMode>(
             showSelectedIcon: false,
-            segments: const [
+            segments: [
               ButtonSegment(
                   value: ThemeMode.dark,
-                  icon: Icon(Icons.dark_mode_outlined),
-                  label: Text("Qorong'i")),
+                  icon: const Icon(Icons.dark_mode_outlined),
+                  label: Text(tr("Qorong'i"))),
               ButtonSegment(
                   value: ThemeMode.light,
-                  icon: Icon(Icons.light_mode_outlined),
-                  label: Text("Yorug'")),
+                  icon: const Icon(Icons.light_mode_outlined),
+                  label: Text(tr("Yorug'"))),
               ButtonSegment(
                   value: ThemeMode.system,
-                  icon: Icon(Icons.phone_android_outlined),
-                  label: Text('Telefon')),
+                  icon: const Icon(Icons.phone_android_outlined),
+                  label: Text(tr('Telefon'))),
             ],
             selected: {mode},
             onSelectionChanged: (s) {
@@ -68,25 +70,30 @@ class _SettingsSheetState extends State<_SettingsSheet> {
           ),
         ),
         const SizedBox(height: AppSpace.xl),
-        const Eyebrow('Bildirishnomalar'),
+        Eyebrow(tr('Til')),
+        const SizedBox(height: AppSpace.sm),
+        // til almashganda ilova qayta chiziladi — varaqni yopamiz
+        LangPicker(onChanged: () => Navigator.pop(context)),
+        const SizedBox(height: AppSpace.xl),
+        Eyebrow(tr('Bildirishnomalar')),
         if (!Notifications.supported)
           Padding(
             padding: const EdgeInsets.only(top: AppSpace.sm),
             child: Text(
-              "Bildirishnomalar telefondagi (Android) ilovada ishlaydi.",
+              tr("Bildirishnomalar telefondagi (Android) ilovada ishlaydi."),
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             ),
           ),
         if (widget.student) ...[
-          sw('notif_meals', AppSettings.mealReminders, 'Ovqat vaqti eslatmasi',
-              'Rejadagi har mahal vaqtida eslatadi'),
-          sw('notif_weight', AppSettings.weighInReminder, 'Haftalik vazn eslatmasi',
-              'Vazn kiritish kuni ertalab 08:00 da'),
-          sw('notif_plan', AppSettings.planNotifications, 'Yangi reja',
-              'Trener reja biriktirganda'),
+          sw('notif_meals', AppSettings.mealReminders, tr('Ovqat vaqti eslatmasi'),
+              tr('Rejadagi har mahal vaqtida eslatadi')),
+          sw('notif_weight', AppSettings.weighInReminder, tr('Haftalik vazn eslatmasi'),
+              tr('Vazn kiritish kuni ertalab 08:00 da')),
+          sw('notif_plan', AppSettings.planNotifications, tr('Yangi reja'),
+              tr('Trener reja biriktirganda')),
         ],
-        sw('notif_chat', AppSettings.chatNotifications, 'Yangi xabar',
-            widget.student ? 'Trener yozganda' : 'Shogird yozganda'),
+        sw('notif_chat', AppSettings.chatNotifications, tr('Yangi xabar'),
+            widget.student ? tr('Trener yozganda') : tr('Shogird yozganda')),
       ]),
     );
   }

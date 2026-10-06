@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../services/db.dart';
 import '../theme.dart';
 import 'ui.dart';
@@ -10,10 +11,10 @@ Future<void> showChangePassword(BuildContext context) =>
 
 /// Yangi parol tekshiruvi: null — hammasi joyida, aks holda xato matni
 String? validateNewPassword(String current, String next, String repeat) {
-  if (current.isEmpty) return 'Hozirgi parolni kiriting';
-  if (next.length < 6) return "Yangi parol kamida 6 belgi bo'lsin";
-  if (next == current) return 'Yangi parol eskisidan farq qilsin';
-  if (next != repeat) return 'Yangi parollar bir xil emas';
+  if (current.isEmpty) return tr('Hozirgi parolni kiriting');
+  if (next.length < 6) return tr("Yangi parol kamida 6 belgi bo'lsin");
+  if (next == current) return tr('Yangi parol eskisidan farq qilsin');
+  if (next != repeat) return tr('Yangi parollar bir xil emas');
   return null;
 }
 
@@ -54,14 +55,14 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
       if (!mounted) return;
       final messenger = ScaffoldMessenger.of(context);
       Navigator.pop(context);
-      messenger.showSnackBar(const SnackBar(content: Text("Parol o'zgartirildi")));
+      messenger.showSnackBar(SnackBar(content: Text(tr("Parol o'zgartirildi"))));
     } on FirebaseAuthException catch (e) {
       setState(() => _error = switch (e.code) {
-            'wrong-password' || 'invalid-credential' => "Hozirgi parol noto'g'ri",
-            'weak-password' => 'Yangi parol juda oddiy',
-            'too-many-requests' => "Juda ko'p urinish — birozdan keyin qayta urinib ko'ring",
-            'network-request-failed' => "Internet yo'q",
-            _ => "O'zgartirib bo'lmadi: ${e.code}",
+            'wrong-password' || 'invalid-credential' => tr("Hozirgi parol noto'g'ri"),
+            'weak-password' => tr('Yangi parol juda oddiy'),
+            'too-many-requests' => tr("Juda ko'p urinish — birozdan keyin qayta urinib ko'ring"),
+            'network-request-failed' => tr("Internet yo'q"),
+            _ => trf("O'zgartirib bo'lmadi: {0}", [e.code]),
           });
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -86,17 +87,17 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text("Parolni o'zgartirish", style: t.titleLarge),
+        Text(tr("Parolni o'zgartirish"), style: t.titleLarge),
         const SizedBox(height: AppSpace.lg),
-        _field(_current, 'Hozirgi parol', autofocus: true),
-        _field(_next, 'Yangi parol (kamida 6 belgi)'),
-        _field(_repeat, 'Yangi parolni takrorlang'),
+        _field(_current, tr('Hozirgi parol'), autofocus: true),
+        _field(_next, tr('Yangi parol (kamida 6 belgi)')),
+        _field(_repeat, tr('Yangi parolni takrorlang')),
         Align(
           alignment: Alignment.centerLeft,
           child: TextButton.icon(
             onPressed: () => setState(() => _show = !_show),
             icon: Icon(_show ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 18),
-            label: Text(_show ? 'Yashirish' : "Ko'rsatish"),
+            label: Text(_show ? 'Yashirish' : tr("Ko'rsatish")),
           ),
         ),
         if (_error != null)
@@ -109,7 +110,7 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
           child: _busy
               ? const SizedBox.square(
                   dimension: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
-              : const Text('Saqlash'),
+              : Text(tr('Saqlash')),
         ),
       ],
     );

@@ -1,0 +1,502 @@
+{
+ "Akkaunt topilmadi": {
+  "ru": "Аккаунт не найден",
+  "en": "Account not found"
+ },
+ "Akkaunt yaratish": {
+  "ru": "Создать аккаунт",
+  "en": "Create account"
+ },
+ "Akkauntingiz o'chirilgan bo'lishi mumkin. Shu raqam bilan qaytadan ro'yxatdan o'tishingiz mumkin.": {
+  "ru": "Возможно, ваш аккаунт удалён. Вы можете заново зарегистрироваться с этим номером.",
+  "en": "Your account may have been deleted. You can sign up again with this number."
+ },
+ "Anketa": {
+  "ru": "Анкета",
+  "en": "Profile form"
+ },
+ "Ayol": {
+  "ru": "Женщина",
+  "en": "Female"
+ },
+ "BMI 18,5 dan past — ozish tavsiya etilmaydi. Massa naborni tanlang.": {
+  "ru": "ИМТ ниже 18,5 — худеть не рекомендуется. Выберите набор массы.",
+  "en": "BMI is below 18.5 — losing weight is not recommended. Choose muscle gain."
+ },
+ "BMI {0} — vazningiz kam, ozish tavsiya etilmaydi.": {
+  "ru": "ИМТ {0} — вес ниже нормы, худеть не рекомендуется.",
+  "en": "BMI {0} — you are underweight, losing weight is not recommended."
+ },
+ "Bekor qilish": {
+  "ru": "Отмена",
+  "en": "Cancel"
+ },
+ "Bildirishnomalar": {
+  "ru": "Уведомления",
+  "en": "Notifications"
+ },
+ "Bildirishnomalar telefondagi (Android) ilovada ishlaydi.": {
+  "ru": "Уведомления работают в приложении на телефоне (Android).",
+  "en": "Notifications work in the phone app (Android)."
+ },
+ "Bo'lmadi: {0}": {
+  "ru": "Не получилось: {0}",
+  "en": "Failed: {0}"
+ },
+ "Bo'y": {
+  "ru": "Рост",
+  "en": "Height"
+ },
+ "Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi.": {
+  "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
+  "en": "Your daily calorie target is calculated from this data."
+ },
+ "Bu raqam bilan akkaunt allaqachon bor — Kirish'ni bosing": {
+  "ru": "Аккаунт с этим номером уже есть — нажмите «Войти»",
+  "en": "An account with this number already exists — tap Sign in"
+ },
+ "Chiqish": {
+  "ru": "Выйти",
+  "en": "Sign out"
+ },
+ "Chorshanba": {
+  "ru": "Среда",
+  "en": "Wednesday"
+ },
+ "Davom etish": {
+  "ru": "Продолжить",
+  "en": "Continue"
+ },
+ "Dushanba": {
+  "ru": "Понедельник",
+  "en": "Monday"
+ },
+ "Erkak": {
+  "ru": "Мужчина",
+  "en": "Male"
+ },
+ "Eski kirish ma'lumotlari o'chiriladi, keyin shu raqam bilan yangidan ro'yxatdan o'tasiz. Tasdiqlash uchun hozirgi parolingizni kiriting.": {
+  "ru": "Старые данные для входа будут удалены, затем вы заново зарегистрируетесь с этим номером. Для подтверждения введите текущий пароль.",
+  "en": "Your old sign-in data will be deleted, then you sign up again with this number. Enter your current password to confirm."
+ },
+ "Ha": {
+  "ru": "Да",
+  "en": "Yes"
+ },
+ "Haftalik vazn eslatmasi": {
+  "ru": "Еженедельное напоминание о весе",
+  "en": "Weekly weigh-in reminder"
+ },
+ "Homilador bo'lsangiz, 18 yoshgacha bo'lsangiz yoki diabet, yurak, oshqozon kasalliklari bo'lsa, diyetani boshlashdan oldin shifokor bilan maslahatlashing.": {
+  "ru": "Если вы беременны, вам меньше 18 лет или есть диабет, болезни сердца или желудка — перед началом диеты посоветуйтесь с врачом.",
+  "en": "If you are pregnant, under 18, or have diabetes, heart or stomach conditions, consult a doctor before starting the diet."
+ },
+ "Hozircha shogird qabul qilayotgan trener yo'q — trener keyin biriktiriladi.": {
+  "ru": "Сейчас нет тренеров, принимающих учеников — тренера назначат позже.",
+  "en": "No trainer is accepting clients right now — one will be assigned later."
+ },
+ "Hozirgi parol": {
+  "ru": "Текущий пароль",
+  "en": "Current password"
+ },
+ "Hozirgi parol noto'g'ri": {
+  "ru": "Текущий пароль неверный",
+  "en": "Current password is incorrect"
+ },
+ "Hozirgi parolni kiriting": {
+  "ru": "Введите текущий пароль",
+  "en": "Enter your current password"
+ },
+ "Internet aloqasini tekshiring": {
+  "ru": "Проверьте подключение к интернету",
+  "en": "Check your internet connection"
+ },
+ "Internet yo'q": {
+  "ru": "Нет интернета",
+  "en": "No internet"
+ },
+ "Ism": {
+  "ru": "Имя",
+  "en": "Name"
+ },
+ "Ismingizni kiriting": {
+  "ru": "Введите имя",
+  "en": "Enter your name"
+ },
+ "Jins": {
+  "ru": "Пол",
+  "en": "Sex"
+ },
+ "Juda ko'p urinish — birozdan keyin qayta urinib ko'ring": {
+  "ru": "Слишком много попыток — попробуйте чуть позже",
+  "en": "Too many attempts — try again a bit later"
+ },
+ "Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring": {
+  "ru": "Слишком много попыток. Попробуйте чуть позже",
+  "en": "Too many attempts. Try again a bit later"
+ },
+ "Juma": {
+  "ru": "Пятница",
+  "en": "Friday"
+ },
+ "Keling, tanishamiz 👋": {
+  "ru": "Давайте знакомиться 👋",
+  "en": "Let's get to know you 👋"
+ },
+ "Kirish": {
+  "ru": "Войти",
+  "en": "Sign in"
+ },
+ "Kiriting": {
+  "ru": "Введите",
+  "en": "Required"
+ },
+ "Ko'rinish": {
+  "ru": "Оформление",
+  "en": "Appearance"
+ },
+ "Ko'rsatish": {
+  "ru": "Показать",
+  "en": "Show"
+ },
+ "Kunlik norma · {0}": {
+  "ru": "Дневная норма · {0}",
+  "en": "Daily target · {0}"
+ },
+ "Ma'lumotlarni tahrirlash": {
+  "ru": "Изменить данные",
+  "en": "Edit details"
+ },
+ "Maqsad": {
+  "ru": "Цель",
+  "en": "Goal"
+ },
+ "Maqsadingizni tanlang: ozish yoki massa nabor": {
+  "ru": "Выберите цель: похудение или набор массы",
+  "en": "Choose your goal: weight loss or muscle gain"
+ },
+ "Massa nabor": {
+  "ru": "Набор массы",
+  "en": "Muscle gain"
+ },
+ "Moddalar almashinuvi (metabolizm)": {
+  "ru": "Обмен веществ (метаболизм)",
+  "en": "Metabolism"
+ },
+ "Moddalar almashinuvini tanlang: sekin yoki tez": {
+  "ru": "Выберите обмен веществ: медленный или быстрый",
+  "en": "Choose your metabolism: slow or fast"
+ },
+ "O'zgartirib bo'lmadi: {0}": {
+  "ru": "Не удалось изменить: {0}",
+  "en": "Could not change: {0}"
+ },
+ "Ovqat vaqti eslatmasi": {
+  "ru": "Напоминание о приёме пищи",
+  "en": "Meal time reminder"
+ },
+ "Ozish": {
+  "ru": "Похудение",
+  "en": "Weight loss"
+ },
+ "Parol": {
+  "ru": "Пароль",
+  "en": "Password"
+ },
+ "Parol juda oddiy — kamida 6 belgi": {
+  "ru": "Пароль слишком простой — минимум 6 символов",
+  "en": "Password is too weak — at least 6 characters"
+ },
+ "Parol kamida 6 belgidan iborat": {
+  "ru": "Пароль — не меньше 6 символов",
+  "en": "Password must be at least 6 characters"
+ },
+ "Parol noto'g'ri": {
+  "ru": "Неверный пароль",
+  "en": "Incorrect password"
+ },
+ "Parol o'zgartirildi": {
+  "ru": "Пароль изменён",
+  "en": "Password changed"
+ },
+ "Parolni ko'rsatish": {
+  "ru": "Показать пароль",
+  "en": "Show password"
+ },
+ "Parolni o'zgartirish": {
+  "ru": "Сменить пароль",
+  "en": "Change password"
+ },
+ "Parolni unutdim": {
+  "ru": "Забыл пароль",
+  "en": "Forgot password"
+ },
+ "Parolni unutdingizmi?": {
+  "ru": "Забыли пароль?",
+  "en": "Forgot your password?"
+ },
+ "Parolni yashirish": {
+  "ru": "Скрыть пароль",
+  "en": "Hide password"
+ },
+ "Payshanba": {
+  "ru": "Четверг",
+  "en": "Thursday"
+ },
+ "Qayta kirish": {
+  "ru": "Войти заново",
+  "en": "Sign in again"
+ },
+ "Qaytadan ro'yxatdan o'tish": {
+  "ru": "Зарегистрироваться заново",
+  "en": "Sign up again"
+ },
+ "Qorong'i": {
+  "ru": "Тёмное",
+  "en": "Dark"
+ },
+ "Raqamni to'liq kiriting: 90 123 45 67": {
+  "ru": "Введите номер полностью: 90 123 45 67",
+  "en": "Enter the full number: 90 123 45 67"
+ },
+ "Rejadagi har mahal vaqtida eslatadi": {
+  "ru": "Напомнит о каждом приёме пищи по плану",
+  "en": "Reminds you at each meal time in your plan"
+ },
+ "Ro'yxatdan o'tgach, trener sizga shaxsiy ovqatlanish rejasini biriktiradi.": {
+  "ru": "После регистрации тренер назначит вам личный план питания.",
+  "en": "After you sign up, a trainer will assign you a personal meal plan."
+ },
+ "Ro'yxatdan o'tish": {
+  "ru": "Регистрация",
+  "en": "Sign up"
+ },
+ "SMS yuborilmaydi, shuning uchun parolni zal tiklaydi:\n\n1. Zal egasiga (bosh adminga) telefon raqamingizni ayting.\n2. U sizga vaqtinchalik yangi parol beradi.\n3. Shu parol bilan kiring va Profil → «Parolni o'zgartirish» orqali o'zingizning parolingizni qo'ying.": {
+  "ru": "SMS не отправляются, поэтому пароль восстанавливает зал:\n\n1. Сообщите владельцу зала (главному админу) свой номер телефона.\n2. Он выдаст вам временный новый пароль.\n3. Войдите с этим паролем и задайте свой в Профиль → «Сменить пароль».",
+  "en": "No SMS is sent, so the gym resets your password:\n\n1. Tell the gym owner (head admin) your phone number.\n2. They will give you a temporary new password.\n3. Sign in with it and set your own in Profile → “Change password”."
+ },
+ "Saqlab bo'lmadi: {0}": {
+  "ru": "Не удалось сохранить: {0}",
+  "en": "Could not save: {0}"
+ },
+ "Saqlash": {
+  "ru": "Сохранить",
+  "en": "Save"
+ },
+ "Sekin": {
+  "ru": "Медленный",
+  "en": "Slow"
+ },
+ "Seshanba": {
+  "ru": "Вторник",
+  "en": "Tuesday"
+ },
+ "Shanba": {
+  "ru": "Суббота",
+  "en": "Saturday"
+ },
+ "Shogird yozganda": {
+  "ru": "Когда пишет ученик",
+  "en": "When a client writes"
+ },
+ "Sozlamalar": {
+  "ru": "Настройки",
+  "en": "Settings"
+ },
+ "Tana o'lchamlari": {
+  "ru": "Параметры тела",
+  "en": "Body measurements"
+ },
+ "Tanlagan treneringiz rejangizni tuzadi va siz bilan yozishadi. Keyin Profil bo'limida almashtirishingiz mumkin.": {
+  "ru": "Выбранный тренер составит ваш план и будет с вами на связи. Позже его можно сменить в разделе «Профиль».",
+  "en": "The trainer you choose will build your plan and chat with you. You can change trainers later in Profile."
+ },
+ "Telefon": {
+  "ru": "Как в телефоне",
+  "en": "System"
+ },
+ "Telefon raqam": {
+  "ru": "Номер телефона",
+  "en": "Phone number"
+ },
+ "Telefon raqam noto'g'ri": {
+  "ru": "Неверный номер телефона",
+  "en": "Invalid phone number"
+ },
+ "Telefon raqam yoki parol noto'g'ri": {
+  "ru": "Неверный номер телефона или пароль",
+  "en": "Incorrect phone number or password"
+ },
+ "Tez": {
+  "ru": "Быстрый",
+  "en": "Fast"
+ },
+ "Tez — ovqat tez hazm bo'lib, tez-tez qorin ochadi. Sekin — ovqat sekin hazm bo'ladi, kuniga 2 mahal yeb ham yuraverasiz. Bilmasangiz — «Sekin»ni tanlang.": {
+  "ru": "Быстрый — еда переваривается быстро, вы часто хотите есть. Медленный — еда переваривается медленно, вам хватает 2 приёмов пищи в день. Не знаете — выберите «Медленный».",
+  "en": "Fast — food digests quickly and you get hungry often. Slow — food digests slowly and two meals a day are enough. If unsure, choose “Slow”."
+ },
+ "Til": {
+  "ru": "Язык",
+  "en": "Language"
+ },
+ "To'g'ri ovqatlanish —": {
+  "ru": "Правильное питание —",
+  "en": "Eating right is"
+ },
+ "Trener biriktirilgan": {
+  "ru": "Тренер назначен",
+  "en": "Trainer assigned"
+ },
+ "Trener reja biriktirganda": {
+  "ru": "Когда тренер назначает план",
+  "en": "When your trainer assigns a plan"
+ },
+ "Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.": {
+  "ru": "Личный план от тренера, ежедневный контроль и прогресс — в одном приложении.",
+  "en": "A personal plan from your trainer, daily tracking and progress — in one app."
+ },
+ "Trener va mijozlar bitta ilovadan kiradi.": {
+  "ru": "Тренеры и клиенты входят через одно приложение.",
+  "en": "Trainers and clients sign in through the same app."
+ },
+ "Trener yozganda": {
+  "ru": "Когда пишет тренер",
+  "en": "When your trainer writes"
+ },
+ "Treneringiz": {
+  "ru": "Ваш тренер",
+  "en": "Your trainer"
+ },
+ "Treneringizni tanlang": {
+  "ru": "Выберите тренера",
+  "en": "Choose your trainer"
+ },
+ "Tushunarli": {
+  "ru": "Понятно",
+  "en": "Got it"
+ },
+ "Vazn": {
+  "ru": "Вес",
+  "en": "Weight"
+ },
+ "Vazn bu yerda o'zgarmaydi — Progress bo'limida haftada 1 marta kiritiladi.": {
+  "ru": "Вес здесь не меняется — его вносят раз в неделю в разделе «Прогресс».",
+  "en": "Weight can't be changed here — log it once a week in Progress."
+ },
+ "Vazn kiritish kuni ertalab 08:00 da": {
+  "ru": "В день взвешивания, утром в 08:00",
+  "en": "On weigh-in day at 08:00"
+ },
+ "Xatolik yuz berdi": {
+  "ru": "Произошла ошибка",
+  "en": "Something went wrong"
+ },
+ "Yakshanba": {
+  "ru": "Воскресенье",
+  "en": "Sunday"
+ },
+ "Yangi parol (kamida 6 belgi)": {
+  "ru": "Новый пароль (минимум 6 символов)",
+  "en": "New password (at least 6 characters)"
+ },
+ "Yangi parol eskisidan farq qilsin": {
+  "ru": "Новый пароль должен отличаться от старого",
+  "en": "New password must differ from the old one"
+ },
+ "Yangi parol juda oddiy": {
+  "ru": "Новый пароль слишком простой",
+  "en": "New password is too weak"
+ },
+ "Yangi parol kamida 6 belgi bo'lsin": {
+  "ru": "Новый пароль — не меньше 6 символов",
+  "en": "New password must be at least 6 characters"
+ },
+ "Yangi parollar bir xil emas": {
+  "ru": "Новые пароли не совпадают",
+  "en": "New passwords don't match"
+ },
+ "Yangi parolni takrorlang": {
+  "ru": "Повторите новый пароль",
+  "en": "Repeat new password"
+ },
+ "Yangi reja": {
+  "ru": "Новый план",
+  "en": "New plan"
+ },
+ "Yangi xabar": {
+  "ru": "Новое сообщение",
+  "en": "New message"
+ },
+ "Yorug'": {
+  "ru": "Светлое",
+  "en": "Light"
+ },
+ "Yosh": {
+  "ru": "Возраст",
+  "en": "Age"
+ },
+ "aprel": {
+  "ru": "апреля",
+  "en": "April"
+ },
+ "avgust": {
+  "ru": "августа",
+  "en": "August"
+ },
+ "dekabr": {
+  "ru": "декабря",
+  "en": "December"
+ },
+ "fevral": {
+  "ru": "февраля",
+  "en": "February"
+ },
+ "gacha {0}": {
+  "ru": "из {0}",
+  "en": "of {0}"
+ },
+ "iyul": {
+  "ru": "июля",
+  "en": "July"
+ },
+ "iyun": {
+  "ru": "июня",
+  "en": "June"
+ },
+ "mart": {
+  "ru": "марта",
+  "en": "March"
+ },
+ "may": {
+  "ru": "мая",
+  "en": "May"
+ },
+ "natijaga yo’l": {
+  "ru": "путь к результату",
+  "en": "the way to results"
+ },
+ "noyabr": {
+  "ru": "ноября",
+  "en": "November"
+ },
+ "oktyabr": {
+  "ru": "октября",
+  "en": "October"
+ },
+ "sentyabr": {
+  "ru": "сентября",
+  "en": "September"
+ },
+ "yanvar": {
+  "ru": "января",
+  "en": "January"
+ },
+ "{0} kkal": {
+  "ru": "{0} ккал",
+  "en": "{0} kcal"
+ },
+ "{0}, {1}-{2}": {
+  "ru": "{0}, {1} {2}",
+  "en": "{0}, {2} {1}"
+ }
+}

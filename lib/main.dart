@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'services/settings.dart';
 import 'theme.dart';
 import 'widgets/ui.dart';
+import 'l10n/tr.dart';
 
 /// true — lokal Firebase Emulator (akkaunt kerak emas, `firebase emulators:start`).
 /// false — haqiqiy Firebase (telefon/istalgan joyda ishlaydi, SMS uchun ham shu).
@@ -81,7 +82,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
+    // til almashganda ham butun ilova qayta quriladi (matnlar tr() orqali olinadi)
+    return ValueListenableBuilder<String>(
+      valueListenable: appLang,
+      builder: (context, lang, _) => ValueListenableBuilder<ThemeMode>(
       valueListenable: AppSettings.themeMode,
       builder: (context, mode, _) {
         final platformLight =
@@ -90,7 +94,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         AppColors.light = light;
         return MaterialApp(
           // Ranglar const emas — rejim almashganda butun daraxt qayta quriladi
-          key: ValueKey(light),
+          key: ValueKey('$light-$lang'),
           title: 'Diamond',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.current(),
@@ -102,6 +106,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           home: const AuthGate(),
         );
       },
+      ),
     );
   }
 }

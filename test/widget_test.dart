@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kotta_qani_diet/l10n/tr.dart';
 import 'package:kotta_qani_diet/models/feed.dart';
 import 'package:kotta_qani_diet/models/finance.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
@@ -1249,6 +1250,36 @@ void main() {
       // 'a' daraxtda qoladi (holati saqlanadi), 'b' hali qurilmagan
       expect(find.text('a', skipOffstage: false), findsOneWidget);
       expect(find.text('b', skipOffstage: false), findsNothing);
+    });
+  });
+
+  group('Tillar', () {
+    tearDown(() => appLang.value = 'uz');
+
+    test('tr: uch til va tarjimasi yo-q matn', () {
+      expect(tr('Kirish'), 'Kirish');
+      appLang.value = 'ru';
+      expect(tr('Kirish'), 'Войти');
+      expect(tr('Lug-atda yo-q matn'), 'Lug-atda yo-q matn');
+      appLang.value = 'en';
+      expect(tr('Kirish'), 'Sign in');
+    });
+
+    test('trf: o-rinbosarlar va so-z tartibi', () {
+      expect(trf('{0} kkal', [2000]), '2000 kkal');
+      appLang.value = 'ru';
+      expect(trf('{0} kkal', [2000]), '2000 ккал');
+      appLang.value = 'en';
+      expect(trf('gacha {0}', [5]), 'of 5');
+    });
+
+    test('sana tilga qarab yoziladi', () {
+      final d = DateTime(2026, 10, 5); // dushanba
+      expect(uzDate(d), 'Dushanba, 5-oktyabr');
+      appLang.value = 'ru';
+      expect(uzDate(d), 'Понедельник, 5 октября');
+      appLang.value = 'en';
+      expect(uzDate(d), 'Monday, October 5');
     });
   });
 }

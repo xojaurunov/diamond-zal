@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../l10n/tr.dart';
 
 /// Telefon/brauzerda saqlanadigan shaxsiy sozlamalar: ko'rinish (tema) va bildirishnomalar.
 /// Hisobga bog'lanmagan — har qurilmada o'z tanlovi.
@@ -23,7 +24,16 @@ class AppSettings {
       'system' => ThemeMode.system,
       _ => ThemeMode.dark,
     };
+    final lang = _p?.getString('lang');
+    appLang.value = appLangs.containsKey(lang) ? lang! : 'uz';
     _loadFeedSeen();
+  }
+
+  /// Ilova tili (`uz` / `ru` / `en`) — [appLang] ni o'zgartiradi, ilova qayta chiziladi
+  static Future<void> setLang(String code) async {
+    if (!appLangs.containsKey(code)) return;
+    appLang.value = code;
+    await _p?.setString('lang', code);
   }
 
   static Future<void> setThemeMode(ThemeMode m) async {

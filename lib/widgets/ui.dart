@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../theme.dart';
 
 // ---------- formatlash ----------
@@ -28,8 +29,10 @@ const _months = [
   'dekabr',
 ];
 
-/// "Payshanba, 11-sentyabr"
-String uzDate(DateTime d) => '${_weekdays[d.weekday - 1]}, ${d.day}-${_months[d.month - 1]}';
+/// "Payshanba, 11-sentyabr" (ruscha: "Четверг, 11 сентября", inglizcha: "Thursday, September 11").
+/// Ro'yxatlar const — tarjima shu yerda, har chaqiriqda olinadi.
+String uzDate(DateTime d) =>
+    trf('{0}, {1}-{2}', [tr(_weekdays[d.weekday - 1]), d.day, tr(_months[d.month - 1])]);
 
 /// 85.0 -> "85", 85.5 -> "85.5"
 String fmtNum(double v) => v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1);
@@ -113,7 +116,7 @@ Future<bool> confirm(
   BuildContext context, {
   required String title,
   required String message,
-  String ok = 'Ha',
+  String? ok,
   bool destructive = false,
 }) async {
   final r = await showSheet<bool>(
@@ -137,12 +140,12 @@ Future<bool> confirm(
                   )
                 : null,
             onPressed: () => Navigator.pop(context, true),
-            child: Text(ok),
+            child: Text(ok ?? tr('Ha')),
           ),
           const SizedBox(height: AppSpace.sm),
           OutlinedButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Bekor qilish'),
+            child: Text(tr('Bekor qilish')),
           ),
         ]),
   );
@@ -549,7 +552,7 @@ class KcalRing extends StatelessWidget {
           CountUp(value, style: t.headlineMedium?.copyWith(color: fg)),
           const SizedBox(height: 2),
           Text(
-            'gacha ${total.round()}',
+            trf('gacha {0}', [total.round()]),
             style: t.labelSmall?.copyWith(color: AppColors.textFaint, fontFeatures: tabular),
           ),
         ]),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -46,7 +47,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
 
   static FormFieldValidator<String> _range(num min, num max) => (v) {
         final n = double.tryParse((v ?? '').replaceAll(',', '.'));
-        if (n == null) return 'Kiriting';
+        if (n == null) return tr('Kiriting');
         if (n < min || n > max) return '$min–$max';
         return null;
       };
@@ -68,22 +69,22 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   Future<void> _save() async {
     final formOk = _form.currentState!.validate();
     if (_goal.isEmpty) {
-      showSnack(context, 'Maqsadingizni tanlang: ozish yoki massa nabor');
+      showSnack(context, tr('Maqsadingizni tanlang: ozish yoki massa nabor'));
       return;
     }
     if (_canChooseTrainer && _trainers.isNotEmpty && _trainerId == null) {
-      showSnack(context, 'Treneringizni tanlang');
+      showSnack(context, tr('Treneringizni tanlang'));
       return;
     }
     if (_metabolism.isEmpty) {
-      showSnack(context, 'Moddalar almashinuvini tanlang: sekin yoki tez');
+      showSnack(context, tr('Moddalar almashinuvini tanlang: sekin yoki tez'));
       return;
     }
     if (!formOk) return;
     final updated = _preview;
     if (updated == null) return;
     if (updated.goal == 'lose' && !updated.canLose) {
-      showSnack(context, "BMI 18,5 dan past — ozish tavsiya etilmaydi. Massa naborni tanlang.");
+      showSnack(context, tr("BMI 18,5 dan past — ozish tavsiya etilmaydi. Massa naborni tanlang."));
       return;
     }
     setState(() => _busy = true);
@@ -92,7 +93,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       if (widget.user.weight == 0) await Db.addWeight(updated.id, updated.weight);
       if (widget.editing && mounted) Navigator.pop(context);
     } catch (e) {
-      if (mounted) showSnack(context, "Saqlab bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Saqlab bo'lmadi: {0}", [e]));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -106,25 +107,25 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     // Vazn kam bo'lsa (BMI < 18,5) ozishni tanlab bo'lmaydi
     final loseBlocked = preview != null && !preview.canLose;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.editing ? "Ma'lumotlarni tahrirlash" : 'Anketa')),
+      appBar: AppBar(title: Text(widget.editing ? tr("Ma'lumotlarni tahrirlash") : tr('Anketa'))),
       body: Form(
         key: _form,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
           children: [
             if (!widget.editing) ...[
-              Text('Keling, tanishamiz 👋', style: t.headlineSmall),
+              Text(tr('Keling, tanishamiz 👋'), style: t.headlineSmall),
               const SizedBox(height: 6),
-              Text("Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi.",
+              Text(tr("Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi."),
                   style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant)),
               const SizedBox(height: 20),
             ],
-            const SectionHeader('Maqsad'),
+            SectionHeader(tr('Maqsad')),
             Row(children: [
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.trending_down,
-                  label: 'Ozish',
+                  label: tr('Ozish'),
                   selected: _goal == 'lose',
                   onTap: loseBlocked ? null : () => setState(() => _goal = 'lose'),
                 ),
@@ -133,7 +134,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.trending_up,
-                  label: 'Massa nabor',
+                  label: tr('Massa nabor'),
                   selected: _goal == 'gain',
                   onTap: () => setState(() => _goal = 'gain'),
                 ),
@@ -143,12 +144,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: AppSpace.sm, left: 4),
                 child: Text(
-                  'BMI ${preview.bmi.toStringAsFixed(1)} — vazningiz kam, ozish tavsiya etilmaydi.',
+                  trf('BMI {0} — vazningiz kam, ozish tavsiya etilmaydi.', [preview.bmi.toStringAsFixed(1)]),
                   style: t.bodySmall?.copyWith(color: AppColors.warning),
                 ),
               ),
             const SizedBox(height: 20),
-            const SectionHeader('Treneringiz'),
+            SectionHeader(tr('Treneringiz')),
             if (_canChooseTrainer)
               StreamBuilder<List<TrainerInfo>>(
                 stream: _trainerStream,
@@ -162,7 +163,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   }
                   if (_trainers.isEmpty) {
                     return Text(
-                      "Hozircha shogird qabul qilayotgan trener yo'q — trener keyin biriktiriladi.",
+                      tr("Hozircha shogird qabul qilayotgan trener yo'q — trener keyin biriktiriladi."),
                       style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
                     );
                   }
@@ -179,8 +180,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        "Tanlagan treneringiz rejangizni tuzadi va siz bilan yozishadi. "
-                        "Keyin Profil bo'limida almashtirishingiz mumkin.",
+                        tr("Tanlagan treneringiz rejangizni tuzadi va siz bilan yozishadi. "
+                        "Keyin Profil bo'limida almashtirishingiz mumkin."),
                         style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
                       ),
                     ),
@@ -191,17 +192,17 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               StreamBuilder<TrainerInfo?>(
                 stream: Db.trainerProfile(widget.user.trainerId!),
                 builder: (context, snap) => Text(
-                  snap.data?.name ?? 'Trener biriktirilgan',
+                  snap.data?.name ?? tr('Trener biriktirilgan'),
                   style: t.titleMedium,
                 ),
               ),
             const SizedBox(height: 20),
-            const SectionHeader('Jins'),
+            SectionHeader(tr('Jins')),
             Row(children: [
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.male,
-                  label: 'Erkak',
+                  label: tr('Erkak'),
                   selected: _gender == 'male',
                   onTap: () => setState(() => _gender = 'male'),
                 ),
@@ -210,21 +211,21 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.female,
-                  label: 'Ayol',
+                  label: tr('Ayol'),
                   selected: _gender == 'female',
                   onTap: () => setState(() => _gender = 'female'),
                 ),
               ),
             ]),
             const SizedBox(height: 20),
-            const SectionHeader("Tana o'lchamlari"),
+            SectionHeader(tr("Tana o'lchamlari")),
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(child: _numField(_age, 'Yosh', 'yosh', _range(10, 100))),
+              Expanded(child: _numField(_age, tr('Yosh'), 'yosh', _range(10, 100))),
               const SizedBox(width: AppSpace.md),
-              Expanded(child: _numField(_height, "Bo'y", 'sm', _range(100, 250))),
+              Expanded(child: _numField(_height, tr("Bo'y"), 'sm', _range(100, 250))),
               const SizedBox(width: AppSpace.md),
               Expanded(
-                child: _numField(_weight, 'Vazn', 'kg', _range(30, 300),
+                child: _numField(_weight, tr('Vazn'), 'kg', _range(30, 300),
                     decimal: true, locked: _weightLocked),
               ),
             ]),
@@ -232,17 +233,17 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: AppSpace.sm, left: 4),
                 child: Text(
-                  "Vazn bu yerda o'zgarmaydi — Progress bo'limida haftada 1 marta kiritiladi.",
+                  tr("Vazn bu yerda o'zgarmaydi — Progress bo'limida haftada 1 marta kiritiladi."),
                   style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
                 ),
               ),
             const SizedBox(height: 20),
-            const SectionHeader('Moddalar almashinuvi (metabolizm)'),
+            SectionHeader(tr('Moddalar almashinuvi (metabolizm)')),
             Row(children: [
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.hourglass_bottom,
-                  label: 'Sekin',
+                  label: tr('Sekin'),
                   selected: _metabolism == 'slow',
                   onTap: () => setState(() => _metabolism = 'slow'),
                 ),
@@ -251,7 +252,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Expanded(
                 child: _ChoiceCard(
                   icon: Icons.bolt_outlined,
-                  label: 'Tez',
+                  label: tr('Tez'),
                   selected: _metabolism == 'fast',
                   onTap: () => setState(() => _metabolism = 'fast'),
                 ),
@@ -260,8 +261,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             Padding(
               padding: const EdgeInsets.only(top: AppSpace.sm, left: 4),
               child: Text(
-                "Tez — ovqat tez hazm bo'lib, tez-tez qorin ochadi. Sekin — ovqat sekin hazm "
-                "bo'ladi, kuniga 2 mahal yeb ham yuraverasiz. Bilmasangiz — «Sekin»ni tanlang.",
+                tr("Tez — ovqat tez hazm bo'lib, tez-tez qorin ochadi. Sekin — ovqat sekin hazm "
+                "bo'ladi, kuniga 2 mahal yeb ham yuraverasiz. Bilmasangiz — «Sekin»ni tanlang."),
                 style: t.bodySmall?.copyWith(color: s.onSurfaceVariant, height: 1.4),
               ),
             ),
@@ -277,8 +278,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text('Kunlik norma · ${preview.kcalFormula}', style: t.bodySmall),
-                        Text('${preview.targetKcal} kkal', style: t.titleLarge),
+                        Text(trf('Kunlik norma · {0}', [preview.kcalFormula]), style: t.bodySmall),
+                        Text(trf('{0} kkal', [preview.targetKcal]), style: t.titleLarge),
                       ]),
                     ),
                     Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -303,9 +304,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Homilador bo'lsangiz, 18 yoshgacha bo'lsangiz yoki diabet, yurak, "
+                      tr("Homilador bo'lsangiz, 18 yoshgacha bo'lsangiz yoki diabet, yurak, "
                       "oshqozon kasalliklari bo'lsa, diyetani boshlashdan oldin shifokor bilan "
-                      "maslahatlashing.",
+                      "maslahatlashing."),
                       style: t.bodySmall?.copyWith(height: 1.4),
                     ),
                   ),
@@ -318,7 +319,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               child: _busy
                   ? const SizedBox.square(
                       dimension: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
-                  : const Text('Saqlash'),
+                  : Text(tr('Saqlash')),
             ),
           ],
         ),

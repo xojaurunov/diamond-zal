@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // FilteringTextInputFormatter (raqam maydoni)
+import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/lang_picker.dart';
 import '../../widgets/ui.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -34,12 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
         'invalid-credential' ||
         'wrong-password' ||
         'user-not-found' =>
-          "Telefon raqam yoki parol noto'g'ri",
-        'email-already-in-use' => "Bu raqam bilan akkaunt allaqachon bor — Kirish'ni bosing",
-        'weak-password' => 'Parol juda oddiy — kamida 6 belgi',
-        'invalid-email' => "Telefon raqam noto'g'ri",
-        'network-request-failed' => 'Internet aloqasini tekshiring',
-        'too-many-requests' => "Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring",
+          tr("Telefon raqam yoki parol noto'g'ri"),
+        'email-already-in-use' => tr("Bu raqam bilan akkaunt allaqachon bor — Kirish'ni bosing"),
+        'weak-password' => tr('Parol juda oddiy — kamida 6 belgi'),
+        'invalid-email' => tr("Telefon raqam noto'g'ri"),
+        'network-request-failed' => tr('Internet aloqasini tekshiring'),
+        'too-many-requests' => tr("Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring"),
         _ => e.message ?? e.code,
       };
 
@@ -102,21 +104,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(width: AppSpace.md),
                   Eyebrow('Diamond zal', color: AppColors.textFaint),
+                  const Spacer(),
+                  const LangPicker(compact: true),
                 ]),
                 const SizedBox(height: AppSpace.xl),
                 Text(
-                  "To'g'ri ovqatlanish —",
+                  tr("To'g'ri ovqatlanish —"),
                   style: t.headlineLarge?.copyWith(color: AppColors.text),
                 ),
                 Text(
-                  'natijaga yo’l',
+                  tr('natijaga yo’l'),
                   style: t.headlineLarge?.copyWith(color: AppColors.accent),
                 ),
                 const SizedBox(height: AppSpace.md),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 260),
                   child: Text(
-                    'Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.',
+                    tr('Trener tuzgan shaxsiy reja, kunlik nazorat va progress — bitta ilovada.'),
                     style: t.bodyMedium?.copyWith(color: AppColors.textMuted),
                   ),
                 ),
@@ -150,10 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   textInputAction: TextInputAction.next,
                                   autofillHints: const [AutofillHints.name],
                                   validator: (v) =>
-                                      (v ?? '').trim().isEmpty ? 'Ismingizni kiriting' : null,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Ism',
-                                    prefixIcon: Icon(Icons.person_outline),
+                                      (v ?? '').trim().isEmpty ? tr('Ismingizni kiriting') : null,
+                                  decoration: InputDecoration(
+                                    labelText: tr('Ism'),
+                                    prefixIcon: const Icon(Icons.person_outline),
                                   ),
                                 ),
                               )
@@ -183,12 +187,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           LengthLimitingTextInputFormatter(9),
                         ],
                         validator: (v) =>
-                            (v ?? '').length == 9 ? null : "Raqamni to'liq kiriting: 90 123 45 67",
-                        decoration: const InputDecoration(
-                          labelText: 'Telefon raqam',
+                            (v ?? '').length == 9 ? null : tr("Raqamni to'liq kiriting: 90 123 45 67"),
+                        decoration: InputDecoration(
+                          labelText: tr('Telefon raqam'),
                           hintText: '90 123 45 67',
                           prefixText: '+998 ',
-                          prefixIcon: Icon(Icons.phone_outlined),
+                          prefixIcon: const Icon(Icons.phone_outlined),
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -201,12 +205,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                         onFieldSubmitted: (_) => _submit(),
                         validator: (v) =>
-                            (v ?? '').length < 6 ? 'Parol kamida 6 belgidan iborat' : null,
+                            (v ?? '').length < 6 ? tr('Parol kamida 6 belgidan iborat') : null,
                         decoration: InputDecoration(
-                          labelText: 'Parol',
+                          labelText: tr('Parol'),
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
-                            tooltip: _hidePass ? "Parolni ko'rsatish" : 'Parolni yashirish',
+                            tooltip: _hidePass ? tr("Parolni ko'rsatish") : tr('Parolni yashirish'),
                             onPressed: () => setState(() => _hidePass = !_hidePass),
                             icon: Icon(_hidePass
                                 ? Icons.visibility_outlined
@@ -220,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: _busy
                             ? const SizedBox.square(
                                 dimension: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
-                            : Text(_isRegister ? 'Akkaunt yaratish' : 'Kirish'),
+                            : Text(_isRegister ? tr('Akkaunt yaratish') : tr('Kirish')),
                       ),
                       if (!_isRegister)
                         TextButton(
@@ -230,31 +234,31 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text('Parolni unutdingizmi?', style: t.titleLarge),
+                                Text(tr('Parolni unutdingizmi?'), style: t.titleLarge),
                                 const SizedBox(height: AppSpace.sm),
                                 Text(
-                                  "SMS yuborilmaydi, shuning uchun parolni zal tiklaydi:\n\n"
+                                  tr("SMS yuborilmaydi, shuning uchun parolni zal tiklaydi:\n\n"
                                   "1. Zal egasiga (bosh adminga) telefon raqamingizni ayting.\n"
                                   "2. U sizga vaqtinchalik yangi parol beradi.\n"
                                   "3. Shu parol bilan kiring va Profil → «Parolni o'zgartirish» "
-                                  "orqali o'zingizning parolingizni qo'ying.",
+                                  "orqali o'zingizning parolingizni qo'ying."),
                                   style: t.bodyMedium?.copyWith(height: 1.5),
                                 ),
                                 const SizedBox(height: AppSpace.xl),
                                 FilledButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text('Tushunarli'),
+                                  child: Text(tr('Tushunarli')),
                                 ),
                               ],
                             ),
                           ),
-                          child: const Text('Parolni unutdim'),
+                          child: Text(tr('Parolni unutdim')),
                         ),
                       const SizedBox(height: 12),
                       Text(
                         _isRegister
-                            ? "Ro'yxatdan o'tgach, trener sizga shaxsiy ovqatlanish rejasini biriktiradi."
-                            : 'Trener va mijozlar bitta ilovadan kiradi.',
+                            ? tr("Ro'yxatdan o'tgach, trener sizga shaxsiy ovqatlanish rejasini biriktiradi.")
+                            : tr('Trener va mijozlar bitta ilovadan kiradi.'),
                         textAlign: TextAlign.center,
                         style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
                       ),
@@ -287,8 +291,8 @@ class _Toggle extends StatelessWidget {
         border: Border.all(color: s.outlineVariant),
       ),
       child: Row(children: [
-        _seg(context, 'Kirish', !isRegister, () => onChanged(false)),
-        _seg(context, "Ro'yxatdan o'tish", isRegister, () => onChanged(true)),
+        _seg(context, tr('Kirish'), !isRegister, () => onChanged(false)),
+        _seg(context, tr("Ro'yxatdan o'tish"), isRegister, () => onChanged(true)),
       ]),
     );
   }
