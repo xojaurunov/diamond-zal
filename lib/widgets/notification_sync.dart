@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+import '../l10n/tr.dart';
 import '../models/models.dart';
 import '../services/db.dart';
 import '../services/notifications.dart';
@@ -79,7 +80,7 @@ class _StudentNotificationSyncState extends State<StudentNotificationSync> {
       if (!seen.add(id)) continue;
       if (m.senderId == widget.user.id) continue;
       if (AppSettings.chatNotifications && _inBackground()) {
-        Notifications.showNow('msg-$id', 'Treneringizdan xabar', m.text);
+        Notifications.showNow('msg-$id', tr('Treneringizdan xabar'), m.text);
       }
     }
   }
@@ -91,8 +92,8 @@ class _StudentNotificationSyncState extends State<StudentNotificationSync> {
     if (old.user.planId != newPlan) {
       _listenPlan(newPlan);
       if (newPlan != null && AppSettings.planNotifications && _inBackground()) {
-        Notifications.showNow('plan-$newPlan', 'Yangi reja biriktirildi',
-            "Trener sizga ovqatlanish rejasini berdi — 'Bugun' bo'limida ko'ring");
+        Notifications.showNow('plan-$newPlan', tr('Yangi reja biriktirildi'),
+            tr("Trener sizga ovqatlanish rejasini berdi — 'Bugun' bo'limida ko'ring"));
       }
     } else if (old.user.goal != widget.user.goal) {
       _reschedule();
@@ -165,7 +166,7 @@ class _TrainerNotificationSyncState extends State<TrainerNotificationSync> {
       // faqat shogird yozgan xabar (trenerning o'zi va boshqa xodimlarniki emas)
       if (m.senderId != clientId) continue;
       if (AppSettings.chatNotifications && _inBackground()) {
-        Notifications.showNow('msg-$id', _names[clientId] ?? 'Shogird', m.text);
+        Notifications.showNow('msg-$id', _names[clientId] ?? tr('Shogird'), m.text);
       }
     }
   }

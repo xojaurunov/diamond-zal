@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import 'food_image.dart';
 
 /// Rasmlarni to'liq ekranda ko'rsatadi: barmoq bilan kattalashtirish, bir nechta bo'lsa
@@ -61,7 +62,7 @@ class _ImageViewerState extends State<_ImageViewer> {
             top: 4,
             right: 4,
             child: IconButton(
-              tooltip: 'Yopish',
+              tooltip: tr('Yopish'),
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.close, color: Colors.white),
             ),

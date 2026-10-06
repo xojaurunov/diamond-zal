@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../l10n/tr.dart';
 import 'ui.dart';
 
 /// Mahsulot nomidagi kalit so'z -> assets/foods/<kalit>.jpg
@@ -157,14 +158,14 @@ Future<void> showImageCredits(BuildContext context) async {
   await showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Rasm manbalari'),
+      title: Text(tr('Rasm manbalari')),
       content: SingleChildScrollView(
         child: SelectableText(
-          text.isEmpty ? "Ma'lumot yo'q" : text,
+          text.isEmpty ? tr("Ma'lumot yo'q") : text,
           style: const TextStyle(fontSize: 13, height: 1.4),
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Yopish'))],
+      actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: Text(tr('Yopish')))],
     ),
   );
 }

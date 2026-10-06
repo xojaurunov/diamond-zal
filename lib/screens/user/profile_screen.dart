@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -18,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
     final others = all.where((t) => t.id != user.trainerId).toList();
     if (!context.mounted) return;
     if (others.isEmpty) {
-      showSnack(context, "Hozircha shogird qabul qilayotgan boshqa trener yo'q");
+      showSnack(context, tr("Hozircha shogird qabul qilayotgan boshqa trener yo'q"));
       return;
     }
     final picked = await showSheet<TrainerInfo>(
@@ -26,10 +27,10 @@ class ProfileScreen extends StatelessWidget {
       ConstrainedBox(
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.75),
         child: ListView(shrinkWrap: true, children: [
-          Text('Trenerni tanlang', style: Theme.of(context).textTheme.titleLarge),
+          Text(tr('Trenerni tanlang'), style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: AppSpace.xs),
           Text(
-            "Yangi treneringiz rejangiz va chatingizni ko'radi.",
+            tr("Yangi treneringiz rejangiz va chatingizni ko'radi."),
             style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
           const SizedBox(height: AppSpace.md),
@@ -48,25 +49,25 @@ class ProfileScreen extends StatelessWidget {
     if (picked == null || !context.mounted) return;
     final ok = await confirm(
       context,
-      title: 'Trener almashtirilsinmi?',
-      message: '${picked.name} sizning treneringiz bo\'ladi. Oldingi trener sizni endi ko\'rmaydi.',
-      ok: 'Almashtirish',
+      title: tr('Trener almashtirilsinmi?'),
+      message: trf('{0} sizning treneringiz bo\'ladi. Oldingi trener sizni endi ko\'rmaydi.', [picked.name]),
+      ok: tr('Almashtirish'),
     );
     if (!ok) return;
     try {
       await Db.chooseTrainer(user.id, picked.id);
-      if (context.mounted) showSnack(context, 'Treneringiz: ${picked.name}');
+      if (context.mounted) showSnack(context, trf('Treneringiz: {0}', [picked.name]));
     } catch (e) {
-      if (context.mounted) showSnack(context, "Almashtirib bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Almashtirib bo'lmadi: {0}", [e]));
     }
   }
 
   Future<void> _signOut(BuildContext context) async {
     final ok = await confirm(
       context,
-      title: 'Chiqish',
-      message: 'Akkauntdan chiqmoqchimisiz?',
-      ok: 'Chiqish',
+      title: tr('Chiqish'),
+      message: tr('Akkauntdan chiqmoqchimisiz?'),
+      ok: tr('Chiqish'),
       destructive: true,
     );
     if (ok) await AuthService.signOut();
@@ -87,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
               padding:
                   const EdgeInsets.fromLTRB(AppSpace.xl, AppSpace.lg, AppSpace.xl, AppSpace.xl),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Eyebrow('Profil', color: AppColors.textFaint),
+                Eyebrow(tr('Profil'), color: AppColors.textFaint),
                 const SizedBox(height: AppSpace.xl),
                 Row(children: [
                   Expanded(
@@ -138,8 +139,8 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: male ? Icons.male : Icons.female,
-                    label: 'Jins',
-                    value: male ? 'Erkak' : 'Ayol',
+                    label: tr('Jins'),
+                    value: male ? 'Erkak' : tr('Ayol'),
                     color: AppColors.protein,
                   ),
                 ),
@@ -147,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: Icons.cake_outlined,
-                    label: 'Yosh',
+                    label: tr('Yosh'),
                     value: '${user.age}',
                     color: AppColors.warning,
                   ),
@@ -158,8 +159,8 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: Icons.height,
-                    label: "Bo'y",
-                    value: '${user.height.round()} sm',
+                    label: tr("Bo'y"),
+                    value: trf('{0} sm', [user.height.round()]),
                     color: AppColors.water,
                   ),
                 ),
@@ -167,8 +168,8 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: Icons.monitor_weight_outlined,
-                    label: 'Vazn',
-                    value: '${fmtNum(user.weight)} kg',
+                    label: tr('Vazn'),
+                    value: trf('{0} kg', [fmtNum(user.weight)]),
                     color: s.primary,
                   ),
                 ),
@@ -178,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: user.isGain ? Icons.trending_up : Icons.trending_down,
-                    label: 'Maqsad',
+                    label: tr('Maqsad'),
                     value: user.goalLabel.isEmpty ? '—' : user.goalLabel,
                     color: user.isGain ? AppColors.protein : AppColors.water,
                   ),
@@ -187,10 +188,10 @@ class ProfileScreen extends StatelessWidget {
                 Expanded(
                   child: StatTile(
                     icon: user.metabolism == 'fast' ? Icons.bolt_outlined : Icons.hourglass_bottom,
-                    label: 'Metabolizm',
+                    label: tr('Metabolizm'),
                     value: switch (user.metabolism) {
-                      'fast' => 'Tez',
-                      'slow' => 'Sekin',
+                      'fast' => tr('Tez'),
+                      'slow' => tr('Sekin'),
                       _ => '—',
                     },
                     color: AppColors.warning,
@@ -205,7 +206,7 @@ class ProfileScreen extends StatelessWidget {
                   stream: Db.trainerProfile(user.trainerId!),
                   builder: (context, snap) => StatTile(
                     icon: Icons.badge_outlined,
-                    label: 'Treneringiz',
+                    label: tr('Treneringiz'),
                     value: snap.data?.name ?? '—',
                     color: AppColors.accent,
                   ),
@@ -215,7 +216,7 @@ class ProfileScreen extends StatelessWidget {
                   child: TextButton.icon(
                     onPressed: () => _changeTrainer(context),
                     icon: const Icon(Icons.swap_horiz, size: 18),
-                    label: const Text('Trenerni almashtirish'),
+                    label: Text(tr('Trenerni almashtirish')),
                   ),
                 ),
               ],
@@ -228,10 +229,10 @@ class ProfileScreen extends StatelessWidget {
                 child: Row(children: [
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Eyebrow('Kunlik norma', color: AppColors.textFaint),
+                      Eyebrow(tr('Kunlik norma'), color: AppColors.textFaint),
                       const SizedBox(height: AppSpace.xs),
                       Text(
-                        'Trener formulasi: ${user.kcalFormula}',
+                        trf('Trener formulasi: {0}', [user.kcalFormula]),
                         style: t.bodySmall?.copyWith(
                           color: AppColors.textMuted,
                         ),
@@ -262,19 +263,19 @@ class ProfileScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (_) => ProfileSetupScreen(user: user, editing: true)),
                 ),
                 icon: const Icon(Icons.edit_outlined),
-                label: const Text("Ma'lumotlarni o'zgartirish"),
+                label: Text(tr("Ma'lumotlarni o'zgartirish")),
               ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: () => showSettings(context, student: true),
                 icon: const Icon(Icons.tune),
-                label: const Text("Sozlamalar (ko'rinish, bildirishnomalar)"),
+                label: Text(tr("Sozlamalar (ko'rinish, bildirishnomalar)")),
               ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: () => showChangePassword(context),
                 icon: const Icon(Icons.key_outlined),
-                label: const Text("Parolni o'zgartirish"),
+                label: Text(tr("Parolni o'zgartirish")),
               ),
               const SizedBox(height: 8),
               TextButton.icon(
@@ -282,7 +283,7 @@ class ProfileScreen extends StatelessWidget {
                     TextButton.styleFrom(foregroundColor: s.error, minimumSize: const Size(64, 48)),
                 onPressed: () => _signOut(context),
                 icon: const Icon(Icons.logout),
-                label: const Text('Chiqish'),
+                label: Text(tr('Chiqish')),
               ),
             ]),
           ),
@@ -299,10 +300,10 @@ class _BmiCard extends StatelessWidget {
 
   static const _lo = 15.0, _hi = 40.0;
   static final _segments = [
-    (18.5, 'Vazn kam', AppColors.water),
-    (25.0, 'Normal', AppColors.success),
-    (30.0, 'Ortiqcha vazn', AppColors.warning),
-    (40.0, 'Semizlik', AppColors.danger),
+    (18.5, tr('Vazn kam'), AppColors.water),
+    (25.0, tr('Normal'), AppColors.success),
+    (30.0, tr('Ortiqcha vazn'), AppColors.warning),
+    (40.0, tr('Semizlik'), AppColors.danger),
   ];
 
   @override
@@ -316,7 +317,7 @@ class _BmiCard extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Expanded(child: Eyebrow('Tana massasi indeksi', color: s.onSurfaceVariant)),
+            Expanded(child: Eyebrow(tr('Tana massasi indeksi'), color: s.onSurfaceVariant)),
             Pill(text: seg.$2, color: seg.$3),
           ]),
           const SizedBox(height: AppSpace.sm),
@@ -364,7 +365,7 @@ class _BmiCard extends StatelessWidget {
             );
           }),
           const SizedBox(height: 10),
-          Text('Normal oraliq: 18.5 – 24.9',
+          Text(tr('Normal oraliq: 18.5 – 24.9'),
               style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
         ]),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -49,8 +50,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   static String _dayLabel(DateTime d) {
     final now = DateTime.now();
-    if (_sameDay(d, now)) return 'Bugun';
-    if (_sameDay(d, now.subtract(const Duration(days: 1)))) return 'Kecha';
+    if (_sameDay(d, now)) return tr('Bugun');
+    if (_sameDay(d, now.subtract(const Duration(days: 1)))) return tr('Kecha');
     return DateFormat('dd.MM.yyyy').format(d);
   }
 
@@ -84,10 +85,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       .toList()
                   : snap.data!;
               if (msgs.isEmpty) {
-                return const EmptyState(
+                return EmptyState(
                   icon: Icons.forum_outlined,
-                  title: 'Suhbatni boshlang',
-                  subtitle: "Ovqatlanish, mashq yoki reja bo'yicha savolingizni yozing.",
+                  title: tr('Suhbatni boshlang'),
+                  subtitle: tr("Ovqatlanish, mashq yoki reja bo'yicha savolingizni yozing."),
                 );
               }
               return ListView.builder(
@@ -209,7 +210,7 @@ class _Composer extends StatelessWidget {
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => onSend(),
                 decoration: InputDecoration(
-                  hintText: 'Xabar yozing...',
+                  hintText: tr('Xabar yozing...'),
                   fillColor: s.surfaceContainerHighest.withValues(alpha: 0.6),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                   border: pill(),
@@ -222,7 +223,7 @@ class _Composer extends StatelessWidget {
             ValueListenableBuilder<TextEditingValue>(
               valueListenable: controller,
               builder: (context, v, child) => IconButton.filled(
-                tooltip: 'Yuborish',
+                tooltip: tr('Yuborish'),
                 style: IconButton.styleFrom(
                   minimumSize: const Size(48, 48),
                   backgroundColor: AppColors.accent,

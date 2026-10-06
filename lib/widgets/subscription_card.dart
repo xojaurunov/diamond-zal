@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../models/shop.dart';
 import '../models/subscription.dart';
 import '../services/db.dart';
@@ -7,11 +8,11 @@ import 'ui.dart';
 
 /// Abonement holati: "12 kun qoldi" / "Bugun tugaydi" / "Muddati o'tdi" / "Abonement yo'q"
 Pill subscriptionPill(DateTime? exp) {
-  if (exp == null) return Pill(text: "Abonement yo'q", color: AppColors.textMuted);
-  if (Subscription.isExpired(exp)) return Pill(text: "Muddati o'tdi", color: AppColors.danger);
+  if (exp == null) return Pill(text: tr("Abonement yo'q"), color: AppColors.textMuted);
+  if (Subscription.isExpired(exp)) return Pill(text: tr("Muddati o'tdi"), color: AppColors.danger);
   final left = Subscription.daysLeft(exp);
   return Pill(
-    text: left == 0 ? 'Bugun tugaydi' : '$left kun qoldi',
+    text: left == 0 ? tr('Bugun tugaydi') : trf('{0} kun qoldi', [left]),
     color: Subscription.isExpiringSoon(exp) ? AppColors.warning : AppColors.success,
   );
 }
@@ -38,9 +39,9 @@ class MySubscriptionCard extends StatelessWidget {
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text("Abonement yo'q", style: t.titleSmall),
+                  Text(tr("Abonement yo'q"), style: t.titleSmall),
                   const SizedBox(height: 2),
-                  Text("To'lov zalda qilinadi, abonementni trener belgilaydi.", style: muted),
+                  Text(tr("To'lov zalda qilinadi, abonementni trener belgilaydi."), style: muted),
                 ]),
               ),
             ]),
@@ -55,25 +56,25 @@ class MySubscriptionCard extends StatelessWidget {
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Abonement · ${last.kindLabel}', style: t.titleSmall),
+                  Text(trf('Abonement · {0}', [last.kindLabel]), style: t.titleSmall),
                   const SizedBox(height: 2),
-                  Text(last.price > 0 ? fmtMoney(last.price, last.currency) : 'Summa yozilmagan',
+                  Text(last.price > 0 ? fmtMoney(last.price, last.currency) : tr('Summa yozilmagan'),
                       style: t.titleMedium),
                 ]),
               ),
               subscriptionPill(last.expiresAt),
             ]),
             const SizedBox(height: AppSpace.sm),
-            Text("To'langan: ${fmtDay(last.paidDate ?? last.startDate)}", style: t.bodyMedium),
+            Text(trf("To'langan: {0}", [fmtDay(last.paidDate ?? last.startDate)]), style: t.bodyMedium),
             Text(
               last.isDaily
-                  ? 'Amal qiladi: ${fmtDay(last.expiresAt)} kuni'
-                  : 'Amal qiladi: ${fmtDay(last.expiresAt)} gacha — keyingi to\'lov shu kuni',
+                  ? trf('Amal qiladi: {0} kuni', [fmtDay(last.expiresAt)])
+                  : trf('Amal qiladi: {0} gacha — keyingi to\'lov shu kuni', [fmtDay(last.expiresAt)]),
               style: t.bodyMedium,
             ),
             if (list.length > 1) ...[
               const SizedBox(height: AppSpace.sm),
-              Text("Oldingi to'lovlar", style: muted),
+              Text(tr("Oldingi to'lovlar"), style: muted),
               for (final s in list.skip(1).take(5))
                 Padding(
                   padding: const EdgeInsets.only(top: 2),

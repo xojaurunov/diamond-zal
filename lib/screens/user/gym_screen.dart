@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/gym.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
@@ -16,9 +17,9 @@ class GymScreen extends StatelessWidget {
     if (days == null) return;
     try {
       await Db.setGymDays(user.id, days);
-      if (context.mounted) showSnack(context, 'Zal kunlari saqlandi');
+      if (context.mounted) showSnack(context, tr('Zal kunlari saqlandi'));
     } catch (e) {
-      if (context.mounted) showSnack(context, "Saqlab bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Saqlab bo'lmadi: {0}", [e]));
     }
   }
 
@@ -33,7 +34,7 @@ class GymScreen extends StatelessWidget {
     final next = nextWorkout(days, today);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Zal')),
+      appBar: AppBar(title: Text(tr('Zal'))),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
         children: [
@@ -42,18 +43,18 @@ class GymScreen extends StatelessWidget {
               feature: true,
               padding: const EdgeInsets.all(AppSpace.lg),
               child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Text('Haftasiga 3 kun mashg\'ulot', style: t.titleLarge),
+                Text(tr('Haftasiga 3 kun mashg\'ulot'), style: t.titleLarge),
                 const SizedBox(height: AppSpace.sm),
                 Text(
-                  "O'zingizga qulay variantni tanlang: Seshanba, Payshanba, Shanba yoki "
-                  "Dushanba, Chorshanba, Juma.",
+                  tr("O'zingizga qulay variantni tanlang: Seshanba, Payshanba, Shanba yoki "
+                  "Dushanba, Chorshanba, Juma."),
                   style: t.bodyMedium?.copyWith(color: AppColors.textMuted),
                 ),
                 const SizedBox(height: AppSpace.lg),
                 FilledButton.icon(
                   onPressed: () => _chooseDays(context),
                   icon: const Icon(Icons.event_available_outlined),
-                  label: const Text('Kunlarni tanlash'),
+                  label: Text(tr('Kunlarni tanlash')),
                 ),
               ]),
             )
@@ -63,27 +64,27 @@ class GymScreen extends StatelessWidget {
               feature: true,
               padding: const EdgeInsets.all(AppSpace.lg),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Eyebrow('Bugun · ${weekdayNames[today]}'),
+                Eyebrow(trf('Bugun · {0}', [tr(weekdayNames[today] ?? '')])),
                 const SizedBox(height: AppSpace.sm),
                 if (isHome) ...[
                   Row(children: [
                     Icon(Icons.home_outlined, color: AppColors.accent),
                     const SizedBox(width: AppSpace.sm),
-                    Text('Uyda mashq', style: t.headlineSmall),
+                    Text(tr('Uyda mashq'), style: t.headlineSmall),
                   ]),
                   const SizedBox(height: AppSpace.xs),
-                  Text("Trener bugun uyda mashq qilishingizni belgiladi.",
+                  Text(tr("Trener bugun uyda mashq qilishingizni belgiladi."),
                       style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
                 ] else if (todayWorkout != null) ...[
                   Text(todayWorkout, style: t.headlineSmall),
                   const SizedBox(height: AppSpace.xs),
-                  Text('Bugun zalga borish kuni',
+                  Text(tr('Bugun zalga borish kuni'),
                       style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
                 ] else ...[
-                  Text('Dam olish kuni', style: t.headlineSmall),
+                  Text(tr('Dam olish kuni'), style: t.headlineSmall),
                   if (next != null) ...[
                     const SizedBox(height: AppSpace.xs),
-                    Text('Keyingi: ${weekdayNames[next.$1]} — ${next.$2}',
+                    Text(trf('Keyingi: {0} — {1}', [tr(weekdayNames[next.$1] ?? ''), tr(next.$2)]),
                         style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
                   ],
                 ],
@@ -91,12 +92,12 @@ class GymScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpace.xl),
             SectionHeader(
-              'Mening jadvalim',
-              eyebrow: 'Haftasiga 3 kun',
+              tr('Mening jadvalim'),
+              eyebrow: tr('Haftasiga 3 kun'),
               trailing: TextButton.icon(
                 onPressed: () => _chooseDays(context),
                 icon: const Icon(Icons.edit_calendar_outlined, size: 18),
-                label: const Text("O'zgartirish"),
+                label: Text(tr("O'zgartirish")),
               ),
             ),
             for (final d in ([...days]..sort()))
@@ -107,7 +108,7 @@ class GymScreen extends StatelessWidget {
                   child: Row(children: [
                     SizedBox(
                       width: 96,
-                      child: Text(weekdayNames[d]!,
+                      child: Text(tr(weekdayNames[d]!),
                           style:
                               t.titleMedium?.copyWith(color: d == today ? AppColors.accent : null)),
                     ),
@@ -117,7 +118,7 @@ class GymScreen extends StatelessWidget {
               ),
           ],
           const SizedBox(height: AppSpace.xl),
-          const SectionHeader('Mashqlar', eyebrow: 'Tez orada'),
+          SectionHeader(tr('Mashqlar'), eyebrow: tr('Tez orada')),
           BentoTile(
             padding: const EdgeInsets.all(AppSpace.lg),
             child: Row(children: [
@@ -125,8 +126,8 @@ class GymScreen extends StatelessWidget {
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Text(
-                  "Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari "
-                  "tez orada qo'shiladi.",
+                  tr("Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari "
+                  "tez orada qo'shiladi."),
                   style: t.bodyMedium,
                 ),
               ),
@@ -134,8 +135,8 @@ class GymScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpace.md),
           Text(
-            "Bugun zalga kela olmasangiz — 'Trener' bo'limida \"bugun kelolmayman\" deb yozing, "
-            "trener uyda mashq belgilaydi.",
+            tr("Bugun zalga kela olmasangiz — 'Trener' bo'limida \"bugun kelolmayman\" deb yozing, "
+            "trener uyda mashq belgilaydi."),
             style: t.bodySmall?.copyWith(color: AppColors.textMuted),
           ),
         ],
@@ -168,7 +169,7 @@ class _DaysPickerState extends State<_DaysPicker> {
               color: _same(days) ? AppColors.accent : AppColors.textMuted,
             ),
             title: Text(title),
-            subtitle: Text(days.map((d) => weekdayNames[d]).join(', ')),
+            subtitle: Text(days.map((d) => tr(weekdayNames[d] ?? '')).join(', ')),
             onTap: () => setState(() => _sel
               ..clear()
               ..addAll(days)),
@@ -179,11 +180,11 @@ class _DaysPickerState extends State<_DaysPicker> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Zal kunlari', style: t.titleLarge),
+          Text(tr('Zal kunlari'), style: t.titleLarge),
           const SizedBox(height: AppSpace.xs),
           Text(
-              "Haftasiga 3 kun. Mashg'ulotlar kunlar tartibida: 1) ${workoutGroups[0]}, "
-              "2) ${workoutGroups[1]}, 3) ${workoutGroups[2]}.",
+              trf("Haftasiga 3 kun. Mashg'ulotlar kunlar tartibida: 1) {0}, "
+              "2) {1}, 3) {2}.", [tr(workoutGroups[0]), tr(workoutGroups[1]), tr(workoutGroups[2])]),
               style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
           const SizedBox(height: AppSpace.md),
           preset('1-variant', evenDays),
@@ -193,7 +194,7 @@ class _DaysPickerState extends State<_DaysPicker> {
             onPressed: _same(evenDays) || _same(oddDays)
                 ? () => Navigator.pop(context, _sel.toList())
                 : null,
-            child: const Text('Saqlash'),
+            child: Text(tr('Saqlash')),
           ),
         ]);
   }

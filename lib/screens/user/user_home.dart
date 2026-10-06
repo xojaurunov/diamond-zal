@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../widgets/lazy_stack.dart';
 import '../../widgets/notification_sync.dart';
@@ -40,8 +41,8 @@ class _UserHomeState extends ConsumerState<UserHome> {
             ChatScreen(
               chatUid: me.id,
               myId: me.id,
-              title: 'Trener',
-              subtitle: 'Savollaringizga javob beradi',
+              title: tr('Trener'),
+              subtitle: tr('Savollaringizga javob beradi'),
             ),
             ProfileScreen(user: me),
           ],
@@ -53,16 +54,16 @@ class _UserHomeState extends ConsumerState<UserHome> {
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           // Faqat ingichka chiziqli ikonkalar — tanlangani rang bilan ajraladi
           destinations: [
-            const NavigationDestination(icon: Icon(Icons.today_outlined), label: 'Bugun'),
-            const NavigationDestination(icon: Icon(Icons.insights_outlined), label: 'Progress'),
-            const NavigationDestination(icon: Icon(Icons.fitness_center_outlined), label: 'Zal'),
-            const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
+            NavigationDestination(icon: const Icon(Icons.today_outlined), label: tr('Bugun')),
+            NavigationDestination(icon: const Icon(Icons.insights_outlined), label: tr('Progress')),
+            NavigationDestination(icon: const Icon(Icons.fitness_center_outlined), label: tr('Zal')),
+            NavigationDestination(icon: const Icon(Icons.storefront_outlined), label: tr("Do'kon")),
             NavigationDestination(
               icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
-              label: 'Eslatma',
+              label: tr('Eslatma'),
             ),
-            const NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Trener'),
-            const NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profil'),
+            NavigationDestination(icon: const Icon(Icons.chat_bubble_outline), label: tr('Trener')),
+            NavigationDestination(icon: const Icon(Icons.person_outline), label: tr('Profil')),
           ],
         ),
       ),

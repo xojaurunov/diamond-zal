@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/gym.dart' show weekdayNames;
 import '../../models/models.dart';
 import '../../services/db.dart';
@@ -75,8 +76,8 @@ class TodayScreen extends StatelessWidget {
                         FadeInUp(index: 2, child: _WaterCard(uid: user.id, day: day)),
                         const SizedBox(height: AppSpace.xl),
                         SectionHeader(
-                          'Bugungi ovqatlar',
-                          eyebrow: plan.isWeekly ? 'Reja · ${weekdayNames[weekday]}' : 'Reja',
+                          tr('Bugungi ovqatlar'),
+                          eyebrow: plan.isWeekly ? trf('Reja · {0}', [tr(weekdayNames[weekday] ?? '')]) : tr('Reja'),
                           trailing: Pill(
                             text: '$doneCount / ${meals.length}',
                             color: doneCount == meals.length && meals.isNotEmpty
@@ -91,8 +92,8 @@ class TodayScreen extends StatelessWidget {
                             index: 3,
                             child: PlanPhoto(
                               path: photo,
-                              caption: 'Trener bergan ratsion · ${weekdayNames[weekday]}'
-                                  ' — kattalashtirish uchun bosing',
+                              caption: trf('Trener bergan ratsion · {0}'
+                                  ' — kattalashtirish uchun bosing', [tr(weekdayNames[weekday] ?? '')]),
                             ),
                           ),
                           const SizedBox(height: AppSpace.md),
@@ -149,7 +150,7 @@ class _Header extends StatelessWidget {
             Eyebrow(uzDate(DateTime.now())),
             const SizedBox(height: AppSpace.sm),
             Text(
-              first.isEmpty ? 'Salom' : 'Salom, $first',
+              first.isEmpty ? 'Salom' : trf('Salom, {0}', [first]),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: t.headlineLarge,
@@ -168,11 +169,11 @@ class _PlanMismatch extends StatelessWidget {
   const _PlanMismatch();
 
   @override
-  Widget build(BuildContext context) => const EmptyState(
+  Widget build(BuildContext context) => EmptyState(
         icon: Icons.sync_problem_outlined,
-        title: 'Reja yangilanmoqda',
-        subtitle: "Biriktirilgan reja maqsadingizga mos emas. Trener sizga mos rejani "
-            "biriktiradi. Savollaringizni 'Trener' bo'limida yozing.",
+        title: tr('Reja yangilanmoqda'),
+        subtitle: tr("Biriktirilgan reja maqsadingizga mos emas. Trener sizga mos rejani "
+            "biriktiradi. Savollaringizni 'Trener' bo'limida yozing."),
       );
 }
 
@@ -180,11 +181,11 @@ class _NoPlan extends StatelessWidget {
   const _NoPlan();
 
   @override
-  Widget build(BuildContext context) => const EmptyState(
+  Widget build(BuildContext context) => EmptyState(
         icon: Icons.restaurant_menu,
-        title: 'Reja hali biriktirilmagan',
-        subtitle: "Trener tez orada sizga shaxsiy ovqatlanish rejasini tuzadi. "
-            "Savollaringizni 'Trener' bo'limida yozing.",
+        title: tr('Reja hali biriktirilmagan'),
+        subtitle: tr("Trener tez orada sizga shaxsiy ovqatlanish rejasini tuzadi. "
+            "Savollaringizni 'Trener' bo'limida yozing."),
       );
 }
 
@@ -217,7 +218,7 @@ class _HeroPanel extends StatelessWidget {
         const SizedBox(width: AppSpace.xl),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Eyebrow('Bugungi reja', color: AppColors.textFaint),
+            Eyebrow(tr('Bugungi reja'), color: AppColors.textFaint),
             const SizedBox(height: AppSpace.xs),
             Text(
               plan.title,
@@ -237,14 +238,14 @@ class _HeroPanel extends StatelessWidget {
                   const SizedBox(width: AppSpace.sm),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3),
-                    child: Text('kkal qoldi',
+                    child: Text(tr('kkal qoldi'),
                         style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
                   ),
                 ]),
             const SizedBox(height: AppSpace.md),
             _ProgressBar(value: total > 0 ? eaten / total : 0),
             const SizedBox(height: AppSpace.sm),
-            Text('$pct% bajarildi',
+            Text(trf('{0}% bajarildi', [pct]),
                 style: t.labelSmall?.copyWith(
                   color: AppColors.textFaint,
                   letterSpacing: 0.4,
@@ -301,7 +302,7 @@ class _MetricsGrid extends StatelessWidget {
       Expanded(
         child: StatTile(
           icon: Icons.egg_alt_outlined,
-          label: 'Oqsil',
+          label: tr('Oqsil'),
           value: '${plan.proteinFor(weekday).round()} g',
           color: AppColors.protein,
         ),
@@ -310,7 +311,7 @@ class _MetricsGrid extends StatelessWidget {
       Expanded(
         child: StatTile(
           icon: onTarget ? Icons.flag_outlined : Icons.warning_amber_rounded,
-          label: 'Norma',
+          label: tr('Norma'),
           value: user.targetKcal == 0 ? '—' : '${user.targetKcal}',
           color: onTarget ? AppColors.success : AppColors.warning,
         ),
@@ -319,7 +320,7 @@ class _MetricsGrid extends StatelessWidget {
       Expanded(
         child: StatTile(
           icon: Icons.restaurant_outlined,
-          label: 'Ovqat',
+          label: tr('Ovqat'),
           value: '$doneCount/$mealCount',
           color: AppColors.accent,
         ),
@@ -347,10 +348,10 @@ class _WaterCard extends StatelessWidget {
               Icon(Icons.water_drop_outlined, size: 17, color: AppColors.water),
               const SizedBox(width: AppSpace.sm),
               Expanded(
-                child: Eyebrow('Suv · 1 stakan = 250 ml', color: s.onSurfaceVariant),
+                child: Eyebrow(tr('Suv · 1 stakan = 250 ml'), color: s.onSurfaceVariant),
               ),
               if (g >= 8)
-                Pill(text: 'Bajarildi', color: AppColors.success, icon: Icons.check_rounded),
+                Pill(text: tr('Bajarildi'), color: AppColors.success, icon: Icons.check_rounded),
             ]),
             const SizedBox(height: AppSpace.sm),
             // Birlik aniq ko'rinsin: nechta stakan va necha ml
@@ -367,12 +368,12 @@ class _WaterCard extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpace.xs),
                   Text(
-                    'stakan / 8',
+                    tr('stakan / 8'),
                     style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant),
                   ),
                   const Spacer(),
                   Text(
-                    '${g * 250} ml / 2000 ml',
+                    trf('{0} ml / 2000 ml', [g * 250]),
                     style: t.bodySmall?.copyWith(
                       color: s.onSurfaceVariant,
                       fontFeatures: tabular,
@@ -386,7 +387,7 @@ class _WaterCard extends StatelessWidget {
                 return Expanded(
                   child: Semantics(
                     button: true,
-                    label: '${i + 1} stakan',
+                    label: trf('{0} stakan', [i + 1]),
                     child: InkResponse(
                       radius: 26,
                       // oxirgi to'la stakanni bossangiz — bittaga kamayadi
@@ -471,14 +472,14 @@ class _MealCard extends StatelessWidget {
           ),
           if (isNext) ...[
             const SizedBox(width: AppSpace.sm),
-            Pill(text: 'Navbatdagi', color: s.primary),
+            Pill(text: tr('Navbatdagi'), color: s.primary),
           ],
         ]),
         subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: const EdgeInsets.only(top: AppSpace.xs),
             child: Text(
-              '${meal.kcal.round()} kkal  ·  ${meal.protein.round()} g oqsil',
+              trf('{0} kkal  ·  {1} g oqsil', [meal.kcal.round(), meal.protein.round()]),
               style: t.bodySmall?.copyWith(
                 color: s.onSurfaceVariant,
                 fontFeatures: tabular,
@@ -519,7 +520,7 @@ class _MealCard extends StatelessWidget {
                 SizedBox(
                   width: 66,
                   child: Text(
-                    '${i.kcal.round()} kkal',
+                    trf('{0} kkal', [i.kcal.round()]),
                     textAlign: TextAlign.right,
                     style: t.bodySmall?.copyWith(
                       color: s.onSurfaceVariant,
@@ -544,7 +545,7 @@ class _CheckCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = Theme.of(context).colorScheme;
     return Tooltip(
-      message: done ? 'Belgini olib tashlash' : 'Yedim',
+      message: done ? tr('Belgini olib tashlash') : tr('Yedim'),
       child: InkResponse(
         onTap: onTap,
         radius: 24,
@@ -593,10 +594,10 @@ class _AllDoneBanner extends StatelessWidget {
         const SizedBox(width: AppSpace.lg),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Barakalla!', style: t.titleMedium?.copyWith(color: AppColors.text)),
+            Text(tr('Barakalla!'), style: t.titleMedium?.copyWith(color: AppColors.text)),
             const SizedBox(height: 2),
             Text(
-              "Bugungi rejani to'liq bajardingiz.",
+              tr("Bugungi rejani to'liq bajardingiz."),
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             ),
           ]),
@@ -619,7 +620,7 @@ class _ForbiddenCard extends StatelessWidget {
         Row(children: [
           Icon(Icons.block, color: s.error, size: 17),
           const SizedBox(width: AppSpace.sm),
-          Eyebrow('Vaqtincha mumkin emas', color: s.error),
+          Eyebrow(tr('Vaqtincha mumkin emas'), color: s.error),
         ]),
         const SizedBox(height: AppSpace.md),
         Wrap(
@@ -658,7 +659,7 @@ class _NoteCard extends StatelessWidget {
         Row(children: [
           Icon(Icons.tips_and_updates_outlined, size: 17, color: AppColors.warning),
           const SizedBox(width: AppSpace.sm),
-          Eyebrow('Trener maslahati', color: s.onSurfaceVariant),
+          Eyebrow(tr('Trener maslahati'), color: s.onSurfaceVariant),
         ]),
         const SizedBox(height: AppSpace.md),
         Text(note, style: t.bodyMedium?.copyWith(height: 1.5)),

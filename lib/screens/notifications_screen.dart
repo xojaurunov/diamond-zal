@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../models/feed.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
@@ -187,11 +188,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       user: widget.user,
       builder: (context, items) {
         if (items.isEmpty) {
-          return const EmptyState(
+          return EmptyState(
             icon: Icons.notifications_none,
-            title: 'Bildirishnoma yo‘q',
-            subtitle: 'Yangi xabar, reja yoki buyurtma bo‘lsa shu yerda chiqadi — '
-                'telefonda bildirishnoma o‘chirilgan bo‘lsa ham.',
+            title: tr('Bildirishnoma yo‘q'),
+            subtitle: tr('Yangi xabar, reja yoki buyurtma bo‘lsa shu yerda chiqadi — '
+                'telefonda bildirishnoma o‘chirilgan bo‘lsa ham.'),
           );
         }
         final action = items.where((i) => i.action).toList();
@@ -203,16 +204,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           child: ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
           children: [
-            Text('Eslatmalar', style: t.headlineSmall),
+            Text(tr('Eslatmalar'), style: t.headlineSmall),
             const SizedBox(height: 2),
             Text(
-              'Ilovadagi hamma bildirishnoma shu yerda saqlanadi',
+              tr('Ilovadagi hamma bildirishnoma shu yerda saqlanadi'),
               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
             ),
             const SizedBox(height: AppSpace.lg),
             if (action.isNotEmpty) ...[
               SectionHeader(
-                'Amal kutilmoqda',
+                tr('Amal kutilmoqda'),
                 trailing: Pill(text: '${action.length}', color: AppColors.warning),
               ),
               for (final i in action)
@@ -222,7 +223,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
               const SizedBox(height: AppSpace.lg),
             ],
-            if (rest.isNotEmpty) const SectionHeader('Tarix'),
+            if (rest.isNotEmpty) SectionHeader(tr('Tarix')),
             for (final i in rest)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.sm),
@@ -272,7 +273,7 @@ class _FeedTile extends StatelessWidget {
               ),
               if (isNew) ...[
                 const SizedBox(width: AppSpace.sm),
-                Pill(text: 'Yangi', color: AppColors.danger),
+                Pill(text: tr('Yangi'), color: AppColors.danger),
               ],
             ]),
             const SizedBox(height: 2),
@@ -295,14 +296,14 @@ class _FeedTile extends StatelessWidget {
 String feedTime(DateTime at, [DateTime? now]) {
   final n = now ?? DateTime.now();
   final diff = n.difference(at);
-  if (diff.inMinutes.abs() < 1) return 'Hozir';
-  if (diff.inMinutes < 60 && !diff.isNegative) return '${diff.inMinutes} daqiqa oldin';
+  if (diff.inMinutes.abs() < 1) return tr('Hozir');
+  if (diff.inMinutes < 60 && !diff.isNegative) return trf('{0} daqiqa oldin', [diff.inMinutes]);
   final hhmm = '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}';
   final sameDay = at.year == n.year && at.month == n.month && at.day == n.day;
-  if (sameDay) return 'Bugun $hhmm';
+  if (sameDay) return trf('Bugun {0}', [hhmm]);
   final yesterday = n.subtract(const Duration(days: 1));
   final isYesterday =
       at.year == yesterday.year && at.month == yesterday.month && at.day == yesterday.day;
-  if (isYesterday) return 'Kecha $hhmm';
+  if (isYesterday) return trf('Kecha {0}', [hhmm]);
   return '${uzDate(at)}, $hhmm';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../services/db.dart';
@@ -86,7 +87,7 @@ class _ShopScreenState extends State<ShopScreen> {
               const SizedBox(height: AppSpace.lg),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text("O'lchamni tanlang",
+                child: Text(tr("O'lchamni tanlang"),
                     style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
               ),
               const SizedBox(height: AppSpace.sm),
@@ -106,7 +107,7 @@ class _ShopScreenState extends State<ShopScreen> {
               const SizedBox(height: AppSpace.lg),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Rangni tanlang',
+                child: Text(tr('Rangni tanlang'),
                     style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
               ),
               const SizedBox(height: AppSpace.sm),
@@ -138,10 +139,10 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ]),
             const SizedBox(height: AppSpace.md),
-            Text('Jami: ${fmtMoney(p.price * qty, p.currency)}', style: t.titleLarge),
+            Text(trf('Jami: {0}', [fmtMoney(p.price * qty, p.currency)]), style: t.titleLarge),
             const SizedBox(height: AppSpace.sm),
             Text(
-              "To'lov zalda, naqd. Trener buyurtmani ko'radi va tayyorlab qo'yadi.",
+              tr("To'lov zalda, naqd. Trener buyurtmani ko'radi va tayyorlab qo'yadi."),
               textAlign: TextAlign.center,
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             ),
@@ -155,12 +156,12 @@ class _ShopScreenState extends State<ShopScreen> {
                     ? null
                     : () => Navigator.pop(ctx, true),
                 child: Text(p.sizes.isNotEmpty && size == null
-                    ? "Avval o'lchamni tanlang"
+                    ? tr("Avval o'lchamni tanlang")
                     : p.colors.isNotEmpty && color == null
-                        ? 'Avval rangni tanlang'
+                        ? tr('Avval rangni tanlang')
                         : avail <= 0
-                            ? 'Tugagan'
-                            : 'Buyurtma berish'),
+                            ? tr('Tugagan')
+                            : tr('Buyurtma berish')),
               ),
             ),
             const SizedBox(height: AppSpace.sm),
@@ -168,7 +169,7 @@ class _ShopScreenState extends State<ShopScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Bekor qilish'),
+                child: Text(tr('Bekor qilish')),
               ),
             ),
           ]);
@@ -178,25 +179,25 @@ class _ShopScreenState extends State<ShopScreen> {
     if (ok != true || !mounted) return;
     try {
       await Db.createOrder(widget.user, p, qty, size: size ?? '', color: color ?? '');
-      if (mounted) showSnack(context, 'Buyurtma yuborildi — trener xabardor bo\'ldi');
+      if (mounted) showSnack(context, tr('Buyurtma yuborildi — trener xabardor bo\'ldi'));
     } catch (e) {
-      if (mounted) showSnack(context, "Bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
   Future<void> _cancel(ShopOrder o) async {
     final ok = await confirm(
       context,
-      title: 'Buyurtmani bekor qilish',
-      message: '"${o.productName}" buyurtmasi bekor qilinsinmi?',
-      ok: 'Bekor qilish',
+      title: tr('Buyurtmani bekor qilish'),
+      message: trf('"{0}" buyurtmasi bekor qilinsinmi?', [o.productName]),
+      ok: tr('Bekor qilish'),
       destructive: true,
     );
     if (!ok) return;
     try {
       await Db.cancelOrder(o.id);
     } catch (e) {
-      if (mounted) showSnack(context, "Bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -239,7 +240,7 @@ class _ShopScreenState extends State<ShopScreen> {
               padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.lg, AppSpace.lg, 0),
               sliver: SliverList.list(children: [
                 if (waiting.isNotEmpty) ...[
-                  SectionHeader('Mening buyurtmalarim',
+                  SectionHeader(tr('Mening buyurtmalarim'),
                       trailing: Pill(text: '${waiting.length}', color: AppColors.warning)),
                   for (final o in waiting)
                     Padding(
@@ -257,19 +258,19 @@ class _ShopScreenState extends State<ShopScreen> {
                               ),
                             ]),
                           ),
-                          TextButton(onPressed: () => _cancel(o), child: const Text('Bekor')),
+                          TextButton(onPressed: () => _cancel(o), child: Text(tr('Bekor'))),
                         ]),
                       ),
                     ),
                   const SizedBox(height: AppSpace.md),
                 ],
                 if (all.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.only(top: AppSpace.xxl),
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppSpace.xxl),
                     child: EmptyState(
                       icon: Icons.storefront_outlined,
-                      title: "Do'kon hozircha bo'sh",
-                      subtitle: 'Trener tovarlarni kiritgach, shu yerda ko\'rinadi.',
+                      title: tr("Do'kon hozircha bo'sh"),
+                      subtitle: tr('Trener tovarlarni kiritgach, shu yerda ko\'rinadi.'),
                     ),
                   )
                 else ...[
@@ -306,7 +307,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ],
                   const SizedBox(height: AppSpace.md),
                   Text(
-                    "To'lov zalda, naqd — ilovada karta so'ralmaydi.",
+                    tr("To'lov zalda, naqd — ilovada karta so'ralmaydi."),
                     style: t.bodySmall?.copyWith(color: AppColors.textFaint),
                   ),
                   const SizedBox(height: AppSpace.md),
@@ -333,7 +334,7 @@ class _ShopScreenState extends State<ShopScreen> {
               sliver: SliverList.list(children: [
                 if (orders.any((o) => !o.isNew)) ...[
                   const SizedBox(height: AppSpace.lg),
-                  const SectionHeader('Oldingi buyurtmalar'),
+                  SectionHeader(tr('Oldingi buyurtmalar')),
                   for (final o in orders.where((o) => !o.isNew).take(10))
                     Padding(
                       padding: const EdgeInsets.only(bottom: AppSpace.xs),
@@ -413,7 +414,7 @@ class _ProductTile extends StatelessWidget {
             if (p.sizes.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text("O'lchamlar: ${p.sizes.join(' · ')}",
+                child: Text(trf("O'lchamlar: {0}", [p.sizes.join(' · ')]),
                     style: t.bodySmall?.copyWith(color: AppColors.water)),
               ),
             Row(children: [
@@ -421,9 +422,9 @@ class _ProductTile extends StatelessWidget {
                   style: t.titleSmall?.copyWith(color: AppColors.accent)),
               const SizedBox(width: AppSpace.sm),
               if (p.totalStock <= 0)
-                Pill(text: 'Hozir yo\'q', color: AppColors.danger)
+                Pill(text: tr('Hozir yo\'q'), color: AppColors.danger)
               else if (p.totalStock <= 3)
-                Pill(text: 'Qoldi: ${p.totalStock}', color: AppColors.warning),
+                Pill(text: trf('Qoldi: {0}', [p.totalStock]), color: AppColors.warning),
             ]),
           ]),
         ),
@@ -431,7 +432,7 @@ class _ProductTile extends StatelessWidget {
         FilledButton(
           style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
           onPressed: p.totalStock > 0 ? onOrder : null,
-          child: const Text('Olaman'),
+          child: Text(tr('Olaman')),
         ),
       ]),
     );

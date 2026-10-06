@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../l10n/tr.dart';
 import '../models/photo.dart';
 import '../services/db.dart';
 import '../theme.dart';
@@ -26,12 +27,12 @@ class ProgressPhotos extends StatelessWidget {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
-              title: const Text('Kamera'),
+              title: Text(tr('Kamera')),
               onTap: () => Navigator.pop(ctx, ImageSource.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Galereya'),
+              title: Text(tr('Galereya')),
               onTap: () => Navigator.pop(ctx, ImageSource.gallery),
             ),
           ]),
@@ -48,14 +49,14 @@ class ProgressPhotos extends StatelessWidget {
       final bytes = await file.readAsBytes();
       if (bytes.length > ProgressPhoto.maxBytes) {
         if (context.mounted) {
-          showSnack(context, 'Rasm juda katta (${bytes.length ~/ 1024} KB). Boshqasini tanlang.');
+          showSnack(context, trf('Rasm juda katta ({0} KB). Boshqasini tanlang.', [bytes.length ~/ 1024]));
         }
         return;
       }
       await Db.addPhoto(uid, bytes, weight);
-      if (context.mounted) showSnack(context, "Rasm qo'shildi");
+      if (context.mounted) showSnack(context, tr("Rasm qo'shildi"));
     } catch (e) {
-      if (context.mounted) showSnack(context, "Bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -76,9 +77,9 @@ class ProgressPhotos extends StatelessWidget {
                   onPressed: () async {
                     final ok = await confirm(
                       ctx,
-                      title: "Rasmni o'chirish",
-                      message: "Bu rasm o'chirilsinmi?",
-                      ok: "O'chirish",
+                      title: tr("Rasmni o'chirish"),
+                      message: tr("Bu rasm o'chirilsinmi?"),
+                      ok: tr("O'chirish"),
                       destructive: true,
                     );
                     if (!ok) return;
@@ -86,9 +87,9 @@ class ProgressPhotos extends StatelessWidget {
                     if (ctx.mounted) Navigator.pop(ctx);
                   },
                   icon: const Icon(Icons.delete_outline),
-                  label: const Text("O'chirish"),
+                  label: Text(tr("O'chirish")),
                 ),
-              TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Yopish')),
+              TextButton(onPressed: () => Navigator.pop(ctx), child: Text(tr('Yopish'))),
             ]),
           ),
         ]),
@@ -97,7 +98,7 @@ class ProgressPhotos extends StatelessWidget {
   }
 
   static String _caption(ProgressPhoto p) =>
-      [p.dateLabel, if (p.weight > 0) '${fmtNum(p.weight)} kg'].where((e) => e.isNotEmpty).join(' · ');
+      [p.dateLabel, if (p.weight > 0) trf('{0} kg', [fmtNum(p.weight)])].where((e) => e.isNotEmpty).join(' · ');
 
   @override
   Widget build(BuildContext context) {
@@ -110,29 +111,29 @@ class ProgressPhotos extends StatelessWidget {
         if (readOnly && photos.isEmpty) return const SizedBox.shrink();
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SectionHeader(
-            'Rasmlar',
-            eyebrow: 'Oldin / keyin',
+            tr('Rasmlar'),
+            eyebrow: tr('Oldin / keyin'),
             trailing: readOnly
                 ? null
                 : TextButton.icon(
                     onPressed: () => _add(context),
                     icon: const Icon(Icons.add_a_photo_outlined),
-                    label: const Text('Rasm'),
+                    label: Text(tr('Rasm')),
                   ),
           ),
           if (photos.isEmpty)
             Text(
-              "Oyiga bir marta bir xil joyda, bir xil yorug'likda rasm oling — "
+              tr("Oyiga bir marta bir xil joyda, bir xil yorug'likda rasm oling — "
               "o'zgarish tarozidan ko'ra rasmda yaxshiroq ko'rinadi. Rasmni faqat siz va "
-              'treneringiz ko\'radi.',
+              'treneringiz ko\'radi.'),
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             )
           else ...[
             if (photos.length >= 2)
               Row(children: [
-                Expanded(child: _Shot(photos.first, 'Oldin', onTap: () => _open(context, photos.first))),
+                Expanded(child: _Shot(photos.first, tr('Oldin'), onTap: () => _open(context, photos.first))),
                 const SizedBox(width: AppSpace.sm),
-                Expanded(child: _Shot(photos.last, 'Keyin', onTap: () => _open(context, photos.last))),
+                Expanded(child: _Shot(photos.last, tr('Keyin'), onTap: () => _open(context, photos.last))),
               ]),
             if (photos.length != 2) ...[
               if (photos.length > 2) const SizedBox(height: AppSpace.sm),

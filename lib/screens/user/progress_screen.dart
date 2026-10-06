@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -19,8 +20,8 @@ class ProgressScreen extends StatelessWidget {
       final left = WeightLog.daysLeft(lastLog);
       showSnack(
         context,
-        "Vazn haftada 1 marta kiritiladi. Keyingi o'lchov "
-        "${left == 1 ? 'ertaga' : '$left kundan keyin'}.",
+        trf("Vazn haftada 1 marta kiritiladi. Keyingi o'lchov "
+        "{0}.", [left == 1 ? tr('ertaga') : trf('{0} kundan keyin', [left])]),
       );
       return;
     }
@@ -32,10 +33,10 @@ class ProgressScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Bugungi vazn', style: Theme.of(context).textTheme.titleLarge),
+            Text(tr('Bugungi vazn'), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpace.xs),
             Text(
-              'Haftada 1 marta — ertalab, nahorga tortiling',
+              tr('Haftada 1 marta — ertalab, nahorga tortiling'),
               style: TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
             const SizedBox(height: AppSpace.lg),
@@ -51,17 +52,17 @@ class ProgressScreen extends StatelessWidget {
             const SizedBox(height: AppSpace.lg),
             FilledButton(
               onPressed: () => Navigator.pop(context, double.tryParse(c.text.replaceAll(',', '.'))),
-              child: const Text('Saqlash'),
+              child: Text(tr('Saqlash')),
             ),
           ]),
     );
     if (w == null) return;
     if (w < 30 || w > 300) {
-      if (context.mounted) showSnack(context, "Vazn 30–300 kg oralig'ida bo'lishi kerak");
+      if (context.mounted) showSnack(context, tr("Vazn 30–300 kg oralig'ida bo'lishi kerak"));
       return;
     }
     await Db.addWeight(user.id, w);
-    if (context.mounted) showSnack(context, 'Saqlandi: ${fmtNum(w)} kg');
+    if (context.mounted) showSnack(context, trf('Saqlandi: {0} kg', [fmtNum(w)]));
   }
 
   @override
@@ -77,7 +78,7 @@ class ProgressScreen extends StatelessWidget {
         final due = WeightLog.canAdd(lastLog);
         final left = WeightLog.daysLeft(lastLog);
         return Scaffold(
-          appBar: readOnly ? null : AppBar(title: const Text('Progress')),
+          appBar: readOnly ? null : AppBar(title: Text(tr('Progress'))),
           floatingActionButton: readOnly
               ? null
               : FloatingActionButton.extended(
@@ -88,8 +89,8 @@ class ProgressScreen extends StatelessWidget {
                   foregroundColor: due ? AppColors.onAccent : AppColors.textMuted,
                   icon: Icon(due ? Icons.add : Icons.lock_clock_outlined),
                   label: Text(due
-                      ? 'Vazn kiritish'
-                      : (left == 1 ? 'Vazn: ertaga' : 'Vazn: $left kundan keyin')),
+                      ? tr('Vazn kiritish')
+                      : (left == 1 ? tr('Vazn: ertaga') : trf('Vazn: {0} kundan keyin', [left]))),
                 ),
           body: Builder(
             builder: (context) {
@@ -98,11 +99,11 @@ class ProgressScreen extends StatelessWidget {
               if (logs.isEmpty) {
                 return EmptyState(
                   icon: Icons.monitor_weight_outlined,
-                  title: 'Hali vazn kiritilmagan',
+                  title: tr('Hali vazn kiritilmagan'),
                   subtitle: readOnly
                       ? null
-                      : "Haftada 1 marta, ertalab nahorga tortilib, vazningizni kiriting. "
-                          "Har kuni o'lchash shart emas — vazn kun davomida 1–2 kg tebranadi.",
+                      : tr("Haftada 1 marta, ertalab nahorga tortilib, vazningizni kiriting. "
+                          "Har kuni o'lchash shart emas — vazn kun davomida 1–2 kg tebranadi."),
                 );
               }
               final first = logs.first.weight, last = logs.last.weight;
@@ -129,8 +130,8 @@ class ProgressScreen extends StatelessWidget {
                       Expanded(
                         child: StatTile(
                           icon: Icons.flag_outlined,
-                          label: "Boshlang'ich",
-                          value: '${fmtNum(first)} kg',
+                          label: tr("Boshlang'ich"),
+                          value: trf('{0} kg', [fmtNum(first)]),
                           color: s.onSurfaceVariant,
                         ),
                       ),
@@ -138,8 +139,8 @@ class ProgressScreen extends StatelessWidget {
                       Expanded(
                         child: StatTile(
                           icon: Icons.monitor_weight_outlined,
-                          label: 'Hozir',
-                          value: '${fmtNum(last)} kg',
+                          label: tr('Hozir'),
+                          value: trf('{0} kg', [fmtNum(last)]),
                           color: AppColors.water,
                         ),
                       ),
@@ -147,7 +148,7 @@ class ProgressScreen extends StatelessWidget {
                       Expanded(
                         child: StatTile(
                           icon: Icons.event_repeat_outlined,
-                          label: "O'lchov",
+                          label: tr("O'lchov"),
                           value: '${logs.length}',
                           color: AppColors.protein,
                         ),
@@ -161,7 +162,7 @@ class ProgressScreen extends StatelessWidget {
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Padding(
                         padding: const EdgeInsets.only(left: AppSpace.sm, bottom: AppSpace.lg),
-                        child: Eyebrow('Vazn dinamikasi', color: s.onSurfaceVariant),
+                        child: Eyebrow(tr('Vazn dinamikasi'), color: s.onSurfaceVariant),
                       ),
                       SizedBox(
                         height: 220,
@@ -199,7 +200,7 @@ class ProgressScreen extends StatelessWidget {
                               getTooltipColor: (_) => s.inverseSurface,
                               getTooltipItems: (spots) => spots
                                   .map((sp) => LineTooltipItem(
-                                        '${fmtNum(sp.y)} kg\n',
+                                        trf('{0} kg\n', [fmtNum(sp.y)]),
                                         TextStyle(
                                             color: s.onInverseSurface, fontWeight: FontWeight.w700),
                                         children: [
@@ -255,7 +256,7 @@ class ProgressScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpace.lg),
                   ProgressPhotos(uid: user.id, weight: last, readOnly: readOnly),
-                  const SectionHeader('Tarix', eyebrow: "O'lchovlar"),
+                  SectionHeader(tr('Tarix'), eyebrow: tr("O'lchovlar")),
                   BentoTile(
                     padding: EdgeInsets.zero,
                     child: Column(children: [
@@ -291,14 +292,14 @@ class _WeeklyCard extends StatelessWidget {
 
     final (String title, String sub, Color color, IconData icon) = due
         ? (
-            'Vaznni kiritish vaqti keldi',
-            days == 7 ? "Oxirgi o'lchovdan 7 kun o'tdi" : "Oxirgi o'lchovdan $days kun o'tdi",
+            tr('Vaznni kiritish vaqti keldi'),
+            days == 7 ? tr("Oxirgi o'lchovdan 7 kun o'tdi") : trf("Oxirgi o'lchovdan {0} kun o'tdi", [days]),
             AppColors.warning,
             Icons.notifications_active_outlined,
           )
         : (
-            left == 1 ? 'Keyingi o’lchov ertaga' : 'Keyingi o’lchov $left kundan keyin',
-            'Haftada faqat 1 marta — ungacha vaznni o’zgartirib bo’lmaydi',
+            left == 1 ? tr('Keyingi o’lchov ertaga') : trf('Keyingi o’lchov {0} kundan keyin', [left]),
+            tr('Haftada faqat 1 marta — ungacha vaznni o’zgartirib bo’lmaydi'),
             AppColors.success,
             Icons.event_available_outlined,
           );
@@ -344,7 +345,7 @@ class _ChangePanel extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpace.xl),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Eyebrow('Umumiy o’zgarish', color: AppColors.textFaint),
+          Eyebrow(tr('Umumiy o’zgarish'), color: AppColors.textFaint),
           const Spacer(),
           Icon(
             diff == 0
@@ -371,7 +372,7 @@ class _ChangePanel extends StatelessWidget {
             ]),
         const SizedBox(height: AppSpace.sm),
         Text(
-          '${fmtNum(from)} kg dan ${fmtNum(to)} kg gacha',
+          trf('{0} kg dan {1} kg gacha', [fmtNum(from), fmtNum(to)]),
           style: t.bodySmall?.copyWith(
             color: AppColors.textMuted,
             fontFeatures: tabular,
@@ -392,10 +393,10 @@ class _HistoryRow extends StatelessWidget {
     final s = Theme.of(context).colorScheme;
     final d = prev == null ? null : log.weight - prev!.weight;
     return ListTile(
-      title: Text('${fmtNum(log.weight)} kg', style: const TextStyle(fontWeight: FontWeight.w600)),
+      title: Text(trf('{0} kg', [fmtNum(log.weight)]), style: const TextStyle(fontWeight: FontWeight.w600)),
       subtitle: Text(DateFormat('dd.MM.yyyy, HH:mm').format(log.date)),
       trailing: d == null
-          ? Pill(text: 'Start', color: s.outline)
+          ? Pill(text: tr('Start'), color: s.outline)
           : Pill(
               text: '${d > 0 ? '+' : ''}${d.toStringAsFixed(1)}',
               color: d <= 0 ? AppColors.success : AppColors.warning,
