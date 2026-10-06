@@ -3,6 +3,10 @@
   "ru": "\n\nЕго ученики ({0}) останутся без тренера.",
   "en": "\n\nTheir {0} clients will have no trainer."
  },
+ " (o‘rtacha)": {
+  "ru": " (в среднем)",
+  "en": " (average)"
+ },
  " · vazn {0} kg": {
   "ru": " · вес {0} кг",
   "en": " · weight {0} kg"
@@ -10,6 +14,10 @@
  "\"{0}\" bazadan o'chirilsinmi? Mavjud rejalarga ta'sir qilmaydi.": {
   "ru": "Удалить «{0}» из базы? На существующие планы это не повлияет.",
   "en": "Delete “{0}” from the database? Existing plans are not affected."
+ },
+ "\"{0}\" butunlay o'chiriladi. Unga biriktirilgan mijozlar rejasiz qoladi.": {
+  "ru": "«{0}» будет удалён полностью. Клиенты с этим планом останутся без плана.",
+  "en": "“{0}” will be deleted permanently. Clients assigned to it will have no plan."
  },
  "\"{0}\" buyurtmasi bekor qilinsinmi?": {
   "ru": "Отменить заказ «{0}»?",
@@ -22,6 +30,10 @@
  "\"{0}\" o'chiriladi. Undagi trenerlar zalsiz qoladi — ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.": {
   "ru": "«{0}» будет удалён. Его тренеры останутся без зала — прикрепите их к другому. На учеников это не влияет.",
   "en": "“{0}” will be deleted. Its trainers will have no gym — assign them to another one. Clients are not affected."
+ },
+ "\"{0}\" va undagi mahsulotlar olib tashlanadi.": {
+  "ru": "«{0}» и его продукты будут убраны.",
+  "en": "“{0}” and its foods will be removed."
  },
  "100 gramm uchun:": {
   "ru": "На 100 граммов:",
@@ -162,6 +174,10 @@
  "Avgust": {
   "ru": "Август",
   "en": "August"
+ },
+ "Avval 'Mahsulotlar' bo'limida mahsulot qo'shing": {
+  "ru": "Сначала добавьте продукты в разделе «Продукты»",
+  "en": "Add foods in the Foods section first"
  },
  "Avval joyini tanlang, keyin nom bering": {
   "ru": "Сначала выберите место, затем дайте название",
@@ -395,6 +411,10 @@
   "ru": "Другое",
   "en": "Other"
  },
+ "Boshqa kunlarga nusxalash": {
+  "ru": "Скопировать на другие дни",
+  "en": "Copy to other days"
+ },
  "Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari tez orada qo'shiladi.": {
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
   "en": "This section is being improved — exercises for each workout are coming soon."
@@ -579,6 +599,10 @@
   "ru": "Декабрь",
   "en": "December"
  },
+ "Diamond zal shablonidan boshlang yoki yangi reja tuzing.": {
+  "ru": "Начните с шаблона зала Diamond или составьте новый план.",
+  "en": "Start from a Diamond gym template or build a new plan."
+ },
  "Do'kon": {
   "ru": "Магазин",
   "en": "Shop"
@@ -659,6 +683,10 @@
   "ru": "Только советы — добавьте приёмы пищи в разделе «Планы»",
   "en": "Tips only — add meals in the Plans section"
  },
+ "Faqat maslahatlar — mahallarni o'zingiz qo'shasiz": {
+  "ru": "Только советы — приёмы пищи добавляете сами",
+  "en": "Tips only — you add the meals yourself"
+ },
  "Faqat shu maqsad rejalari beriladi": {
   "ru": "Выдаются планы только для этой цели",
   "en": "Only plans for this goal can be assigned"
@@ -699,6 +727,10 @@
   "ru": "Да",
   "en": "Yes"
  },
+ "Hafta kunlari bo'yicha 7 xil menyu — shogirdda o'sha kunniki chiqadi": {
+  "ru": "7 разных меню по дням недели — ученик видит меню на текущий день",
+  "en": "7 different menus by weekday — the client sees the one for the current day"
+ },
  "Haftada 1 marta — ertalab, nahorga tortiling": {
   "ru": "Раз в неделю — взвешивайтесь утром натощак",
   "en": "Once a week — weigh yourself in the morning on an empty stomach"
@@ -711,6 +743,14 @@
   "ru": "Только раз в неделю — до этого вес изменить нельзя",
   "en": "Only once a week — weight can't be changed until then"
  },
+ "Haftalik (7 kun) • ": {
+  "ru": "Недельный (7 дней) • ",
+  "en": "Weekly (7 days) • "
+ },
+ "Haftalik menyuni bekor qilish": {
+  "ru": "Отменить недельное меню",
+  "en": "Turn off weekly menu"
+ },
  "Haftalik vazn eslatmasi": {
   "ru": "Еженедельное напоминание о весе",
   "en": "Weekly weigh-in reminder"
@@ -718,6 +758,10 @@
  "Haftalik · ": {
   "ru": "Недельный · ",
   "en": "Weekly · "
+ },
+ "Haftalik · 7 kun": {
+  "ru": "Недельный · 7 дней",
+  "en": "Weekly · 7 days"
  },
  "Haftasiga 3 kun": {
   "ru": "3 дня в неделю",
@@ -735,9 +779,17 @@
   "ru": "Посещение ещё не отмечено",
   "en": "Attendance not marked yet"
  },
+ "Hali mahal yo'q. Pastdagi \"Mahal qo'shish\" tugmasini bosing.": {
+  "ru": "Приёмов пищи пока нет. Нажмите «Добавить приём пищи» внизу.",
+  "en": "No meals yet. Tap “Add meal” below."
+ },
  "Hali mijoz yo'q": {
   "ru": "Клиентов пока нет",
   "en": "No clients yet"
+ },
+ "Hali reja yo'q": {
+  "ru": "Планов пока нет",
+  "en": "No plans yet"
  },
  "Hali ro'yxatdan o'tgan foydalanuvchi yo'q": {
   "ru": "Зарегистрированных пользователей пока нет",
@@ -758,6 +810,10 @@
  "Hali zal qo'shilmagan": {
   "ru": "Залы ещё не добавлены",
   "en": "No gyms added yet"
+ },
+ "Hamma kunga": {
+  "ru": "На все дни",
+  "en": "To all days"
  },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
@@ -782,6 +838,10 @@
  "Har bir sotuv": {
   "ru": "Каждая продажа",
   "en": "Every sale"
+ },
+ "Har kunga alohida menyu": {
+  "ru": "Отдельное меню на каждый день",
+  "en": "Separate menu for each day"
  },
  "Havola nusxalandi": {
   "ru": "Ссылка скопирована",
@@ -818,6 +878,10 @@
  "Hozir biriktirilgan: {0}": {
   "ru": "Сейчас назначен: {0}",
   "en": "Currently assigned: {0}"
+ },
+ "Hozir reja har kuni bir xil": {
+  "ru": "Сейчас план одинаковый на каждый день",
+  "en": "Right now the plan is the same every day"
  },
  "Hozir yo'q": {
   "ru": "Нет в наличии",
@@ -895,9 +959,17 @@
   "ru": "Комментарий (необязательно)",
   "en": "Note (optional)"
  },
+ "Izoh / maslahat": {
+  "ru": "Комментарий / совет",
+  "en": "Note / tip"
+ },
  "Jami": {
   "ru": "Всего",
   "en": "Total"
+ },
+ "Jami kaloriya": {
+  "ru": "Всего калорий",
+  "en": "Total calories"
  },
  "Jami tushum": {
   "ru": "Общая выручка",
@@ -958,6 +1030,14 @@
  "Katalogdagi profilim": {
   "ru": "Мой профиль в каталоге",
   "en": "My catalog profile"
+ },
+ "Kategoriya": {
+  "ru": "Категория",
+  "en": "Category"
+ },
+ "Kategoriyani tanlang: Ozish yoki Massa nabor": {
+  "ru": "Выберите категорию: похудение или набор массы",
+  "en": "Choose a category: weight loss or muscle gain"
  },
  "Kecha": {
   "ru": "Вчера",
@@ -1091,6 +1171,18 @@
   "ru": "Не удалось загрузить данные",
   "en": "Could not load data"
  },
+ "Mahal qo'shish": {
+  "ru": "Добавить приём пищи",
+  "en": "Add meal"
+ },
+ "Mahalni o'chirish": {
+  "ru": "Удалить приём пищи",
+  "en": "Delete meal"
+ },
+ "Mahalni tahrirlash": {
+  "ru": "Изменить приём пищи",
+  "en": "Edit meal"
+ },
  "Mahsulot": {
   "ru": "Продукт",
   "en": "Food"
@@ -1203,6 +1295,10 @@
   "ru": "Клиенты появятся здесь после регистрации в приложении.",
   "en": "Clients appear here once they sign up in the app."
  },
+ "Miqdori": {
+  "ru": "Количество",
+  "en": "Amount"
+ },
  "Moddalar almashinuvi (metabolizm)": {
   "ru": "Обмен веществ (метаболизм)",
   "en": "Metabolism"
@@ -1218,6 +1314,10 @@
  "Muddati o‘tdi": {
   "ru": "Срок истёк",
   "en": "Expired"
+ },
+ "Mumkin emas (vergul bilan)": {
+  "ru": "Нельзя (через запятую)",
+  "en": "Not allowed (comma-separated)"
  },
  "Narxi": {
   "ru": "Цена",
@@ -1239,6 +1339,18 @@
   "ru": "Название",
   "en": "Name"
  },
+ "Nomsiz": {
+  "ru": "Без названия",
+  "en": "Untitled"
+ },
+ "Non, shirinlik, ...": {
+  "ru": "Хлеб, сладкое, ...",
+  "en": "Bread, sweets, ..."
+ },
+ "Nonushta": {
+  "ru": "Завтрак",
+  "en": "Breakfast"
+ },
  "Norma": {
   "ru": "Норма",
   "en": "Target"
@@ -1258,6 +1370,14 @@
  "Noyabr": {
   "ru": "Ноябрь",
   "en": "November"
+ },
+ "Nusxa olish": {
+  "ru": "Сделать копию",
+  "en": "Duplicate"
+ },
+ "Nusxalash": {
+  "ru": "Скопировать",
+  "en": "Copy"
  },
  "O'chirilgan trener": {
   "ru": "Удалённый тренер",
@@ -1327,6 +1447,10 @@
   "ru": "Прошлые оплаты",
   "en": "Past payments"
  },
+ "Olib tashlash": {
+  "ru": "Убрать",
+  "en": "Remove"
+ },
  "Olish": {
   "ru": "Снять",
   "en": "Remove"
@@ -1346,6 +1470,10 @@
  "Ovqat vaqti eslatmasi": {
   "ru": "Напоминание о приёме пищи",
   "en": "Meal time reminder"
+ },
+ "Ovqatlanish mahallari ({0})": {
+  "ru": "Приёмы пищи ({0})",
+  "en": "Meals ({0})"
  },
  "Ovqatlanish rejalari": {
   "ru": "Планы питания",
@@ -1591,6 +1719,10 @@
   "ru": "План ({0} ккал) отличается от нормы клиента ({1} ккал) больше чем на 300 ккал.",
   "en": "The plan ({0} kcal) differs from the client's target ({1} kcal) by more than 300 kcal."
  },
+ "Reja 1200 kkal dan kam. Ko'pchilik uchun bu xavfli darajada past.": {
+  "ru": "План меньше 1200 ккал. Для большинства это опасно мало.",
+  "en": "The plan is under 1200 kcal. For most people that is dangerously low."
+ },
  "Reja berilgan": {
   "ru": "План назначен",
   "en": "Plans assigned"
@@ -1615,9 +1747,25 @@
   "ru": "План не подходит",
   "en": "Plan mismatch"
  },
+ "Reja nomi": {
+  "ru": "Название плана",
+  "en": "Plan name"
+ },
+ "Reja nomini kiriting": {
+  "ru": "Введите название плана",
+  "en": "Enter a plan name"
+ },
+ "Reja o'chirildi": {
+  "ru": "План удалён",
+  "en": "Plan deleted"
+ },
  "Reja olib tashlandi": {
   "ru": "План снят",
   "en": "Plan removed"
+ },
+ "Reja saqlandi": {
+  "ru": "План сохранён",
+  "en": "Plan saved"
  },
  "Reja yangilanmoqda": {
   "ru": "План обновляется",
@@ -1639,13 +1787,25 @@
   "ru": "Планы",
   "en": "Plans"
  },
+ "Rejalarni ochib bo'lmadi": {
+  "ru": "Не удалось открыть планы",
+  "en": "Could not load plans"
+ },
  "Rejangizdagi mahalni belgilashni unutmang": {
   "ru": "Не забудьте отметить приём пищи из плана",
   "en": "Don't forget to mark the meal in your plan"
  },
+ "Rejani o'chirish": {
+  "ru": "Удалить план",
+  "en": "Delete plan"
+ },
  "Rejani olib tashlash": {
   "ru": "Снять план",
   "en": "Remove plan"
+ },
+ "Rejani tahrirlash": {
+  "ru": "Изменить план",
+  "en": "Edit plan"
  },
  "Rejasiz": {
   "ru": "Без плана",
@@ -1739,6 +1899,14 @@
   "ru": "Шаблон",
   "en": "Template"
  },
+ "Shablondan boshlash": {
+  "ru": "Начать с шаблона",
+  "en": "Start from a template"
+ },
+ "Shablonni tanlang": {
+  "ru": "Выберите шаблон",
+  "en": "Choose a template"
+ },
  "Shanba": {
   "ru": "Суббота",
   "en": "Saturday"
@@ -1758,6 +1926,10 @@
  "Shogird maqsadini hali tanlamagan — yangi versiyada kirganda so'raladi yoki shu yerda o'zingiz belgilang. Maqsadsiz reja berib bo'lmaydi.": {
   "ru": "Ученик ещё не выбрал цель — приложение спросит при входе в новой версии, либо задайте её здесь. Без цели план назначить нельзя.",
   "en": "The client hasn't chosen a goal yet — the app will ask on the next sign-in, or set it here yourself. A plan can't be assigned without a goal."
+ },
+ "Shogird shu rasmni ko'radi": {
+  "ru": "Ученик видит это изображение",
+  "en": "The client sees this image"
  },
  "Shogird yo'q": {
   "ru": "Учеников нет",
@@ -2207,6 +2379,10 @@
   "ru": "Назначена тренировка дома",
   "en": "Home workout set"
  },
+ "Vaqt: {0}": {
+  "ru": "Время: {0}",
+  "en": "Time: {0}"
+ },
  "Vaqtincha mumkin emas": {
   "ru": "Временно нельзя",
   "en": "Temporarily off limits"
@@ -2623,6 +2799,10 @@
   "ru": "отметки «съел»",
   "en": "meals marked eaten"
  },
+ "{0} (nusxa)": {
+  "ru": "{0} (копия)",
+  "en": "{0} (copy)"
+ },
  "{0} daqiqa oldin": {
   "ru": "{0} мин назад",
   "en": "{0} min ago"
@@ -2634,6 +2814,10 @@
  "{0} faqat do'kon bilan ishlaydi: tovar, buyurtma va qoldiq. Shogirdlar, rejalar va chatni ko'rmaydi.{1}": {
   "ru": "{0} будет работать только с магазином: товары, заказы и остатки. Учеников, планы и чат не видит.{1}",
   "en": "{0} will work only with the shop: products, orders and stock. They won't see clients, plans or chat.{1}"
+ },
+ "{0} g oqsil": {
+  "ru": "{0} г белка",
+  "en": "{0} g protein"
  },
  "{0} ilovaga kira olmaydi va ro’yxatlardan yo’qoladi. Bu amalni qaytarib bo’lmaydi.": {
   "ru": "{0} не сможет войти в приложение и исчезнет из списков. Это действие нельзя отменить.",
@@ -2671,6 +2855,10 @@
   "ru": "{0} ккал  ·  {1} г белка",
   "en": "{0} kcal  ·  {1} g protein"
  },
+ "{0} kkal • {1} g oqsil": {
+  "ru": "{0} ккал • {1} г белка",
+  "en": "{0} kcal • {1} g protein"
+ },
  "{0} kun": {
   "ru": "{0} дн.",
   "en": "{0} days"
@@ -2686,6 +2874,22 @@
  "{0} kundan keyin tugaydi": {
   "ru": "закончится через {0} дн.",
   "en": "expires in {0} days"
+ },
+ "{0} mahal": {
+  "ru": "приёмов пищи: {0}",
+  "en": "{0} meals"
+ },
+ "{0} menyusi": {
+  "ru": "Меню: {0}",
+  "en": "{0} menu"
+ },
+ "{0} menyusi qoladi va har kuni shu ko'rsatiladi. Boshqa kunlarning menyusi o'chadi.": {
+  "ru": "Останется меню «{0}», оно будет показываться каждый день. Меню остальных дней удалится.",
+  "en": "The {0} menu stays and is shown every day. Menus for the other days are deleted."
+ },
+ "{0} menyusi qolgan 6 kunga ko'chiriladi va ularning hozirgi menyusi o'chadi.": {
+  "ru": "Меню «{0}» скопируется на остальные 6 дней, их текущее меню удалится.",
+  "en": "The {0} menu is copied to the other 6 days and their current menus are deleted."
  },
  "{0} ml / 2000 ml": {
   "ru": "{0} мл / 2000 мл",
@@ -2771,6 +2975,10 @@
   "ru": "Продуктов: {0} • Б — белки, Ж — жиры, У — углеводы (на 100 г)",
   "en": "{0} foods • P — protein, F — fat, C — carbs (per 100 g)"
  },
+ "{0} ta reja": {
+  "ru": "Планов: {0}",
+  "en": "{0} plans"
+ },
  "{0} ta shogird  ·  {1}": {
   "ru": "учеников: {0}  ·  {1}",
   "en": "{0} clients  ·  {1}"
@@ -2811,6 +3019,10 @@
   "ru": "{0} зв.",
   "en": "{0} stars"
  },
+ "{0} · kaloriya": {
+  "ru": "{0} · калории",
+  "en": "{0} · calories"
+ },
  "{0} — hali ovqatlanish rejasi yo‘q": {
   "ru": "{0} — ещё нет плана питания",
   "en": "{0} — no meal plan yet"
@@ -2846,6 +3058,10 @@
  "{0}{1} mahal · {2} kkal · {3} g oqsil": {
   "ru": "{0}приёмов пищи: {1} · {2} ккал · {3} г белка",
   "en": "{0}{1} meals · {2} kcal · {3} g protein"
+ },
+ "{0}{1} mahal • {2} kkal{3} • {4} g oqsil": {
+  "ru": "{0}приёмов пищи: {1} • {2} ккал{3} • {4} г белка",
+  "en": "{0}{1} meals • {2} kcal{3} • {4} g protein"
  },
  "— Trener yo’q —": {
   "ru": "— Без тренера —",

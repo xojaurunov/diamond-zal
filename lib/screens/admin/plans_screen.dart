@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/gym.dart' show weekdayNames, weekdayShort;
 import '../../models/models.dart';
 import '../../services/db.dart';
@@ -25,7 +26,7 @@ class PlansScreen extends StatelessWidget {
       ConstrainedBox(
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
         child: ListView(shrinkWrap: true, children: [
-          Text('Shablonni tanlang', style: t.titleLarge),
+          Text(tr('Shablonni tanlang'), style: t.titleLarge),
           for (final g in groups.entries) ...[
             const SizedBox(height: AppSpace.lg),
             Eyebrow(g.key),
@@ -36,10 +37,10 @@ class PlansScreen extends StatelessWidget {
                   leading: const Icon(Icons.restaurant_menu),
                   title: Text(p.title.substring(g.key.length).replaceFirst(' • ', '')),
                   subtitle: Text(p.meals.isEmpty && !p.isWeekly
-                      ? "Faqat maslahatlar — mahallarni o'zingiz qo'shasiz"
-                      : '${p.isWeekly ? "Haftalik (7 kun) • " : ""}${p.mealsPerDay} mahal • '
-                          "${p.kcal.round()} kkal${p.isWeekly ? ' (o‘rtacha)' : ''} • "
-                          '${p.protein.round()} g oqsil'),
+                      ? tr("Faqat maslahatlar — mahallarni o'zingiz qo'shasiz")
+                      : trf('{0}{1} mahal • '
+                          "{2} kkal{3} • "
+                          '{4} g oqsil', [p.isWeekly ? tr("Haftalik (7 kun) • ") : "", p.mealsPerDay, p.kcal.round(), p.isWeekly ? tr(' (o‘rtacha)') : '', p.protein.round()])),
                   onTap: () => Navigator.pop(context, p),
                 ),
               ),
@@ -53,14 +54,14 @@ class PlansScreen extends StatelessWidget {
   Future<void> _delete(BuildContext context, Plan p) async {
     final ok = await confirm(
       context,
-      title: "Rejani o'chirish",
-      message: '"${p.title}" butunlay o\'chiriladi. Unga biriktirilgan mijozlar rejasiz qoladi.',
-      ok: "O'chirish",
+      title: tr("Rejani o'chirish"),
+      message: trf('"{0}" butunlay o\'chiriladi. Unga biriktirilgan mijozlar rejasiz qoladi.', [p.title]),
+      ok: tr("O'chirish"),
       destructive: true,
     );
     if (!ok) return;
     await Db.deletePlan(p.id);
-    if (context.mounted) showSnack(context, "Reja o'chirildi");
+    if (context.mounted) showSnack(context, tr("Reja o'chirildi"));
   }
 
   @override
@@ -69,7 +70,7 @@ class PlansScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _open(context),
         icon: const Icon(Icons.add),
-        label: const Text('Yangi reja'),
+        label: Text(tr('Yangi reja')),
       ),
       body: StreamBuilder<List<Plan>>(
         stream: Db.plans(),
@@ -78,7 +79,7 @@ class PlansScreen extends StatelessWidget {
           if (snap.hasError) {
             return EmptyState(
               icon: Icons.error_outline,
-              title: "Rejalarni ochib bo'lmadi",
+              title: tr("Rejalarni ochib bo'lmadi"),
               subtitle: '${snap.error}',
             );
           }
@@ -87,12 +88,12 @@ class PlansScreen extends StatelessWidget {
           if (plans.isEmpty) {
             return EmptyState(
               icon: Icons.menu_book_outlined,
-              title: "Hali reja yo'q",
-              subtitle: 'Diamond zal shablonidan boshlang yoki yangi reja tuzing.',
+              title: tr("Hali reja yo'q"),
+              subtitle: tr('Diamond zal shablonidan boshlang yoki yangi reja tuzing.'),
               action: FilledButton.icon(
                 onPressed: () => _pickTemplate(context),
                 icon: const Icon(Icons.auto_awesome),
-                label: const Text('Shablondan boshlash'),
+                label: Text(tr('Shablondan boshlash')),
               ),
             );
           }
@@ -100,11 +101,11 @@ class PlansScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
             children: [
               SectionHeader(
-                '${plans.length} ta reja',
+                trf('{0} ta reja', [plans.length]),
                 trailing: TextButton.icon(
                   onPressed: () => _pickTemplate(context),
                   icon: const Icon(Icons.auto_awesome, size: 18),
-                  label: const Text('Shablon'),
+                  label: Text(tr('Shablon')),
                 ),
               ),
               for (final p in plans)
@@ -116,7 +117,7 @@ class PlansScreen extends StatelessWidget {
                     onCopy: () => _open(
                       context,
                       Plan(
-                        title: '${p.title} (nusxa)',
+                        title: trf('{0} (nusxa)', [p.title]),
                         note: p.note,
                         meals: p.meals,
                         week: p.week,
@@ -165,22 +166,22 @@ class _PlanCard extends StatelessWidget {
                 Wrap(spacing: 6, runSpacing: 6, children: [
                   if (plan.isWeekly)
                     Pill(
-                      text: 'Haftalik · 7 kun',
+                      text: tr('Haftalik · 7 kun'),
                       color: AppColors.accent,
                       icon: Icons.calendar_view_week_outlined,
                     ),
                   Pill(
-                    text: '${plan.mealsPerDay} mahal',
+                    text: trf('{0} mahal', [plan.mealsPerDay]),
                     color: s.primary,
                     icon: Icons.schedule,
                   ),
                   Pill(
-                    text: '${plan.kcal.round()} kkal',
+                    text: trf('{0} kkal', [plan.kcal.round()]),
                     color: AppColors.warning,
                     icon: Icons.local_fire_department_outlined,
                   ),
                   Pill(
-                    text: '${plan.protein.round()} g oqsil',
+                    text: trf('{0} g oqsil', [plan.protein.round()]),
                     color: AppColors.protein,
                     icon: Icons.egg_alt_outlined,
                   ),
@@ -188,22 +189,22 @@ class _PlanCard extends StatelessWidget {
               ]),
             ),
             PopupMenuButton<String>(
-              tooltip: 'Amallar',
+              tooltip: tr('Amallar'),
               onSelected: (v) => v == 'copy' ? onCopy() : onDelete(),
-              itemBuilder: (_) => const [
+              itemBuilder: (_) => [
                 PopupMenuItem(
                   value: 'copy',
                   child: ListTile(
-                    leading: Icon(Icons.copy_outlined),
-                    title: Text('Nusxa olish'),
+                    leading: const Icon(Icons.copy_outlined),
+                    title: Text(tr('Nusxa olish')),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
                 PopupMenuItem(
                   value: 'delete',
                   child: ListTile(
-                    leading: Icon(Icons.delete_outline),
-                    title: Text("O'chirish"),
+                    leading: const Icon(Icons.delete_outline),
+                    title: Text(tr("O'chirish")),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
@@ -273,10 +274,10 @@ class _PlanEditorState extends State<PlanEditor> {
     }
     final ok = await confirm(
       context,
-      title: 'Haftalik menyuni bekor qilish',
-      message: '${weekdayNames[_day]} menyusi qoladi va har kuni shu ko\'rsatiladi. '
-          'Boshqa kunlarning menyusi o\'chadi.',
-      ok: 'Bekor qilish',
+      title: tr('Haftalik menyuni bekor qilish'),
+      message: trf('{0} menyusi qoladi va har kuni shu ko\'rsatiladi. '
+          'Boshqa kunlarning menyusi o\'chadi.', [tr(weekdayNames[_day] ?? '')]),
+      ok: tr('Bekor qilish'),
       destructive: true,
     );
     if (!ok || !mounted) return;
@@ -293,10 +294,10 @@ class _PlanEditorState extends State<PlanEditor> {
   Future<void> _copyDayToAll() async {
     final ok = await confirm(
       context,
-      title: 'Boshqa kunlarga nusxalash',
-      message: '${weekdayNames[_day]} menyusi qolgan 6 kunga ko\'chiriladi '
-          'va ularning hozirgi menyusi o\'chadi.',
-      ok: 'Nusxalash',
+      title: tr('Boshqa kunlarga nusxalash'),
+      message: trf('{0} menyusi qolgan 6 kunga ko\'chiriladi '
+          'va ularning hozirgi menyusi o\'chadi.', [tr(weekdayNames[_day] ?? '')]),
+      ok: tr('Nusxalash'),
     );
     if (!ok || !mounted) return;
     setState(() {
@@ -327,7 +328,7 @@ class _PlanEditorState extends State<PlanEditor> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setD) => AlertDialog(
-          title: Text(m == null ? "Mahal qo'shish" : 'Mahalni tahrirlash'),
+          title: Text(m == null ? tr("Mahal qo'shish") : tr('Mahalni tahrirlash')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -336,7 +337,7 @@ class _PlanEditorState extends State<PlanEditor> {
                 controller: title,
                 autofocus: true,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(labelText: 'Nomi', hintText: 'Nonushta'),
+                decoration: InputDecoration(labelText: tr('Nomi'), hintText: tr('Nonushta')),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
@@ -356,12 +357,12 @@ class _PlanEditorState extends State<PlanEditor> {
                   if (picked != null) setD(() => time = _hhmm(picked));
                 },
                 icon: const Icon(Icons.schedule),
-                label: Text('Vaqt: $time'),
+                label: Text(trf('Vaqt: {0}', [time])),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Bekor')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Bekor'))),
             FilledButton(
               style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
               onPressed: () => Navigator.pop(ctx, true),
@@ -387,9 +388,9 @@ class _PlanEditorState extends State<PlanEditor> {
   Future<void> _removeMeal(int index) async {
     final ok = await confirm(
       context,
-      title: "Mahalni o'chirish",
-      message: '"${_current[index].title}" va undagi mahsulotlar olib tashlanadi.',
-      ok: "O'chirish",
+      title: tr("Mahalni o'chirish"),
+      message: trf('"{0}" va undagi mahsulotlar olib tashlanadi.', [_current[index].title]),
+      ok: tr("O'chirish"),
       destructive: true,
     );
     if (ok && mounted) setState(() => _current.removeAt(index));
@@ -399,7 +400,7 @@ class _PlanEditorState extends State<PlanEditor> {
     final foods = await Db.foods().first;
     if (!mounted) return;
     if (foods.isEmpty) {
-      showSnack(context, "Avval 'Mahsulotlar' bo'limida mahsulot qo'shing");
+      showSnack(context, tr("Avval 'Mahsulotlar' bo'limida mahsulot qo'shing"));
       return;
     }
     Food? selected = foods.first;
@@ -408,12 +409,12 @@ class _PlanEditorState extends State<PlanEditor> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setD) => AlertDialog(
-          title: const Text("Mahsulot qo'shish"),
+          title: Text(tr("Mahsulot qo'shish")),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             DropdownButtonFormField<Food>(
               initialValue: selected,
               isExpanded: true,
-              decoration: const InputDecoration(labelText: 'Mahsulot'),
+              decoration: InputDecoration(labelText: tr('Mahsulot')),
               items: foods
                   .map((f) => DropdownMenuItem(
                         value: f,
@@ -430,15 +431,15 @@ class _PlanEditorState extends State<PlanEditor> {
             TextField(
               controller: grams,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Miqdori', suffixText: 'g'),
+              decoration: InputDecoration(labelText: tr('Miqdori'), suffixText: 'g'),
             ),
           ]),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Bekor')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Bekor'))),
             FilledButton(
               style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text("Qo'shish"),
+              child: Text(tr("Qo'shish")),
             ),
           ],
         ),
@@ -468,11 +469,11 @@ class _PlanEditorState extends State<PlanEditor> {
 
   Future<void> _save() async {
     if (_category.isEmpty) {
-      showSnack(context, 'Kategoriyani tanlang: Ozish yoki Massa nabor');
+      showSnack(context, tr('Kategoriyani tanlang: Ozish yoki Massa nabor'));
       return;
     }
     if (_title.text.trim().isEmpty) {
-      showSnack(context, 'Reja nomini kiriting');
+      showSnack(context, tr('Reja nomini kiriting'));
       return;
     }
     final messenger = ScaffoldMessenger.of(context);
@@ -491,7 +492,7 @@ class _PlanEditorState extends State<PlanEditor> {
       ));
       if (!mounted) return;
       Navigator.pop(context);
-      messenger.showSnackBar(const SnackBar(content: Text('Reja saqlandi')));
+      messenger.showSnackBar(SnackBar(content: Text(tr('Reja saqlandi'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -503,7 +504,7 @@ class _PlanEditorState extends State<PlanEditor> {
     final t = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isNew ? 'Yangi reja' : 'Rejani tahrirlash'),
+        title: Text(_isNew ? tr('Yangi reja') : tr('Rejani tahrirlash')),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -511,7 +512,7 @@ class _PlanEditorState extends State<PlanEditor> {
               style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
               onPressed: _saving ? null : _save,
               icon: const Icon(Icons.check, size: 18),
-              label: const Text('Saqlash'),
+              label: Text(tr('Saqlash')),
             ),
           ),
         ],
@@ -519,7 +520,7 @@ class _PlanEditorState extends State<PlanEditor> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _editMealHeader(),
         icon: const Icon(Icons.add),
-        label: const Text("Mahal qo'shish"),
+        label: Text(tr("Mahal qo'shish")),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
@@ -528,8 +529,8 @@ class _PlanEditorState extends State<PlanEditor> {
             Expanded(
               child: StatTile(
                 icon: Icons.local_fire_department_outlined,
-                label: _weekly ? '${weekdayShort[_day]} · kaloriya' : 'Jami kaloriya',
-                value: '${_kcal.round()} kkal',
+                label: _weekly ? trf('{0} · kaloriya', [tr(weekdayShort[_day] ?? '')]) : tr('Jami kaloriya'),
+                value: trf('{0} kkal', [_kcal.round()]),
                 color: AppColors.warning,
               ),
             ),
@@ -537,7 +538,7 @@ class _PlanEditorState extends State<PlanEditor> {
             Expanded(
               child: StatTile(
                 icon: Icons.egg_alt_outlined,
-                label: 'Oqsil',
+                label: tr('Oqsil'),
                 value: '${_protein.round()} g',
                 color: AppColors.protein,
               ),
@@ -554,7 +555,7 @@ class _PlanEditorState extends State<PlanEditor> {
                   const SizedBox(width: AppSpace.md),
                   Expanded(
                     child: Text(
-                      "Reja 1200 kkal dan kam. Ko'pchilik uchun bu xavfli darajada past.",
+                      tr("Reja 1200 kkal dan kam. Ko'pchilik uchun bu xavfli darajada past."),
                       style: TextStyle(color: s.onErrorContainer),
                     ),
                   ),
@@ -563,12 +564,12 @@ class _PlanEditorState extends State<PlanEditor> {
             ),
           ],
           const SizedBox(height: 16),
-          const Eyebrow('Kategoriya'),
+          Eyebrow(tr('Kategoriya')),
           const SizedBox(height: AppSpace.sm),
           Wrap(spacing: AppSpace.sm, children: [
             for (final c in planCategories)
               ChoiceChip(
-                label: Text(c),
+                label: Text(tr(c)),
                 selected: _category == c,
                 onSelected: (_) => setState(() => _category = c),
               ),
@@ -576,18 +577,18 @@ class _PlanEditorState extends State<PlanEditor> {
           const SizedBox(height: 12),
           TextField(
             controller: _title,
-            decoration: const InputDecoration(
-              labelText: 'Reja nomi',
-              prefixIcon: Icon(Icons.title),
+            decoration: InputDecoration(
+              labelText: tr('Reja nomi'),
+              prefixIcon: const Icon(Icons.title),
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _forbidden,
-            decoration: const InputDecoration(
-              labelText: 'Mumkin emas (vergul bilan)',
-              hintText: 'Non, shirinlik, ...',
-              prefixIcon: Icon(Icons.block),
+            decoration: InputDecoration(
+              labelText: tr('Mumkin emas (vergul bilan)'),
+              hintText: tr('Non, shirinlik, ...'),
+              prefixIcon: const Icon(Icons.block),
             ),
           ),
           const SizedBox(height: 12),
@@ -595,8 +596,8 @@ class _PlanEditorState extends State<PlanEditor> {
             controller: _note,
             minLines: 2,
             maxLines: 5,
-            decoration: const InputDecoration(
-              labelText: 'Izoh / maslahat',
+            decoration: InputDecoration(
+              labelText: tr('Izoh / maslahat'),
               alignLabelWithHint: true,
             ),
           ),
@@ -605,11 +606,11 @@ class _PlanEditorState extends State<PlanEditor> {
             contentPadding: EdgeInsets.zero,
             value: _weekly,
             onChanged: _setWeekly,
-            title: const Text('Har kunga alohida menyu'),
+            title: Text(tr('Har kunga alohida menyu')),
             subtitle: Text(
               _weekly
-                  ? "Hafta kunlari bo'yicha 7 xil menyu — shogirdda o'sha kunniki chiqadi"
-                  : 'Hozir reja har kuni bir xil',
+                  ? tr("Hafta kunlari bo'yicha 7 xil menyu — shogirdda o'sha kunniki chiqadi")
+                  : tr('Hozir reja har kuni bir xil'),
               style: TextStyle(color: AppColors.textMuted),
             ),
           ),
@@ -624,7 +625,7 @@ class _PlanEditorState extends State<PlanEditor> {
                     child: ChoiceChip(
                       selected: _day == d,
                       onSelected: (_) => setState(() => _day = d),
-                      label: Text(weekdayShort[d]!),
+                      label: Text(tr(weekdayShort[d]!)),
                     ),
                   ),
               ]),
@@ -633,14 +634,14 @@ class _PlanEditorState extends State<PlanEditor> {
             Row(children: [
               Expanded(
                 child: Text(
-                  '${weekdayNames[_day]} menyusi',
+                  trf('{0} menyusi', [tr(weekdayNames[_day] ?? '')]),
                   style: t.titleMedium,
                 ),
               ),
               TextButton.icon(
                 onPressed: _copyDayToAll,
                 icon: const Icon(Icons.copy_all_outlined, size: 18),
-                label: const Text('Hamma kunga'),
+                label: Text(tr('Hamma kunga')),
               ),
             ]),
             // Shu kunning rasmi — shogirdga ham shu ko'rinadi
@@ -649,18 +650,18 @@ class _PlanEditorState extends State<PlanEditor> {
               PlanPhoto(
                 path: photo,
                 height: 170,
-                caption: "Shogird shu rasmni ko'radi",
+                caption: tr("Shogird shu rasmni ko'radi"),
               ),
               const SizedBox(height: AppSpace.sm),
             ],
           ],
-          SectionHeader('Ovqatlanish mahallari (${_current.length})'),
+          SectionHeader(trf('Ovqatlanish mahallari ({0})', [_current.length])),
           if (_current.isEmpty)
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(
-                  "Hali mahal yo'q. Pastdagi \"Mahal qo'shish\" tugmasini bosing.",
+                  tr("Hali mahal yo'q. Pastdagi \"Mahal qo'shish\" tugmasini bosing."),
                   textAlign: TextAlign.center,
                   style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant),
                 ),
@@ -694,18 +695,18 @@ class _PlanEditorState extends State<PlanEditor> {
             const SizedBox(width: 12),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(m.title.isEmpty ? 'Nomsiz' : m.title, style: t.titleMedium),
-                Text('${m.kcal.round()} kkal • ${m.protein.round()} g oqsil',
+                Text(m.title.isEmpty ? tr('Nomsiz') : m.title, style: t.titleMedium),
+                Text(trf('{0} kkal • {1} g oqsil', [m.kcal.round(), m.protein.round()]),
                     style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
               ]),
             ),
             IconButton(
-              tooltip: 'Tahrirlash',
+              tooltip: tr('Tahrirlash'),
               onPressed: () => _editMealHeader(mi),
               icon: const Icon(Icons.edit_outlined),
             ),
             IconButton(
-              tooltip: "O'chirish",
+              tooltip: tr("O'chirish"),
               onPressed: () => _removeMeal(mi),
               icon: const Icon(Icons.delete_outline),
             ),
@@ -722,13 +723,13 @@ class _PlanEditorState extends State<PlanEditor> {
                     style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
                 SizedBox(
                   width: 64,
-                  child: Text('${m.items[ii].kcal.round()} kkal',
+                  child: Text(trf('{0} kkal', [m.items[ii].kcal.round()]),
                       textAlign: TextAlign.right,
                       style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
                 ),
                 IconButton(
                   visualDensity: VisualDensity.compact,
-                  tooltip: 'Olib tashlash',
+                  tooltip: tr('Olib tashlash'),
                   icon: const Icon(Icons.close, size: 18),
                   onPressed: () => _removeItem(mi, ii),
                 ),
@@ -739,7 +740,7 @@ class _PlanEditorState extends State<PlanEditor> {
             child: TextButton.icon(
               onPressed: () => _addItem(mi),
               icon: const Icon(Icons.add),
-              label: const Text("Mahsulot qo'shish"),
+              label: Text(tr("Mahsulot qo'shish")),
             ),
           ),
         ]),
