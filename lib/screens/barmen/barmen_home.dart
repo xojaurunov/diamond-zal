@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/db.dart';
 import '../../widgets/change_password.dart';
+import '../../widgets/lazy_stack.dart';
 import '../../widgets/settings_sheet.dart';
 import '../../widgets/ui.dart';
 import '../admin/sales_report_screen.dart';
@@ -72,7 +73,7 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
           const SizedBox(width: 4),
         ],
       ),
-      body: IndexedStack(
+      body: LazyIndexedStack(
         index: _tab,
         children: [
           ShopAdminScreen(admin: me),

@@ -6,6 +6,10 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
+        "source": "/img/**",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      },
+      {
         "source": "/app/kq.bin",
         "headers": [
           { "key": "Content-Type", "value": "application/vnd.android.package-archive" },

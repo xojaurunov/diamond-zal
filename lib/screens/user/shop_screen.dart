@@ -3,6 +3,8 @@ import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/food_image.dart';
+import '../../widgets/image_viewer.dart';
 import '../../widgets/product_image.dart';
 import '../../widgets/ui.dart';
 
@@ -49,14 +51,17 @@ class _ShopScreenState extends State<ShopScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: p.gallery.length,
                   separatorBuilder: (_, __) => const SizedBox(width: AppSpace.sm),
-                  itemBuilder: (_, i) => ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                    child: Image.network(
-                      p.gallery[i],
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  itemBuilder: (_, i) => GestureDetector(
+                    onTap: () => showImageViewer(ctx, p.gallery, initial: i),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                      child: netImage(
+                        p.gallery[i],
+                        width: 150,
+                        height: 150,
+                        cacheWidth: (150 * MediaQuery.devicePixelRatioOf(ctx)).round(),
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      ),
                     ),
                   ),
                 ),
@@ -64,7 +69,10 @@ class _ShopScreenState extends State<ShopScreen> {
               const SizedBox(height: AppSpace.md),
             ],
             Row(children: [
-              ProductImage(category: p.category, name: p.name, url: p.image, size: 56),
+              GestureDetector(
+                onTap: p.gallery.isEmpty ? null : () => showImageViewer(ctx, p.gallery),
+                child: ProductImage(category: p.category, name: p.name, url: p.image, size: 56),
+              ),
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -224,11 +232,12 @@ class _ShopScreenState extends State<ShopScreen> {
             // AppBar yo'q - ro'yxat telefon status bari ostiga kirib ketmasin
             return SafeArea(
               bottom: false,
-              child: ListView(
+              // tovarlar dangasa chiziladi (faqat ko'ringani) - bo'limda 20-30 ta rasmli qator bor
+              child: CustomScrollView(slivers: [
+              SliverPadding(
               // tepadan bo'sh joy - bo'lim tugmalari ekran chetiga yopishib qolmasin
-              padding:
-                  const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.lg, AppSpace.lg, AppSpace.xxl),
-              children: [
+              padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.lg, AppSpace.lg, 0),
+              sliver: SliverList.list(children: [
                 if (waiting.isNotEmpty) ...[
                   SectionHeader('Mening buyurtmalarim',
                       trailing: Pill(text: '${waiting.length}', color: AppColors.warning)),
@@ -301,12 +310,27 @@ class _ShopScreenState extends State<ShopScreen> {
                     style: t.bodySmall?.copyWith(color: AppColors.textFaint),
                   ),
                   const SizedBox(height: AppSpace.md),
-                  for (final p in list)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpace.sm),
-                      child: _ProductTile(product: p, onOrder: () => _order(p)),
-                    ),
                 ],
+              ]),
+              ),
+              if (all.isNotEmpty)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpace.lg),
+                  sliver: SliverList.builder(
+                    itemCount: list.length,
+                    itemBuilder: (_, i) => Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpace.sm),
+                      child: _ProductTile(
+                        key: ValueKey(list[i].id),
+                        product: list[i],
+                        onOrder: () => _order(list[i]),
+                      ),
+                    ),
+                  ),
+                ),
+              SliverPadding(
+              padding: const EdgeInsets.fromLTRB(AppSpace.lg, 0, AppSpace.lg, AppSpace.xxl),
+              sliver: SliverList.list(children: [
                 if (orders.any((o) => !o.isNew)) ...[
                   const SizedBox(height: AppSpace.lg),
                   const SectionHeader('Oldingi buyurtmalar'),
@@ -326,8 +350,9 @@ class _ShopScreenState extends State<ShopScreen> {
                       ]),
                     ),
                 ],
-              ],
+              ]),
               ),
+              ]),
             );
           },
         );
@@ -358,7 +383,7 @@ class _CatChip extends StatelessWidget {
 class _ProductTile extends StatelessWidget {
   final Product product;
   final VoidCallback onOrder;
-  const _ProductTile({required this.product, required this.onOrder});
+  const _ProductTile({super.key, required this.product, required this.onOrder});
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +392,11 @@ class _ProductTile extends StatelessWidget {
     return BentoTile(
       padding: const EdgeInsets.all(AppSpace.md),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        ProductImage(category: p.category, name: p.name, url: p.image, size: 60),
+        // rasm bosilsa to'liq ekranda ochiladi
+        GestureDetector(
+          onTap: p.gallery.isEmpty ? null : () => showImageViewer(context, p.gallery),
+          child: ProductImage(category: p.category, name: p.name, url: p.image, size: 60),
+        ),
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

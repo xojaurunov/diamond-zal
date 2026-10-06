@@ -4,6 +4,7 @@ import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/join_qr_sheet.dart';
+import '../../widgets/lazy_stack.dart';
 import '../../widgets/notification_sync.dart';
 import '../../widgets/settings_sheet.dart';
 import '../../widgets/ui.dart';
@@ -100,7 +101,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
       ),
       body: Column(children: [
         Expanded(
-          child: IndexedStack(
+          child: LazyIndexedStack(
             index: tab,
             children: [
               ClientsScreen(admin: me),

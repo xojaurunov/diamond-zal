@@ -3,6 +3,7 @@ import '../../models/models.dart';
 import '../../models/subscription.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/lazy_stack.dart';
 import '../../widgets/ui.dart';
 import '../payments_screen.dart';
 
@@ -39,7 +40,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         ),
       ),
       Expanded(
-        child: IndexedStack(index: _tab, children: [
+        child: LazyIndexedStack(index: _tab, children: [
           _ClientsTab(stream: _clients, adminId: widget.admin.id),
           // zalning hamma mijozlari (boshqa trenerniki ham) — faqat ko'rish
           PaymentsScreen(me: widget.admin),

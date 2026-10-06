@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kotta_qani_diet/models/feed.dart';
 import 'package:kotta_qani_diet/models/finance.dart';
@@ -13,6 +14,7 @@ import 'package:kotta_qani_diet/services/db.dart';
 import 'package:kotta_qani_diet/services/reminders.dart';
 import 'package:kotta_qani_diet/widgets/change_password.dart';
 import 'package:kotta_qani_diet/widgets/food_image.dart';
+import 'package:kotta_qani_diet/widgets/lazy_stack.dart';
 import 'package:kotta_qani_diet/widgets/ui.dart';
 
 void main() {
@@ -1225,6 +1227,28 @@ void main() {
       expect(o.gymId, '');
       const g = ShopOrder(clientId: 'c', productId: 'p', productName: 'X', price: 1, gymId: 'zal1');
       expect(g.gymId, 'zal1');
+    });
+  });
+
+  group('Dangasa bo-limlar', () {
+    testWidgets('bo-lim faqat birinchi tanlanganda quriladi va keyin saqlanadi', (t) async {
+      final built = <String>[];
+      Widget tab(String name) => Builder(builder: (_) {
+            built.add(name);
+            return Text(name, textDirection: TextDirection.ltr);
+          });
+      Widget app(int i) => Directionality(
+            textDirection: TextDirection.ltr,
+            child: LazyIndexedStack(index: i, children: [tab('a'), tab('b'), tab('c')]),
+          );
+      await t.pumpWidget(app(0));
+      expect(built, ['a']);
+      await t.pumpWidget(app(2));
+      expect(built.contains('c'), isTrue);
+      expect(built.contains('b'), isFalse);
+      // 'a' daraxtda qoladi (holati saqlanadi), 'b' hali qurilmagan
+      expect(find.text('a', skipOffstage: false), findsOneWidget);
+      expect(find.text('b', skipOffstage: false), findsNothing);
     });
   });
 }

@@ -173,7 +173,9 @@ class _Shot extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.lg),
           child: AspectRatio(
             aspectRatio: 3 / 4,
-            child: Image.memory(photo.bytes, fit: BoxFit.cover, gaplessPlayback: true),
+            // to'liq o'lchamda emas - katakcha eniga mos dekodlanadi (xotira va tezlik)
+            child: Image.memory(photo.bytes,
+                fit: BoxFit.cover, gaplessPlayback: true, cacheWidth: 360),
           ),
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'ui.dart';
@@ -69,6 +71,38 @@ String? foodAsset(String name) {
   return best == null ? null : 'assets/foods/$best${_ext[best] ?? '.jpg'}';
 }
 
+/// Tarmoq rasmi. Telefonda diskda keshlanadi — ilova qayta ochilganda internetdan qayta
+/// yuklanmaydi. Web'da brauzerning o'z keshi ishlaydi (va CORS'siz saytlar uchun <img> zaxirasi).
+/// [cacheWidth] — xotirada shu enga kichraytirib saqlanadi (null — to'liq o'lcham).
+Widget netImage(
+  String url, {
+  int? cacheWidth,
+  BoxFit fit = BoxFit.cover,
+  double? width,
+  double? height,
+  required Widget Function(BuildContext, Object, StackTrace?) errorBuilder,
+}) =>
+    kIsWeb
+        ? Image.network(
+            url,
+            fit: fit,
+            width: width,
+            height: height,
+            cacheWidth: cacheWidth,
+            // CORS sarlavhasiz saytlardagi rasmlar ham web'da ko'rinsin
+            webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
+            errorBuilder: errorBuilder,
+          )
+        : CachedNetworkImage(
+            imageUrl: url,
+            fit: fit,
+            width: width,
+            height: height,
+            memCacheWidth: cacheWidth,
+            fadeInDuration: const Duration(milliseconds: 120),
+            errorWidget: (c, _, e) => errorBuilder(c, e, null),
+          );
+
 /// Mahsulot rasmi: URL -> nom bo'yicha ichki rasm -> rangli ikonka
 class FoodImage extends StatelessWidget {
   final String name;
@@ -88,14 +122,7 @@ class FoodImage extends StatelessWidget {
 
     final link = url.trim();
     final Widget img = link.isNotEmpty
-        ? Image.network(
-            link,
-            fit: BoxFit.cover,
-            cacheWidth: px,
-            // CORS sarlavhasiz saytlardagi rasmlar ham web'da ko'rinsin
-            webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
-            errorBuilder: assetOr,
-          )
+        ? netImage(link, cacheWidth: px, errorBuilder: assetOr)
         : asset != null
             ? Image.asset(asset, fit: BoxFit.cover, cacheWidth: px, errorBuilder: placeholder)
             : _Placeholder(name: name, size: size);

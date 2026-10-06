@@ -3,6 +3,7 @@ import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/lazy_stack.dart';
 import '../../widgets/product_image.dart';
 import '../../widgets/ui.dart';
 
@@ -67,7 +68,7 @@ class _ShopAdminScreenState extends State<ShopAdminScreen> {
           ),
         ),
         Expanded(
-          child: IndexedStack(
+          child: LazyIndexedStack(
             index: _tab,
             children: [
               _OrdersTab(stream: _orders, onStatus: _setStatus),
@@ -235,45 +236,45 @@ class _ProductsTab extends StatelessWidget {
             ),
           );
         }
-        return ListView(
-          padding: const EdgeInsets.fromLTRB(AppSpace.lg, 0, AppSpace.lg, 96),
-          children: [
-            for (final c in shopCategories) ...[
-              // Dobavkalar guruhining boshi — bitta umumiy sarlavha
-              if (c == supplementCategories.first &&
-                  all.any((p) => supplementCategories.contains(p.category)))
-                SectionHeader(
-                  'Dobavkalar',
-                  trailing: Pill(
-                    text: '${all.where((p) => supplementCategories.contains(p.category)).length}',
-                    color: shopColor('Boshqa'),
+        // Qatorlar dangasa quriladi (faqat ko'ringani) - 150 ga yaqin rasmli tovar bor
+        Widget tile(Product p) => Padding(
+              padding: const EdgeInsets.only(bottom: AppSpace.sm),
+              child: _ProductAdminTile(key: ValueKey(p.id), product: p),
+            );
+        final rows = <Widget Function()>[
+          for (final c in shopCategories) ...[
+            // Dobavkalar guruhining boshi — bitta umumiy sarlavha
+            if (c == supplementCategories.first &&
+                all.any((p) => supplementCategories.contains(p.category)))
+              () => SectionHeader(
+                    'Dobavkalar',
+                    trailing: Pill(
+                      text:
+                          '${all.where((p) => supplementCategories.contains(p.category)).length}',
+                      color: shopColor('Boshqa'),
+                    ),
                   ),
-                ),
-              if (all.any((p) => p.category == c)) ...[
-                SubHeader(
-                  c,
-                  count: all.where((p) => p.category == c).length,
-                  color: shopColor(c),
-                ),
-                for (final p in all.where((p) => p.category == c))
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpace.sm),
-                    child: _ProductAdminTile(product: p),
+            if (all.any((p) => p.category == c)) ...[
+              () => SubHeader(
+                    c,
+                    count: all.where((p) => p.category == c).length,
+                    color: shopColor(c),
                   ),
-              ],
+              for (final p in all.where((p) => p.category == c)) () => tile(p),
             ],
-            // Bo'limi noto'g'ri yozilgan eski yozuvlar ko'rinmay qolmasin
-            for (final p in all.where((p) => !shopCategories.contains(p.category)))
-              Padding(
-                padding: const EdgeInsets.only(bottom: AppSpace.sm),
-                child: _ProductAdminTile(product: p),
-              ),
-            const SizedBox(height: AppSpace.md),
-            Text(
-              "Qoldiq: tovar berilganda avtomatik kamayadi. Tugasa shogird buyurtma bera olmaydi.",
-              style: t.bodySmall?.copyWith(color: AppColors.textFaint),
-            ),
           ],
+          // Bo'limi noto'g'ri yozilgan eski yozuvlar ko'rinmay qolmasin
+          for (final p in all.where((p) => !shopCategories.contains(p.category))) () => tile(p),
+          () => const SizedBox(height: AppSpace.md),
+          () => Text(
+                "Qoldiq: tovar berilganda avtomatik kamayadi. Tugasa shogird buyurtma bera olmaydi.",
+                style: t.bodySmall?.copyWith(color: AppColors.textFaint),
+              ),
+        ];
+        return ListView.builder(
+          padding: const EdgeInsets.fromLTRB(AppSpace.lg, 0, AppSpace.lg, 96),
+          itemCount: rows.length,
+          itemBuilder: (_, i) => rows[i](),
         );
       },
     );
@@ -282,7 +283,7 @@ class _ProductsTab extends StatelessWidget {
 
 class _ProductAdminTile extends StatelessWidget {
   final Product product;
-  const _ProductAdminTile({required this.product});
+  const _ProductAdminTile({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

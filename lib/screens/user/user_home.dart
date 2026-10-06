@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/db.dart';
+import '../../widgets/lazy_stack.dart';
 import '../../widgets/notification_sync.dart';
 import '../notifications_screen.dart';
 import 'today_screen.dart';
@@ -28,7 +29,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
     return StudentNotificationSync(
       user: me,
       child: Scaffold(
-        body: IndexedStack(
+        body: LazyIndexedStack(
           index: _tab,
           children: [
             TodayScreen(user: me),

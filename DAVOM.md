@@ -34,7 +34,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **116/116**, qoida testlari **213/213**.
+`flutter test` **117/117**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1491,6 +1491,27 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     Qayta qo'shish — faqat telefonda sinab, alohida ish. **Saboq:** Android plagini qo'shilgan
     APK telefonda ochib ko'rilmaguncha saytga joylanmaydi. 5-okt 17:41 gacha saytda turgan
     APK'lar (Crashlytics bilan) ishlamaydi — 17:55 dagi APK ishlatiladi.
+
+81. **Tezlik (6-okt)** — shikoyat: hamma telefonda ilova sekin, ro'yxatlar kech chiqadi,
+    rasmlar sekin yuklanadi, do'konda rasmni ochib bo'lmaydi. Telefonda o'lchanmadi —
+    sabablar kod o'qib topildi:
+    - `IndexedStack` hamma bo'limni ilova ochilishida birdan qurardi (shogirdda 7 ta, trenerda
+      7–8 ta bo'lim bir vaqtda Firestore so'rovi yuborardi) → `LazyIndexedStack`
+      (`lib/widgets/lazy_stack.dart`): bo'lim birinchi tanlanganda quriladi, keyin saqlanadi.
+    - Do'kon ro'yxatlari bir yo'la chizilardi → shogirdda `SliverList.builder`, trener/barmenda
+      `ListView.builder`.
+    - Tarmoq rasmlari diskda saqlanmasdi → `netImage()` (`lib/widgets/food_image.dart`):
+      telefonda `cached_network_image`, web'da avvalgidek `Image.network`.
+    - Do'konda rasm bosilsa to'liq ekranda ochiladi (`lib/widgets/image_viewer.dart`:
+      varaqlash, barmoq bilan kattalashtirish).
+    - Progress rasmlari kichraytirib dekodlanadi (`cacheWidth`).
+    - 18 ta katta tovar rasmi siqildi (eng kattasi 465 → 199 KB); hosting'da `/img/**` keshi
+      1 soat → 7 kun.
+    - Firestore `eur3` (Yevropa)da — har so'rovdagi kechikish qoladi, o'zgartirib bo'lmaydi.
+    `flutter test` **117/117**. Web va rasmlar joylandi (web brauzerda bosh admin bo'lib
+    sinaldi). **APK saytga QO'YILMADI** — yangi Android plaginlari (sqflite, path_provider)
+    bor; sinov nusxasi `Diamond-SINOV-2026-10-06.apk` zal egasida, telefonda ochilgach
+    `deploy.ps1` bilan joylanadi. Reja: `specs/tezlik/` (lokal).
 
 ---
 
