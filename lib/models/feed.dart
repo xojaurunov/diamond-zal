@@ -115,7 +115,7 @@ List<FeedItem> studentFeed({
       final names = meals[i].items.map((e) => e.name.split('(').first.trim()).take(3);
       items.add(FeedItem(
         kind: FeedKind.meal,
-        title: trf('{0} vaqti o‘tdi', [meals[i].title.isEmpty ? tr('Ovqat') : meals[i].title]),
+        title: trf('{0} vaqti o‘tdi', [meals[i].title.isEmpty ? tr('Ovqat') : tr(meals[i].title)]),
         body: names.isEmpty ? tr('Belgilashni unutmang') : names.join(', '),
         at: at,
         action: true,

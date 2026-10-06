@@ -221,7 +221,7 @@ class _HeroPanel extends StatelessWidget {
             Eyebrow(tr('Bugungi reja'), color: AppColors.textFaint),
             const SizedBox(height: AppSpace.xs),
             Text(
-              plan.title,
+              tr(plan.title),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: t.titleMedium?.copyWith(color: AppColors.text),
@@ -461,7 +461,7 @@ class _MealCard extends StatelessWidget {
           const SizedBox(width: AppSpace.sm),
           Flexible(
             child: Text(
-              meal.title,
+              tr(meal.title),
               overflow: TextOverflow.ellipsis,
               style: t.titleMedium?.copyWith(
                 fontWeight: FontWeight.w500,
@@ -508,7 +508,7 @@ class _MealCard extends StatelessWidget {
               child: Row(children: [
                 FoodImage(name: i.name, url: i.image, size: 44),
                 const SizedBox(width: AppSpace.md),
-                Expanded(child: Text(i.name, style: t.bodyMedium)),
+                Expanded(child: Text(tr(i.name), style: t.bodyMedium)),
                 const SizedBox(width: AppSpace.sm),
                 Text(
                   '${i.grams.round()} g',
@@ -635,7 +635,7 @@ class _ForbiddenCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
                 child: Text(
-                  f,
+                  tr(f),
                   style: t.bodySmall?.copyWith(color: s.error, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -662,7 +662,8 @@ class _NoteCard extends StatelessWidget {
           Eyebrow(tr('Trener maslahati'), color: s.onSurfaceVariant),
         ]),
         const SizedBox(height: AppSpace.md),
-        Text(note, style: t.bodyMedium?.copyWith(height: 1.5)),
+        // tayyor shablon matni bo'lsa tarjima qilinadi; trener o'zi yozgan bo'lsa — o'zicha
+        Text(tr(note), style: t.bodyMedium?.copyWith(height: 1.5)),
       ]),
     );
   }

@@ -478,7 +478,7 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpace.md, left: 4),
                   child: Text(
-                    trf('Hozir biriktirilgan: {0}', [current.title]),
+                    trf('Hozir biriktirilgan: {0}', [tr(current.title)]),
                     style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant),
                   ),
                 ),

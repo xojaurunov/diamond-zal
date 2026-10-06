@@ -161,7 +161,7 @@ class _PlanCard extends StatelessWidget {
             const SizedBox(width: 14),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(plan.title, style: t.titleMedium),
+                Text(tr(plan.title), style: t.titleMedium),
                 const SizedBox(height: 8),
                 Wrap(spacing: 6, runSpacing: 6, children: [
                   if (plan.isWeekly)
@@ -421,7 +421,7 @@ class _PlanEditorState extends State<PlanEditor> {
                         child: Row(children: [
                           FoodImage(name: f.name, url: f.image, size: 32),
                           const SizedBox(width: AppSpace.md),
-                          Expanded(child: Text(f.name, overflow: TextOverflow.ellipsis)),
+                          Expanded(child: Text(tr(f.name), overflow: TextOverflow.ellipsis)),
                         ]),
                       ))
                   .toList(),
@@ -718,7 +718,7 @@ class _PlanEditorState extends State<PlanEditor> {
               child: Row(children: [
                 FoodImage(name: m.items[ii].name, url: m.items[ii].image, size: 36),
                 const SizedBox(width: AppSpace.md),
-                Expanded(child: Text(m.items[ii].name, style: t.bodyMedium)),
+                Expanded(child: Text(tr(m.items[ii].name), style: t.bodyMedium)),
                 Text('${m.items[ii].grams.round()} g',
                     style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
                 SizedBox(

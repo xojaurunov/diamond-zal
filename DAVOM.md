@@ -1524,8 +1524,12 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       `add`, `gen`, `check` (tarjimasi yo'q kalitlar).
     - **Tayyor (711 kalit):** hamma ekran — kirish, anketa, sozlamalar, shogird, trener,
       bosh admin, barmen; holat yorliqlari, lenta, eslatmalar, do'kon bo'limlari, sana.
-    - **O'zbekcha qoldi:** tayyor reja shablonlari va standart mahsulotlar (bazaga yoziladigan
-      ma'lumot), viloyat-tuman nomlari (`hudud.dart`), Android bildirishnoma kanali nomi,
+    - **Reja mazmuni ham tarjima bo'ladi:** tayyor shablon matni (reja nomi, taqiq ro'yxati,
+      trener maslahati, mahal va mahsulot nomlari) va standart mahsulotlar lug'atga kiritildi;
+      ekranda `tr(plan.title)`, `tr(meal.title)`, `tr(i.name)`, `tr(note)` — bazadagi matn
+      shablon bilan AYNAN bir xil bo'lsa tarjima chiqadi, trener o'zgartirgan bo'lsa o'zbekcha
+      qoladi. 6-okt: bazadagi 3 reja va 20 mahsulotning hamma matni lug'atda bor.
+    - **O'zbekcha qoldi:** viloyat-tuman nomlari (`hudud.dart`), Android bildirishnoma kanali nomi,
       tizim oynalaridagi tugmalar (vaqt tanlash — inglizcha, `flutter_localizations` yo'q).
     - **Tarjima qilinmaydi:** foydalanuvchi kiritgan matn (tovar, reja va taom nomi, chat,
       ism) va chatga yoziladigan buyurtma xabarlari.

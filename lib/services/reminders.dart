@@ -33,7 +33,7 @@ DateTime weighInReminderAt(DateTime? lastWeighIn, DateTime now) {
 
 /// Ovqat eslatmasi matni: "Nonushta vaqti · 07:30" / "Suli bo'tqasi, Tvorog, Tuxum oqi"
 (String, String) mealReminderText(Meal meal) {
-  final title = trf('{0} vaqti · {1}', [meal.title.isEmpty ? tr('Ovqat') : meal.title, meal.time]);
+  final title = trf('{0} vaqti · {1}', [meal.title.isEmpty ? tr('Ovqat') : tr(meal.title), meal.time]);
   final names = meal.items.map((i) => i.name.split('(').first.trim()).where((n) => n.isNotEmpty);
   final body =
       names.isEmpty ? tr('Rejangizdagi mahalni belgilashni unutmang') : names.take(3).join(', ');

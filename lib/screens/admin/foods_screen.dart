@@ -216,7 +216,7 @@ class _FoodTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
         contentPadding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
         leading: FoodImage(name: f.name, url: f.image, size: 52),
-        title: Text(f.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(tr(f.name), style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 6),
           child: Wrap(spacing: 6, runSpacing: 4, children: [
