@@ -1,3 +1,4 @@
+import '../l10n/tr.dart';
 import 'models.dart';
 
 /// Trenerlar reytingi uchun hisob-kitob. Firestore'ga bog'liq emas — faqat
@@ -73,20 +74,20 @@ class ClientStat {
   /// Trener nimaga e'tibor berishi kerak — bo'sh bo'lsa hammasi joyida
   List<String> get attention {
     final r = <String>[];
-    if (!client.profileDone || client.goal.isEmpty) r.add("Anketa to'liq emas");
-    if (client.planId == null) r.add("Reja berilmagan");
+    if (!client.profileDone || client.goal.isEmpty) r.add(tr("Anketa to'liq emas"));
+    if (client.planId == null) r.add(tr("Reja berilmagan"));
     final w = waitingFor;
     if (w != null && w.inHours >= 12) {
       r.add(
-          w.inDays >= 1 ? 'Javob kutmoqda: ${w.inDays} kun' : 'Javob kutmoqda: ${w.inHours} soat');
+          w.inDays >= 1 ? trf('Javob kutmoqda: {0} kun', [w.inDays]) : trf('Javob kutmoqda: {0} soat', [w.inHours]));
     }
     final a = adherence;
-    if (a != null && a < 0.5) r.add('Rejaga rioya past: ${(a * 100).round()}%');
+    if (a != null && a < 0.5) r.add(trf('Rejaga rioya past: {0}%', [(a * 100).round()]));
     final last = lastWeighIn;
     if (client.profileDone && (last == null || now.difference(last).inDays > 14)) {
-      r.add('Vazn 2 haftadan beri kiritilmagan');
+      r.add(tr('Vazn 2 haftadan beri kiritilmagan'));
     }
-    if (progressing == false) r.add("Vazn maqsadga qarab o'zgarmayapti");
+    if (progressing == false) r.add(tr("Vazn maqsadga qarab o'zgarmayapti"));
     return r;
   }
 }
@@ -125,10 +126,10 @@ class TrainerStat {
 
   /// Ball tarkibi: (nomi, ulush 0..1 yoki null, og'irligi)
   List<(String, double?, int)> get parts => [
-        ('Reja berilgan', planCoverage, 30),
-        ('Chatga javob', replyRate, 25),
-        ('Shogirdlar rioyasi', adherence, 25),
-        ('Natija (vazn)', progressRate, 20),
+        (tr('Reja berilgan'), planCoverage, 30),
+        (tr('Chatga javob'), replyRate, 25),
+        (tr('Shogirdlar rioyasi'), adherence, 25),
+        (tr('Natija (vazn)'), progressRate, 20),
       ];
 
   /// 0..100. Ma'lumoti yo'q qismlar hisobga olinmaydi; shogird yo'q bo'lsa null.

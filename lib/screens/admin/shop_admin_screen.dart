@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../services/db.dart';
@@ -27,9 +28,9 @@ class _ShopAdminScreenState extends State<ShopAdminScreen> {
     if (status == orderCanceled) {
       final ok = await confirm(
         context,
-        title: 'Buyurtmani bekor qilish',
-        message: '${o.clientName}: "${o.productName}" × ${o.qty} bekor qilinsinmi?',
-        ok: 'Bekor qilish',
+        title: tr('Buyurtmani bekor qilish'),
+        message: trf('{0}: "{1}" × {2} bekor qilinsinmi?', [o.clientName, o.productName, o.qty]),
+        ok: tr('Bekor qilish'),
         destructive: true,
       );
       if (!ok) return;
@@ -37,10 +38,10 @@ class _ShopAdminScreenState extends State<ShopAdminScreen> {
     try {
       await Db.setOrderStatus(o, status, widget.admin.id);
       if (mounted) {
-        showSnack(context, status == orderGiven ? 'Berildi deb belgilandi' : 'Bekor qilindi');
+        showSnack(context, status == orderGiven ? tr('Berildi deb belgilandi') : tr('Bekor qilindi'));
       }
     } catch (e) {
-      if (mounted) showSnack(context, "Bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -51,7 +52,7 @@ class _ShopAdminScreenState extends State<ShopAdminScreen> {
           ? FloatingActionButton.extended(
               onPressed: () => editProduct(context),
               icon: const Icon(Icons.add),
-              label: const Text('Tovar'),
+              label: Text(tr('Tovar')),
             )
           : null,
       body: Column(children: [
@@ -59,9 +60,9 @@ class _ShopAdminScreenState extends State<ShopAdminScreen> {
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.sm),
           child: SegmentedButton<int>(
             showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(value: 0, label: Text('Buyurtmalar')),
-              ButtonSegment(value: 1, label: Text('Tovarlar')),
+            segments: [
+              ButtonSegment(value: 0, label: Text(tr('Buyurtmalar'))),
+              ButtonSegment(value: 1, label: Text(tr('Tovarlar'))),
             ],
             selected: {_tab},
             onSelectionChanged: (s) => setState(() => _tab = s.first),
@@ -95,10 +96,10 @@ class _OrdersTab extends StatelessWidget {
         if (!snap.hasData) return const Center(child: CircularProgressIndicator());
         final orders = snap.data!;
         if (orders.isEmpty) {
-          return const EmptyState(
+          return EmptyState(
             icon: Icons.receipt_long_outlined,
-            title: "Buyurtma yo'q",
-            subtitle: "Shogird do'kondan tovar so'rasa, shu yerda chiqadi va chatga xabar keladi.",
+            title: tr("Buyurtma yo'q"),
+            subtitle: tr("Shogird do'kondan tovar so'rasa, shu yerda chiqadi va chatga xabar keladi."),
           );
         }
         final waiting = orders.where((o) => o.isNew).toList();
@@ -115,20 +116,20 @@ class _OrdersTab extends StatelessWidget {
                 const SizedBox(width: AppSpace.md),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('30 kunda: ${month.money}', style: t.titleMedium),
-                    Text('${month.count} ta buyurtma berildi',
+                    Text(trf('30 kunda: {0}', [month.money]), style: t.titleMedium),
+                    Text(trf('{0} ta buyurtma berildi', [month.count]),
                         style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
                   ]),
                 ),
               ]),
             ),
             const SizedBox(height: AppSpace.md),
-            SectionHeader('Kutilmoqda',
+            SectionHeader(tr('Kutilmoqda'),
                 trailing: Pill(text: '${waiting.length}', color: AppColors.warning)),
             if (waiting.isEmpty)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.sm, left: 4),
-                child: Text('Yangi buyurtma yo\'q', style: TextStyle(color: AppColors.textMuted)),
+                child: Text(tr('Yangi buyurtma yo\'q'), style: TextStyle(color: AppColors.textMuted)),
               ),
             for (final o in waiting)
               Padding(
@@ -137,7 +138,7 @@ class _OrdersTab extends StatelessWidget {
               ),
             if (done.isNotEmpty) ...[
               const SizedBox(height: AppSpace.lg),
-              const SectionHeader('Tarix'),
+              SectionHeader(tr('Tarix')),
               for (final o in done.take(30))
                 Padding(
                   padding: const EdgeInsets.only(bottom: AppSpace.sm),
@@ -195,14 +196,14 @@ class _OrderTile extends StatelessWidget {
                 style: FilledButton.styleFrom(minimumSize: const Size(0, 42)),
                 onPressed: () => onStatus(o, orderGiven),
                 icon: const Icon(Icons.check, size: 18),
-                label: const Text('Berildi'),
+                label: Text(tr('Berildi')),
               ),
             ),
             const SizedBox(width: AppSpace.sm),
             OutlinedButton(
               style: OutlinedButton.styleFrom(minimumSize: const Size(0, 42)),
               onPressed: () => onStatus(o, orderCanceled),
-              child: const Text('Bekor'),
+              child: Text(tr('Bekor')),
             ),
           ]),
         ],
@@ -226,13 +227,13 @@ class _ProductsTab extends StatelessWidget {
         if (all.isEmpty) {
           return EmptyState(
             icon: Icons.storefront_outlined,
-            title: "Do'kon bo'sh",
-            subtitle: 'Forma, suv idishlari, anjomlar va dobavkalar shu yerga kiritiladi. '
-                "Shogird narxini ko'radi va buyurtma beradi, to'lov zalda naqd.",
+            title: tr("Do'kon bo'sh"),
+            subtitle: tr('Forma, suv idishlari, anjomlar va dobavkalar shu yerga kiritiladi. '
+                "Shogird narxini ko'radi va buyurtma beradi, to'lov zalda naqd."),
             action: FilledButton.icon(
               onPressed: () => editProduct(context),
               icon: const Icon(Icons.add),
-              label: const Text("Birinchi tovarni qo'shish"),
+              label: Text(tr("Birinchi tovarni qo'shish")),
             ),
           );
         }
@@ -247,7 +248,7 @@ class _ProductsTab extends StatelessWidget {
             if (c == supplementCategories.first &&
                 all.any((p) => supplementCategories.contains(p.category)))
               () => SectionHeader(
-                    'Dobavkalar',
+                    tr('Dobavkalar'),
                     trailing: Pill(
                       text:
                           '${all.where((p) => supplementCategories.contains(p.category)).length}',
@@ -256,7 +257,7 @@ class _ProductsTab extends StatelessWidget {
                   ),
             if (all.any((p) => p.category == c)) ...[
               () => SubHeader(
-                    c,
+                    tr(c),
                     count: all.where((p) => p.category == c).length,
                     color: shopColor(c),
                   ),
@@ -267,7 +268,7 @@ class _ProductsTab extends StatelessWidget {
           for (final p in all.where((p) => !shopCategories.contains(p.category))) () => tile(p),
           () => const SizedBox(height: AppSpace.md),
           () => Text(
-                "Qoldiq: tovar berilganda avtomatik kamayadi. Tugasa shogird buyurtma bera olmaydi.",
+                tr("Qoldiq: tovar berilganda avtomatik kamayadi. Tugasa shogird buyurtma bera olmaydi."),
                 style: t.bodySmall?.copyWith(color: AppColors.textFaint),
               ),
         ];
@@ -302,7 +303,7 @@ class _ProductAdminTile extends StatelessWidget {
             Wrap(spacing: 6, runSpacing: 4, children: [
               Pill(text: p.priceText, color: AppColors.accent),
               Pill(
-                text: p.totalStock > 0 ? 'Qoldiq: ${p.totalStock}' : 'Tugagan',
+                text: p.totalStock > 0 ? trf('Qoldiq: {0}', [p.totalStock]) : tr('Tugagan'),
                 color: p.totalStock > 0 ? AppColors.textMuted : AppColors.danger,
               ),
               if (p.sizes.isNotEmpty)
@@ -310,10 +311,10 @@ class _ProductAdminTile extends StatelessWidget {
               if (p.colors.isNotEmpty)
                 Pill(text: p.colors.join(' · '), color: AppColors.protein),
               if (p.margin > 0)
-                Pill(text: 'Foyda: ${fmtSum(p.margin)}', color: AppColors.success),
+                Pill(text: trf('Foyda: {0}', [fmtSum(p.margin)]), color: AppColors.success),
               if (p.gallery.length > 1)
-                Pill(text: '${p.gallery.length} rasm', color: AppColors.textMuted),
-              if (!p.active) Pill(text: 'Sotuvda emas', color: AppColors.warning),
+                Pill(text: trf('{0} rasm', [p.gallery.length]), color: AppColors.textMuted),
+              if (!p.active) Pill(text: tr('Sotuvda emas'), color: AppColors.warning),
             ]),
           ]),
         ),
@@ -357,7 +358,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             ),
             const SizedBox(width: AppSpace.md),
             Expanded(
-              child: Text(p == null ? "Yangi tovar" : 'Tovarni tahrirlash',
+              child: Text(p == null ? tr("Yangi tovar") : tr('Tovarni tahrirlash'),
                   style: Theme.of(ctx).textTheme.titleLarge),
             ),
           ]),
@@ -381,16 +382,16 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             textCapitalization: TextCapitalization.sentences,
             // nom yozilganda yuqoridagi rasm ham yangilanadi (protein, gainer ...)
             onChanged: (_) => setS(() {}),
-            decoration: const InputDecoration(
-                labelText: 'Nomi', hintText: 'Protein izolyat 900 g (shokolad)'),
+            decoration: InputDecoration(
+                labelText: tr('Nomi'), hintText: tr('Protein izolyat 900 g (shokolad)')),
           ),
           const SizedBox(height: AppSpace.md),
           TextField(
             controller: note,
             maxLines: 2,
-            decoration: const InputDecoration(
-              labelText: 'Izoh (ixtiyoriy)',
-              hintText: "O'lchami, ta'mi, ishlab chiqaruvchi",
+            decoration: InputDecoration(
+              labelText: tr('Izoh (ixtiyoriy)'),
+              hintText: tr("O'lchami, ta'mi, ishlab chiqaruvchi"),
             ),
           ),
           const SizedBox(height: AppSpace.md),
@@ -401,7 +402,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
                 keyboardType: TextInputType.number,
                 onChanged: (_) => setS(() {}),
                 decoration: InputDecoration(
-                  labelText: 'Narxi',
+                  labelText: tr('Narxi'),
                   suffixText: currencyLabel(currency),
                 ),
               ),
@@ -412,7 +413,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
                 controller: costPrice,
                 keyboardType: TextInputType.number,
                 onChanged: (_) => setS(() {}),
-                decoration: const InputDecoration(labelText: 'Tan narxi (ixtiyoriy)'),
+                decoration: InputDecoration(labelText: tr('Tan narxi (ixtiyoriy)')),
               ),
             ),
           ]),
@@ -421,7 +422,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Foyda: ${fmtSum(n(price) - n(costPrice))} ${currencyLabel(currency)}',
+                trf('Foyda: {0} {1}', [fmtSum(n(price) - n(costPrice)), currencyLabel(currency)]),
                 style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
               ),
             ),
@@ -434,7 +435,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
                 ChoiceChip(
                   selected: currency == c,
                   onSelected: (_) => setS(() => currency = c),
-                  label: Text(c == usd ? 'Dollar (\$)' : "So'm"),
+                  label: Text(c == usd ? tr('Dollar (\$)') : tr("So'm")),
                 ),
             ]),
           ),
@@ -445,29 +446,29 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             minLines: 1,
             maxLines: 4,
             onChanged: (_) => setS(() {}),
-            decoration: const InputDecoration(
-              labelText: 'Rasm havolalari (ixtiyoriy)',
+            decoration: InputDecoration(
+              labelText: tr('Rasm havolalari (ixtiyoriy)'),
               hintText: 'https://...',
-              helperText: 'Bir nechta bo\'lsa — har birini yangi qatorga yozing',
+              helperText: tr('Bir nechta bo\'lsa — har birini yangi qatorga yozing'),
             ),
           ),
           const SizedBox(height: AppSpace.md),
           TextField(
             controller: sizes,
             onChanged: (_) => setS(() {}),
-            decoration: const InputDecoration(
-              labelText: "O'lchamlar (ixtiyoriy)",
+            decoration: InputDecoration(
+              labelText: tr("O'lchamlar (ixtiyoriy)"),
               hintText: 'XL, XXL, 3XL, 4XL',
-              helperText: "Vergul bilan. Yozilsa — shogird buyurtmada o'lchamni tanlaydi",
+              helperText: tr("Vergul bilan. Yozilsa — shogird buyurtmada o'lchamni tanlaydi"),
             ),
           ),
           const SizedBox(height: AppSpace.md),
           TextField(
             controller: colors,
-            decoration: const InputDecoration(
-              labelText: 'Ranglar (ixtiyoriy)',
-              hintText: 'sariq, kulrang, yashil',
-              helperText: 'Vergul bilan. Yozilsa — shogird buyurtmada rangni tanlaydi',
+            decoration: InputDecoration(
+              labelText: tr('Ranglar (ixtiyoriy)'),
+              hintText: tr('sariq, kulrang, yashil'),
+              helperText: tr('Vergul bilan. Yozilsa — shogird buyurtmada rangni tanlaydi'),
             ),
           ),
           const SizedBox(height: AppSpace.md),
@@ -475,13 +476,13 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             TextField(
               controller: stock,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Qoldiq', suffixText: 'dona'),
+              decoration: InputDecoration(labelText: tr('Qoldiq'), suffixText: 'dona'),
             )
           else
             Align(
               alignment: Alignment.centerLeft,
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Qoldiq (o'lcham bo'yicha)",
+                Text(tr("Qoldiq (o'lcham bo'yicha)"),
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12.5)),
                 const SizedBox(height: AppSpace.xs),
                 Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
@@ -502,9 +503,9 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             contentPadding: EdgeInsets.zero,
             value: active,
             onChanged: (v) => setS(() => active = v),
-            title: const Text('Sotuvda'),
+            title: Text(tr('Sotuvda')),
             subtitle: Text(
-              active ? "Shogirdlar ko'radi" : "Shogirdlarga ko'rinmaydi",
+              active ? tr("Shogirdlar ko'radi") : tr("Shogirdlarga ko'rinmaydi"),
               style: TextStyle(color: AppColors.textMuted),
             ),
           ),
@@ -513,7 +514,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
             width: double.infinity,
             child: FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Saqlash'),
+              child: Text(tr('Saqlash')),
             ),
           ),
           const SizedBox(height: AppSpace.sm),
@@ -524,7 +525,7 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
                 style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
                 onPressed: () => Navigator.pop(ctx, false),
                 icon: const Icon(Icons.delete_outline),
-                label: const Text("O'chirish"),
+                label: Text(tr("O'chirish")),
               ),
             ),
           const SizedBox(height: AppSpace.sm),
@@ -566,9 +567,9 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
   } else if (saved == false && p != null && context.mounted) {
     final ok = await confirm(
       context,
-      title: "Tovarni o'chirish",
-      message: '"${p.name}" do\'kondan o\'chirilsinmi?',
-      ok: "O'chirish",
+      title: tr("Tovarni o'chirish"),
+      message: trf('"{0}" do\'kondan o\'chirilsinmi?', [p.name]),
+      ok: tr("O'chirish"),
       destructive: true,
     );
     if (ok) await Db.deleteProduct(p.id);

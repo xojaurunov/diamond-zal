@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../models/stats.dart';
 import '../../services/db.dart';
@@ -29,9 +30,9 @@ class _TrainerStatsScreenState extends State<TrainerStatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trenerlar reytingi'),
+        title: Text(tr('Trenerlar reytingi')),
         actions: [
-          IconButton(tooltip: 'Yangilash', onPressed: _reload, icon: const Icon(Icons.refresh)),
+          IconButton(tooltip: tr('Yangilash'), onPressed: _reload, icon: const Icon(Icons.refresh)),
         ],
       ),
       body: FutureBuilder<List<TrainerStat>>(
@@ -40,9 +41,9 @@ class _TrainerStatsScreenState extends State<TrainerStatsScreen> {
           if (snap.hasError) {
             return EmptyState(
               icon: Icons.error_outline,
-              title: "Ma'lumotni yuklab bo'lmadi",
+              title: tr("Ma'lumotni yuklab bo'lmadi"),
               subtitle: '${snap.error}',
-              action: OutlinedButton(onPressed: _reload, child: const Text('Qayta urinish')),
+              action: OutlinedButton(onPressed: _reload, child: Text(tr('Qayta urinish'))),
             );
           }
           if (!snap.hasData) return const Center(child: CircularProgressIndicator());
@@ -62,8 +63,8 @@ class _TrainerStatsScreenState extends State<TrainerStatsScreen> {
                   const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
               children: [
                 Text(
-                  "So'nggi $statsDays kun. Ball shogirdlarga reja berilgani, chatga javob, "
-                  "shogirdlarning rejaga rioyasi va vazn natijasidan avtomatik hisoblanadi.",
+                  trf("So'nggi {0} kun. Ball shogirdlarga reja berilgani, chatga javob, "
+                  "shogirdlarning rejaga rioyasi va vazn natijasidan avtomatik hisoblanadi.", [statsDays]),
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -139,7 +140,7 @@ class _Comparison extends StatelessWidget {
     return BentoTile(
       padding: const EdgeInsets.all(AppSpace.md),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        const Eyebrow('Solishtirish'),
+        Eyebrow(tr('Solishtirish')),
         for (var m = 0; m < metrics.length; m++) ...[
           const SizedBox(height: AppSpace.md),
           Text(metrics[m], style: t.titleSmall),
@@ -225,7 +226,7 @@ class _TrainerCard extends StatelessWidget {
                   maxLines: 1, overflow: TextOverflow.ellipsis, style: t.titleMedium),
               const SizedBox(height: 2),
               if (score == null)
-                Text("Shogirdi yo'q — baho yo'q",
+                Text(tr("Shogirdi yo'q — baho yo'q"),
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted))
               else
                 _Stars(stat.stars),
@@ -243,17 +244,17 @@ class _TrainerCard extends StatelessWidget {
           const SizedBox(height: AppSpace.md),
           Wrap(spacing: 6, runSpacing: 6, children: [
             Pill(
-              text: '${stat.clients.length} shogird',
+              text: trf('{0} shogird', [stat.clients.length]),
               color: AppColors.water,
               icon: Icons.groups_outlined,
             ),
             Pill(
-              text: '${stat.messagesSent} xabar',
+              text: trf('{0} xabar', [stat.messagesSent]),
               color: AppColors.protein,
               icon: Icons.chat_bubble_outline,
             ),
             Pill(
-              text: attention == 0 ? 'Hammasi joyida' : "$attention ta e'tibor kerak",
+              text: attention == 0 ? tr('Hammasi joyida') : trf("{0} ta e'tibor kerak", [attention]),
               color: attention == 0 ? AppColors.success : AppColors.warning,
               icon: attention == 0 ? Icons.check_rounded : Icons.priority_high_rounded,
             ),
@@ -264,7 +265,7 @@ class _TrainerCard extends StatelessWidget {
                 final r = snap.data?[stat.trainer.id];
                 if (r == null) return const SizedBox.shrink();
                 return Pill(
-                  text: 'Bahongiz: ${r.stars}/5',
+                  text: trf('Bahongiz: {0}/5', [r.stars]),
                   color: AppColors.warning,
                   icon: Icons.star_rounded,
                 );
@@ -300,12 +301,12 @@ class _TrainerStatDetail extends StatelessWidget {
             child: Row(children: [
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Eyebrow('Umumiy ball', color: AppColors.textFaint),
+                  Eyebrow(tr('Umumiy ball'), color: AppColors.textFaint),
                   const SizedBox(height: AppSpace.sm),
                   _Stars(stat.stars),
                   const SizedBox(height: AppSpace.xs),
                   Text(
-                    "${stat.clients.length} shogird · $statsDays kunda ${stat.messagesSent} xabar yozgan",
+                    trf("{0} shogird · {1} kunda {2} xabar yozgan", [stat.clients.length, statsDays, stat.messagesSent]),
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                   ),
                 ]),
@@ -322,12 +323,12 @@ class _TrainerStatDetail extends StatelessWidget {
           BentoTile(
             padding: const EdgeInsets.all(AppSpace.md),
             child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              const Eyebrow('Ball tarkibi'),
+              Eyebrow(tr('Ball tarkibi')),
               for (final (label, value, weight) in stat.parts) ...[
                 const SizedBox(height: AppSpace.md),
                 Row(children: [
                   Expanded(child: Text(label, style: t.titleSmall)),
-                  Text("og'irligi $weight%",
+                  Text(trf("og'irligi {0}%", [weight]),
                       style: t.bodySmall?.copyWith(color: AppColors.textFaint)),
                 ]),
                 const SizedBox(height: AppSpace.xs),
@@ -337,23 +338,23 @@ class _TrainerStatDetail extends StatelessWidget {
           ),
           const SizedBox(height: AppSpace.xl),
           SectionHeader(
-            "E'tibor kerak",
-            eyebrow: 'Shogirdlar',
+            tr("E'tibor kerak"),
+            eyebrow: tr('Shogirdlar'),
             trailing: Pill(
               text: '${attention.length}',
               color: attention.isEmpty ? AppColors.success : AppColors.warning,
             ),
           ),
           if (attention.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpace.lg),
-              child: Center(child: Text('Hamma shogirdlarda hammasi joyida')),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpace.lg),
+              child: Center(child: Text(tr('Hamma shogirdlarda hammasi joyida'))),
             ),
           for (final c in attention) _ClientAttention(stat: c, owner: owner),
           if (ok.isNotEmpty) ...[
             const SizedBox(height: AppSpace.xl),
-            SectionHeader('Yaxshi',
-                eyebrow: 'Shogirdlar',
+            SectionHeader(tr('Yaxshi'),
+                eyebrow: tr('Shogirdlar'),
                 trailing: Pill(text: '${ok.length}', color: AppColors.success)),
             for (final c in ok) _ClientAttention(stat: c, owner: owner),
           ],
@@ -365,8 +366,8 @@ class _TrainerStatDetail extends StatelessWidget {
   static String _explain(String label) => switch (label) {
         'Reja berilgan' => 'shogirdlar',
         'Chatga javob' => 'yozganlar',
-        'Shogirdlar rioyasi' => 'yedim belgisi',
-        _ => 'maqsad tomon',
+        'Shogirdlar rioyasi' => tr('yedim belgisi'),
+        _ => tr('maqsad tomon'),
       };
 }
 
@@ -407,8 +408,8 @@ class _ClientAttention extends StatelessWidget {
               ]),
               const SizedBox(height: 2),
               Text(
-                'Rioya ${_pct(a)}'
-                '${d == null ? '' : ' · vazn ${d > 0 ? '+' : ''}${fmtNum(double.parse(d.toStringAsFixed(1)))} kg'}',
+                trf('Rioya {0}'
+                '{1}', [_pct(a), d == null ? '' : trf(' · vazn {0} kg', ['${d > 0 ? '+' : ''}${fmtNum(double.parse(d.toStringAsFixed(1)))}'])]),
                 style: t.bodySmall?.copyWith(color: AppColors.textMuted, fontFeatures: tabular),
               ),
               if (reasons.isNotEmpty) ...[
@@ -451,9 +452,9 @@ class _OwnerRatingCardState extends State<_OwnerRatingCard> {
     setState(() => _saving = true);
     try {
       await Db.saveRating(widget.trainerId, stars, _comment.text.trim());
-      if (mounted) showSnack(context, 'Baho saqlandi');
+      if (mounted) showSnack(context, tr('Baho saqlandi'));
     } catch (e) {
-      if (mounted) showSnack(context, "Saqlab bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Saqlab bo'lmadi: {0}", [e]));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -474,17 +475,17 @@ class _OwnerRatingCardState extends State<_OwnerRatingCard> {
         return BentoTile(
           padding: const EdgeInsets.all(AppSpace.md),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            const Eyebrow('Sizning bahoingiz'),
+            Eyebrow(tr('Sizning bahoingiz')),
             const SizedBox(height: AppSpace.xs),
             Text(
-              "Faqat siz ko'rasiz — trener bu bahoni ko'rmaydi.",
+              tr("Faqat siz ko'rasiz — trener bu bahoni ko'rmaydi."),
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             ),
             const SizedBox(height: AppSpace.sm),
             Row(children: [
               for (var i = 1; i <= 5; i++)
                 IconButton(
-                  tooltip: '$i yulduz',
+                  tooltip: trf('{0} yulduz', [i]),
                   onPressed: () => setState(() => _stars = i),
                   icon: Icon(
                     i <= stars ? Icons.star_rounded : Icons.star_outline_rounded,
@@ -498,19 +499,19 @@ class _OwnerRatingCardState extends State<_OwnerRatingCard> {
               maxLength: 500,
               minLines: 1,
               maxLines: 4,
-              decoration: const InputDecoration(labelText: 'Izoh (ixtiyoriy)'),
+              decoration: InputDecoration(labelText: tr('Izoh (ixtiyoriy)')),
             ),
             if (saved?.updatedAt != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.sm),
                 child: Text(
-                  'Oxirgi baho: ${uzDate(saved!.updatedAt!)}',
+                  trf('Oxirgi baho: {0}', [uzDate(saved!.updatedAt!)]),
                   style: t.bodySmall?.copyWith(color: AppColors.textFaint),
                 ),
               ),
             FilledButton(
               onPressed: stars == 0 || _saving ? null : () => _save(stars),
-              child: const Text('Bahoni saqlash'),
+              child: Text(tr('Bahoni saqlash')),
             ),
           ]),
         );

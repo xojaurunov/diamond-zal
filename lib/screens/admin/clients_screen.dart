@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -42,11 +43,11 @@ class _ClientsScreenState extends State<ClientsScreen> {
         if (all.isEmpty) {
           final empty = EmptyState(
             icon: Icons.people_outline,
-            title: "Hali mijoz yo'q",
+            title: tr("Hali mijoz yo'q"),
             subtitle: widget.admin.isOwner
-                ? "Mijozlar ilovada ro'yxatdan o'tgach, shu yerda paydo bo'ladi."
-                : "Shogirdlar ro'yxatdan o'tganda sizni katalogdan tanlaydi va shu yerda "
-                    "paydo bo'ladi. \"Shogird qabul qilaman\" yoqilgan bo'lsin.",
+                ? tr("Mijozlar ilovada ro'yxatdan o'tgach, shu yerda paydo bo'ladi.")
+                : tr("Shogirdlar ro'yxatdan o'tganda sizni katalogdan tanlaydi va shu yerda "
+                    "paydo bo'ladi. \"Shogird qabul qilaman\" yoqilgan bo'lsin."),
           );
           if (!widget.admin.isTrainer) return empty;
           return ListView(
@@ -82,7 +83,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                 Expanded(
                   child: StatTile(
                     icon: Icons.people_outline,
-                    label: 'Jami',
+                    label: tr('Jami'),
                     value: '${all.length}',
                     color: s.onSurfaceVariant,
                   ),
@@ -91,7 +92,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                 Expanded(
                   child: StatTile(
                     icon: Icons.check_circle_outline,
-                    label: 'Reja bor',
+                    label: tr('Reja bor'),
                     value: '$withPlan',
                     color: AppColors.success,
                   ),
@@ -100,7 +101,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                 Expanded(
                   child: StatTile(
                     icon: Icons.hourglass_empty,
-                    label: 'Kutmoqda',
+                    label: tr('Kutmoqda'),
                     value: '$waiting',
                     color: waiting > 0 ? AppColors.warning : s.onSurfaceVariant,
                   ),
@@ -110,15 +111,15 @@ class _ClientsScreenState extends State<ClientsScreen> {
             const SizedBox(height: AppSpace.md),
             TextField(
               onChanged: (v) => setState(() => _query = v),
-              decoration: const InputDecoration(
-                hintText: "Ism yoki telefon raqam bo'yicha qidirish",
-                prefixIcon: Icon(Icons.search),
+              decoration: InputDecoration(
+                hintText: tr("Ism yoki telefon raqam bo'yicha qidirish"),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
             const SizedBox(height: AppSpace.xl),
             SectionHeader(
-              'Mijozlar',
-              eyebrow: q.isEmpty ? "Ro'yxat" : 'Qidiruv natijasi',
+              tr('Mijozlar'),
+              eyebrow: q.isEmpty ? tr("Ro'yxat") : tr('Qidiruv natijasi'),
               trailing: Text(
                 '${list.length}',
                 style: Theme.of(context)
@@ -128,9 +129,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
               ),
             ),
             if (list.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: AppSpace.xxl),
-                child: Center(child: Text('Hech narsa topilmadi')),
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpace.xxl),
+                child: Center(child: Text(tr('Hech narsa topilmadi'))),
               ),
             for (final u in list)
               Padding(
@@ -162,12 +163,12 @@ class _ClientTile extends StatelessWidget {
     final u = client;
     final s = Theme.of(context).colorScheme;
     final Widget status = !u.profileDone
-        ? Pill(text: "Anketa yo'q", color: s.outline)
+        ? Pill(text: tr("Anketa yo'q"), color: s.outline)
         : u.planId == null
-            ? Pill(text: 'Rejasiz', color: AppColors.warning)
+            ? Pill(text: tr('Rejasiz'), color: AppColors.warning)
             : planMismatch
-                ? Pill(text: 'Reja mos emas', color: AppColors.danger)
-                : Pill(text: 'Reja bor', color: AppColors.success, icon: Icons.check_rounded);
+                ? Pill(text: tr('Reja mos emas'), color: AppColors.danger)
+                : Pill(text: tr('Reja bor'), color: AppColors.success, icon: Icons.check_rounded);
     final t = Theme.of(context).textTheme;
     return BentoTile(
       onTap: onTap,
@@ -190,12 +191,12 @@ class _ClientTile extends StatelessWidget {
               if (u.goal.isNotEmpty)
                 GoalPill(user: u)
               else
-                Pill(text: 'Maqsad ?', color: AppColors.warning),
+                Pill(text: tr('Maqsad ?'), color: AppColors.warning),
             ]),
             const SizedBox(height: 2),
             Text(
               u.profileDone
-                  ? '${fmtNum(u.weight)} kg · BMI ${u.bmi.toStringAsFixed(1)} · ${u.targetKcal} kkal'
+                  ? trf('{0} kg · BMI {1} · {2} kkal', [fmtNum(u.weight), u.bmi.toStringAsFixed(1), u.targetKcal])
                   : userContact(u.phone, u.email),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -232,9 +233,9 @@ class ClientDetail extends StatelessWidget {
             appBar: AppBar(
               title: Text(u.name),
               // Reja va progress alohida tablarda — telefonda ichma-ich o'ralish bo'lmasin
-              bottom: const TabBar(tabs: [
-                Tab(icon: Icon(Icons.restaurant_menu, size: 20), text: 'Reja'),
-                Tab(icon: Icon(Icons.show_chart, size: 20), text: 'Progress'),
+              bottom: TabBar(tabs: [
+                Tab(icon: const Icon(Icons.restaurant_menu, size: 20), text: tr('Reja')),
+                Tab(icon: const Icon(Icons.show_chart, size: 20), text: tr('Progress')),
               ]),
               actions: [
                 Padding(
@@ -248,14 +249,14 @@ class ClientDetail extends StatelessWidget {
                           chatUid: u.id,
                           myId: admin.id,
                           title: u.name,
-                          subtitle: 'Mijoz',
+                          subtitle: tr('Mijoz'),
                           // trener boshqa xodim (bosh admin) xabarlarini ko'rmaydi
                           onlyMineAndClient: admin.isTrainer,
                         ),
                       ),
                     ),
                     icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                    label: const Text('Chat'),
+                    label: Text(tr('Chat')),
                   ),
                 ),
               ],
@@ -268,8 +269,8 @@ class ClientDetail extends StatelessWidget {
                     Expanded(
                       child: StatTile(
                         icon: Icons.monitor_weight_outlined,
-                        label: 'Vazn',
-                        value: dash ?? '${fmtNum(u.weight)} kg',
+                        label: tr('Vazn'),
+                        value: dash ?? trf('{0} kg', [fmtNum(u.weight)]),
                         color: s.primary,
                       ),
                     ),
@@ -286,7 +287,7 @@ class ClientDetail extends StatelessWidget {
                     Expanded(
                       child: StatTile(
                         icon: Icons.local_fire_department_outlined,
-                        label: 'Norma, kkal',
+                        label: tr('Norma, kkal'),
                         value: dash ?? '${u.targetKcal}',
                         color: AppColors.warning,
                       ),
@@ -352,7 +353,7 @@ class _PlanPickerState extends State<_PlanPicker> {
       await job();
       if (mounted) showSnack(context, done);
     } catch (e) {
-      if (mounted) showSnack(context, "Saqlab bo'lmadi: $e");
+      if (mounted) showSnack(context, trf("Saqlab bo'lmadi: {0}", [e]));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -362,7 +363,7 @@ class _PlanPickerState extends State<_PlanPicker> {
   Future<void> _pick(_Variant v) => _run(() async {
         final id = v.saved ? v.plan.id : await Db.savePlan(v.plan);
         await Db.assignPlan(widget.user.id, id);
-      }, 'Reja biriktirildi');
+      }, tr('Reja biriktirildi'));
 
   @override
   Widget build(BuildContext context) {
@@ -386,12 +387,12 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12, left: 4),
                   child: Text(
-                    '${u.gender == 'male' ? 'Erkak' : 'Ayol'} • ${u.age} yosh • ${u.height.round()} sm',
+                    trf('{0} • {1} yosh • {2} sm', [u.gender == 'male' ? tr('Erkak') : tr('Ayol'), u.age, u.height.round()]),
                     style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant),
                   ),
                 ),
               // Maqsad: shogird anketada tanlaydi; tanlamagan bo'lsa trener belgilaydi
-              const Eyebrow('Maqsad'),
+              Eyebrow(tr('Maqsad')),
               const SizedBox(height: AppSpace.sm),
               // Maqsad belgilangan bo'lsa — aniq ko'rsatiladi, o'zgartirilmaydi (shogird tanlagan).
               // Bo'sh bo'lsa — trener ikkitadan birini belgilaydi.
@@ -401,7 +402,7 @@ class _PlanPickerState extends State<_PlanPicker> {
                   const SizedBox(width: AppSpace.sm),
                   Expanded(
                     child: Text(
-                      'Faqat shu maqsad rejalari beriladi',
+                      tr('Faqat shu maqsad rejalari beriladi'),
                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     ),
                   ),
@@ -410,15 +411,15 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Row(children: [
                   for (final (goal, label, icon) in [
                     // vazn kam (BMI < 18,5) bo'lsa ozish umuman ko'rsatilmaydi
-                    if (u.canLose) ('lose', 'Ozish', Icons.trending_down),
-                    ('gain', 'Massa nabor', Icons.trending_up),
+                    if (u.canLose) ('lose', tr('Ozish'), Icons.trending_down),
+                    ('gain', tr('Massa nabor'), Icons.trending_up),
                   ]) ...[
                     if (goal == 'gain' && u.canLose) const SizedBox(width: AppSpace.sm),
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: _busy
                             ? null
-                            : () => _run(() => Db.setGoal(u.id, goal), 'Maqsad: $label'),
+                            : () => _run(() => Db.setGoal(u.id, goal), trf('Maqsad: {0}', [label])),
                         icon: Icon(icon, size: 18),
                         label: Text(label),
                       ),
@@ -428,8 +429,8 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpace.sm, left: 4),
                   child: Text(
-                    "Shogird maqsadini hali tanlamagan — yangi versiyada kirganda so'raladi "
-                    "yoki shu yerda o'zingiz belgilang. Maqsadsiz reja berib bo'lmaydi.",
+                    tr("Shogird maqsadini hali tanlamagan — yangi versiyada kirganda so'raladi "
+                    "yoki shu yerda o'zingiz belgilang. Maqsadsiz reja berib bo'lmaydi."),
                     style: t.bodySmall?.copyWith(color: AppColors.warning),
                   ),
                 ),
@@ -438,13 +439,13 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpace.sm, left: 4),
                   child: Text(
-                    'BMI ${u.bmi.toStringAsFixed(1)} — vazn kam, faqat massa nabor mumkin.',
+                    trf('BMI {0} — vazn kam, faqat massa nabor mumkin.', [u.bmi.toStringAsFixed(1)]),
                     style: t.bodySmall?.copyWith(color: AppColors.danger),
                   ),
                 ),
               if (variants.isNotEmpty) ...[
                 const SizedBox(height: AppSpace.lg),
-                Eyebrow('${u.goalLabel} — ${variants.length} ta variant'),
+                Eyebrow(trf('{0} — {1} ta variant', [tr(u.goalLabel), variants.length])),
                 const SizedBox(height: AppSpace.sm),
                 for (final v in variants)
                   _VariantTile(
@@ -465,9 +466,9 @@ class _PlanPickerState extends State<_PlanPicker> {
                     Expanded(
                       child: Text(
                         u.goal.isEmpty
-                            ? 'Eski reja biriktirilgan — maqsad belgilangach mos variantni tanlang.'
-                            : "Biriktirilgan reja maqsadga mos emas — bloklangan, shogirdga "
-                                "ko'rsatilmaydi. Yuqoridagi variantlardan birini tanlang.",
+                            ? tr('Eski reja biriktirilgan — maqsad belgilangach mos variantni tanlang.')
+                            : tr("Biriktirilgan reja maqsadga mos emas — bloklangan, shogirdga "
+                                "ko'rsatilmaydi. Yuqoridagi variantlardan birini tanlang."),
                         style: t.bodySmall?.copyWith(color: AppColors.danger),
                       ),
                     ),
@@ -477,7 +478,7 @@ class _PlanPickerState extends State<_PlanPicker> {
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpace.md, left: 4),
                   child: Text(
-                    'Hozir biriktirilgan: ${current.title}',
+                    trf('Hozir biriktirilgan: {0}', [current.title]),
                     style: t.bodyMedium?.copyWith(color: s.onSurfaceVariant),
                   ),
                 ),
@@ -487,9 +488,9 @@ class _PlanPickerState extends State<_PlanPicker> {
                   child: TextButton.icon(
                     onPressed: _busy
                         ? null
-                        : () => _run(() => Db.assignPlan(u.id, null), 'Reja olib tashlandi'),
+                        : () => _run(() => Db.assignPlan(u.id, null), tr('Reja olib tashlandi')),
                     icon: const Icon(Icons.close, size: 18),
-                    label: const Text('Rejani olib tashlash'),
+                    label: Text(tr('Rejani olib tashlash')),
                   ),
                 ),
               if (current != null && !blocked && warn(current)) ...[
@@ -499,8 +500,8 @@ class _PlanPickerState extends State<_PlanPicker> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Reja (${current.kcal.round()} kkal) mijoz normasidan '
-                      "(${u.targetKcal} kkal) 300 kkal dan ko'proq farq qiladi.",
+                      trf('Reja ({0} kkal) mijoz normasidan '
+                      "({1} kkal) 300 kkal dan ko'proq farq qiladi.", [current.kcal.round(), u.targetKcal]),
                       style: t.bodySmall,
                     ),
                   ),
@@ -561,17 +562,17 @@ class _VariantTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     p.meals.isEmpty && !p.isWeekly
-                        ? "Faqat maslahatlar — mahallarni Rejalar bo'limida qo'shing"
-                        : '${p.isWeekly ? "Haftalik · " : ""}${p.mealsPerDay} mahal · '
-                            '${p.kcal.round()} kkal · ${p.protein.round()} g oqsil',
+                        ? tr("Faqat maslahatlar — mahallarni Rejalar bo'limida qo'shing")
+                        : trf('{0}{1} mahal · '
+                            '{2} kkal · {3} g oqsil', [p.isWeekly ? tr("Haftalik · ") : "", p.mealsPerDay, p.kcal.round(), p.protein.round()]),
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted, fontFeatures: tabular),
                   ),
                 ]),
               ),
               if (selected)
-                Pill(text: 'Biriktirilgan', color: AppColors.accent)
+                Pill(text: tr('Biriktirilgan'), color: AppColors.accent)
               else if (!variant.saved)
-                Pill(text: 'Shablon', color: AppColors.textMuted),
+                Pill(text: tr('Shablon'), color: AppColors.textMuted),
             ]),
           ),
         ),
@@ -587,7 +588,7 @@ class GoalPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Pill(
-        text: user.goalLabel,
+        text: tr(user.goalLabel),
         color: user.isGain ? AppColors.protein : AppColors.water,
         icon: user.isGain ? Icons.trending_up : Icons.trending_down,
       );
@@ -613,12 +614,12 @@ class _TrainerPicker extends StatelessWidget {
             key: ValueKey(currentId),
             initialValue: currentId,
             isExpanded: true,
-            decoration: const InputDecoration(
-              labelText: 'Biriktirilgan trener',
-              prefixIcon: Icon(Icons.badge_outlined),
+            decoration: InputDecoration(
+              labelText: tr('Biriktirilgan trener'),
+              prefixIcon: const Icon(Icons.badge_outlined),
             ),
             items: [
-              const DropdownMenuItem(value: null, child: Text('— Trener yo’q —')),
+              DropdownMenuItem(value: null, child: Text(tr('— Trener yo’q —'))),
               for (final t in staff)
                 DropdownMenuItem(
                   value: t.id,
@@ -631,7 +632,7 @@ class _TrainerPicker extends StatelessWidget {
             onChanged: (v) async {
               await Db.assignTrainer(user.id, v);
               if (context.mounted) {
-                showSnack(context, v == null ? 'Trener olib tashlandi' : 'Trener biriktirildi');
+                showSnack(context, v == null ? tr('Trener olib tashlandi') : tr('Trener biriktirildi'));
               }
             },
           );
@@ -658,17 +659,17 @@ class _MyCatalogCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Katalogdagi profilim', style: Theme.of(context).textTheme.titleLarge),
+            Text(tr('Katalogdagi profilim'), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpace.xs),
             Text(
-              "Shogirdlar ro'yxatdan o'tayotganda shu ma'lumotni ko'rib trener tanlaydi.",
+              tr("Shogirdlar ro'yxatdan o'tayotganda shu ma'lumotni ko'rib trener tanlaydi."),
               style: TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
             const SizedBox(height: AppSpace.lg),
             TextField(
               controller: name,
               maxLength: 60,
-              decoration: const InputDecoration(labelText: "Ism (shogirdlarga ko'rinadi)"),
+              decoration: InputDecoration(labelText: tr("Ism (shogirdlarga ko'rinadi)")),
             ),
             const SizedBox(height: AppSpace.sm),
             TextField(
@@ -676,15 +677,15 @@ class _MyCatalogCard extends StatelessWidget {
               maxLength: 300,
               minLines: 2,
               maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: "Qisqa ma'lumot",
-                hintText: "Masalan: 5 yil tajriba, ozish va massa nabor",
+              decoration: InputDecoration(
+                labelText: tr("Qisqa ma'lumot"),
+                hintText: tr("Masalan: 5 yil tajriba, ozish va massa nabor"),
                 alignLabelWithHint: true,
               ),
             ),
             const SizedBox(height: AppSpace.lg),
             FilledButton(
-                onPressed: () => Navigator.pop(context, true), child: const Text('Saqlash')),
+                onPressed: () => Navigator.pop(context, true), child: Text(tr('Saqlash'))),
           ]),
     );
     if (ok != true || name.text.trim().isEmpty) return;
@@ -694,7 +695,7 @@ class _MyCatalogCard extends StatelessWidget {
       bio: bio.text.trim(),
       accepting: current.accepting,
     ));
-    if (context.mounted) showSnack(context, 'Profil saqlandi');
+    if (context.mounted) showSnack(context, tr('Profil saqlandi'));
   }
 
   @override
@@ -712,24 +713,24 @@ class _MyCatalogCard extends StatelessWidget {
               ? Row(children: [
                   Expanded(
                     child: Text(
-                      "Siz katalogda yo'qsiz — shogirdlar sizni tanlay olmaydi.",
+                      tr("Siz katalogda yo'qsiz — shogirdlar sizni tanlay olmaydi."),
                       style: TextStyle(color: AppColors.textMuted),
                     ),
                   ),
                   FilledButton(
                     style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
                     onPressed: () => Db.saveTrainerProfile(TrainerInfo(trainer.id, _defaultName)),
-                    child: const Text("Qo'shilish"),
+                    child: Text(tr("Qo'shilish")),
                   ),
                 ])
               : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                   Row(children: [
-                    const Eyebrow('Katalogdagi profilim'),
+                    Eyebrow(tr('Katalogdagi profilim')),
                     const Spacer(),
                     TextButton.icon(
                       onPressed: () => _edit(context, p),
                       icon: const Icon(Icons.edit_outlined, size: 16),
-                      label: const Text('Tahrirlash'),
+                      label: Text(tr('Tahrirlash')),
                     ),
                   ]),
                   Text(p.name, style: t.titleMedium),
@@ -739,11 +740,11 @@ class _MyCatalogCard extends StatelessWidget {
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     value: p.accepting,
-                    title: const Text('Yangi shogird qabul qilaman'),
+                    title: Text(tr('Yangi shogird qabul qilaman')),
                     subtitle: Text(
                       p.accepting
-                          ? "Ro'yxatdan o'tayotgan shogirdlar sizni tanlay oladi"
-                          : "Katalogda ko'rinmaysiz — yangi shogird tanlay olmaydi",
+                          ? tr("Ro'yxatdan o'tayotgan shogirdlar sizni tanlay oladi")
+                          : tr("Katalogda ko'rinmaysiz — yangi shogird tanlay olmaydi"),
                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     ),
                     onChanged: (v) => Db.saveTrainerProfile(
