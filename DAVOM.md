@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-05**
+> Oxirgi yangilanish: **2026-10-06**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,7 +11,25 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (5-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (6-oktabr holati)
+
+**6-oktabr:** uch ish qilindi, hammasi kodda va **web'da joylangan**:
+1. **Tezlik** (81-band) — bo'limlar birinchi ochilganda yuklanadi, rasmlar telefonda
+   keshlanadi, do'kon ro'yxatlari dangasa, do'konda rasm bosilsa kattalashadi.
+2. **Uch til: o'zbek / rus / ingliz** (82-band) — hamma ekran, 711 ta matn; tayyor reja
+   shablonlari va standart mahsulotlar ham (jami lug'atda 870 kalit).
+3. **Ish rejasi** raqobatchilar bilan solishtirib tuzildi (83-band).
+
+⚠️ **APK saytga QO'YILMAGAN.** Saytdagi APK — 5-oktabr 17:55 (Crashlytics'siz, ishlaydi, lekin
+tezlik va til yo'q). Yangi kod bilan sinov nusxasi: `Diamond-SINOV-2026-10-06.apk` (loyihadan
+tashqarida, zal egasining `Music` papkasida). Unda yangi Android plaginlari bor (rasm keshi:
+sqflite, path_provider) — **telefonda ochilishi tekshirilgach** `deploy.ps1` bilan joylanadi.
+Sabab: 5-oktabrda Crashlytics qo'shilgan APK telefonda ochilmagan edi (80-band).
+
+**5-oktabr (kechqurun):** abonementga kunlik tur va belgilangan narx (kunlik 50 000, oylik
+500 000), mijoz o'z to'lovini ko'radi, zal xodimlari hamma to'lovni ko'radi (78-band); yangi
+ilova ikonkasi; **Crashlytics olib tashlandi** (80-band).
+
 
 **5-oktabr:** 4-oktabr ishlari **haqiqiy Firebase'ga joylandi** — qoidalar, web (`/ilova/`) va
 yangi APK (25,3 MB, `CN=Diamond Zal`). Do'kondagi **hamma 115 tovarga 15% ustama** qo'yildi
@@ -115,7 +133,32 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 19. **Abonement, davomat, do'kon ustamasi/o'lchami, QR, zaxira** (4-okt, 61–65-band):
     kod tayyor va lokal emulyatorda sinaldi, **haqiqiy bazaga hali joylanmagan**.
 
-### ⏳ Ertaga / ochiq
+### ⏳ Ochiq ishlar (6-oktabr holati)
+
+**Birinchi navbatda — zal egasi:**
+- Sinov APK'ni telefonda ochib ko'rish; ishlasa saytga joylanadi (`deploy.ps1`).
+- Telefonda hali ko'rilmagan: tezlik, rasm keshi, do'konda rasmni kattalashtirish, til
+  almashtirish, "To'lovlar" (trener, barmen), rang tanlash, suv belgisi, ovqat eslatmasi.
+- Tarjimani ko'zdan kechirish (Claude tarjima qilgan) — tuzatish `tools/l10n/tarjima.json` da,
+  keyin `python tools/l10n/l10n.py gen`.
+
+**Qaror kutilmoqda:** Blaze (push); ikonkadagi "DISCIPLINA" yozuvi (boshqa brend rasmi —
+"DIAMOND"ga almashtirish taklif qilingan); guruh mashg'ulotlari bormi (jadval kerakmi).
+
+**Navbatdagi ishlar** — 83-banddagi reja: 1) muzlatish, muddati o'tganlar ro'yxati, kunlik
+kassa; 2) QR skaner, davomat seriyasi; 3) Play Market, push; 4) "rejadan tashqari yedim",
+mashq jurnali; 5) Payme/Click, iPhone.
+
+**Tillardan qolgan:** viloyat-tuman nomlari (`hudud.dart`), do'kon tovarlari nomi (bazada
+o'zbekcha — `nameRu`/`nameEn` maydoni kerak), vaqt tanlash oynasi tugmalari (inglizcha).
+
+**Zal egasi to'xtatgan / kerak emas degan:** trener parolini almashtirish, imzo kaliti nusxasi,
+mijozning o'zi abonement so'rovi yuborishi, APK'ni hammaga tarqatish (o'zi sekin tarqatadi).
+O'lcham bo'yicha haqiqiy qoldiqni zal egasi yoki barmen yozadi. `ZAXIRA.bat` — haftada bir.
+
+**Qilinmagan:** Crashlytics'ni qayta qo'shish (faqat telefonda sinab), sport sumka (rasm yo'q).
+
+### Eski ochiq ro'yxat (5-oktabrgacha — ko'pi hal bo'lgan, tarix uchun)
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
   A — suv belgisi (shogird ismi rejada xira turadi, tavsiya qilingan);
   B — `FLAG_SECURE` bilan skrinshotni bloklash (web'da ishlamaydi, ikkinchi telefon kamerasini
@@ -1535,6 +1578,30 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       ism) va chatga yoziladigan buyurtma xabarlari.
     - Bazadagi kalit qiymatlar (`Forma`, `Ozish`, hafta kunlari) o'zgarmadi — faqat ekranda
       `tr()` bilan ko'rsatiladi. Reja: `specs/tillar/` (lokal).
+
+83. **Raqobatchilar bilan solishtirish va ish rejasi (6-okt)** — O'zbekiston bozoridagi
+    ilovalar saytidagi tavsifi bo'yicha solishtirildi (o'rnatib sinalmagan): **FitBase** (zallar
+    uchun pullik tizim, 50+ klub, brendli ilova, Uzcard/Humo, muzlatish), **1Fit** (ko'p zalga
+    bitta abonement), **UzFit** (o'zbekcha fitnes ilovasi), **Eda AI / Bodring AI /
+    Kaloriya.uz** (rasmdan kaloriya).
+    - **Bizning ustunlik:** jonli trener tuzgan reja + zal + do'kon bitta ilovada; oylik
+      to'lovsiz; o'zbek taomlari. Raqobatchilarning hech birida bu uchalasi birga yo'q.
+    - **Orqada qolgan joylar:** onlayn to'lov, muzlatish, do'konlarda (Play Market) yo'qligi,
+      push, iPhone, mashq jurnali; davomat qo'lda. (Rus tili — shu kuni yopildi, 82-band.)
+    - **Rasmdan kaloriya (AI) tavsiya qilinmadi:** tadqiqotlarda aralash taomda 25–35% xato,
+      porsiyani aniqlash 39% gacha tushadi; har so'rov pullik. O'rniga — "rejadan tashqari
+      yedim": mijoz bazadan taomni tanlab, porsiyani o'zi yozadi.
+    - **Reja (zal egasi bilan kelishilgan tartib, boshlanmagan):**
+      1) pul — abonementni muzlatish, muddati o'tganlar ro'yxati, kunlik kassa;
+      2) davomat — kirishda QR skaner, davomat seriyasi va "N kundan beri kelmadi";
+      3) kengayish — Play Market (25 $), push (Blaze);
+      4) boyitish — "rejadan tashqari yedim" + kun yakuni, mashq jurnali (kg, takror),
+         do'konda chegirma, tana o'lchamlari;
+      5) katta — Payme/Click, mashg'ulotga yozilish, iPhone (Mac + yiliga 99 $).
+    - **Hozircha kerak emas:** zal bandligi (mijoz kam), "do'st olib kel" (Play Market'dan
+      oldin ishlamaydi), oylik natija kartasi, Excel.
+    - Qiziqtirish g'oyalari (ball, daraja, nishon, seriya, zal reytingi, ball evaziga chegirma)
+      muhokama qilindi — qaror yo'q; QR skanerdan keyin ma'noli (davomat aniq bo'lishi kerak).
 
 ---
 
