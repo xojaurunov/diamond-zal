@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../models/subscription.dart';
 import '../../services/db.dart';
@@ -30,10 +31,10 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.sm),
         child: SegmentedButton<int>(
           showSelectedIcon: false,
-          segments: const [
-            ButtonSegment(value: 0, label: Text('Mijozlar')),
-            ButtonSegment(value: 1, label: Text("To'lovlar")),
-            ButtonSegment(value: 2, label: Text('Eslatmalar')),
+          segments: [
+            ButtonSegment(value: 0, label: Text(tr('Mijozlar'))),
+            ButtonSegment(value: 1, label: Text(tr("To'lovlar"))),
+            ButtonSegment(value: 2, label: Text(tr('Eslatmalar'))),
           ],
           selected: {_tab},
           onSelectionChanged: (s) => setState(() => _tab = s.first),
@@ -64,7 +65,7 @@ class _ClientsTab extends StatelessWidget {
         if (!snap.hasData) return const Center(child: CircularProgressIndicator());
         final list = [...snap.data!]..sort((a, b) => a.name.compareTo(b.name));
         if (list.isEmpty) {
-          return const EmptyState(icon: Icons.card_membership_outlined, title: "Hali mijoz yo'q");
+          return EmptyState(icon: Icons.card_membership_outlined, title: tr("Hali mijoz yo'q"));
         }
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xl),
@@ -89,9 +90,9 @@ class _SubscriptionTile extends StatelessWidget {
   Future<void> _sendReminder(BuildContext context, int daysLeft) async {
     try {
       await Db.sendSubscriptionReminder(client, daysLeft, adminId);
-      if (context.mounted) showSnack(context, 'Eslatma yuborildi');
+      if (context.mounted) showSnack(context, tr('Eslatma yuborildi'));
     } catch (e) {
-      if (context.mounted) showSnack(context, "Bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -105,12 +106,12 @@ class _SubscriptionTile extends StatelessWidget {
     final expiringSoon = Subscription.isExpiringSoon(exp);
     final expired = Subscription.isExpired(exp);
     final status = exp == null
-        ? Pill(text: 'Abonement yo‘q', color: AppColors.textMuted)
+        ? Pill(text: tr('Abonement yo‘q'), color: AppColors.textMuted)
         : expired
-            ? Pill(text: 'Muddati o‘tdi', color: AppColors.danger)
+            ? Pill(text: tr('Muddati o‘tdi'), color: AppColors.danger)
             : expiringSoon
-                ? Pill(text: '$daysLeft kun qoldi', color: AppColors.warning)
-                : Pill(text: '$daysLeft kun qoldi', color: AppColors.success);
+                ? Pill(text: trf('{0} kun qoldi', [daysLeft]), color: AppColors.warning)
+                : Pill(text: trf('{0} kun qoldi', [daysLeft]), color: AppColors.success);
 
     return BentoTile(
       onTap: () => addSubscriptionSheet(context, u),
@@ -133,7 +134,7 @@ class _SubscriptionTile extends StatelessWidget {
               style: OutlinedButton.styleFrom(minimumSize: const Size(0, 40)),
               onPressed: () => _sendReminder(context, daysLeft),
               icon: const Icon(Icons.notifications_active_outlined, size: 18),
-              label: const Text('Eslatma yubor'),
+              label: Text(tr('Eslatma yubor')),
             ),
           ),
         ],
@@ -153,7 +154,7 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
     context,
     StatefulBuilder(
       builder: (ctx, setS) => Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('Abonement — ${client.name.isEmpty ? fmtPhone(client.phone) : client.name}',
+        Text(trf('Abonement — {0}', [client.name.isEmpty ? fmtPhone(client.phone) : client.name]),
             style: Theme.of(ctx).textTheme.titleLarge),
         const SizedBox(height: AppSpace.lg),
         Align(
@@ -167,7 +168,7 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
                   months = m;
                   price.text = '${stdPrice()}';
                 }),
-                label: Text(m == 0 ? 'Kunlik' : '$m oy'),
+                label: Text(m == 0 ? tr('Kunlik') : trf('{0} oy', [m])),
               ),
           ]),
         ),
@@ -175,14 +176,14 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
         TextField(
           controller: price,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Narxi', suffixText: "so'm"),
+          decoration: InputDecoration(labelText: tr('Narxi'), suffixText: tr("so'm")),
         ),
         const SizedBox(height: AppSpace.lg),
         SizedBox(
           width: double.infinity,
           child: FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Saqlash'),
+            child: Text(tr('Saqlash')),
           ),
         ),
         const SizedBox(height: AppSpace.sm),
@@ -201,7 +202,7 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
         paidDate: DateTime.now(),
       ),
     );
-    if (context.mounted) showSnack(context, 'Abonement qo‘shildi');
+    if (context.mounted) showSnack(context, tr('Abonement qo‘shildi'));
   }
 }
 
@@ -221,7 +222,7 @@ class _ReminderReportTab extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xl),
           children: [
-            SectionHeader('Oxirgi 7 kun', trailing: Pill(text: '$total ta', color: AppColors.accent)),
+            SectionHeader(tr('Oxirgi 7 kun'), trailing: Pill(text: trf('{0} ta', [total]), color: AppColors.accent)),
             for (final e in byDay.entries)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.sm),

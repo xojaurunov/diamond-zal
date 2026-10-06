@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../models/shop.dart';
 import '../../services/db.dart';
@@ -27,7 +28,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Sotuv hisoboti')),
+      appBar: AppBar(title: Text(tr('Sotuv hisoboti'))),
       body: StreamBuilder<List<ShopOrder>>(
         stream: Db.ordersFor(widget.me),
         builder: (context, snap) {
@@ -63,7 +64,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           child: ChoiceChip(
                             selected: _days == days,
                             onSelected: (_) => setState(() => _days = days),
-                            label: Text(label),
+                            label: Text(tr(label)),
                           ),
                         ),
                     ]),
@@ -75,12 +76,12 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     feature: true,
                     padding: const EdgeInsets.all(AppSpace.lg),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Eyebrow(widget.ownerView ? 'Jami tushum' : 'Men sotdim'),
+                      Eyebrow(widget.ownerView ? tr('Jami tushum') : tr('Men sotdim')),
                       const SizedBox(height: AppSpace.xs),
                       Text(total.money,
                           style: t.headlineMedium?.copyWith(color: AppColors.accent)),
                       const SizedBox(height: 2),
-                      Text('${total.count} ta buyurtma berildi',
+                      Text(trf('{0} ta buyurtma berildi', [total.count]),
                           style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
                     ]),
                   ),
@@ -88,9 +89,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                   // ---------- sotuvchilar ----------
                   if (widget.ownerView) ...[
                     const SizedBox(height: AppSpace.xl),
-                    const SectionHeader('Kim sotdi', eyebrow: 'Hisobot'),
+                    SectionHeader(tr('Kim sotdi'), eyebrow: tr('Hisobot')),
                     if (sellers.isEmpty)
-                      Text('Bu davrda sotuv bo‘lmagan',
+                      Text(tr('Bu davrda sotuv bo‘lmagan'),
                           style: TextStyle(color: AppColors.textMuted)),
                     for (final e in (sellers.entries.toList()
                       ..sort((a, b) => b.value.sum.compareTo(a.value.sum))))
@@ -99,7 +100,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         child: BentoTile(
                           padding: const EdgeInsets.all(AppSpace.md),
                           child: Row(children: [
-                            UserAvatar(name: names[e.key] ?? 'Noma’lum', size: 38),
+                            UserAvatar(name: names[e.key] ?? tr('Noma’lum'), size: 38),
                             const SizedBox(width: AppSpace.md),
                             Expanded(
                               child: Column(
@@ -107,11 +108,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                   children: [
                                     Text(
                                       e.key.isEmpty
-                                          ? 'Kim bergani yozilmagan'
-                                          : (names[e.key] ?? 'Xodim'),
+                                          ? tr('Kim bergani yozilmagan')
+                                          : (names[e.key] ?? tr('Xodim')),
                                       style: t.titleSmall,
                                     ),
-                                    Text('${e.value.count} ta buyurtma',
+                                    Text(trf('{0} ta buyurtma', [e.value.count]),
                                         style: t.bodySmall
                                             ?.copyWith(color: AppColors.textMuted)),
                                   ]),
@@ -125,9 +126,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
 
                   // ---------- tovarlar ----------
                   const SizedBox(height: AppSpace.xl),
-                  const SectionHeader('Qaysi tovar', eyebrow: 'Sotilgani'),
+                  SectionHeader(tr('Qaysi tovar'), eyebrow: tr('Sotilgani')),
                   if (products.isEmpty)
-                    Text('Bu davrda sotuv bo‘lmagan',
+                    Text(tr('Bu davrda sotuv bo‘lmagan'),
                         style: TextStyle(color: AppColors.textMuted)),
                   for (final e in (products.entries.toList()
                     ..sort((a, b) => b.value.sum.compareTo(a.value.sum))))
@@ -146,7 +147,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                       style: t.titleSmall,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis),
-                                  Text('${e.value.count} dona',
+                                  Text(trf('{0} dona', [e.value.count]),
                                       style:
                                           t.bodySmall?.copyWith(color: AppColors.textMuted)),
                                 ]),
@@ -159,7 +160,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
 
                   // ---------- ro'yxat ----------
                   const SizedBox(height: AppSpace.xl),
-                  SectionHeader('Har bir sotuv', eyebrow: '${sold.length} ta'),
+                  SectionHeader(tr('Har bir sotuv'), eyebrow: trf('{0} ta', [sold.length])),
                   for (final o in sold)
                     Padding(
                       padding: const EdgeInsets.only(bottom: AppSpace.xs),

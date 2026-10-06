@@ -1,7 +1,35 @@
 {
+ "\"{0}\" bazadan o'chirilsinmi? Mavjud rejalarga ta'sir qilmaydi.": {
+  "ru": "Удалить «{0}» из базы? На существующие планы это не повлияет.",
+  "en": "Delete “{0}” from the database? Existing plans are not affected."
+ },
  "\"{0}\" buyurtmasi bekor qilinsinmi?": {
   "ru": "Отменить заказ «{0}»?",
   "en": "Cancel the order “{0}”?"
+ },
+ "100 gramm uchun:": {
+  "ru": "На 100 граммов:",
+  "en": "Per 100 grams:"
+ },
+ "30 kun": {
+  "ru": "30 дней",
+  "en": "30 days"
+ },
+ "7 kun": {
+  "ru": "7 дней",
+  "en": "7 days"
+ },
+ "Abonement": {
+  "ru": "Абонемент",
+  "en": "Membership"
+ },
+ "Abonement qo‘shildi": {
+  "ru": "Абонемент добавлен",
+  "en": "Membership added"
+ },
+ "Abonement to'langan sanasi bo'yicha, do'kon — buyurtma berilgan sanasi bo'yicha hisoblanadi. Foyda tovarning hozirgi tan narxidan. Trener haqi — shogirdlari to'lagan abonementning tanlangan foizi; foiz shu qurilmada eslab qolinadi.": {
+  "ru": "Абонементы считаются по дате оплаты, магазин — по дате заказа. Прибыль — от текущей себестоимости товара. Доля тренера — выбранный процент от абонементов его учеников; процент запоминается на этом устройстве.",
+  "en": "Memberships are counted by payment date, shop sales by order date. Profit uses the product's current cost price. Trainer pay is the chosen percentage of their clients' membership payments; the percentage is remembered on this device."
  },
  "Abonement tugadi": {
   "ru": "Абонемент закончился",
@@ -11,13 +39,25 @@
   "ru": "Абонемент скоро закончится",
   "en": "Membership is about to expire"
  },
+ "Abonement tushumidan ulush": {
+  "ru": "Доля от выручки за абонементы",
+  "en": "Share of membership revenue"
+ },
  "Abonement yo'q": {
+  "ru": "Нет абонемента",
+  "en": "No membership"
+ },
+ "Abonement yo‘q": {
   "ru": "Нет абонемента",
   "en": "No membership"
  },
  "Abonement · {0}": {
   "ru": "Абонемент · {0}",
   "en": "Membership · {0}"
+ },
+ "Abonement — {0}": {
+  "ru": "Абонемент — {0}",
+  "en": "Membership — {0}"
  },
  "Akkaunt topilmadi": {
   "ru": "Аккаунт не найден",
@@ -63,6 +103,14 @@
   "ru": "Анкета",
   "en": "Profile form"
  },
+ "Aprel": {
+  "ru": "Апрель",
+  "en": "April"
+ },
+ "Avgust": {
+  "ru": "Август",
+  "en": "August"
+ },
  "Avval o'lchamni tanlang": {
   "ru": "Сначала выберите размер",
   "en": "Choose a size first"
@@ -90,6 +138,14 @@
  "Barakalla!": {
   "ru": "Отлично!",
   "en": "Well done!"
+ },
+ "Barmen panelidan chiqmoqchimisiz?": {
+  "ru": "Выйти из панели бармена?",
+  "en": "Sign out of the bar panel?"
+ },
+ "Barmen • Diamond": {
+  "ru": "Бармен • Diamond",
+  "en": "Bar • Diamond"
  },
  "Bekor": {
   "ru": "Отмена",
@@ -139,9 +195,17 @@
   "ru": "Не получилось: {0}",
   "en": "Failed: {0}"
  },
+ "Bo'sh bo'lsa, nomiga qarab rasm tanlanadi": {
+  "ru": "Если пусто, картинка подбирается по названию",
+  "en": "If empty, an image is picked by name"
+ },
  "Bo'y": {
   "ru": "Рост",
   "en": "Height"
+ },
+ "Bosh admin • Diamond": {
+  "ru": "Главный админ • Diamond",
+  "en": "Head admin • Diamond"
  },
  "Boshlang'ich": {
   "ru": "Начальный",
@@ -154,6 +218,10 @@
  "Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari tez orada qo'shiladi.": {
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
   "en": "This section is being improved — exercises for each workout are coming soon."
+ },
+ "Bu davrda sotuv bo‘lmagan": {
+  "ru": "За этот период продаж не было",
+  "en": "No sales in this period"
  },
  "Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi.": {
   "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
@@ -171,9 +239,37 @@
   "ru": "Сегодня",
   "en": "Today"
  },
+ "Bugun dam olish": {
+  "ru": "Сегодня отдых",
+  "en": "Rest today"
+ },
+ "Bugun hech kimning mashg'uloti yo'q": {
+  "ru": "Сегодня ни у кого нет тренировки",
+  "en": "Nobody has a workout today"
+ },
+ "Bugun keldi deb belgilandi": {
+  "ru": "Отмечено: сегодня пришёл",
+  "en": "Marked as present today"
+ },
+ "Bugun keldi deb belgilangan": {
+  "ru": "Отмечен как пришедший сегодня",
+  "en": "Marked as present today"
+ },
  "Bugun tugaydi": {
   "ru": "Истекает сегодня",
   "en": "Expires today"
+ },
+ "Bugun uyda": {
+  "ru": "Сегодня дома",
+  "en": "At home today"
+ },
+ "Bugun uyda mashq": {
+  "ru": "Сегодня тренировка дома",
+  "en": "Home workout today"
+ },
+ "Bugun uyda mashq belgilandi": {
+  "ru": "Назначена домашняя тренировка на сегодня",
+  "en": "Home workout set for today"
  },
  "Bugun zalga borish kuni": {
   "ru": "Сегодня день тренировки в зале",
@@ -182,6 +278,10 @@
  "Bugun zalga kela olmasangiz — 'Trener' bo'limida \"bugun kelolmayman\" deb yozing, trener uyda mashq belgilaydi.": {
   "ru": "Не можете прийти в зал сегодня — напишите в разделе «Тренер»: «сегодня не смогу», и тренер назначит домашнюю тренировку.",
   "en": "If you can't make it to the gym today, write “can't come today” in the Trainer tab and your trainer will set a home workout."
+ },
+ "Bugun zalga keladi": {
+  "ru": "Сегодня придут в зал",
+  "en": "Coming to the gym today"
  },
  "Bugun {0}": {
   "ru": "Сегодня {0}",
@@ -235,6 +335,14 @@
   "ru": "Отменить заказ",
   "en": "Cancel order"
  },
+ "Chatda \"bugun kelolmayman\" deb yozsa, uyda mashq belgilash mumkin": {
+  "ru": "Если напишет в чате «сегодня не смогу», можно назначить тренировку дома",
+  "en": "If they write “can't come today” in chat, you can set a home workout"
+ },
+ "Chatda bugun kela olmasligini yozdi": {
+  "ru": "Написал в чате, что сегодня не придёт",
+  "en": "Wrote in chat that they can't come today"
+ },
  "Chiqish": {
   "ru": "Выйти",
   "en": "Sign out"
@@ -255,13 +363,29 @@
   "ru": "Продолжить",
   "en": "Continue"
  },
+ "Davomat bekor qilindi": {
+  "ru": "Отметка о посещении снята",
+  "en": "Attendance mark removed"
+ },
+ "Dekabr": {
+  "ru": "Декабрь",
+  "en": "December"
+ },
  "Do'kon": {
   "ru": "Магазин",
   "en": "Shop"
  },
+ "Do'kon foydasi": {
+  "ru": "Прибыль магазина",
+  "en": "Shop profit"
+ },
  "Do'kon hozircha bo'sh": {
   "ru": "Магазин пока пуст",
   "en": "The shop is empty for now"
+ },
+ "Do'kon tushumi": {
+  "ru": "Выручка магазина",
+  "en": "Shop revenue"
  },
  "Dobavkalar": {
   "ru": "Добавки",
@@ -291,9 +415,21 @@
   "ru": "Уведомления",
   "en": "Alerts"
  },
+ "Eslatma yubor": {
+  "ru": "Отправить напоминание",
+  "en": "Send reminder"
+ },
+ "Eslatma yuborildi": {
+  "ru": "Напоминание отправлено",
+  "en": "Reminder sent"
+ },
  "Eslatmalar": {
   "ru": "Уведомления",
   "en": "Notifications"
+ },
+ "Fevral": {
+  "ru": "Февраль",
+  "en": "February"
  },
  "Forma": {
   "ru": "Форма",
@@ -339,9 +475,37 @@
   "ru": "3 дня в неделю. Тренировки по порядку дней: 1) {0}, 2) {1}, 3) {2}.",
   "en": "3 days a week. Workouts follow the day order: 1) {0}, 2) {1}, 3) {2}."
  },
+ "Hali kelgani belgilanmagan": {
+  "ru": "Посещение ещё не отмечено",
+  "en": "Attendance not marked yet"
+ },
+ "Hali mijoz yo'q": {
+  "ru": "Клиентов пока нет",
+  "en": "No clients yet"
+ },
+ "Hali to'lov yo'q": {
+  "ru": "Оплат пока нет",
+  "en": "No payments yet"
+ },
  "Hali vazn kiritilmagan": {
   "ru": "Вес ещё не внесён",
   "en": "No weight logged yet"
+ },
+ "Hamma shogirdlar jadvali": {
+  "ru": "Расписание всех учеников",
+  "en": "All clients' schedule"
+ },
+ "Hamma zallar": {
+  "ru": "Все залы",
+  "en": "All gyms"
+ },
+ "Hammasi": {
+  "ru": "Все",
+  "en": "All"
+ },
+ "Har bir sotuv": {
+  "ru": "Каждая продажа",
+  "en": "Every sale"
  },
  "Havola nusxalandi": {
   "ru": "Ссылка скопирована",
@@ -350,6 +514,18 @@
  "Havolani nusxalash": {
   "ru": "Скопировать ссылку",
   "en": "Copy link"
+ },
+ "Hech kim uyda mashq qilmaydi": {
+  "ru": "Никто не тренируется дома",
+  "en": "Nobody is training at home"
+ },
+ "Hisobim": {
+  "ru": "Мой отчёт",
+  "en": "My report"
+ },
+ "Hisobot": {
+  "ru": "Отчёт",
+  "en": "Report"
  },
  "Homilador bo'lsangiz, 18 yoshgacha bo'lsangiz yoki diabet, yurak, oshqozon kasalliklari bo'lsa, diyetani boshlashdan oldin shifokor bilan maslahatlashing.": {
   "ru": "Если вы беременны, вам меньше 18 лет или есть диабет, болезни сердца или желудка — перед началом диеты посоветуйтесь с врачом.",
@@ -403,6 +579,22 @@
   "ru": "Введите имя",
   "en": "Enter your name"
  },
+ "Ismsiz": {
+  "ru": "Без имени",
+  "en": "No name"
+ },
+ "Iyul": {
+  "ru": "Июль",
+  "en": "July"
+ },
+ "Iyun": {
+  "ru": "Июнь",
+  "en": "June"
+ },
+ "Jami tushum": {
+  "ru": "Общая выручка",
+  "en": "Total revenue"
+ },
  "Jami: {0}": {
   "ru": "Итого: {0}",
   "en": "Total: {0}"
@@ -427,6 +619,14 @@
   "ru": "Пятница",
   "en": "Friday"
  },
+ "Kaloriya": {
+  "ru": "Калории",
+  "en": "Calories"
+ },
+ "Kaloriya kiritilmagan": {
+  "ru": "Калории не указаны",
+  "en": "Calories not entered"
+ },
  "Kamera": {
   "ru": "Камера",
   "en": "Camera"
@@ -438,6 +638,10 @@
  "Kecha {0}": {
   "ru": "Вчера {0}",
   "en": "Yesterday {0}"
+ },
+ "Keldi": {
+  "ru": "Пришёл",
+  "en": "Present"
  },
  "Keling, tanishamiz 👋": {
   "ru": "Давайте знакомиться 👋",
@@ -458,6 +662,14 @@
  "Keyingi: {0} — {1}": {
   "ru": "Следующая: {0} — {1}",
   "en": "Next: {0} — {1}"
+ },
+ "Kim bergani yozilmagan": {
+  "ru": "Не указано, кто выдал",
+  "en": "Not recorded who handed it over"
+ },
+ "Kim sotdi": {
+  "ru": "Кто продал",
+  "en": "Sold by"
  },
  "Kirish": {
   "ru": "Войти",
@@ -482,6 +694,10 @@
  "Kreatin": {
   "ru": "Креатин",
   "en": "Creatine"
+ },
+ "Kunlar tanlanmagan": {
+  "ru": "Дни не выбраны",
+  "en": "Days not chosen"
  },
  "Kunlarni tanlash": {
   "ru": "Выбрать дни",
@@ -511,6 +727,10 @@
   "ru": "L-карнитин",
   "en": "L-Carnitine"
  },
+ "Ma'lumot olinmadi": {
+  "ru": "Не удалось получить данные",
+  "en": "Could not load data"
+ },
  "Ma'lumot yo'q": {
   "ru": "Нет данных",
   "en": "No data"
@@ -523,6 +743,34 @@
   "ru": "Изменить данные",
   "en": "Edit details"
  },
+ "Mahsulot": {
+  "ru": "Продукт",
+  "en": "Food"
+ },
+ "Mahsulot qidirish": {
+  "ru": "Поиск продукта",
+  "en": "Search foods"
+ },
+ "Mahsulot qo'shish": {
+  "ru": "Добавить продукт",
+  "en": "Add food"
+ },
+ "Mahsulotlar bazasi": {
+  "ru": "База продуктов",
+  "en": "Food database"
+ },
+ "Mahsulotlar bazasi bo'sh": {
+  "ru": "База продуктов пуста",
+  "en": "The food database is empty"
+ },
+ "Mahsulotni o'chirish": {
+  "ru": "Удалить продукт",
+  "en": "Delete food"
+ },
+ "Mahsulotni tahrirlash": {
+  "ru": "Изменить продукт",
+  "en": "Edit food"
+ },
  "Maqsad": {
   "ru": "Цель",
   "en": "Goal"
@@ -531,13 +779,29 @@
   "ru": "Выберите цель: похудение или набор массы",
   "en": "Choose your goal: weight loss or muscle gain"
  },
+ "Mart": {
+  "ru": "Март",
+  "en": "March"
+ },
  "Mashqlar": {
   "ru": "Упражнения",
   "en": "Exercises"
  },
+ "Mashqlar hozir qo'shilmoqda — har bir mashg'ulotning mashqlari ro'yxati ishlab chiqilmoqda.": {
+  "ru": "Упражнения сейчас добавляются — список для каждой тренировки в разработке.",
+  "en": "Exercises are being added — the list for each workout is in progress."
+ },
  "Massa nabor": {
   "ru": "Набор массы",
   "en": "Muscle gain"
+ },
+ "May": {
+  "ru": "Май",
+  "en": "May"
+ },
+ "Men sotdim": {
+  "ru": "Я продал",
+  "en": "My sales"
  },
  "Mening buyurtmalarim": {
   "ru": "Мои заказы",
@@ -555,6 +819,10 @@
   "ru": "Клиент сканирует этот код — и открывается страница регистрации в приложении.",
   "en": "When a client scans this code, the app's sign-up page opens."
  },
+ "Mijozlar": {
+  "ru": "Клиенты",
+  "en": "Clients"
+ },
  "Moddalar almashinuvi (metabolizm)": {
   "ru": "Обмен веществ (метаболизм)",
   "en": "Metabolism"
@@ -567,9 +835,25 @@
   "ru": "Срок истёк",
   "en": "Expired"
  },
+ "Muddati o‘tdi": {
+  "ru": "Срок истёк",
+  "en": "Expired"
+ },
+ "Narxi": {
+  "ru": "Цена",
+  "en": "Price"
+ },
  "Navbatdagi": {
   "ru": "Следующий",
   "en": "Up next"
+ },
+ "Noma’lum": {
+  "ru": "Неизвестно",
+  "en": "Unknown"
+ },
+ "Nomi": {
+  "ru": "Название",
+  "en": "Name"
  },
  "Norma": {
   "ru": "Норма",
@@ -582,6 +866,14 @@
  "Normal oraliq: 18.5 – 24.9": {
   "ru": "Нормальный диапазон: 18.5 – 24.9",
   "en": "Normal range: 18.5 – 24.9"
+ },
+ "Noyabr": {
+  "ru": "Ноябрь",
+  "en": "November"
+ },
+ "O'chirilgan trener": {
+  "ru": "Удалённый тренер",
+  "en": "Deleted trainer"
  },
  "O'chirish": {
   "ru": "Удалить",
@@ -614,6 +906,10 @@
  "O'zingizga qulay variantni tanlang: Seshanba, Payshanba, Shanba yoki Dushanba, Chorshanba, Juma.": {
   "ru": "Выберите удобный вариант: вторник, четверг, суббота или понедельник, среда, пятница.",
   "en": "Pick the option that suits you: Tuesday, Thursday, Saturday or Monday, Wednesday, Friday."
+ },
+ "Oktabr": {
+  "ru": "Октябрь",
+  "en": "October"
  },
  "Olaman": {
   "ru": "Беру",
@@ -651,9 +947,17 @@
   "ru": "Напоминание о приёме пищи",
   "en": "Meal time reminder"
  },
+ "Ovqatlanish rejalari": {
+  "ru": "Планы питания",
+  "en": "Meal plans"
+ },
  "Ovqatlanish, mashq yoki reja bo'yicha savolingizni yozing.": {
   "ru": "Напишите вопрос о питании, тренировках или плане.",
   "en": "Ask a question about nutrition, training or your plan."
+ },
+ "Oxirgi 7 kun": {
+  "ru": "Последние 7 дней",
+  "en": "Last 7 days"
  },
  "Oxirgi o'lchovdan 7 kun o'tdi": {
   "ru": "С последнего взвешивания прошло 7 дней",
@@ -674,6 +978,10 @@
  "Oylik": {
   "ru": "Месячный",
   "en": "Monthly"
+ },
+ "Oylik hisobot": {
+  "ru": "Месячный отчёт",
+  "en": "Monthly report"
  },
  "Ozish": {
   "ru": "Похудение",
@@ -739,9 +1047,17 @@
   "ru": "Протеин",
   "en": "Protein"
  },
+ "QR kod": {
+  "ru": "QR-код",
+  "en": "QR code"
+ },
  "Qanot (orqa) + oyoq": {
   "ru": "Спина + ноги",
   "en": "Back + legs"
+ },
+ "Qaysi tovar": {
+  "ru": "Какой товар",
+  "en": "By product"
  },
  "Qayta kirish": {
   "ru": "Войти заново",
@@ -770,6 +1086,10 @@
  "Rasm": {
   "ru": "Фото",
   "en": "Photo"
+ },
+ "Rasm havolasi (ixtiyoriy)": {
+  "ru": "Ссылка на картинку (необязательно)",
+  "en": "Image link (optional)"
  },
  "Rasm juda katta ({0} KB). Boshqasini tanlang.": {
   "ru": "Фото слишком большое ({0} КБ). Выберите другое.",
@@ -814,6 +1134,10 @@
  "Rejadagi har mahal vaqtida eslatadi": {
   "ru": "Напомнит о каждом приёме пищи по плану",
   "en": "Reminds you at each meal time in your plan"
+ },
+ "Rejalar": {
+  "ru": "Планы",
+  "en": "Plans"
  },
  "Rejangizdagi mahalni belgilashni unutmang": {
   "ru": "Не забудьте отметить приём пищи из плана",
@@ -871,6 +1195,10 @@
   "ru": "Ожирение",
   "en": "Obesity"
  },
+ "Sentabr": {
+  "ru": "Сентябрь",
+  "en": "September"
+ },
  "Seshanba": {
   "ru": "Вторник",
   "en": "Tuesday"
@@ -887,9 +1215,29 @@
   "ru": "Ученик",
   "en": "Client"
  },
+ "Shogird yo'q": {
+  "ru": "Учеников нет",
+  "en": "No clients"
+ },
  "Shogird yozganda": {
   "ru": "Когда пишет ученик",
   "en": "When a client writes"
+ },
+ "Sotilgan narx − tan narx": {
+  "ru": "Цена продажи − себестоимость",
+  "en": "Sale price − cost price"
+ },
+ "Sotilgani": {
+  "ru": "Продано",
+  "en": "Sold"
+ },
+ "Sotuv hisobim": {
+  "ru": "Мой отчёт о продажах",
+  "en": "My sales report"
+ },
+ "Sotuv hisoboti": {
+  "ru": "Отчёт о продажах",
+  "en": "Sales report"
  },
  "Sozlamalar": {
   "ru": "Настройки",
@@ -898,6 +1246,10 @@
  "Sozlamalar (ko'rinish, bildirishnomalar)": {
   "ru": "Настройки (оформление, уведомления)",
   "en": "Settings (appearance, notifications)"
+ },
+ "Standart mahsulotlarni qo'shish": {
+  "ru": "Добавить стандартные продукты",
+  "en": "Add standard foods"
  },
  "Start": {
   "ru": "Старт",
@@ -975,6 +1327,14 @@
   "ru": "Оплачено: {0}",
   "en": "Paid: {0}"
  },
+ "To'langan: {0} · amal qiladi: {1}": {
+  "ru": "Оплачено: {0} · действует: {1}",
+  "en": "Paid: {0} · valid on: {1}"
+ },
+ "To'langan: {0} · keyingi to'lov: {1}": {
+  "ru": "Оплачено: {0} · следующая оплата: {1}",
+  "en": "Paid: {0} · next payment: {1}"
+ },
  "To'lov zalda qilinadi, abonementni trener belgilaydi.": {
   "ru": "Оплата в зале, абонемент оформляет тренер.",
   "en": "Payment is made at the gym; your trainer sets up the membership."
@@ -986,6 +1346,14 @@
  "To'lov zalda, naqd. Trener buyurtmani ko'radi va tayyorlab qo'yadi.": {
   "ru": "Оплата в зале, наличными. Тренер увидит заказ и подготовит его.",
   "en": "Pay in cash at the gym. Your trainer will see the order and get it ready."
+ },
+ "To'lovlar": {
+  "ru": "Оплаты",
+  "en": "Payments"
+ },
+ "To'lovlar zal bo'yicha ko'rinadi. Bosh admin sizni zalga biriktirishi kerak.": {
+  "ru": "Оплаты показываются по залу. Главный админ должен прикрепить вас к залу.",
+  "en": "Payments are shown per gym. The head admin needs to assign you to a gym."
  },
  "Trener": {
   "ru": "Тренер",
@@ -1014,6 +1382,14 @@
  "Trener maslahati": {
   "ru": "Совет тренера",
   "en": "Trainer's tip"
+ },
+ "Trener paneli • Diamond": {
+  "ru": "Панель тренера • Diamond",
+  "en": "Trainer panel • Diamond"
+ },
+ "Trener panelidan chiqmoqchimisiz?": {
+  "ru": "Выйти из панели тренера?",
+  "en": "Sign out of the trainer panel?"
  },
  "Trener reja biriktirganda": {
   "ru": "Когда тренер назначает план",
@@ -1063,6 +1439,10 @@
   "ru": "Выберите тренера",
   "en": "Choose your trainer"
  },
+ "Trenerlar haqi": {
+  "ru": "Оплата тренеров",
+  "en": "Trainer pay"
+ },
  "Trenerni almashtirish": {
   "ru": "Сменить тренера",
   "en": "Change trainer"
@@ -1070,6 +1450,10 @@
  "Trenerni tanlang": {
   "ru": "Выберите тренера",
   "en": "Choose a trainer"
+ },
+ "Trenersiz": {
+  "ru": "Без тренера",
+  "en": "No trainer"
  },
  "Tugagan": {
   "ru": "Закончился",
@@ -1079,6 +1463,10 @@
   "ru": "Понятно",
   "en": "Got it"
  },
+ "Uglevod": {
+  "ru": "Углеводы",
+  "en": "Carbs"
+ },
  "Umumiy o’zgarish": {
   "ru": "Общее изменение",
   "en": "Total change"
@@ -1086,6 +1474,14 @@
  "Uyda mashq": {
   "ru": "Тренировка дома",
   "en": "Home workout"
+ },
+ "Uyda mashq bekor qilindi": {
+  "ru": "Домашняя тренировка отменена",
+  "en": "Home workout canceled"
+ },
+ "Uyda mashq belgilangan": {
+  "ru": "Назначена тренировка дома",
+  "en": "Home workout set"
  },
  "Vaqtincha mumkin emas": {
   "ru": "Временно нельзя",
@@ -1150,6 +1546,18 @@
  "Xatolik yuz berdi": {
   "ru": "Произошла ошибка",
   "en": "Something went wrong"
+ },
+ "Xodim": {
+  "ru": "Сотрудник",
+  "en": "Staff"
+ },
+ "Xodimlar": {
+  "ru": "Сотрудники",
+  "en": "Staff"
+ },
+ "Xodimlar va shogirdlar": {
+  "ru": "Сотрудники и ученики",
+  "en": "Staff and clients"
  },
  "Yak": {
   "ru": "Вс",
@@ -1219,6 +1627,10 @@
   "ru": "Чтобы продлить, обратитесь к тренеру",
   "en": "Contact your trainer to renew"
  },
+ "Yanvar": {
+  "ru": "Январь",
+  "en": "January"
+ },
  "Yashirish": {
   "ru": "Скрыть",
   "en": "Hide"
@@ -1230,6 +1642,10 @@
  "Yelka + qo'lning orqasi (triceps)": {
   "ru": "Плечи + трицепс",
   "en": "Shoulders + triceps"
+ },
+ "Yog'": {
+  "ru": "Жиры",
+  "en": "Fat"
  },
  "Yopish": {
   "ru": "Закрыть",
@@ -1251,6 +1667,10 @@
   "ru": "Зал",
   "en": "Gym"
  },
+ "Zal biriktirilmagan": {
+  "ru": "Зал не назначен",
+  "en": "No gym assigned"
+ },
  "Zal kunlari": {
   "ru": "Дни зала",
   "en": "Gym days"
@@ -1262,6 +1682,10 @@
  "Zal kunlari tanlanmagan": {
   "ru": "Дни зала не выбраны",
   "en": "Gym days not chosen"
+ },
+ "Zalsiz": {
+  "ru": "Без зала",
+  "en": "No gym"
  },
  "aprel": {
   "ru": "апреля",
@@ -1339,6 +1763,10 @@
   "ru": "{0} мин назад",
   "en": "{0} min ago"
  },
+ "{0} dona": {
+  "ru": "{0} шт.",
+  "en": "{0} pcs"
+ },
  "{0} kg": {
   "ru": "{0} кг",
   "en": "{0} kg"
@@ -1387,6 +1815,10 @@
   "ru": "{0} мес.",
   "en": "{0} mo"
  },
+ "{0} shogird · {1} abonement · {2}": {
+  "ru": "{0} уч. · {1} абон. · {2}",
+  "en": "{0} clients · {1} memberships · {2}"
+ },
  "{0} sizning treneringiz bo'ladi. Oldingi trener sizni endi ko'rmaydi.": {
   "ru": "{0} станет вашим тренером. Прежний тренер больше не будет видеть ваши данные.",
   "en": "{0} will be your trainer. Your previous trainer will no longer see your data."
@@ -1398,6 +1830,38 @@
  "{0} stakan": {
   "ru": "{0} стакан",
   "en": "{0} glass"
+ },
+ "{0} ta": {
+  "ru": "{0}",
+  "en": "{0}"
+ },
+ "{0} ta abonement sotildi": {
+  "ru": "Продано абонементов: {0}",
+  "en": "{0} memberships sold"
+ },
+ "{0} ta asosiy mahsulotni (100 g uchun KBJU) bir bosishda qo'shing.": {
+  "ru": "Добавьте {0} основных продуктов (КБЖУ на 100 г) одним нажатием.",
+  "en": "Add {0} basic foods (macros per 100 g) with one tap."
+ },
+ "{0} ta buyurtma": {
+  "ru": "Заказов: {0}",
+  "en": "{0} orders"
+ },
+ "{0} ta buyurtma berildi": {
+  "ru": "Выдано заказов: {0}",
+  "en": "{0} orders handed over"
+ },
+ "{0} ta buyurtmada tan narx yo'q — foydaga qo'shilmadi": {
+  "ru": "В {0} заказах нет себестоимости — в прибыль не включены",
+  "en": "{0} orders have no cost price — not included in profit"
+ },
+ "{0} ta mahsulot • O — oqsil, Y — yog', U — uglevod (100 g uchun)": {
+  "ru": "Продуктов: {0} • Б — белки, Ж — жиры, У — углеводы (на 100 г)",
+  "en": "{0} foods • P — protein, F — fat, C — carbs (per 100 g)"
+ },
+ "{0} ta shogird hali zal kunlarini tanlamagan.": {
+  "ru": "Учеников, не выбравших дни зала: {0}.",
+  "en": "{0} clients haven't chosen gym days yet."
  },
  "{0} vaqti o‘tdi": {
   "ru": "{0}: время прошло",

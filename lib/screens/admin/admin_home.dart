@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/change_password.dart';
@@ -42,9 +43,9 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
   Future<void> _signOut() async {
     final ok = await confirm(
       context,
-      title: 'Chiqish',
-      message: 'Trener panelidan chiqmoqchimisiz?',
-      ok: 'Chiqish',
+      title: tr('Chiqish'),
+      message: tr('Trener panelidan chiqmoqchimisiz?'),
+      ok: tr('Chiqish'),
       destructive: true,
     );
     if (ok) await AuthService.signOut();
@@ -69,9 +70,9 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(titles[tab]),
+            Text(tr(titles[tab])),
             Text(
-              me.isOwner ? 'Bosh admin • Diamond' : 'Trener paneli • Diamond',
+              me.isOwner ? tr('Bosh admin • Diamond') : tr('Trener paneli • Diamond'),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -81,21 +82,21 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         ),
         actions: [
           IconButton(
-            tooltip: 'QR kod',
+            tooltip: tr('QR kod'),
             onPressed: () => showJoinQr(context),
             icon: const Icon(Icons.qr_code_2_outlined),
           ),
           IconButton(
-            tooltip: 'Sozlamalar',
+            tooltip: tr('Sozlamalar'),
             onPressed: () => showSettings(context, student: false),
             icon: const Icon(Icons.tune),
           ),
           IconButton(
-            tooltip: "Parolni o'zgartirish",
+            tooltip: tr("Parolni o'zgartirish"),
             onPressed: () => showChangePassword(context),
             icon: const Icon(Icons.key_outlined),
           ),
-          IconButton(tooltip: 'Chiqish', onPressed: _signOut, icon: const Icon(Icons.logout)),
+          IconButton(tooltip: tr('Chiqish'), onPressed: _signOut, icon: const Icon(Icons.logout)),
           const SizedBox(width: 4),
         ],
       ),
@@ -123,19 +124,19 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         // Faqat ingichka chiziqli ikonkalar (dizayn qoidasi)
         destinations: [
-          const NavigationDestination(icon: Icon(Icons.people_outline), label: 'Mijozlar'),
-          const NavigationDestination(
-              icon: Icon(Icons.card_membership_outlined), label: 'Abonement'),
-          const NavigationDestination(icon: Icon(Icons.fitness_center_outlined), label: 'Zal'),
-          const NavigationDestination(icon: Icon(Icons.menu_book_outlined), label: 'Rejalar'),
-          const NavigationDestination(icon: Icon(Icons.egg_alt_outlined), label: 'Ovqat'),
-          const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
+          NavigationDestination(icon: const Icon(Icons.people_outline), label: tr('Mijozlar')),
+          NavigationDestination(
+              icon: const Icon(Icons.card_membership_outlined), label: tr('Abonement')),
+          NavigationDestination(icon: const Icon(Icons.fitness_center_outlined), label: tr('Zal')),
+          NavigationDestination(icon: const Icon(Icons.menu_book_outlined), label: tr('Rejalar')),
+          NavigationDestination(icon: const Icon(Icons.egg_alt_outlined), label: tr('Ovqat')),
+          NavigationDestination(icon: const Icon(Icons.storefront_outlined), label: tr("Do'kon")),
           NavigationDestination(
             icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
-            label: 'Eslatma',
+            label: tr('Eslatma'),
           ),
           if (me.isOwner)
-            const NavigationDestination(icon: Icon(Icons.badge_outlined), label: 'Xodimlar'),
+            NavigationDestination(icon: const Icon(Icons.badge_outlined), label: tr('Xodimlar')),
         ],
       ),
     );

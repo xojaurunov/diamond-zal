@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/tr.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
 import '../models/subscription.dart';
@@ -26,10 +27,10 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
     final t = Theme.of(context).textTheme;
     final me = widget.me;
     if (!me.isOwner && (me.gymId ?? '').isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.payments_outlined,
-        title: 'Zal biriktirilmagan',
-        subtitle: "To'lovlar zal bo'yicha ko'rinadi. Bosh admin sizni zalga biriktirishi kerak.",
+        title: tr('Zal biriktirilmagan'),
+        subtitle: tr("To'lovlar zal bo'yicha ko'rinadi. Bosh admin sizni zalga biriktirishi kerak."),
       );
     }
     return StreamBuilder<List<Membership>>(
@@ -37,7 +38,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       builder: (context, snap) {
         if (snap.hasError) {
           return EmptyState(
-              icon: Icons.error_outline, title: "Ma'lumot olinmadi", subtitle: '${snap.error}');
+              icon: Icons.error_outline, title: tr("Ma'lumot olinmadi"), subtitle: '${snap.error}');
         }
         if (!snap.hasData) return const Center(child: CircularProgressIndicator());
         // tugashi yaqini (va o'tgani) tepada
@@ -45,7 +46,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         final list = [...snap.data!]
           ..sort((a, b) => (a.expiresAt ?? far).compareTo(b.expiresAt ?? far));
         if (list.isEmpty) {
-          return const EmptyState(icon: Icons.payments_outlined, title: "Hali to'lov yo'q");
+          return EmptyState(icon: Icons.payments_outlined, title: tr("Hali to'lov yo'q"));
         }
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xl),
@@ -60,7 +61,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                       UserAvatar(name: m.name),
                       const SizedBox(width: AppSpace.md),
                       Expanded(
-                        child: Text(m.name.isEmpty ? 'Ismsiz' : m.name,
+                        child: Text(m.name.isEmpty ? tr('Ismsiz') : m.name,
                             style: t.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
                       ),
                       const SizedBox(width: AppSpace.sm),
@@ -72,8 +73,11 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                       style: t.bodyMedium,
                     ),
                     Text(
-                      "To'langan: ${fmtDay(m.paidDate)} · "
-                      '${m.days > 0 ? 'amal qiladi: ${fmtDay(m.expiresAt)}' : 'keyingi to\'lov: ${fmtDay(m.expiresAt)}'}',
+                      m.days > 0
+                          ? trf("To'langan: {0} · amal qiladi: {1}",
+                              [fmtDay(m.paidDate), fmtDay(m.expiresAt)])
+                          : trf("To'langan: {0} · keyingi to'lov: {1}",
+                              [fmtDay(m.paidDate), fmtDay(m.expiresAt)]),
                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     ),
                   ]),

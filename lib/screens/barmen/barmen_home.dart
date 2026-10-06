@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lazy_stack.dart';
@@ -28,9 +29,9 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
   Future<void> _signOut() async {
     final ok = await confirm(
       context,
-      title: 'Chiqish',
-      message: 'Barmen panelidan chiqmoqchimisiz?',
-      ok: 'Chiqish',
+      title: tr('Chiqish'),
+      message: tr('Barmen panelidan chiqmoqchimisiz?'),
+      ok: tr('Chiqish'),
       destructive: true,
     );
     if (ok) await AuthService.signOut();
@@ -48,9 +49,9 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(_titles[_tab]),
+            Text(tr(_titles[_tab])),
             Text(
-              'Barmen • Diamond',
+              tr('Barmen • Diamond'),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -60,16 +61,16 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
         ),
         actions: [
           IconButton(
-            tooltip: 'Sozlamalar',
+            tooltip: tr('Sozlamalar'),
             onPressed: () => showSettings(context, student: false),
             icon: const Icon(Icons.tune),
           ),
           IconButton(
-            tooltip: "Parolni o'zgartirish",
+            tooltip: tr("Parolni o'zgartirish"),
             onPressed: () => showChangePassword(context),
             icon: const Icon(Icons.key_outlined),
           ),
-          IconButton(tooltip: 'Chiqish', onPressed: _signOut, icon: const Icon(Icons.logout)),
+          IconButton(tooltip: tr('Chiqish'), onPressed: _signOut, icon: const Icon(Icons.logout)),
           const SizedBox(width: 4),
         ],
       ),
@@ -88,13 +89,13 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
         destinations: [
-          const NavigationDestination(icon: Icon(Icons.storefront_outlined), label: "Do'kon"),
-          const NavigationDestination(icon: Icon(Icons.payments_outlined), label: 'Hisobim'),
-          const NavigationDestination(
-              icon: Icon(Icons.card_membership_outlined), label: "To'lovlar"),
+          NavigationDestination(icon: const Icon(Icons.storefront_outlined), label: tr("Do'kon")),
+          NavigationDestination(icon: const Icon(Icons.payments_outlined), label: tr('Hisobim')),
+          NavigationDestination(
+              icon: const Icon(Icons.card_membership_outlined), label: tr("To'lovlar")),
           NavigationDestination(
             icon: FeedBadge(user: me, icon: const Icon(Icons.notifications_none)),
-            label: 'Eslatma',
+            label: tr('Eslatma'),
           ),
         ],
       ),

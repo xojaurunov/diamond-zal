@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/gym.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
@@ -37,26 +38,26 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
           children: [
-            Text('Bugun · ${weekdayNames[today]}', style: t.titleLarge),
+            Text(trf('Bugun · {0}', [tr(weekdayNames[today] ?? '')]), style: t.titleLarge),
             const SizedBox(height: AppSpace.md),
-            SectionHeader('Bugun zalga keladi',
+            SectionHeader(tr('Bugun zalga keladi'),
                 trailing: Pill(text: '${coming.length}', color: AppColors.accent)),
-            if (coming.isEmpty) _empty(context, "Bugun hech kimning mashg'uloti yo'q"),
+            if (coming.isEmpty) _empty(context, tr("Bugun hech kimning mashg'uloti yo'q")),
             for (final u in coming) _ClientGymTile(client: u, today: today, adminId: widget.admin.id),
             const SizedBox(height: AppSpace.lg),
-            SectionHeader('Bugun uyda',
+            SectionHeader(tr('Bugun uyda'),
                 trailing: Pill(text: '${home.length}', color: AppColors.water)),
-            if (home.isEmpty) _empty(context, "Hech kim uyda mashq qilmaydi"),
+            if (home.isEmpty) _empty(context, tr("Hech kim uyda mashq qilmaydi")),
             for (final u in home) _ClientGymTile(client: u, today: today, adminId: widget.admin.id),
             const SizedBox(height: AppSpace.lg),
-            const SectionHeader('Hamma shogirdlar jadvali'),
+            SectionHeader(tr('Hamma shogirdlar jadvali')),
             for (final u in all)
               _ClientGymTile(client: u, today: today, adminId: widget.admin.id, showWeek: true),
             if (noDays.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpace.sm),
                 child: Text(
-                  "${noDays.length} ta shogird hali zal kunlarini tanlamagan.",
+                  trf("{0} ta shogird hali zal kunlarini tanlamagan.", [noDays.length]),
                   style: t.bodySmall?.copyWith(color: AppColors.warning),
                 ),
               ),
@@ -68,8 +69,8 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
                 const SizedBox(width: AppSpace.md),
                 Expanded(
                   child: Text(
-                    "Mashqlar hozir qo'shilmoqda — har bir mashg'ulotning mashqlari ro'yxati "
-                    "ishlab chiqilmoqda.",
+                    tr("Mashqlar hozir qo'shilmoqda — har bir mashg'ulotning mashqlari ro'yxati "
+                    "ishlab chiqilmoqda."),
                     style: t.bodyMedium,
                   ),
                 ),
@@ -103,10 +104,10 @@ class _ClientGymTile extends StatelessWidget {
     try {
       await Db.setHomeWorkout(client.id, isHome ? null : todayKey());
       if (context.mounted) {
-        showSnack(context, isHome ? 'Uyda mashq bekor qilindi' : 'Bugun uyda mashq belgilandi');
+        showSnack(context, isHome ? tr('Uyda mashq bekor qilindi') : tr('Bugun uyda mashq belgilandi'));
       }
     } catch (e) {
-      if (context.mounted) showSnack(context, "Bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -114,10 +115,10 @@ class _ClientGymTile extends StatelessWidget {
     try {
       await Db.markAttendance(client.id, todayKey(), !present, adminId);
       if (context.mounted) {
-        showSnack(context, present ? 'Davomat bekor qilindi' : 'Bugun keldi deb belgilandi');
+        showSnack(context, present ? tr('Davomat bekor qilindi') : tr('Bugun keldi deb belgilandi'));
       }
     } catch (e) {
-      if (context.mounted) showSnack(context, "Bo'lmadi: $e");
+      if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
     }
   }
 
@@ -143,10 +144,10 @@ class _ClientGymTile extends StatelessWidget {
                 Text(name, style: t.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
                 Text(
                   !validGymDays(days)
-                      ? 'Kunlar tanlanmagan'
+                      ? tr('Kunlar tanlanmagan')
                       : isHome
-                          ? 'Bugun uyda mashq'
-                          : (todayWorkout ?? 'Bugun dam olish'),
+                          ? tr('Bugun uyda mashq')
+                          : (todayWorkout == null ? tr('Bugun dam olish') : tr(todayWorkout)),
                   style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                 ),
               ]),
@@ -157,7 +158,7 @@ class _ClientGymTile extends StatelessWidget {
             Wrap(spacing: 6, runSpacing: 6, children: [
               for (final d in days)
                 Pill(
-                  text: '${weekdayShort[d]} · ${workoutGroups[days.indexOf(d)].split(' ').first}',
+                  text: '${tr(weekdayShort[d] ?? '')} · ${tr(workoutGroups[days.indexOf(d)]).split(' ').first}',
                   color: d == today ? AppColors.accent : AppColors.textMuted,
                 ),
             ]),
@@ -183,10 +184,10 @@ class _ClientGymTile extends StatelessWidget {
                     Expanded(
                       child: Text(
                         isHome
-                            ? 'Uyda mashq belgilangan'
+                            ? tr('Uyda mashq belgilangan')
                             : wrote
-                                ? 'Chatda bugun kela olmasligini yozdi'
-                                : 'Chatda "bugun kelolmayman" deb yozsa, uyda mashq belgilash mumkin',
+                                ? tr('Chatda bugun kela olmasligini yozdi')
+                                : tr('Chatda "bugun kelolmayman" deb yozsa, uyda mashq belgilash mumkin'),
                         style: t.bodySmall?.copyWith(
                             color: wrote || isHome ? AppColors.warning : AppColors.textFaint),
                       ),
@@ -196,7 +197,7 @@ class _ClientGymTile extends StatelessWidget {
                       style: OutlinedButton.styleFrom(minimumSize: const Size(0, 40)),
                       onPressed: isHome || wrote ? () => _toggleHome(context, isHome) : null,
                       icon: Icon(isHome ? Icons.close : Icons.home_outlined, size: 18),
-                      label: Text(isHome ? 'Bekor' : 'Uyda mashq'),
+                      label: Text(isHome ? tr('Bekor') : tr('Uyda mashq')),
                     ),
                   ]),
                 );
@@ -213,7 +214,7 @@ class _ClientGymTile extends StatelessWidget {
                   child: Row(children: [
                     Expanded(
                       child: Text(
-                        present ? 'Bugun keldi deb belgilangan' : 'Hali kelgani belgilanmagan',
+                        present ? tr('Bugun keldi deb belgilangan') : tr('Hali kelgani belgilanmagan'),
                         style: t.bodySmall
                             ?.copyWith(color: present ? AppColors.success : AppColors.textFaint),
                       ),
@@ -223,7 +224,7 @@ class _ClientGymTile extends StatelessWidget {
                       style: OutlinedButton.styleFrom(minimumSize: const Size(0, 40)),
                       onPressed: () => _toggleAttendance(context, present),
                       icon: Icon(present ? Icons.close : Icons.check, size: 18),
-                      label: Text(present ? 'Bekor' : 'Keldi'),
+                      label: Text(present ? tr('Bekor') : tr('Keldi')),
                     ),
                   ]),
                 );

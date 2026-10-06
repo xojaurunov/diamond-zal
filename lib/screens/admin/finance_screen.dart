@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/finance.dart';
 import '../../models/models.dart';
 import '../../models/shop.dart';
@@ -51,7 +52,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
     final now = DateTime.now();
     final isCurrent = _month.year == now.year && _month.month == now.month;
     return Scaffold(
-      appBar: AppBar(title: const Text('Oylik hisobot')),
+      appBar: AppBar(title: Text(tr('Oylik hisobot'))),
       body: StreamBuilder<List<(String, Subscription)>>(
         stream: _subs,
         builder: (context, sSnap) => StreamBuilder<List<ShopOrder>>(
@@ -69,7 +70,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                     if (err != null) {
                       return EmptyState(
                         icon: Icons.error_outline,
-                        title: "Ma'lumot olinmadi",
+                        title: tr("Ma'lumot olinmadi"),
                         subtitle: '$err',
                       );
                     }
@@ -104,8 +105,8 @@ class _FinanceScreenState extends State<FinanceScreen> {
                       ..sort((a, b) => (byTrainer[b]!.sums.values.fold(0, (x, y) => x + y))
                           .compareTo(byTrainer[a]!.sums.values.fold(0, (x, y) => x + y)));
                     String trainerName(String id) => id.isEmpty
-                        ? 'Trenersiz'
-                        : (staff.where((s) => s.id == id).firstOrNull?.name ?? "O'chirilgan trener");
+                        ? tr('Trenersiz')
+                        : (staff.where((s) => s.id == id).firstOrNull?.name ?? tr("O'chirilgan trener"));
                     final orders =
                         oSnap.data!.where((o) => _gym == null || o.gymId == _gym).toList();
                     final r = MonthlyReport.build(
@@ -125,7 +126,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                             icon: const Icon(Icons.chevron_left),
                           ),
                           Expanded(
-                            child: Text('${_oylar[_month.month - 1]} ${_month.year}',
+                            child: Text('${tr(_oylar[_month.month - 1])} ${_month.year}',
                                 textAlign: TextAlign.center, style: t.titleLarge),
                           ),
                           IconButton(
@@ -137,7 +138,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           const SizedBox(height: AppSpace.sm),
                           Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.sm, children: [
                             ChoiceChip(
-                              label: const Text('Hamma zallar'),
+                              label: Text(tr('Hamma zallar')),
                               selected: _gym == null,
                               onSelected: (_) => setState(() => _gym = null),
                             ),
@@ -148,7 +149,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                 onSelected: (_) => setState(() => _gym = g.id),
                               ),
                             ChoiceChip(
-                              label: const Text('Zalsiz'),
+                              label: Text(tr('Zalsiz')),
                               selected: _gym == '',
                               onSelected: (_) => setState(() => _gym = ''),
                             ),
@@ -158,7 +159,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         _Card(
                           icon: Icons.account_balance_wallet_outlined,
                           color: AppColors.accent,
-                          title: 'Jami tushum',
+                          title: tr('Jami tushum'),
                           value: MonthlyReport.money(r.income),
                           feature: true,
                         ),
@@ -166,33 +167,33 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         _Card(
                           icon: Icons.card_membership_outlined,
                           color: AppColors.water,
-                          title: 'Abonement',
+                          title: tr('Abonement'),
                           value: MonthlyReport.money(r.subsSums),
-                          subtitle: '${r.subsCount} ta abonement sotildi',
+                          subtitle: trf('{0} ta abonement sotildi', [r.subsCount]),
                         ),
                         const SizedBox(height: AppSpace.md),
                         _Card(
                           icon: Icons.storefront_outlined,
                           color: AppColors.protein,
-                          title: "Do'kon tushumi",
+                          title: tr("Do'kon tushumi"),
                           value: MonthlyReport.money(r.shopSums),
-                          subtitle: '${r.ordersCount} ta buyurtma berildi',
+                          subtitle: trf('{0} ta buyurtma berildi', [r.ordersCount]),
                         ),
                         const SizedBox(height: AppSpace.md),
                         _Card(
                           icon: Icons.trending_up,
                           color: AppColors.success,
-                          title: "Do'kon foydasi",
+                          title: tr("Do'kon foydasi"),
                           value: MonthlyReport.money(r.profit),
                           subtitle: r.noCostOrders == 0
-                              ? 'Sotilgan narx − tan narx'
-                              : '${r.noCostOrders} ta buyurtmada tan narx yo\'q — '
-                                  'foydaga qo\'shilmadi',
+                              ? tr('Sotilgan narx − tan narx')
+                              : trf('{0} ta buyurtmada tan narx yo\'q — '
+                                  'foydaga qo\'shilmadi', [r.noCostOrders]),
                         ),
                         const SizedBox(height: AppSpace.xl),
                         SectionHeader(
-                          'Trenerlar haqi',
-                          eyebrow: 'Abonement tushumidan ulush',
+                          tr('Trenerlar haqi'),
+                          eyebrow: tr('Abonement tushumidan ulush'),
                           trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                             IconButton(
                               onPressed: _pct > 0 ? () => _setPct(_pct - 5) : null,
@@ -206,7 +207,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           ]),
                         ),
                         if (trainerIds.isEmpty)
-                          Text("Shogird yo'q",
+                          Text(tr("Shogird yo'q"),
                               style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
                         for (final id in trainerIds)
                           Padding(
@@ -221,9 +222,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                         Text(trainerName(id), style: t.titleSmall),
                                         const SizedBox(height: 2),
                                         Text(
-                                          '${byTrainer[id]!.clients} shogird · '
-                                          '${byTrainer[id]!.subsCount} abonement · '
-                                          '${MonthlyReport.money(byTrainer[id]!.sums)}',
+                                          trf('{0} shogird · '
+                                          '{1} abonement · '
+                                          '{2}', [byTrainer[id]!.clients, byTrainer[id]!.subsCount, MonthlyReport.money(byTrainer[id]!.sums)]),
                                           style:
                                               t.bodySmall?.copyWith(color: AppColors.textMuted),
                                         ),
@@ -239,10 +240,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           ),
                         const SizedBox(height: AppSpace.lg),
                         Text(
-                          "Abonement to'langan sanasi bo'yicha, do'kon — buyurtma berilgan "
+                          tr("Abonement to'langan sanasi bo'yicha, do'kon — buyurtma berilgan "
                           "sanasi bo'yicha hisoblanadi. Foyda tovarning hozirgi tan narxidan. "
                           "Trener haqi — shogirdlari to'lagan abonementning tanlangan foizi; "
-                          'foiz shu qurilmada eslab qolinadi.',
+                          'foiz shu qurilmada eslab qolinadi.'),
                           style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                         ),
                       ],

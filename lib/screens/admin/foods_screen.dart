@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -27,7 +28,7 @@ class FoodsScreen extends StatefulWidget {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setD) => AlertDialog(
-          title: Text(f == null ? "Mahsulot qo'shish" : 'Mahsulotni tahrirlash'),
+          title: Text(f == null ? tr("Mahsulot qo'shish") : tr('Mahsulotni tahrirlash')),
           content: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               Row(children: [
@@ -40,7 +41,7 @@ class FoodsScreen extends StatefulWidget {
                     autofocus: f == null,
                     textCapitalization: TextCapitalization.sentences,
                     onChanged: (_) => setD(() {}),
-                    decoration: const InputDecoration(labelText: 'Nomi'),
+                    decoration: InputDecoration(labelText: tr('Nomi')),
                   ),
                 ),
               ]),
@@ -49,35 +50,35 @@ class FoodsScreen extends StatefulWidget {
                 controller: img,
                 keyboardType: TextInputType.url,
                 onChanged: (_) => setD(() {}),
-                decoration: const InputDecoration(
-                  labelText: 'Rasm havolasi (ixtiyoriy)',
+                decoration: InputDecoration(
+                  labelText: tr('Rasm havolasi (ixtiyoriy)'),
                   hintText: 'https://...',
-                  helperText: "Bo'sh bo'lsa, nomiga qarab rasm tanlanadi",
+                  helperText: tr("Bo'sh bo'lsa, nomiga qarab rasm tanlanadi"),
                 ),
               ),
               const SizedBox(height: 16),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text('100 gramm uchun:', style: TextStyle(fontWeight: FontWeight.w600)),
+                child: Text(tr('100 gramm uchun:'), style: const TextStyle(fontWeight: FontWeight.w600)),
               ),
               const SizedBox(height: AppSpace.md),
-              field(kcal, 'Kaloriya', 'kkal'),
+              field(kcal, tr('Kaloriya'), 'kkal'),
               const SizedBox(height: AppSpace.md),
               Row(children: [
-                Expanded(child: field(p, 'Oqsil', 'g')),
+                Expanded(child: field(p, tr('Oqsil'), 'g')),
                 const SizedBox(width: 8),
-                Expanded(child: field(fat, "Yog'", 'g')),
+                Expanded(child: field(fat, tr("Yog'"), 'g')),
                 const SizedBox(width: 8),
-                Expanded(child: field(c, 'Uglevod', 'g')),
+                Expanded(child: field(c, tr('Uglevod'), 'g')),
               ]),
             ]),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Bekor')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('Bekor'))),
             FilledButton(
               style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Saqlash'),
+              child: Text(tr('Saqlash')),
             ),
           ],
         ),
@@ -119,9 +120,9 @@ class _FoodsScreenState extends State<FoodsScreen> {
   Future<void> _delete(Food f) async {
     final ok = await confirm(
       context,
-      title: "Mahsulotni o'chirish",
-      message: '"${f.name}" bazadan o\'chirilsinmi? Mavjud rejalarga ta\'sir qilmaydi.',
-      ok: "O'chirish",
+      title: tr("Mahsulotni o'chirish"),
+      message: trf('"{0}" bazadan o\'chirilsinmi? Mavjud rejalarga ta\'sir qilmaydi.', [f.name]),
+      ok: tr("O'chirish"),
       destructive: true,
     );
     if (ok) await Db.deleteFood(f.id);
@@ -135,7 +136,7 @@ class _FoodsScreenState extends State<FoodsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => FoodsScreen.edit(context),
         icon: const Icon(Icons.add),
-        label: const Text('Mahsulot'),
+        label: Text(tr('Mahsulot')),
       ),
       body: StreamBuilder<List<Food>>(
         stream: _stream,
@@ -145,13 +146,13 @@ class _FoodsScreenState extends State<FoodsScreen> {
           if (foods.isEmpty) {
             return EmptyState(
               icon: Icons.egg_alt_outlined,
-              title: "Mahsulotlar bazasi bo'sh",
-              subtitle: "${defaultFoods.length} ta asosiy mahsulotni (100 g uchun KBJU) "
-                  "bir bosishda qo'shing.",
+              title: tr("Mahsulotlar bazasi bo'sh"),
+              subtitle: trf("{0} ta asosiy mahsulotni (100 g uchun KBJU) "
+                  "bir bosishda qo'shing.", [defaultFoods.length]),
               action: FilledButton.icon(
                 onPressed: _seeding ? null : _seed,
                 icon: const Icon(Icons.download_outlined),
-                label: const Text("Standart mahsulotlarni qo'shish"),
+                label: Text(tr("Standart mahsulotlarni qo'shish")),
               ),
             );
           }
@@ -162,9 +163,9 @@ class _FoodsScreenState extends State<FoodsScreen> {
             children: [
               TextField(
                 onChanged: (v) => setState(() => _query = v),
-                decoration: const InputDecoration(
-                  hintText: 'Mahsulot qidirish',
-                  prefixIcon: Icon(Icons.search),
+                decoration: InputDecoration(
+                  hintText: tr('Mahsulot qidirish'),
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
               Padding(
@@ -172,13 +173,13 @@ class _FoodsScreenState extends State<FoodsScreen> {
                 child: Row(children: [
                   Expanded(
                     child: Text(
-                      "${list.length} ta mahsulot • O — oqsil, Y — yog', U — uglevod (100 g uchun)",
+                      trf("{0} ta mahsulot • O — oqsil, Y — yog', U — uglevod (100 g uchun)", [list.length]),
                       style: t.bodySmall?.copyWith(color: s.onSurfaceVariant),
                     ),
                   ),
                   TextButton(
                     onPressed: () => showImageCredits(context),
-                    child: const Text('Rasm manbalari'),
+                    child: Text(tr('Rasm manbalari')),
                   ),
                 ]),
               ),
@@ -223,7 +224,7 @@ class _FoodTile extends StatelessWidget {
             Pill(text: 'Y ${fmtNum(f.fat)}', color: AppColors.warning),
             Pill(text: 'U ${fmtNum(f.carbs)}', color: AppColors.water),
             // 0 kkal kiritilgan mahsulot rejaga qo'shilsa hisob noto'g'ri chiqadi
-            if (f.kcal <= 0) Pill(text: 'Kaloriya kiritilmagan', color: AppColors.danger),
+            if (f.kcal <= 0) Pill(text: tr('Kaloriya kiritilmagan'), color: AppColors.danger),
           ]),
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -232,7 +233,7 @@ class _FoodTile extends StatelessWidget {
             Text('kkal', style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
           ]),
           IconButton(
-            tooltip: "O'chirish",
+            tooltip: tr("O'chirish"),
             onPressed: onDelete,
             icon: const Icon(Icons.delete_outline),
           ),
