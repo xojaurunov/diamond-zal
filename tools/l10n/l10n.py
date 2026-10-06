@@ -200,8 +200,8 @@ def candidate(s, group):
         return False  # allaqachon o'ralgan
     if before.endswith('[') and after.startswith(']'):
         return False  # d['maydon']
-    if after.startswith(':') and not exprs and re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", key):
-        return False  # {'maydon': ...}
+    if after.startswith(':') and not exprs and re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", key)             and (before.endswith('{') or before.endswith(',')):
+        return False  # {'maydon': ...} (shartli ifodadagi `? 'a' : 'b'` emas)
     if re.search(r"(collection|doc|where|orderBy|RegExp|getString|getBool|getInt|setString|setBool|setInt|"
                  r"getStringList|setStringList|remove|startsWith|endsWith|ValueKey|Key|asset|AssetImage|"
                  r"getLocation|debugPrint|Exception|StateError|ArgumentError|fromEnvironment|"
@@ -420,6 +420,8 @@ def enclosing_const(s, off):
         if not mm or s[j + mm.start()] == ';':
             continue
         o = j + mm.start()
+        if '=' in s[j:o]:
+            continue  # e'lon (`const x = ...`) — `const` olib tashlansa kod buziladi; qo'lda ko'riladi
         e = match_any(s, o)
         if e is not None and o <= off <= e or k <= off <= o:
             return k

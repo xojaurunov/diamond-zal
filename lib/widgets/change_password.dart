@@ -97,7 +97,7 @@ class _ChangePasswordSheetState extends State<_ChangePasswordSheet> {
           child: TextButton.icon(
             onPressed: () => setState(() => _show = !_show),
             icon: Icon(_show ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 18),
-            label: Text(_show ? 'Yashirish' : tr("Ko'rsatish")),
+            label: Text(_show ? tr('Yashirish') : tr("Ko'rsatish")),
           ),
         ),
         if (_error != null)

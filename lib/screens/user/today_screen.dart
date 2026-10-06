@@ -150,7 +150,7 @@ class _Header extends StatelessWidget {
             Eyebrow(uzDate(DateTime.now())),
             const SizedBox(height: AppSpace.sm),
             Text(
-              first.isEmpty ? 'Salom' : trf('Salom, {0}', [first]),
+              first.isEmpty ? tr('Salom') : trf('Salom, {0}', [first]),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: t.headlineLarge,

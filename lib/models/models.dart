@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/tr.dart';
 
 /// Reja kategoriyalari — shogird maqsadlari bilan bir xil nomlar (AppUser.goalLabel, Plan.category)
 const planCategories = ['Ozish', 'Massa nabor'];
@@ -119,12 +120,12 @@ class AppUser {
   /// Norma qanday hisoblangani — foydalanuvchiga ko'rsatish uchun: "80 kg × 33 − 20%"
   String get kcalFormula {
     final w = weight == weight.roundToDouble() ? '${weight.round()}' : '$weight';
-    final base = '$w kg × $kcalPerKg';
+    final base = trf('{0} kg × {1}', [w, kcalPerKg]);
     if (isGain) return '$base + 10%';
     final deficit = bmi >= 23 ? ' − 20%' : '';
     final raw = bmi >= 23 ? weight * kcalPerKg * 0.8 : weight * kcalPerKg;
     final min = gender == 'male' ? 1500 : 1200;
-    return raw < min ? '$base$deficit (minimum $min)' : '$base$deficit';
+    return raw < min ? trf('{0}{1} (minimum {2})', [base, deficit, min]) : '$base$deficit';
   }
 
   double get bmi => height > 0 ? weight / ((height / 100) * (height / 100)) : 0;

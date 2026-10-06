@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../l10n/tr.dart';
 import '../theme.dart';
 import 'ui.dart';
 
@@ -11,10 +12,10 @@ const joinUrl = 'https://kotta-qani-09111753.web.app/ilova/';
 Future<void> showJoinQr(BuildContext context) => showSheet<void>(
       context,
       Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('Ro\'yxatdan o\'tish QR kodi', style: Theme.of(context).textTheme.titleLarge),
+        Text(tr('Ro\'yxatdan o\'tish QR kodi'), style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: AppSpace.sm),
         Text(
-          'Mijoz shu kodni skanerlasa, ilovaga ro\'yxatdan o\'tish sahifasi ochiladi.',
+          tr('Mijoz shu kodni skanerlasa, ilovaga ro\'yxatdan o\'tish sahifasi ochiladi.'),
           textAlign: TextAlign.center,
           style: TextStyle(color: AppColors.textMuted),
         ),
@@ -33,10 +34,10 @@ Future<void> showJoinQr(BuildContext context) => showSheet<void>(
           child: OutlinedButton.icon(
             onPressed: () async {
               await Clipboard.setData(const ClipboardData(text: joinUrl));
-              if (context.mounted) showSnack(context, 'Havola nusxalandi');
+              if (context.mounted) showSnack(context, tr('Havola nusxalandi'));
             },
             icon: const Icon(Icons.copy_outlined),
-            label: const Text('Havolani nusxalash'),
+            label: Text(tr('Havolani nusxalash')),
           ),
         ),
         const SizedBox(height: AppSpace.sm),

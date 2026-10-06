@@ -140,7 +140,7 @@ class ProfileScreen extends StatelessWidget {
                   child: StatTile(
                     icon: male ? Icons.male : Icons.female,
                     label: tr('Jins'),
-                    value: male ? 'Erkak' : tr('Ayol'),
+                    value: male ? tr('Erkak') : tr('Ayol'),
                     color: AppColors.protein,
                   ),
                 ),
@@ -180,7 +180,7 @@ class ProfileScreen extends StatelessWidget {
                   child: StatTile(
                     icon: user.isGain ? Icons.trending_up : Icons.trending_down,
                     label: tr('Maqsad'),
-                    value: user.goalLabel.isEmpty ? '—' : user.goalLabel,
+                    value: user.goalLabel.isEmpty ? '—' : tr(user.goalLabel),
                     color: user.isGain ? AppColors.protein : AppColors.water,
                   ),
                 ),

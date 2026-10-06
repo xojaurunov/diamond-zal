@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/tr.dart';
 
 /// Abonement muddatlari (oy) — tanlov ro'yxati uchun
 const subscriptionMonths = [1, 3, 6, 12];
@@ -40,8 +41,8 @@ class Subscription {
   String get kindLabel => kindLabelOf(months: months, days: days);
 
   static String kindLabelOf({int months = 0, int days = 0}) => days > 0
-      ? (days == 1 ? 'Kunlik' : '$days kun')
-      : (months == 1 ? 'Oylik' : '$months oy');
+      ? (days == 1 ? tr('Kunlik') : trf('{0} kun', [days]))
+      : (months == 1 ? tr('Oylik') : trf('{0} oy', [months]));
 
   /// Belgilangan narx: kunlik — kuniga, oylik — oyiga
   static int priceOf({int months = 0, int days = 0}) =>

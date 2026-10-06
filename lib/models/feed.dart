@@ -1,3 +1,4 @@
+import '../l10n/tr.dart';
 import 'gym.dart';
 import 'models.dart';
 import 'shop.dart';
@@ -62,7 +63,7 @@ List<FeedItem> studentFeed({
     if (m.senderId == user.id) continue;
     items.add(FeedItem(
       kind: FeedKind.chat,
-      title: 'Trener xabar yozdi',
+      title: tr('Trener xabar yozdi'),
       body: m.text,
       at: m.createdAt,
     ));
@@ -72,7 +73,7 @@ List<FeedItem> studentFeed({
   if (plan != null && user.planAssignedAt != null) {
     items.add(FeedItem(
       kind: FeedKind.plan,
-      title: 'Yangi reja berildi',
+      title: tr('Yangi reja berildi'),
       body: plan.title,
       at: user.planAssignedAt!,
     ));
@@ -83,10 +84,10 @@ List<FeedItem> studentFeed({
   if (user.profileDone && WeightLog.canAdd(last, n)) {
     items.add(FeedItem(
       kind: FeedKind.weighIn,
-      title: 'Vazn kiritish vaqti keldi',
+      title: tr('Vazn kiritish vaqti keldi'),
       body: last == null
-          ? 'Birinchi o‘lchov — ertalab, nahorga tortiling'
-          : 'Oxirgi o‘lchovdan ${WeightLog.daysSince(last.date, n)} kun o‘tdi',
+          ? tr('Birinchi o‘lchov — ertalab, nahorga tortiling')
+          : trf('Oxirgi o‘lchovdan {0} kun o‘tdi', [WeightLog.daysSince(last.date, n)]),
       at: last == null ? n : last.date.add(const Duration(days: weighInIntervalDays)),
       action: true,
     ));
@@ -97,8 +98,8 @@ List<FeedItem> studentFeed({
     final left = Subscription.daysLeft(user.subscriptionExpiresAt, n);
     items.add(FeedItem(
       kind: FeedKind.subscription,
-      title: left <= 0 ? 'Abonement tugadi' : 'Abonement tugashi yaqinlashdi',
-      body: left <= 0 ? 'Yangilash uchun trenerga murojaat qiling' : '$left kundan keyin tugaydi',
+      title: left <= 0 ? tr('Abonement tugadi') : tr('Abonement tugashi yaqinlashdi'),
+      body: left <= 0 ? tr('Yangilash uchun trenerga murojaat qiling') : trf('{0} kundan keyin tugaydi', [left]),
       at: n,
       action: true,
     ));
@@ -114,8 +115,8 @@ List<FeedItem> studentFeed({
       final names = meals[i].items.map((e) => e.name.split('(').first.trim()).take(3);
       items.add(FeedItem(
         kind: FeedKind.meal,
-        title: '${meals[i].title.isEmpty ? 'Ovqat' : meals[i].title} vaqti o‘tdi',
-        body: names.isEmpty ? 'Belgilashni unutmang' : names.join(', '),
+        title: trf('{0} vaqti o‘tdi', [meals[i].title.isEmpty ? tr('Ovqat') : meals[i].title]),
+        body: names.isEmpty ? tr('Belgilashni unutmang') : names.join(', '),
         at: at,
         action: true,
       ));
@@ -129,9 +130,9 @@ List<FeedItem> studentFeed({
     items.add(FeedItem(
       kind: FeedKind.order,
       title: switch (o.status) {
-        orderGiven => 'Buyurtma berildi',
-        orderCanceled => 'Buyurtma bekor qilindi',
-        _ => 'Buyurtma kutilmoqda',
+        orderGiven => tr('Buyurtma berildi'),
+        orderCanceled => tr('Buyurtma bekor qilindi'),
+        _ => tr('Buyurtma kutilmoqda'),
       },
       body: '${o.title} × ${o.qty} — ${o.totalText}',
       at: at,
@@ -153,7 +154,7 @@ List<FeedItem> trainerFeed({
   final n = now ?? DateTime.now();
   final items = <FeedItem>[];
   final nameOf = {
-    for (final c in clients) c.id: c.name.isEmpty ? 'Shogird' : c.name,
+    for (final c in clients) c.id: c.name.isEmpty ? tr('Shogird') : c.name,
   };
 
   // 1. Shogirdlardan kelgan xabarlar
@@ -162,7 +163,7 @@ List<FeedItem> trainerFeed({
       if (m.senderId != e.key) continue;
       items.add(FeedItem(
         kind: FeedKind.chat,
-        title: nameOf[e.key] ?? 'Shogird',
+        title: nameOf[e.key] ?? tr('Shogird'),
         body: m.text,
         at: m.createdAt,
       ));
@@ -175,7 +176,7 @@ List<FeedItem> trainerFeed({
     if (at == null) continue;
     items.add(FeedItem(
       kind: FeedKind.order,
-      title: o.isNew ? 'Yangi buyurtma' : 'Buyurtma: ${o.statusLabel.toLowerCase()}',
+      title: o.isNew ? tr('Yangi buyurtma') : trf('Buyurtma: {0}', [o.statusLabel.toLowerCase()]),
       body: '${o.clientName.isEmpty ? 'Shogird' : o.clientName} · '
           '${o.title} × ${o.qty}',
       at: at,
@@ -188,8 +189,8 @@ List<FeedItem> trainerFeed({
     if (c.planId != null) continue;
     items.add(FeedItem(
       kind: FeedKind.attention,
-      title: 'Reja berilmagan',
-      body: '${nameOf[c.id]} — hali ovqatlanish rejasi yo‘q',
+      title: tr('Reja berilmagan'),
+      body: trf('{0} — hali ovqatlanish rejasi yo‘q', [nameOf[c.id]]),
       at: n,
       action: true,
     ));
@@ -200,8 +201,8 @@ List<FeedItem> trainerFeed({
     if (validGymDays(c.gymDays)) continue;
     items.add(FeedItem(
       kind: FeedKind.gym,
-      title: 'Zal kunlari tanlanmagan',
-      body: '${nameOf[c.id]} — mashg‘ulot kunlarini tanlamagan',
+      title: tr('Zal kunlari tanlanmagan'),
+      body: trf('{0} — mashg‘ulot kunlarini tanlamagan', [nameOf[c.id]]),
       at: n.subtract(const Duration(seconds: 1)),
       action: true,
     ));
@@ -213,7 +214,7 @@ List<FeedItem> trainerFeed({
     final left = Subscription.daysLeft(c.subscriptionExpiresAt, n);
     items.add(FeedItem(
       kind: FeedKind.subscription,
-      title: 'Abonement tugashi yaqinlashdi',
+      title: tr('Abonement tugashi yaqinlashdi'),
       body: '${nameOf[c.id]} — ${left <= 0 ? 'tugadi' : '$left kundan keyin tugaydi'}',
       at: n.subtract(const Duration(seconds: 2)),
       action: true,
@@ -231,7 +232,7 @@ List<FeedItem> barmenFeed({List<ShopOrder> orders = const []}) {
     if (at == null) continue;
     items.add(FeedItem(
       kind: FeedKind.order,
-      title: o.isNew ? 'Yangi buyurtma' : 'Buyurtma: ${o.statusLabel.toLowerCase()}',
+      title: o.isNew ? tr('Yangi buyurtma') : trf('Buyurtma: {0}', [o.statusLabel.toLowerCase()]),
       body: '${o.clientName.isEmpty ? 'Shogird' : o.clientName} · '
           '${o.title} × ${o.qty} — ${o.totalText}',
       at: at,

@@ -376,7 +376,7 @@ class _CatChip extends StatelessWidget {
           selected: selected,
           onSelected: (_) => onTap(),
           avatar: icon == null ? null : Icon(icon, size: 16),
-          label: Text(label),
+          label: Text(tr(label)),
         ),
       );
 }

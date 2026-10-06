@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/tr.dart';
 
 /// Zal do'koni: forma, suv idishlari, anjomlar va dobavkalar (protein, kreatin ...).
 /// Tovarlarni trener kiritadi, shogird ko'radi va buyurtma beradi.
@@ -31,7 +32,7 @@ const usd = 'USD';
 const currencies = [uzs, usd];
 
 /// Valyuta belgisi: "so'm" / "$"
-String currencyLabel(String c) => c == usd ? '\$' : "so'm";
+String currencyLabel(String c) => c == usd ? '\$' : tr("so'm");
 
 /// Pulni to'liq yozish: (450000, UZS) -> "450 000 so'm"; (35, USD) -> "35 \$"
 String fmtMoney(int amount, [String currency = uzs]) =>
@@ -256,9 +257,9 @@ class ShopOrder {
   bool get isGiven => status == orderGiven;
 
   String get statusLabel => switch (status) {
-        orderGiven => 'Berildi',
-        orderCanceled => 'Bekor qilindi',
-        _ => 'Kutilmoqda',
+        orderGiven => tr('Berildi'),
+        orderCanceled => tr('Bekor qilindi'),
+        _ => tr('Kutilmoqda'),
       };
 
   /// Nomi o'lchami va rangi bilan: "Venum komplekt (XL, sariq)"

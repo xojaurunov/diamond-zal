@@ -1,3 +1,4 @@
+import '../l10n/tr.dart';
 import '../models/models.dart';
 
 /// Eslatmalar vaqtini hisoblash — plaginga bog'liq emas (testlanadi).
@@ -32,9 +33,9 @@ DateTime weighInReminderAt(DateTime? lastWeighIn, DateTime now) {
 
 /// Ovqat eslatmasi matni: "Nonushta vaqti · 07:30" / "Suli bo'tqasi, Tvorog, Tuxum oqi"
 (String, String) mealReminderText(Meal meal) {
-  final title = '${meal.title.isEmpty ? 'Ovqat' : meal.title} vaqti · ${meal.time}';
+  final title = trf('{0} vaqti · {1}', [meal.title.isEmpty ? tr('Ovqat') : meal.title, meal.time]);
   final names = meal.items.map((i) => i.name.split('(').first.trim()).where((n) => n.isNotEmpty);
   final body =
-      names.isEmpty ? 'Rejangizdagi mahalni belgilashni unutmang' : names.take(3).join(', ');
+      names.isEmpty ? tr('Rejangizdagi mahalni belgilashni unutmang') : names.take(3).join(', ');
   return (title, body);
 }

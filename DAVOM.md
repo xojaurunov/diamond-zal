@@ -34,7 +34,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **117/117**, qoida testlari **213/213**.
+`flutter test` **120/120**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1512,6 +1512,24 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     sinaldi). **APK saytga QO'YILMADI** — yangi Android plaginlari (sqflite, path_provider)
     bor; sinov nusxasi `Diamond-SINOV-2026-10-06.apk` zal egasida, telefonda ochilgach
     `deploy.ps1` bilan joylanadi. Reja: `specs/tezlik/` (lokal).
+
+82. **Uch til: o'zbek / rus / ingliz (6-okt, davom etmoqda)** — yangi kutubxonasiz:
+    `lib/l10n/tr.dart` — `tr('O'zbekcha matn')` (kalit — matnning o'zi, tarjima bo'lmasa
+    o'zbekchasi chiqadi) va `trf('{0} kun qoldi', [n])`. Til `appLang` (`AppSettings.setLang`,
+    qurilmada saqlanadi); o'zgarsa `MaterialApp` qayta quriladi. Tanlash: kirish ekrani
+    (o'ng tepada) va Sozlamalar (`lib/widgets/lang_picker.dart`).
+    - Manba: `tools/l10n/tarjima.json`; `lib/l10n/ru.dart`, `en.dart` — GENERATSIYA
+      (`python tools/l10n/l10n.py gen`), qo'lda tahrirlanmaydi.
+    - Vosita `tools/l10n/l10n.py`: `scan` (matnlarni topadi), `wrap` (o'raydi), `unconst`,
+      `add`, `gen`, `check` (tarjimasi yo'q kalitlar).
+    - **Tayyor:** kirish, ro'yxatdan o'tish, anketa, sozlamalar, parol; shogirdning hamma
+      ekrani; holat yorliqlari, lenta, eslatma matnlari, do'kon bo'limlari, sana (318 kalit).
+    - **Qoldi:** trener / bosh admin / barmen ekranlari (~750 matn), tayyor reja shablonlari,
+      viloyat-tuman nomlari. Ular hozircha har tilda o'zbekcha chiqadi.
+    - **Tarjima qilinmaydi:** foydalanuvchi kiritgan matn (tovar, reja va taom nomi, chat,
+      ism) va chatga yoziladigan buyurtma xabarlari.
+    - Bazadagi kalit qiymatlar (`Forma`, `Ozish`, hafta kunlari) o'zgarmadi — faqat ekranda
+      `tr()` bilan ko'rsatiladi. Reja: `specs/tillar/` (lokal).
 
 ---
 

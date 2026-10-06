@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
+import '../l10n/tr.dart';
 import '../models/models.dart';
 import 'reminders.dart';
 import 'settings.dart';
@@ -106,8 +107,8 @@ class Notifications {
       scheduledDate: _tz(weighInReminderAt(lastWeighIn, DateTime.now())),
       notificationDetails: _details,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      title: 'Vazn kiritish kuni',
-      body: "Ertalab nahorga tortilib, Progress bo'limida vazningizni kiriting",
+      title: tr('Vazn kiritish kuni'),
+      body: tr("Ertalab nahorga tortilib, Progress bo'limida vazningizni kiriting"),
     );
   }
 

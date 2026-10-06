@@ -142,7 +142,7 @@ class _TrainerNotificationSyncState extends State<TrainerNotificationSync> {
     _clientsSub = Db.clientsOf(widget.trainer.id).listen((clients) {
       final ids = clients.map((c) => c.id).toSet();
       for (final c in clients) {
-        _names[c.id] = c.name.isEmpty ? 'Shogird' : c.name;
+        _names[c.id] = c.name.isEmpty ? tr('Shogird') : c.name;
         _chatSubs.putIfAbsent(
           c.id,
           () => Db.messageEvents(c.id).listen((msgs) => _onMessages(c.id, msgs)),
