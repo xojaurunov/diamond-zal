@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/tr.dart';
 import '../../models/hudud.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
@@ -61,7 +62,7 @@ class _StaffScreenState extends State<StaffScreen> {
 
                 int countFor(String uid) => clients.where((c) => c.trainerId == uid).length;
                 String gymName(String? id) =>
-                    gyms.where((g) => g.id == id).map((g) => g.name).firstOrNull ?? 'Zalsiz';
+                    gyms.where((g) => g.id == id).map((g) => g.name).firstOrNull ?? tr('Zalsiz');
 
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(
@@ -69,24 +70,24 @@ class _StaffScreenState extends State<StaffScreen> {
                   children: [
                     // ---------- zallar ----------
                     SectionHeader(
-                      gyms.isEmpty || gymId == null ? 'Zallar' : gymName(gymId),
-                      eyebrow: 'Zal tanlang',
+                      gyms.isEmpty || gymId == null ? tr('Zallar') : gymName(gymId),
+                      eyebrow: tr('Zal tanlang'),
                       trailing: TextButton.icon(
                         onPressed: () => _gymSheet(),
                         icon: const Icon(Icons.add, size: 18),
-                        label: const Text('Zal'),
+                        label: Text(tr('Zal')),
                       ),
                     ),
                     if (gyms.isEmpty)
                       BentoTile(
                         padding: const EdgeInsets.all(AppSpace.lg),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('Hali zal qo\'shilmagan',
+                          Text(tr('Hali zal qo\'shilmagan'),
                               style: Theme.of(context).textTheme.titleMedium),
                           const SizedBox(height: 4),
                           Text(
-                            'Zal qo\'shsangiz, har trenerni o\'z zaliga biriktirasiz va '
-                            'zal bo\'yicha ajratib ko\'rasiz.',
+                            tr('Zal qo\'shsangiz, har trenerni o\'z zaliga biriktirasiz va '
+                            'zal bo\'yicha ajratib ko\'rasiz.'),
                             style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                           ),
                         ]),
@@ -96,7 +97,7 @@ class _StaffScreenState extends State<StaffScreen> {
                         scrollDirection: Axis.horizontal,
                         child: Row(children: [
                           _GymChip(
-                            label: 'Hammasi',
+                            label: tr('Hammasi'),
                             selected: gymId == null,
                             onTap: () => setState(() => _gymId = null),
                           ),
@@ -116,7 +117,7 @@ class _StaffScreenState extends State<StaffScreen> {
                         Expanded(
                           child: Text(
                             gyms.firstWhere((g) => g.id == gymId).fullAddress.isEmpty
-                                ? 'Manzil kiritilmagan'
+                                ? tr('Manzil kiritilmagan')
                                 : gyms.firstWhere((g) => g.id == gymId).fullAddress,
                             style: TextStyle(color: AppColors.textFaint, fontSize: 12.5),
                           ),
@@ -125,7 +126,7 @@ class _StaffScreenState extends State<StaffScreen> {
                           onPressed: () =>
                               _gymSheet(gym: gyms.firstWhere((g) => g.id == gymId)),
                           icon: const Icon(Icons.edit_outlined, size: 16),
-                          label: const Text('Tahrirlash'),
+                          label: Text(tr('Tahrirlash')),
                         ),
                       ]),
                     ],
@@ -136,7 +137,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       Expanded(
                         child: StatTile(
                           icon: Icons.badge_outlined,
-                          label: 'Trener',
+                          label: tr('Trener'),
                           value: '${trainers.length}',
                           color: AppColors.accent,
                         ),
@@ -145,7 +146,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       Expanded(
                         child: StatTile(
                           icon: Icons.groups_outlined,
-                          label: 'Shogird',
+                          label: tr('Shogird'),
                           value: '${gymClients.length}',
                           color: AppColors.water,
                         ),
@@ -154,7 +155,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       Expanded(
                         child: StatTile(
                           icon: Icons.person_off_outlined,
-                          label: 'Biriktirilmagan',
+                          label: tr('Biriktirilmagan'),
                           value: '${free.length}',
                           color: free.isEmpty ? AppColors.textMuted : AppColors.warning,
                         ),
@@ -173,11 +174,11 @@ class _StaffScreenState extends State<StaffScreen> {
                         const SizedBox(width: AppSpace.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text('Trenerlar reytingi',
+                            Text(tr('Trenerlar reytingi'),
                                 style: Theme.of(context).textTheme.titleMedium),
                             const SizedBox(height: 2),
                             Text(
-                              "Solishtirish, ball va kimga e'tibor kerak",
+                              tr("Solishtirish, ball va kimga e'tibor kerak"),
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                             ),
                           ]),
@@ -199,11 +200,11 @@ class _StaffScreenState extends State<StaffScreen> {
                         const SizedBox(width: AppSpace.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text('Sotuv hisoboti',
+                            Text(tr('Sotuv hisoboti'),
                                 style: Theme.of(context).textTheme.titleMedium),
                             const SizedBox(height: 2),
                             Text(
-                              'Kim nechta sotdi, qaysi tovar, qancha pul',
+                              tr('Kim nechta sotdi, qaysi tovar, qancha pul'),
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                             ),
                           ]),
@@ -224,11 +225,11 @@ class _StaffScreenState extends State<StaffScreen> {
                         const SizedBox(width: AppSpace.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text('Oylik hisobot',
+                            Text(tr('Oylik hisobot'),
                                 style: Theme.of(context).textTheme.titleMedium),
                             const SizedBox(height: 2),
                             Text(
-                              "Abonement va do'kon tushumi, foyda — oy va zal bo'yicha",
+                              tr("Abonement va do'kon tushumi, foyda — oy va zal bo'yicha"),
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                             ),
                           ]),
@@ -240,12 +241,12 @@ class _StaffScreenState extends State<StaffScreen> {
 
                     // ---------- trenerlar ----------
                     SectionHeader(
-                      'Trenerlar',
-                      eyebrow: gymId == null ? 'Hamma zallar' : gymName(gymId),
+                      tr('Trenerlar'),
+                      eyebrow: gymId == null ? tr('Hamma zallar') : gymName(gymId),
                       trailing: TextButton.icon(
                         onPressed: () => _addTrainerMenu(gyms, gymId, clients),
                         icon: const Icon(Icons.person_add_alt, size: 18),
-                        label: const Text('Qo\'shish'),
+                        label: Text(tr('Qo\'shish')),
                       ),
                     ),
                     if (trainers.isEmpty)
@@ -253,8 +254,8 @@ class _StaffScreenState extends State<StaffScreen> {
                         padding: const EdgeInsets.only(bottom: AppSpace.sm, left: 4),
                         child: Text(
                           gymId == null
-                              ? 'Hali trener yo\'q'
-                              : 'Bu zalda trener yo\'q — qo\'shing yoki boshqa zaldan ko\'chiring',
+                              ? tr('Hali trener yo\'q')
+                              : tr('Bu zalda trener yo\'q — qo\'shing yoki boshqa zaldan ko\'chiring'),
                           style: TextStyle(color: AppColors.textMuted),
                         ),
                       ),
@@ -291,8 +292,8 @@ class _StaffScreenState extends State<StaffScreen> {
                           const SizedBox(width: AppSpace.sm),
                           Expanded(
                             child: Text(
-                              '${noGym.length} ta trener zalga biriktirilmagan — '
-                              'ustiga bosib "Zalga biriktirish" ni tanlang.',
+                              trf('{0} ta trener zalga biriktirilmagan — '
+                              'ustiga bosib "Zalga biriktirish" ni tanlang.', [noGym.length]),
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                             ),
                           ),
@@ -304,8 +305,8 @@ class _StaffScreenState extends State<StaffScreen> {
                     if (barmens.isNotEmpty) ...[
                       const SizedBox(height: AppSpace.xl),
                       SectionHeader(
-                        'Barmenlar',
-                        eyebrow: "Do'kon va sotuv",
+                        tr('Barmenlar'),
+                        eyebrow: tr("Do'kon va sotuv"),
                         trailing: Pill(text: '${barmens.length}', color: AppColors.protein),
                       ),
                       for (final b in barmens)
@@ -314,7 +315,7 @@ class _StaffScreenState extends State<StaffScreen> {
                           child: _StaffTile(
                             person: b,
                             clientCount: 0,
-                            subtitle: 'Barmen',
+                            subtitle: tr('Barmen'),
                             onTap: () => _staffActions(context, b, 0,
                                 ownerCount: owners.length, gyms: gyms),
                             onActions: () => _staffActions(context, b, 0,
@@ -325,14 +326,14 @@ class _StaffScreenState extends State<StaffScreen> {
 
                     // ---------- bosh adminlar ----------
                     const SizedBox(height: AppSpace.xl),
-                    const SectionHeader('Bosh adminlar', eyebrow: 'Zal egasi'),
+                    SectionHeader(tr('Bosh adminlar'), eyebrow: tr('Zal egasi')),
                     for (final o in owners)
                       Padding(
                         padding: const EdgeInsets.only(bottom: AppSpace.sm),
                         child: _StaffTile(
                           person: o,
                           clientCount: countFor(o.id),
-                          subtitle: o.id == owner.id ? 'Siz' : null,
+                          subtitle: o.id == owner.id ? tr('Siz') : null,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -355,8 +356,8 @@ class _StaffScreenState extends State<StaffScreen> {
                     if (free.isNotEmpty) ...[
                       const SizedBox(height: AppSpace.xl),
                       SectionHeader(
-                        'Trenersiz shogirdlar',
-                        eyebrow: 'Biriktirish kerak',
+                        tr('Trenersiz shogirdlar'),
+                        eyebrow: tr('Biriktirish kerak'),
                         trailing: Pill(text: '${free.length}', color: AppColors.warning),
                       ),
                       for (final c in free)
@@ -411,10 +412,10 @@ class _StaffScreenState extends State<StaffScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: AppSpace.md),
-                Text(gym == null ? 'Yangi zal' : 'Zalni tahrirlash',
+                Text(gym == null ? tr('Yangi zal') : tr('Zalni tahrirlash'),
                     style: Theme.of(ctx).textTheme.titleLarge),
                 const SizedBox(height: AppSpace.xs),
-                Text('Avval joyini tanlang, keyin nom bering',
+                Text(tr('Avval joyini tanlang, keyin nom bering'),
                     style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
                 const SizedBox(height: AppSpace.lg),
 
@@ -422,7 +423,7 @@ class _StaffScreenState extends State<StaffScreen> {
                 DropdownButtonFormField<String>(
                   initialValue: country,
                   isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Mamlakat'),
+                  decoration: InputDecoration(labelText: tr('Mamlakat')),
                   items: [
                     for (final c in countries) DropdownMenuItem(value: c, child: Text(c)),
                   ],
@@ -434,9 +435,9 @@ class _StaffScreenState extends State<StaffScreen> {
                 DropdownButtonFormField<String>(
                   initialValue: region,
                   isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Viloyat / shahar',
-                    hintText: 'Tanlang',
+                  decoration: InputDecoration(
+                    labelText: tr('Viloyat / shahar'),
+                    hintText: tr('Tanlang'),
                   ),
                   items: [
                     for (final r in regionNames) DropdownMenuItem(value: r, child: Text(r)),
@@ -454,8 +455,8 @@ class _StaffScreenState extends State<StaffScreen> {
                   initialValue: district,
                   isExpanded: true,
                   decoration: InputDecoration(
-                    labelText: 'Tuman',
-                    hintText: region == null ? 'Avval viloyatni tanlang' : 'Tanlang',
+                    labelText: tr('Tuman'),
+                    hintText: region == null ? tr('Avval viloyatni tanlang') : tr('Tanlang'),
                   ),
                   items: region == null
                       ? const []
@@ -471,9 +472,9 @@ class _StaffScreenState extends State<StaffScreen> {
                   TextField(
                     controller: otherDistrict,
                     textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Tuman nomi',
-                      hintText: "Ro'yxatda yo'q bo'lsa — o'zingiz yozing",
+                    decoration: InputDecoration(
+                      labelText: tr('Tuman nomi'),
+                      hintText: tr("Ro'yxatda yo'q bo'lsa — o'zingiz yozing"),
                     ),
                   ),
                 ],
@@ -483,8 +484,8 @@ class _StaffScreenState extends State<StaffScreen> {
                 TextField(
                   controller: name,
                   textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    labelText: 'Zal nomi',
+                  decoration: InputDecoration(
+                    labelText: tr('Zal nomi'),
                     hintText: 'Kotta Qani zali',
                   ),
                 ),
@@ -492,15 +493,15 @@ class _StaffScreenState extends State<StaffScreen> {
                 TextField(
                   controller: address,
                   textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    labelText: "Ko'cha, uy (ixtiyoriy)",
+                  decoration: InputDecoration(
+                    labelText: tr("Ko'cha, uy (ixtiyoriy)"),
                     hintText: 'Bunyodkor 12',
                   ),
                 ),
                 const SizedBox(height: AppSpace.lg),
                 FilledButton(
                   onPressed: () => Navigator.pop(ctx, true),
-                  child: const Text('Saqlash'),
+                  child: Text(tr('Saqlash')),
                 ),
                 if (gym != null) ...[
                   const SizedBox(height: AppSpace.sm),
@@ -508,7 +509,7 @@ class _StaffScreenState extends State<StaffScreen> {
                     style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
                     onPressed: () => Navigator.pop(ctx, false),
                     icon: const Icon(Icons.delete_outline, size: 18),
-                    label: const Text("Zalni o'chirish"),
+                    label: Text(tr("Zalni o'chirish")),
                   ),
                 ],
                 const SizedBox(height: AppSpace.sm),
@@ -520,7 +521,7 @@ class _StaffScreenState extends State<StaffScreen> {
 
     if (saved == true) {
       if (name.text.trim().isEmpty) {
-        showSnack(context, 'Zal nomini kiriting');
+        showSnack(context, tr('Zal nomini kiriting'));
         return;
       }
       final d = district == otherOption ? otherDistrict.text.trim() : (district ?? '');
@@ -534,7 +535,7 @@ class _StaffScreenState extends State<StaffScreen> {
       ));
       if (mounted) {
         setState(() => _gymId = id);
-        showSnack(context, gym == null ? "Zal qo'shildi" : 'Saqlandi');
+        showSnack(context, gym == null ? tr("Zal qo'shildi") : tr('Saqlandi'));
       }
       return;
     }
@@ -542,17 +543,17 @@ class _StaffScreenState extends State<StaffScreen> {
     if (saved == false && gym != null) {
       final ok = await confirm(
         context,
-        title: "Zal o'chirilsinmi?",
-        message: '"${gym.name}" o\'chiriladi. Undagi trenerlar zalsiz qoladi — '
-            "ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.",
-        ok: "O'chirish",
+        title: tr("Zal o'chirilsinmi?"),
+        message: trf('"{0}" o\'chiriladi. Undagi trenerlar zalsiz qoladi — '
+            "ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.", [gym.name]),
+        ok: tr("O'chirish"),
         destructive: true,
       );
       if (!ok || !mounted) return;
       await Db.deleteGym(gym.id);
       if (mounted) {
         setState(() => _gymId = null);
-        showSnack(context, "Zal o'chirildi");
+        showSnack(context, tr("Zal o'chirildi"));
       }
     }
   }
@@ -564,30 +565,30 @@ class _StaffScreenState extends State<StaffScreen> {
       Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: AppSpace.md),
-            Text('Trener qo\'shish', style: Theme.of(context).textTheme.titleLarge),
+            Text(tr('Trener qo\'shish'), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpace.sm),
             Text(
-              'Barmen faqat do\'kon bilan ishlaydi: tovar, buyurtma va qoldiq. '
-              'Shogirdlar, rejalar va chatni ko\'rmaydi.',
+              tr('Barmen faqat do\'kon bilan ishlaydi: tovar, buyurtma va qoldiq. '
+              'Shogirdlar, rejalar va chatni ko\'rmaydi.'),
               style: TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
             const SizedBox(height: AppSpace.lg),
             FilledButton.icon(
               onPressed: () => Navigator.pop(context, 'new'),
               icon: const Icon(Icons.person_add_alt_1, size: 18),
-              label: const Text('Yangi trener akkaunti'),
+              label: Text(tr('Yangi trener akkaunti')),
             ),
             const SizedBox(height: AppSpace.sm),
             OutlinedButton.icon(
               onPressed: () => Navigator.pop(context, 'barmen'),
               icon: const Icon(Icons.local_bar_outlined, size: 18),
-              label: const Text('Yangi barmen akkaunti'),
+              label: Text(tr('Yangi barmen akkaunti')),
             ),
             const SizedBox(height: AppSpace.sm),
             OutlinedButton.icon(
               onPressed: () => Navigator.pop(context, 'promote'),
               icon: const Icon(Icons.switch_account_outlined, size: 18),
-              label: const Text('Mavjud foydalanuvchini tayinlash'),
+              label: Text(tr('Mavjud foydalanuvchini tayinlash')),
             ),
           ]),
     );
@@ -618,7 +619,7 @@ class _StaffScreenState extends State<StaffScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: AppSpace.md),
-              Text(isBarmen ? 'Yangi barmen' : 'Yangi trener',
+              Text(isBarmen ? tr('Yangi barmen') : tr('Yangi trener'),
                   style: Theme.of(ctx).textTheme.titleLarge),
               const SizedBox(height: AppSpace.lg),
               TextField(
@@ -626,7 +627,7 @@ class _StaffScreenState extends State<StaffScreen> {
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
-                  labelText: 'Ism',
+                  labelText: tr('Ism'),
                   hintText: isBarmen ? 'Anvar aka' : 'Bekzod aka',
                 ),
               ),
@@ -634,8 +635,8 @@ class _StaffScreenState extends State<StaffScreen> {
               TextField(
                 controller: phone,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Telefon raqam',
+                decoration: InputDecoration(
+                  labelText: tr('Telefon raqam'),
                   hintText: '90 123 45 67',
                   prefixText: '+998 ',
                 ),
@@ -643,9 +644,9 @@ class _StaffScreenState extends State<StaffScreen> {
               const SizedBox(height: AppSpace.md),
               TextField(
                 controller: pass,
-                decoration: const InputDecoration(
-                  labelText: 'Parol',
-                  helperText: 'Kamida 6 belgi — xodimga shu parolni aytasiz',
+                decoration: InputDecoration(
+                  labelText: tr('Parol'),
+                  helperText: tr('Kamida 6 belgi — xodimga shu parolni aytasiz'),
                 ),
               ),
               if (gyms.isNotEmpty) ...[
@@ -674,15 +675,15 @@ class _StaffScreenState extends State<StaffScreen> {
                         final n = name.text.trim();
                         final ph = normalizePhone(phone.text);
                         if (n.isEmpty) {
-                          setS(() => error = 'Ismni kiriting');
+                          setS(() => error = tr('Ismni kiriting'));
                           return;
                         }
                         if (ph.length < 12) {
-                          setS(() => error = 'Telefon raqam to\'liq emas');
+                          setS(() => error = tr('Telefon raqam to\'liq emas'));
                           return;
                         }
                         if (pass.text.trim().length < 6) {
-                          setS(() => error = 'Parol kamida 6 belgi bo\'lsin');
+                          setS(() => error = tr('Parol kamida 6 belgi bo\'lsin'));
                           return;
                         }
                         setS(() {
@@ -700,8 +701,8 @@ class _StaffScreenState extends State<StaffScreen> {
                           if (ctx.mounted) Navigator.pop(ctx, true);
                         } catch (e) {
                           final msg = '$e'.contains('email-already-in-use')
-                              ? 'Bu raqam allaqachon ro\'yxatdan o\'tgan'
-                              : 'Bo\'lmadi: $e';
+                              ? tr('Bu raqam allaqachon ro\'yxatdan o\'tgan')
+                              : trf('Bo\'lmadi: {0}', [e]);
                           setS(() {
                             busy = false;
                             error = msg;
@@ -709,8 +710,8 @@ class _StaffScreenState extends State<StaffScreen> {
                         }
                       },
                 child: Text(busy
-                    ? 'Yaratilmoqda…'
-                    : (isBarmen ? 'Barmen qo\'shish' : 'Trener qo\'shish')),
+                    ? tr('Yaratilmoqda…')
+                    : (isBarmen ? tr('Barmen qo\'shish') : tr('Trener qo\'shish'))),
               ),
             ]),
       ),
@@ -722,27 +723,27 @@ class _StaffScreenState extends State<StaffScreen> {
         Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: AppSpace.md),
-              Text(isBarmen ? 'Barmen qo\'shildi' : 'Trener qo\'shildi',
+              Text(isBarmen ? tr('Barmen qo\'shildi') : tr('Trener qo\'shildi'),
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: AppSpace.sm),
               Text(
-                'Shu ma\'lumotni xodimga bering — ilovaga shu bilan kiradi:',
+                tr('Shu ma\'lumotni xodimga bering — ilovaga shu bilan kiradi:'),
                 style: TextStyle(color: AppColors.textMuted, fontSize: 13),
               ),
               const SizedBox(height: AppSpace.lg),
               BentoTile(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Telefon: ${fmtPhone(normalizePhone(phone.text))}',
+                  Text(trf('Telefon: {0}', [fmtPhone(normalizePhone(phone.text))]),
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 4),
-                  Text('Parol: ${pass.text.trim()}',
+                  Text(trf('Parol: {0}', [pass.text.trim()]),
                       style: Theme.of(context).textTheme.titleMedium),
                 ]),
               ),
               const SizedBox(height: AppSpace.lg),
               FilledButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Tushundim'),
+                child: Text(tr('Tushundim')),
               ),
             ]),
       );
@@ -756,7 +757,7 @@ class _StaffScreenState extends State<StaffScreen> {
       Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: AppSpace.md),
-            Text('Qaysi zalga?', style: Theme.of(context).textTheme.titleLarge),
+            Text(tr('Qaysi zalga?'), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpace.lg),
             for (final g in gyms)
               Padding(
@@ -769,19 +770,19 @@ class _StaffScreenState extends State<StaffScreen> {
             if (trainer.gymId != null)
               TextButton(
                 onPressed: () => Navigator.pop(context, ''),
-                child: const Text('Zaldan chiqarish'),
+                child: Text(tr('Zaldan chiqarish')),
               ),
           ]),
     );
     if (picked == null || !mounted) return;
     await Db.setUserGym(trainer.id, picked.isEmpty ? null : picked);
-    if (mounted) showSnack(context, picked.isEmpty ? 'Zaldan chiqarildi' : 'Zalga biriktirildi');
+    if (mounted) showSnack(context, picked.isEmpty ? tr('Zaldan chiqarildi') : tr('Zalga biriktirildi'));
   }
 
   /// Oddiy foydalanuvchini trener qilish
   Future<void> _promoteSheet(BuildContext context, List<AppUser> clients) async {
     if (clients.isEmpty) {
-      showSnack(context, "Hali ro'yxatdan o'tgan foydalanuvchi yo'q");
+      showSnack(context, tr("Hali ro'yxatdan o'tgan foydalanuvchi yo'q"));
       return;
     }
     final picked = await showSheet<AppUser>(
@@ -792,15 +793,15 @@ class _StaffScreenState extends State<StaffScreen> {
 
     final ok = await confirm(
       context,
-      title: 'Trener qilinsinmi?',
-      message: '${picked.name.isEmpty ? fmtPhone(picked.phone) : picked.name} '
+      title: tr('Trener qilinsinmi?'),
+      message: trf('{0} '
           'trener paneliga kira oladi: reja tuzadi, mahsulot qo’shadi, '
-          'shogirdlar bilan yozishadi.',
-      ok: 'Trener qilish',
+          'shogirdlar bilan yozishadi.', [picked.name.isEmpty ? fmtPhone(picked.phone) : picked.name]),
+      ok: tr('Trener qilish'),
     );
     if (!ok) return;
     await Db.setRole(picked.id, 'admin');
-    if (context.mounted) showSnack(context, 'Trener tayinlandi');
+    if (context.mounted) showSnack(context, tr('Trener tayinlandi'));
   }
 
   /// Xodim ustidagi amallar (bosh admin uchun)
@@ -824,8 +825,8 @@ class _StaffScreenState extends State<StaffScreen> {
           const SizedBox(height: AppSpace.xs),
           Text(
             person.isOwner
-                ? 'Bosh admin'
-                : (count == 0 ? 'Shogirdi yo’q' : '$count ta shogird biriktirilgan'),
+                ? tr('Bosh admin')
+                : (count == 0 ? tr('Shogirdi yo’q') : trf('{0} ta shogird biriktirilgan', [count])),
             style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
           const SizedBox(height: AppSpace.lg),
@@ -833,7 +834,7 @@ class _StaffScreenState extends State<StaffScreen> {
             OutlinedButton.icon(
               onPressed: () => Navigator.pop(context, 'makeBarmen'),
               icon: const Icon(Icons.local_bar_outlined, size: 18),
-              label: const Text('Barmen qilish'),
+              label: Text(tr('Barmen qilish')),
             ),
             const SizedBox(height: AppSpace.sm),
           ],
@@ -841,7 +842,7 @@ class _StaffScreenState extends State<StaffScreen> {
             OutlinedButton.icon(
               onPressed: () => Navigator.pop(context, 'makeTrainer'),
               icon: const Icon(Icons.fitness_center_outlined, size: 18),
-              label: const Text('Trener qilish'),
+              label: Text(tr('Trener qilish')),
             ),
             const SizedBox(height: AppSpace.sm),
           ],
@@ -849,7 +850,7 @@ class _StaffScreenState extends State<StaffScreen> {
             OutlinedButton.icon(
               onPressed: () => Navigator.pop(context, 'gym'),
               icon: const Icon(Icons.home_work_outlined, size: 18),
-              label: const Text('Zalga biriktirish'),
+              label: Text(tr('Zalga biriktirish')),
             ),
             const SizedBox(height: AppSpace.sm),
           ],
@@ -857,7 +858,7 @@ class _StaffScreenState extends State<StaffScreen> {
             FilledButton.icon(
               onPressed: () => Navigator.pop(context, 'makeOwner'),
               icon: const Icon(Icons.shield_outlined, size: 18),
-              label: const Text('Bosh admin qilish'),
+              label: Text(tr('Bosh admin qilish')),
             ),
             const SizedBox(height: AppSpace.sm),
           ],
@@ -865,15 +866,15 @@ class _StaffScreenState extends State<StaffScreen> {
             onPressed: lastOwner ? null : () => Navigator.pop(context, 'demote'),
             icon: const Icon(Icons.person_remove_outlined, size: 18),
             label: Text(person.isOwner
-                ? 'Bosh adminlikdan olish'
-                : (person.isBarmen ? 'Barmenlikdan olish' : 'Trenerlikdan olish')),
+                ? tr('Bosh adminlikdan olish')
+                : (person.isBarmen ? tr('Barmenlikdan olish') : tr('Trenerlikdan olish'))),
           ),
           if (lastOwner)
             Padding(
               padding: const EdgeInsets.only(top: AppSpace.sm),
               child: Text(
-                'Bu yagona bosh admin — tushirib bo’lmaydi. Avval boshqa birovni '
-                'bosh admin qiling.',
+                tr('Bu yagona bosh admin — tushirib bo’lmaydi. Avval boshqa birovni '
+                'bosh admin qiling.'),
                 style: TextStyle(color: AppColors.textFaint, fontSize: 12),
               ),
             ),
@@ -885,7 +886,7 @@ class _StaffScreenState extends State<StaffScreen> {
             ),
             onPressed: () => Navigator.pop(context, 'delete'),
             icon: const Icon(Icons.delete_outline, size: 18),
-            label: const Text('Akkauntni o’chirish'),
+            label: Text(tr('Akkauntni o’chirish')),
           ),
         ],
       ),
@@ -901,18 +902,18 @@ class _StaffScreenState extends State<StaffScreen> {
       final toBarmen = action == 'makeBarmen';
       final ok = await confirm(
         context,
-        title: toBarmen ? 'Barmen qilinsinmi?' : 'Trener qilinsinmi?',
+        title: toBarmen ? tr('Barmen qilinsinmi?') : tr('Trener qilinsinmi?'),
         message: toBarmen
-            ? '$name faqat do\'kon bilan ishlaydi: tovar, buyurtma va qoldiq. '
+            ? trf('{0} faqat do\'kon bilan ishlaydi: tovar, buyurtma va qoldiq. '
                 'Shogirdlar, rejalar va chatni ko\'rmaydi.'
-                '${count > 0 ? '\n\nUnga biriktirilgan $count ta shogird trenersiz qoladi.' : ''}'
-            : '$name trener paneliga kiradi: reja tuzadi, shogird qabul qiladi.',
-        ok: toBarmen ? 'Barmen qilish' : 'Trener qilish',
+                '{1}', [name, count > 0 ? trf('\n\nUnga biriktirilgan {0} ta shogird trenersiz qoladi.', [count]) : ''])
+            : trf('{0} trener paneliga kiradi: reja tuzadi, shogird qabul qiladi.', [name]),
+        ok: toBarmen ? tr('Barmen qilish') : tr('Trener qilish'),
       );
       if (!ok) return;
       await Db.setRole(person.id, toBarmen ? 'barmen' : 'admin');
       if (context.mounted) {
-        showSnack(context, toBarmen ? 'Barmen tayinlandi' : 'Trener tayinlandi');
+        showSnack(context, toBarmen ? tr('Barmen tayinlandi') : tr('Trener tayinlandi'));
       }
       return;
     }
@@ -920,15 +921,15 @@ class _StaffScreenState extends State<StaffScreen> {
     if (action == 'makeOwner') {
       final ok = await confirm(
         context,
-        title: 'Bosh admin qilinsinmi?',
-        message: '$name sizga teng huquq oladi: trener tayinlaydi, akkaunt o’chiradi, '
+        title: tr('Bosh admin qilinsinmi?'),
+        message: trf('{0} sizga teng huquq oladi: trener tayinlaydi, akkaunt o’chiradi, '
             'hamma trener va shogirdni ko’radi.\n\nUni faqat boshqa bosh admin '
-            'tushira oladi.',
-        ok: 'Bosh admin qilish',
+            'tushira oladi.', [name]),
+        ok: tr('Bosh admin qilish'),
       );
       if (!ok) return;
       await Db.setRole(person.id, 'owner');
-      if (context.mounted) showSnack(context, 'Bosh admin tayinlandi');
+      if (context.mounted) showSnack(context, tr('Bosh admin tayinlandi'));
       return;
     }
 
@@ -937,36 +938,36 @@ class _StaffScreenState extends State<StaffScreen> {
       final toRole = person.isOwner ? 'admin' : 'user';
       final ok = await confirm(
         context,
-        title: person.isOwner ? 'Bosh adminlikdan olinsinmi?' : 'Trenerlikdan olinsinmi?',
+        title: person.isOwner ? tr('Bosh adminlikdan olinsinmi?') : tr('Trenerlikdan olinsinmi?'),
         message: person.isOwner
-            ? '$name oddiy trener bo’lib qoladi: rol tayinlay olmaydi va akkaunt '
-                'o’chira olmaydi. Shogirdlari o’zida qoladi.'
+            ? trf('{0} oddiy trener bo’lib qoladi: rol tayinlay olmaydi va akkaunt '
+                'o’chira olmaydi. Shogirdlari o’zida qoladi.', [name])
             : (count == 0
-                ? '$name oddiy foydalanuvchiga aylanadi va trener paneliga kira olmaydi.'
-                : '$name oddiy foydalanuvchiga aylanadi. Unga biriktirilgan $count ta '
-                    'shogird trenersiz qoladi — ularni boshqa trenerga biriktirishingiz kerak.'),
-        ok: 'Olish',
+                ? trf('{0} oddiy foydalanuvchiga aylanadi va trener paneliga kira olmaydi.', [name])
+                : trf('{0} oddiy foydalanuvchiga aylanadi. Unga biriktirilgan {1} ta '
+                    'shogird trenersiz qoladi — ularni boshqa trenerga biriktirishingiz kerak.', [name, count])),
+        ok: tr('Olish'),
         destructive: true,
       );
       if (!ok) return;
       await Db.setRole(person.id, toRole);
       if (context.mounted) {
-        showSnack(context, person.isOwner ? 'Bosh adminlikdan olindi' : 'Trenerlikdan olindi');
+        showSnack(context, person.isOwner ? tr('Bosh adminlikdan olindi') : tr('Trenerlikdan olindi'));
       }
       return;
     }
 
     final ok = await confirm(
       context,
-      title: 'Akkaunt o’chirilsinmi?',
-      message: '$name ilovaga kira olmaydi va ro’yxatlardan yo’qoladi. '
-          'Bu amalni qaytarib bo’lmaydi.',
-      ok: 'O’chirish',
+      title: tr('Akkaunt o’chirilsinmi?'),
+      message: trf('{0} ilovaga kira olmaydi va ro’yxatlardan yo’qoladi. '
+          'Bu amalni qaytarib bo’lmaydi.', [name]),
+      ok: tr('O’chirish'),
       destructive: true,
     );
     if (!ok) return;
     await Db.deleteUser(person.id);
-    if (context.mounted) showSnack(context, 'Akkaunt o’chirildi');
+    if (context.mounted) showSnack(context, tr('Akkaunt o’chirildi'));
   }
 }
 
@@ -1041,15 +1042,15 @@ class _StaffTile extends StatelessWidget {
               ),
               const SizedBox(width: AppSpace.sm),
               Pill(
-                text: subtitle ?? (person.isOwner ? 'Bosh admin' : 'Trener'),
+                text: subtitle ?? (person.isOwner ? tr('Bosh admin') : tr('Trener')),
                 color: person.isOwner ? AppColors.accent : AppColors.textMuted,
               ),
             ]),
             const SizedBox(height: 2),
             Text(
               clientCount == 0
-                  ? 'Shogirdi yo’q'
-                  : '$clientCount ta shogird  ·  ${fmtPhone(person.phone)}',
+                  ? tr('Shogirdi yo’q')
+                  : trf('{0} ta shogird  ·  {1}', [clientCount, fmtPhone(person.phone)]),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: t.bodySmall?.copyWith(
@@ -1061,7 +1062,7 @@ class _StaffTile extends StatelessWidget {
         ),
         if (onActions != null)
           IconButton(
-            tooltip: 'Amallar',
+            tooltip: tr('Amallar'),
             onPressed: onActions,
             icon: const Icon(Icons.more_horiz, size: 20),
           )
@@ -1092,7 +1093,7 @@ class TrainerDetail extends StatelessWidget {
           children: [
             Text(name),
             Text(
-              trainer.isOwner ? 'Bosh admin' : 'Trener',
+              trainer.isOwner ? tr('Bosh admin') : tr('Trener'),
               style: TextStyle(fontSize: 12, color: AppColors.textMuted),
             ),
           ],
@@ -1105,18 +1106,18 @@ class TrainerDetail extends StatelessWidget {
           final mine = snap.data!.where((c) => c.trainerId == trainer.id).toList()
             ..sort((a, b) => a.name.compareTo(b.name));
           if (mine.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.groups_outlined,
-              title: 'Shogird biriktirilmagan',
-              subtitle: 'Shogirdni "Mijozlar" bo’limidan tanlab, '
-                  'shu trenerga biriktirishingiz mumkin.',
+              title: tr('Shogird biriktirilmagan'),
+              subtitle: tr('Shogirdni "Mijozlar" bo’limidan tanlab, '
+                  'shu trenerga biriktirishingiz mumkin.'),
             );
           }
           return ListView(
             padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.sm, AppSpace.lg, AppSpace.xxl),
             children: [
               SectionHeader(
-                'Shogirdlar',
+                tr('Shogirdlar'),
                 eyebrow: name,
                 trailing: Pill(text: '${mine.length}', color: AppColors.accent),
               ),
@@ -1164,8 +1165,8 @@ class _ClientRow extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               u.profileDone
-                  ? '${fmtNum(u.weight)} kg · ${u.targetKcal} kkal'
-                  : 'Anketa to’ldirilmagan',
+                  ? trf('{0} kg · {1} kkal', [fmtNum(u.weight), u.targetKcal])
+                  : tr('Anketa to’ldirilmagan'),
               style: t.bodySmall?.copyWith(
                 color: AppColors.textMuted,
                 fontFeatures: tabular,
@@ -1174,9 +1175,9 @@ class _ClientRow extends StatelessWidget {
           ]),
         ),
         if (u.planId == null)
-          Pill(text: 'Rejasiz', color: AppColors.warning)
+          Pill(text: tr('Rejasiz'), color: AppColors.warning)
         else
-          Pill(text: 'Reja bor', color: AppColors.success, icon: Icons.check_rounded),
+          Pill(text: tr('Reja bor'), color: AppColors.success, icon: Icons.check_rounded),
       ]),
     );
   }
@@ -1207,14 +1208,14 @@ class _PickUserSheetState extends State<_PickUserSheet> {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Align(
         alignment: Alignment.centerLeft,
-        child: Text('Kimni trener qilamiz?', style: Theme.of(context).textTheme.titleLarge),
+        child: Text(tr('Kimni trener qilamiz?'), style: Theme.of(context).textTheme.titleLarge),
       ),
       const SizedBox(height: AppSpace.md),
       TextField(
         onChanged: (v) => setState(() => _q = v),
-        decoration: const InputDecoration(
-          hintText: 'Ism yoki telefon raqam',
-          prefixIcon: Icon(Icons.search),
+        decoration: InputDecoration(
+          hintText: tr('Ism yoki telefon raqam'),
+          prefixIcon: const Icon(Icons.search),
         ),
       ),
       const SizedBox(height: AppSpace.md),
@@ -1223,7 +1224,7 @@ class _PickUserSheetState extends State<_PickUserSheet> {
         child: list.isEmpty
             ? Padding(
                 padding: const EdgeInsets.all(AppSpace.lg),
-                child: Text('Hech narsa topilmadi', style: TextStyle(color: AppColors.textMuted)),
+                child: Text(tr('Hech narsa topilmadi'), style: TextStyle(color: AppColors.textMuted)),
               )
             : ListView.separated(
                 shrinkWrap: true,

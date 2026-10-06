@@ -1,4 +1,8 @@
 {
+ "\n\nUnga biriktirilgan {0} ta shogird trenersiz qoladi.": {
+  "ru": "\n\nЕго ученики ({0}) останутся без тренера.",
+  "en": "\n\nTheir {0} clients will have no trainer."
+ },
  " · vazn {0} kg": {
   "ru": " · вес {0} кг",
   "en": " · weight {0} kg"
@@ -14,6 +18,10 @@
  "\"{0}\" do'kondan o'chirilsinmi?": {
   "ru": "Удалить «{0}» из магазина?",
   "en": "Delete “{0}” from the shop?"
+ },
+ "\"{0}\" o'chiriladi. Undagi trenerlar zalsiz qoladi — ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.": {
+  "ru": "«{0}» будет удалён. Его тренеры останутся без зала — прикрепите их к другому. На учеников это не влияет.",
+  "en": "“{0}” will be deleted. Its trainers will have no gym — assign them to another one. Clients are not affected."
  },
  "100 gramm uchun:": {
   "ru": "На 100 граммов:",
@@ -55,6 +63,10 @@
   "ru": "Доля от выручки за абонементы",
   "en": "Share of membership revenue"
  },
+ "Abonement va do'kon tushumi, foyda — oy va zal bo'yicha": {
+  "ru": "Выручка за абонементы и магазин, прибыль — по месяцам и залам",
+  "en": "Membership and shop revenue, profit — by month and gym"
+ },
  "Abonement yo'q": {
   "ru": "Нет абонемента",
   "en": "No membership"
@@ -71,6 +83,14 @@
   "ru": "Абонемент — {0}",
   "en": "Membership — {0}"
  },
+ "Akkaunt o’chirildi": {
+  "ru": "Аккаунт удалён",
+  "en": "Account deleted"
+ },
+ "Akkaunt o’chirilsinmi?": {
+  "ru": "Удалить аккаунт?",
+  "en": "Delete account?"
+ },
  "Akkaunt topilmadi": {
   "ru": "Аккаунт не найден",
   "en": "Account not found"
@@ -86,6 +106,10 @@
  "Akkauntingiz o'chirilgan bo'lishi mumkin. Shu raqam bilan qaytadan ro'yxatdan o'tishingiz mumkin.": {
   "ru": "Возможно, ваш аккаунт удалён. Вы можете заново зарегистрироваться с этим номером.",
   "en": "Your account may have been deleted. You can sign up again with this number."
+ },
+ "Akkauntni o’chirish": {
+  "ru": "Удалить аккаунт",
+  "en": "Delete account"
  },
  "Almashtirib bo'lmadi: {0}": {
   "ru": "Не удалось сменить: {0}",
@@ -107,6 +131,10 @@
   "ru": "Действует: {0}",
   "en": "Valid on {0}"
  },
+ "Amallar": {
+  "ru": "Действия",
+  "en": "Actions"
+ },
  "Anjomlar": {
   "ru": "Инвентарь",
   "en": "Equipment"
@@ -118,6 +146,10 @@
  "Anketa to'liq emas": {
   "ru": "Анкета заполнена не полностью",
   "en": "Profile form is incomplete"
+ },
+ "Anketa to’ldirilmagan": {
+  "ru": "Анкета не заполнена",
+  "en": "Profile form not filled in"
  },
  "Anketa yo'q": {
   "ru": "Нет анкеты",
@@ -131,6 +163,10 @@
   "ru": "Август",
   "en": "August"
  },
+ "Avval joyini tanlang, keyin nom bering": {
+  "ru": "Сначала выберите место, затем дайте название",
+  "en": "Choose the location first, then name it"
+ },
  "Avval o'lchamni tanlang": {
   "ru": "Сначала выберите размер",
   "en": "Choose a size first"
@@ -138,6 +174,10 @@
  "Avval rangni tanlang": {
   "ru": "Сначала выберите цвет",
   "en": "Choose a color first"
+ },
+ "Avval viloyatni tanlang": {
+  "ru": "Сначала выберите область",
+  "en": "Choose a region first"
  },
  "Ayol": {
   "ru": "Женщина",
@@ -179,13 +219,49 @@
   "ru": "Отлично!",
   "en": "Well done!"
  },
+ "Barmen": {
+  "ru": "Бармен",
+  "en": "Bar staff"
+ },
+ "Barmen faqat do'kon bilan ishlaydi: tovar, buyurtma va qoldiq. Shogirdlar, rejalar va chatni ko'rmaydi.": {
+  "ru": "Бармен работает только с магазином: товары, заказы и остатки. Учеников, планы и чат он не видит.",
+  "en": "Bar staff work only with the shop: products, orders and stock. They don't see clients, plans or chat."
+ },
  "Barmen panelidan chiqmoqchimisiz?": {
   "ru": "Выйти из панели бармена?",
   "en": "Sign out of the bar panel?"
  },
+ "Barmen qilinsinmi?": {
+  "ru": "Сделать барменом?",
+  "en": "Make bar staff?"
+ },
+ "Barmen qilish": {
+  "ru": "Сделать барменом",
+  "en": "Make bar staff"
+ },
+ "Barmen qo'shildi": {
+  "ru": "Бармен добавлен",
+  "en": "Bar staff added"
+ },
+ "Barmen qo'shish": {
+  "ru": "Добавить бармена",
+  "en": "Add bar staff"
+ },
+ "Barmen tayinlandi": {
+  "ru": "Бармен назначен",
+  "en": "Bar staff assigned"
+ },
  "Barmen • Diamond": {
   "ru": "Бармен • Diamond",
   "en": "Bar • Diamond"
+ },
+ "Barmenlar": {
+  "ru": "Бармены",
+  "en": "Bar staff"
+ },
+ "Barmenlikdan olish": {
+  "ru": "Снять с должности бармена",
+  "en": "Remove bar staff role"
  },
  "Bekor": {
   "ru": "Отмена",
@@ -247,6 +323,14 @@
   "ru": "Назначенный тренер",
   "en": "Assigned trainer"
  },
+ "Biriktirilmagan": {
+  "ru": "Не прикреплены",
+  "en": "Unassigned"
+ },
+ "Biriktirish kerak": {
+  "ru": "Нужно прикрепить",
+  "en": "Need assigning"
+ },
  "Birinchi o‘lchov — ertalab, nahorga tortiling": {
   "ru": "Первое взвешивание — утром, натощак",
   "en": "First weigh-in — in the morning, on an empty stomach"
@@ -267,9 +351,41 @@
   "ru": "Рост",
   "en": "Height"
  },
+ "Bosh admin": {
+  "ru": "Главный админ",
+  "en": "Head admin"
+ },
+ "Bosh admin qilinsinmi?": {
+  "ru": "Сделать главным админом?",
+  "en": "Make head admin?"
+ },
+ "Bosh admin qilish": {
+  "ru": "Сделать главным админом",
+  "en": "Make head admin"
+ },
+ "Bosh admin tayinlandi": {
+  "ru": "Главный админ назначен",
+  "en": "Head admin assigned"
+ },
  "Bosh admin • Diamond": {
   "ru": "Главный админ • Diamond",
   "en": "Head admin • Diamond"
+ },
+ "Bosh adminlar": {
+  "ru": "Главные админы",
+  "en": "Head admins"
+ },
+ "Bosh adminlikdan olindi": {
+  "ru": "Снят с роли главного админа",
+  "en": "Head admin role removed"
+ },
+ "Bosh adminlikdan olinsinmi?": {
+  "ru": "Снять с роли главного админа?",
+  "en": "Remove head admin role?"
+ },
+ "Bosh adminlikdan olish": {
+  "ru": "Снять с роли главного админа",
+  "en": "Remove head admin role"
  },
  "Boshlang'ich": {
   "ru": "Начальный",
@@ -291,6 +407,10 @@
   "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
   "en": "Your daily calorie target is calculated from this data."
  },
+ "Bu raqam allaqachon ro'yxatdan o'tgan": {
+  "ru": "Этот номер уже зарегистрирован",
+  "en": "This number is already registered"
+ },
  "Bu raqam bilan akkaunt allaqachon bor — Kirish'ni bosing": {
   "ru": "Аккаунт с этим номером уже есть — нажмите «Войти»",
   "en": "An account with this number already exists — tap Sign in"
@@ -298,6 +418,14 @@
  "Bu rasm o'chirilsinmi?": {
   "ru": "Удалить это фото?",
   "en": "Delete this photo?"
+ },
+ "Bu yagona bosh admin — tushirib bo’lmaydi. Avval boshqa birovni bosh admin qiling.": {
+  "ru": "Это единственный главный админ — понизить нельзя. Сначала назначьте главным админом кого-то ещё.",
+  "en": "This is the only head admin — they can't be demoted. Make someone else head admin first."
+ },
+ "Bu zalda trener yo'q — qo'shing yoki boshqa zaldan ko'chiring": {
+  "ru": "В этом зале нет тренеров — добавьте или переведите из другого зала",
+  "en": "No trainers in this gym — add one or move one from another gym"
  },
  "Bugun": {
   "ru": "Сегодня",
@@ -471,6 +599,10 @@
   "ru": "Выручка магазина",
   "en": "Shop revenue"
  },
+ "Do'kon va sotuv": {
+  "ru": "Магазин и продажи",
+  "en": "Shop and sales"
+ },
  "Dobavkalar": {
   "ru": "Добавки",
   "en": "Supplements"
@@ -607,13 +739,25 @@
   "ru": "Клиентов пока нет",
   "en": "No clients yet"
  },
+ "Hali ro'yxatdan o'tgan foydalanuvchi yo'q": {
+  "ru": "Зарегистрированных пользователей пока нет",
+  "en": "No registered users yet"
+ },
  "Hali to'lov yo'q": {
   "ru": "Оплат пока нет",
   "en": "No payments yet"
  },
+ "Hali trener yo'q": {
+  "ru": "Тренеров пока нет",
+  "en": "No trainers yet"
+ },
  "Hali vazn kiritilmagan": {
   "ru": "Вес ещё не внесён",
   "en": "No weight logged yet"
+ },
+ "Hali zal qo'shilmagan": {
+  "ru": "Залы ещё не добавлены",
+  "en": "No gyms added yet"
  },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
@@ -719,6 +863,10 @@
   "ru": "Имя (видят ученики)",
   "en": "Name (shown to clients)"
  },
+ "Ism yoki telefon raqam": {
+  "ru": "Имя или номер телефона",
+  "en": "Name or phone number"
+ },
  "Ism yoki telefon raqam bo'yicha qidirish": {
   "ru": "Поиск по имени или номеру телефона",
   "en": "Search by name or phone number"
@@ -726,6 +874,10 @@
  "Ismingizni kiriting": {
   "ru": "Введите имя",
   "en": "Enter your name"
+ },
+ "Ismni kiriting": {
+  "ru": "Введите имя",
+  "en": "Enter a name"
  },
  "Ismsiz": {
   "ru": "Без имени",
@@ -795,6 +947,10 @@
   "ru": "Камера",
   "en": "Camera"
  },
+ "Kamida 6 belgi — xodimga shu parolni aytasiz": {
+  "ru": "Минимум 6 символов — сообщите этот пароль сотруднику",
+  "en": "At least 6 characters — give this password to the staff member"
+ },
  "Katalogda ko'rinmaysiz — yangi shogird tanlay olmaydi": {
   "ru": "Вас нет в каталоге — новые ученики не могут вас выбрать",
   "en": "You're hidden from the catalog — new clients can't choose you"
@@ -839,9 +995,17 @@
   "ru": "Не указано, кто выдал",
   "en": "Not recorded who handed it over"
  },
+ "Kim nechta sotdi, qaysi tovar, qancha pul": {
+  "ru": "Кто сколько продал, какие товары, на какую сумму",
+  "en": "Who sold how many, which products, how much"
+ },
  "Kim sotdi": {
   "ru": "Кто продал",
   "en": "Sold by"
+ },
+ "Kimni trener qilamiz?": {
+  "ru": "Кого сделать тренером?",
+  "en": "Who should be a trainer?"
  },
  "Kirish": {
   "ru": "Войти",
@@ -850,6 +1014,10 @@
  "Kiriting": {
   "ru": "Введите",
   "en": "Required"
+ },
+ "Ko'cha, uy (ixtiyoriy)": {
+  "ru": "Улица, дом (необязательно)",
+  "en": "Street, building (optional)"
  },
  "Ko'krak (grud) + qo'lning oldi (biceps)": {
   "ru": "Грудь + бицепс",
@@ -951,6 +1119,14 @@
   "ru": "Изменить продукт",
   "en": "Edit food"
  },
+ "Mamlakat": {
+  "ru": "Страна",
+  "en": "Country"
+ },
+ "Manzil kiritilmagan": {
+  "ru": "Адрес не указан",
+  "en": "No address entered"
+ },
  "Maqsad": {
   "ru": "Цель",
   "en": "Goal"
@@ -986,6 +1162,10 @@
  "Massa nabor": {
   "ru": "Набор массы",
   "en": "Muscle gain"
+ },
+ "Mavjud foydalanuvchini tayinlash": {
+  "ru": "Назначить существующего пользователя",
+  "en": "Assign an existing user"
  },
  "May": {
   "ru": "Май",
@@ -1147,6 +1327,10 @@
   "ru": "Прошлые оплаты",
   "en": "Past payments"
  },
+ "Olish": {
+  "ru": "Снять",
+  "en": "Remove"
+ },
  "Oqsil": {
   "ru": "Белок",
   "en": "Protein"
@@ -1207,6 +1391,10 @@
   "ru": "Похудение",
   "en": "Weight loss"
  },
+ "O’chirish": {
+  "ru": "Удалить",
+  "en": "Delete"
+ },
  "Parol": {
   "ru": "Пароль",
   "en": "Password"
@@ -1214,6 +1402,10 @@
  "Parol juda oddiy — kamida 6 belgi": {
   "ru": "Пароль слишком простой — минимум 6 символов",
   "en": "Password is too weak — at least 6 characters"
+ },
+ "Parol kamida 6 belgi bo'lsin": {
+  "ru": "Пароль — не меньше 6 символов",
+  "en": "Password must be at least 6 characters"
  },
  "Parol kamida 6 belgidan iborat": {
   "ru": "Пароль — не меньше 6 символов",
@@ -1226,6 +1418,10 @@
  "Parol o'zgartirildi": {
   "ru": "Пароль изменён",
   "en": "Password changed"
+ },
+ "Parol: {0}": {
+  "ru": "Пароль: {0}",
+  "en": "Password: {0}"
  },
  "Parolni ko'rsatish": {
   "ru": "Показать пароль",
@@ -1287,6 +1483,10 @@
   "ru": "Какой товар",
   "en": "By product"
  },
+ "Qaysi zalga?": {
+  "ru": "В какой зал?",
+  "en": "Which gym?"
+ },
  "Qayta kirish": {
   "ru": "Войти заново",
   "en": "Sign in again"
@@ -1310,6 +1510,10 @@
  "Qo'shilish": {
   "ru": "Присоединиться",
   "en": "Join"
+ },
+ "Qo'shish": {
+  "ru": "Добавить",
+  "en": "Add"
  },
  "Qoldi: {0}": {
   "ru": "Осталось: {0}",
@@ -1455,6 +1659,10 @@
   "ru": "Список",
   "en": "List"
  },
+ "Ro'yxatda yo'q bo'lsa — o'zingiz yozing": {
+  "ru": "Если нет в списке — введите сами",
+  "en": "If it's not in the list, type it yourself"
+ },
  "Ro'yxatdan o'tayotgan shogirdlar sizni tanlay oladi": {
   "ru": "Новые ученики могут выбрать вас при регистрации",
   "en": "Clients signing up can choose you"
@@ -1486,6 +1694,10 @@
  "Saqlab bo'lmadi: {0}": {
   "ru": "Не удалось сохранить: {0}",
   "en": "Could not save: {0}"
+ },
+ "Saqlandi": {
+  "ru": "Сохранено",
+  "en": "Saved"
  },
  "Saqlandi: {0} kg": {
   "ru": "Сохранено: {0} кг",
@@ -1535,6 +1747,10 @@
   "ru": "Ученик",
   "en": "Client"
  },
+ "Shogird biriktirilmagan": {
+  "ru": "Ученики не прикреплены",
+  "en": "No clients assigned"
+ },
  "Shogird do'kondan tovar so'rasa, shu yerda chiqadi va chatga xabar keladi.": {
   "ru": "Когда ученик закажет товар, заказ появится здесь, а в чат придёт сообщение.",
   "en": "When a client orders a product, it shows up here and a message arrives in chat."
@@ -1554,6 +1770,10 @@
  "Shogirdi yo'q — baho yo'q": {
   "ru": "Нет учеников — нет оценки",
   "en": "No clients — no score"
+ },
+ "Shogirdi yo’q": {
+  "ru": "Учеников нет",
+  "en": "No clients"
  },
  "Shogirdlar": {
   "ru": "Ученики",
@@ -1579,6 +1799,18 @@
   "ru": "Ученики не видят",
   "en": "Hidden from clients"
  },
+ "Shogirdni \"Mijozlar\" bo’limidan tanlab, shu trenerga biriktirishingiz mumkin.": {
+  "ru": "Выберите ученика в разделе «Клиенты» и прикрепите к этому тренеру.",
+  "en": "Pick a client in the Clients section and assign them to this trainer."
+ },
+ "Shu ma'lumotni xodimga bering — ilovaga shu bilan kiradi:": {
+  "ru": "Передайте эти данные сотруднику — с ними он войдёт в приложение:",
+  "en": "Give these details to the staff member — they sign in with them:"
+ },
+ "Siz": {
+  "ru": "Вы",
+  "en": "You"
+ },
  "Siz katalogda yo'qsiz — shogirdlar sizni tanlay olmaydi.": {
   "ru": "Вас нет в каталоге — ученики не могут вас выбрать.",
   "en": "You're not in the catalog — clients can't choose you."
@@ -1598,6 +1830,10 @@
  "Solishtirish": {
   "ru": "Сравнение",
   "en": "Comparison"
+ },
+ "Solishtirish, ball va kimga e'tibor kerak": {
+  "ru": "Сравнение, баллы и кому нужно внимание",
+  "en": "Comparison, scores and who needs attention"
  },
  "Sotilgan narx − tan narx": {
   "ru": "Цена продажи − себестоимость",
@@ -1675,6 +1911,10 @@
   "ru": "Выбранный тренер составит ваш план и будет с вами на связи. Позже его можно сменить в разделе «Профиль».",
   "en": "The trainer you choose will build your plan and chat with you. You can change trainers later in Profile."
  },
+ "Tanlang": {
+  "ru": "Выберите",
+  "en": "Select"
+ },
  "Tarix": {
   "ru": "История",
   "en": "History"
@@ -1691,9 +1931,17 @@
   "ru": "Неверный номер телефона",
   "en": "Invalid phone number"
  },
+ "Telefon raqam to'liq emas": {
+  "ru": "Номер телефона введён не полностью",
+  "en": "Phone number is incomplete"
+ },
  "Telefon raqam yoki parol noto'g'ri": {
   "ru": "Неверный номер телефона или пароль",
   "en": "Incorrect phone number or password"
+ },
+ "Telefon: {0}": {
+  "ru": "Телефон: {0}",
+  "en": "Phone: {0}"
  },
  "Tez": {
   "ru": "Быстрый",
@@ -1807,6 +2055,22 @@
   "ru": "Выйти из панели тренера?",
   "en": "Sign out of the trainer panel?"
  },
+ "Trener qilinsinmi?": {
+  "ru": "Сделать тренером?",
+  "en": "Make trainer?"
+ },
+ "Trener qilish": {
+  "ru": "Сделать тренером",
+  "en": "Make trainer"
+ },
+ "Trener qo'shildi": {
+  "ru": "Тренер добавлен",
+  "en": "Trainer added"
+ },
+ "Trener qo'shish": {
+  "ru": "Добавить тренера",
+  "en": "Add trainer"
+ },
  "Trener reja biriktirganda": {
   "ru": "Когда тренер назначает план",
   "en": "When your trainer assigns a plan"
@@ -1814,6 +2078,10 @@
  "Trener sizga ovqatlanish rejasini berdi — 'Bugun' bo'limida ko'ring": {
   "ru": "Тренер назначил вам план питания — смотрите в разделе «Сегодня»",
   "en": "Your trainer assigned you a meal plan — see it in the Today tab"
+ },
+ "Trener tayinlandi": {
+  "ru": "Тренер назначен",
+  "en": "Trainer assigned"
  },
  "Trener tez orada sizga shaxsiy ovqatlanish rejasini tuzadi. Savollaringizni 'Trener' bo'limida yozing.": {
   "ru": "Тренер скоро составит вам личный план питания. Вопросы пишите в разделе «Тренер».",
@@ -1855,6 +2123,10 @@
   "ru": "Выберите тренера",
   "en": "Choose your trainer"
  },
+ "Trenerlar": {
+  "ru": "Тренеры",
+  "en": "Trainers"
+ },
  "Trenerlar haqi": {
   "ru": "Оплата тренеров",
   "en": "Trainer pay"
@@ -1862,6 +2134,18 @@
  "Trenerlar reytingi": {
   "ru": "Рейтинг тренеров",
   "en": "Trainer ranking"
+ },
+ "Trenerlikdan olindi": {
+  "ru": "Снят с роли тренера",
+  "en": "Trainer role removed"
+ },
+ "Trenerlikdan olinsinmi?": {
+  "ru": "Снять с роли тренера?",
+  "en": "Remove trainer role?"
+ },
+ "Trenerlikdan olish": {
+  "ru": "Снять с роли тренера",
+  "en": "Remove trainer role"
  },
  "Trenerni almashtirish": {
   "ru": "Сменить тренера",
@@ -1875,11 +2159,27 @@
   "ru": "Без тренера",
   "en": "No trainer"
  },
+ "Trenersiz shogirdlar": {
+  "ru": "Ученики без тренера",
+  "en": "Clients without a trainer"
+ },
  "Tugagan": {
   "ru": "Закончился",
   "en": "Sold out"
  },
+ "Tuman": {
+  "ru": "Район",
+  "en": "District"
+ },
+ "Tuman nomi": {
+  "ru": "Название района",
+  "en": "District name"
+ },
  "Tushunarli": {
+  "ru": "Понятно",
+  "en": "Got it"
+ },
+ "Tushundim": {
   "ru": "Понятно",
   "en": "Got it"
  },
@@ -1979,6 +2279,10 @@
   "ru": "Через запятую. Если указано — ученик выберет цвет при заказе",
   "en": "Comma-separated. If set, the client picks a color when ordering"
  },
+ "Viloyat / shahar": {
+  "ru": "Область / город",
+  "en": "Region / city"
+ },
  "Xabar yozing...": {
   "ru": "Напишите сообщение...",
   "en": "Type a message..."
@@ -2010,6 +2314,14 @@
  "Yangi": {
   "ru": "Новое",
   "en": "New"
+ },
+ "Yangi barmen": {
+  "ru": "Новый бармен",
+  "en": "New bar staff"
+ },
+ "Yangi barmen akkaunti": {
+  "ru": "Новый аккаунт бармена",
+  "en": "New bar staff account"
  },
  "Yangi buyurtma": {
   "ru": "Новый заказ",
@@ -2063,6 +2375,14 @@
   "ru": "Новый товар",
   "en": "New product"
  },
+ "Yangi trener": {
+  "ru": "Новый тренер",
+  "en": "New trainer"
+ },
+ "Yangi trener akkaunti": {
+  "ru": "Новый аккаунт тренера",
+  "en": "New trainer account"
+ },
  "Yangi treneringiz rejangiz va chatingizni ko'radi.": {
   "ru": "Новый тренер увидит ваш план и переписку.",
   "en": "Your new trainer will see your plan and chat."
@@ -2075,6 +2395,10 @@
   "ru": "Новые сообщения, планы и заказы появятся здесь — даже если уведомления на телефоне выключены.",
   "en": "New messages, plans and orders show up here — even if phone notifications are off."
  },
+ "Yangi zal": {
+  "ru": "Новый зал",
+  "en": "New gym"
+ },
  "Yangilash": {
   "ru": "Обновить",
   "en": "Refresh"
@@ -2086,6 +2410,10 @@
  "Yanvar": {
   "ru": "Январь",
   "en": "January"
+ },
+ "Yaratilmoqda…": {
+  "ru": "Создаётся…",
+  "en": "Creating…"
  },
  "Yashirish": {
   "ru": "Скрыть",
@@ -2131,6 +2459,10 @@
   "ru": "Зал не назначен",
   "en": "No gym assigned"
  },
+ "Zal egasi": {
+  "ru": "Владелец зала",
+  "en": "Gym owner"
+ },
  "Zal kunlari": {
   "ru": "Дни зала",
   "en": "Gym days"
@@ -2142,6 +2474,62 @@
  "Zal kunlari tanlanmagan": {
   "ru": "Дни зала не выбраны",
   "en": "Gym days not chosen"
+ },
+ "Zal nomi": {
+  "ru": "Название зала",
+  "en": "Gym name"
+ },
+ "Zal nomini kiriting": {
+  "ru": "Введите название зала",
+  "en": "Enter the gym name"
+ },
+ "Zal o'chirildi": {
+  "ru": "Зал удалён",
+  "en": "Gym deleted"
+ },
+ "Zal o'chirilsinmi?": {
+  "ru": "Удалить зал?",
+  "en": "Delete gym?"
+ },
+ "Zal qo'shildi": {
+  "ru": "Зал добавлен",
+  "en": "Gym added"
+ },
+ "Zal qo'shsangiz, har trenerni o'z zaliga biriktirasiz va zal bo'yicha ajratib ko'rasiz.": {
+  "ru": "Добавьте зал — и сможете прикреплять тренеров к своему залу и смотреть данные по залам.",
+  "en": "Add a gym to assign each trainer to their gym and view data per gym."
+ },
+ "Zal tanlang": {
+  "ru": "Выберите зал",
+  "en": "Choose a gym"
+ },
+ "Zaldan chiqarildi": {
+  "ru": "Откреплён от зала",
+  "en": "Removed from gym"
+ },
+ "Zaldan chiqarish": {
+  "ru": "Открепить от зала",
+  "en": "Remove from gym"
+ },
+ "Zalga biriktirildi": {
+  "ru": "Прикреплён к залу",
+  "en": "Assigned to gym"
+ },
+ "Zalga biriktirish": {
+  "ru": "Прикрепить к залу",
+  "en": "Assign to gym"
+ },
+ "Zallar": {
+  "ru": "Залы",
+  "en": "Gyms"
+ },
+ "Zalni o'chirish": {
+  "ru": "Удалить зал",
+  "en": "Delete gym"
+ },
+ "Zalni tahrirlash": {
+  "ru": "Изменить зал",
+  "en": "Edit gym"
  },
  "Zalsiz": {
   "ru": "Без зала",
@@ -2243,6 +2631,14 @@
   "ru": "{0} шт.",
   "en": "{0} pcs"
  },
+ "{0} faqat do'kon bilan ishlaydi: tovar, buyurtma va qoldiq. Shogirdlar, rejalar va chatni ko'rmaydi.{1}": {
+  "ru": "{0} будет работать только с магазином: товары, заказы и остатки. Учеников, планы и чат не видит.{1}",
+  "en": "{0} will work only with the shop: products, orders and stock. They won't see clients, plans or chat.{1}"
+ },
+ "{0} ilovaga kira olmaydi va ro’yxatlardan yo’qoladi. Bu amalni qaytarib bo’lmaydi.": {
+  "ru": "{0} не сможет войти в приложение и исчезнет из списков. Это действие нельзя отменить.",
+  "en": "{0} won't be able to sign in and will disappear from the lists. This can't be undone."
+ },
  "{0} kg": {
   "ru": "{0} кг",
   "en": "{0} kg"
@@ -2258,6 +2654,10 @@
  "{0} kg · BMI {1} · {2} kkal": {
   "ru": "{0} кг · ИМТ {1} · {2} ккал",
   "en": "{0} kg · BMI {1} · {2} kcal"
+ },
+ "{0} kg · {1} kkal": {
+  "ru": "{0} кг · {1} ккал",
+  "en": "{0} kg · {1} kcal"
  },
  "{0} kg × {1}": {
   "ru": "{0} кг × {1}",
@@ -2291,6 +2691,18 @@
   "ru": "{0} мл / 2000 мл",
   "en": "{0} ml / 2000 ml"
  },
+ "{0} oddiy foydalanuvchiga aylanadi va trener paneliga kira olmaydi.": {
+  "ru": "{0} станет обычным пользователем и не сможет войти в панель тренера.",
+  "en": "{0} becomes a regular user and can't access the trainer panel."
+ },
+ "{0} oddiy foydalanuvchiga aylanadi. Unga biriktirilgan {1} ta shogird trenersiz qoladi — ularni boshqa trenerga biriktirishingiz kerak.": {
+  "ru": "{0} станет обычным пользователем. Его ученики ({1}) останутся без тренера — прикрепите их к другому.",
+  "en": "{0} becomes a regular user. Their {1} clients will have no trainer — assign them to another one."
+ },
+ "{0} oddiy trener bo’lib qoladi: rol tayinlay olmaydi va akkaunt o’chira olmaydi. Shogirdlari o’zida qoladi.": {
+  "ru": "{0} останется обычным тренером: не сможет назначать роли и удалять аккаунты. Ученики остаются за ним.",
+  "en": "{0} stays a regular trainer: can't assign roles or delete accounts. Their clients stay with them."
+ },
  "{0} oy": {
   "ru": "{0} мес.",
   "en": "{0} mo"
@@ -2310,6 +2722,10 @@
  "{0} shogird · {1} kunda {2} xabar yozgan": {
   "ru": "учеников: {0} · за {1} дн. написал сообщений: {2}",
   "en": "{0} clients · {2} messages sent in {1} days"
+ },
+ "{0} sizga teng huquq oladi: trener tayinlaydi, akkaunt o’chiradi, hamma trener va shogirdni ko’radi.\n\nUni faqat boshqa bosh admin tushira oladi.": {
+  "ru": "{0} получит те же права, что и вы: назначать тренеров, удалять аккаунты, видеть всех тренеров и учеников.\n\nПонизить его сможет только другой главный админ.",
+  "en": "{0} gets the same rights as you: assigning trainers, deleting accounts, seeing all trainers and clients.\n\nOnly another head admin can demote them."
  },
  "{0} sizning treneringiz bo'ladi. Oldingi trener sizni endi ko'rmaydi.": {
   "ru": "{0} станет вашим тренером. Прежний тренер больше не будет видеть ваши данные.",
@@ -2355,9 +2771,29 @@
   "ru": "Продуктов: {0} • Б — белки, Ж — жиры, У — углеводы (на 100 г)",
   "en": "{0} foods • P — protein, F — fat, C — carbs (per 100 g)"
  },
+ "{0} ta shogird  ·  {1}": {
+  "ru": "учеников: {0}  ·  {1}",
+  "en": "{0} clients  ·  {1}"
+ },
+ "{0} ta shogird biriktirilgan": {
+  "ru": "Прикреплено учеников: {0}",
+  "en": "{0} clients assigned"
+ },
  "{0} ta shogird hali zal kunlarini tanlamagan.": {
   "ru": "Учеников, не выбравших дни зала: {0}.",
   "en": "{0} clients haven't chosen gym days yet."
+ },
+ "{0} ta trener zalga biriktirilmagan — ustiga bosib \"Zalga biriktirish\" ni tanlang.": {
+  "ru": "Тренеров без зала: {0} — нажмите на тренера и выберите «Прикрепить к залу».",
+  "en": "{0} trainers have no gym — tap one and choose “Assign to gym”."
+ },
+ "{0} trener paneliga kira oladi: reja tuzadi, mahsulot qo’shadi, shogirdlar bilan yozishadi.": {
+  "ru": "{0} сможет войти в панель тренера: составлять планы, добавлять продукты, переписываться с учениками.",
+  "en": "{0} will be able to use the trainer panel: build plans, add foods, chat with clients."
+ },
+ "{0} trener paneliga kiradi: reja tuzadi, shogird qabul qiladi.": {
+  "ru": "{0} получит доступ к панели тренера: составляет планы, принимает учеников.",
+  "en": "{0} gets access to the trainer panel: builds plans, accepts clients."
  },
  "{0} vaqti o‘tdi": {
   "ru": "{0}: время прошло",
