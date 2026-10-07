@@ -61,7 +61,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **121/121**, qoida testlari **213/213**.
+`flutter test` **122/122**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1647,6 +1647,21 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - Kodda tarjimaga ulanmagan qolgan matnlar (ataylab): brend nomi ("Qobil"), Firestore
       maydon nomlari, sana formatlari, misol tariqasidagi maydon ko'rsatmalari ("Bunyodkor 12",
       "Anvar aka"), "OK", ishlab chiquvchi uchun "Firebase sozlanmagan" ekrani.
+
+86. **Do'kon tovarlari uch tilda (7-okt)** — `Product` ga `nameRu`, `nameEn`, `noteRu`, `noteEn`
+    qo'shildi (ixtiyoriy; bo'sh bo'lsa o'zbekchasi chiqadi). Ekranda `displayName` /
+    `displayNote`. Tovar tahrirlash oynasida "Tarjima (ixtiyoriy)" bo'limi. Rang nomlari
+    lug'at orqali (`tr(c)`), qiymati bazada o'zbekcha.
+    - Bazadagi **146 tovarning hammasi** to'ldirildi: `tools/dokon/tovar-tarjima.json`
+      (90 nom, 121 izoh) + `node tools/dokon/tarjima_yozish.mjs` (faqat shu 4 maydonga tegadi,
+      qayta ishga tushirish xavfsiz; `korish` — faqat ko'rsatadi).
+    - Tarjimada ichki eslatma ("Narx AllPituz kanalidan (24-sent)", "hozirgi narxni tekshiring")
+      tashlab ketildi. **O'zbekcha izohda u hali turibdi va mijozga ko'rinadi** — tozalash
+      taklif qilingan, qilinmagan.
+    - Buyurtma ro'yxatlarida tovar nomi o'zbekcha qoladi (`orders.productName` shunday yozilgan).
+    - Eski APK'da tovar tahrirlansa (`set`), tarjima maydonlari o'chadi — keyin skriptni qayta
+      ishga tushirish kerak. `flutter test` **122/122**, lug'at 1 100 kalit.
+      Reja: `specs/tovar-tarjima.md` (lokal).
       `flutter test` **121/121**. Web va APK joylandi.
     - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
       o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.

@@ -1282,6 +1282,20 @@ void main() {
       expect(trChat('Bugun kelolmayman'), 'Bugun kelolmayman');
     });
 
+    test('tovar nomi tilga qarab, tarjimasi yo-q bo-lsa o-zbekcha', () {
+      const p = Product(category: 'Forma', name: 'Mayka (kulrang)', note: 'Yengsiz',
+          nameRu: 'Майка (серая)', noteEn: 'Sleeveless');
+      expect(p.displayName, 'Mayka (kulrang)');
+      appLang.value = 'ru';
+      expect(p.displayName, 'Майка (серая)');
+      expect(p.displayNote, 'Yengsiz'); // ruscha izoh yo-q
+      appLang.value = 'en';
+      expect(p.displayName, 'Mayka (kulrang)'); // inglizcha nom yo-q
+      expect(p.displayNote, 'Sleeveless');
+      expect(p.toMap()['nameRu'], 'Майка (серая)');
+      expect(p.toMap().containsKey('nameEn'), isFalse);
+    });
+
     test('sana tilga qarab yoziladi', () {
       final d = DateTime(2026, 10, 5); // dushanba
       expect(uzDate(d), 'Dushanba, 5-oktyabr');

@@ -60,6 +60,10 @@ class Product {
   /// Qisqa izoh: ta'mi, hajmi, o'lchami
   final String note;
 
+  /// Nom va izohning ruscha / inglizcha tarjimasi (ixtiyoriy; bo'sh bo'lsa o'zbekchasi chiqadi).
+  /// [name] va [note] — asosiy (o'zbekcha): buyurtma va hisobotlarga shular yoziladi.
+  final String nameRu, nameEn, noteRu, noteEn;
+
   /// Asosiy rasm havolasi (ixtiyoriy) — bo'sh bo'lsa bo'lim ikonkasi chiqadi
   final String image;
 
@@ -98,6 +102,10 @@ class Product {
     required this.category,
     required this.name,
     this.note = '',
+    this.nameRu = '',
+    this.nameEn = '',
+    this.noteRu = '',
+    this.noteEn = '',
     this.image = '',
     this.images = const [],
     this.sizes = const [],
@@ -133,6 +141,20 @@ class Product {
   /// Narx yozuvi: "450 000 so'm" yoki "35 \$"
   String get priceText => fmtMoney(price, currency);
 
+  /// Ilova tilidagi nom (tarjimasi bo'lmasa — o'zbekcha)
+  String get displayName => switch (appLang.value) {
+        'ru' => nameRu.isEmpty ? name : nameRu,
+        'en' => nameEn.isEmpty ? name : nameEn,
+        _ => name,
+      };
+
+  /// Ilova tilidagi izoh (tarjimasi bo'lmasa — o'zbekcha)
+  String get displayNote => switch (appLang.value) {
+        'ru' => noteRu.isEmpty ? note : noteRu,
+        'en' => noteEn.isEmpty ? note : noteEn,
+        _ => note,
+      };
+
   /// Foyda ([costPrice] kiritilmagan bo'lsa 0 — hali hisoblanmagan)
   int get margin => costPrice > 0 ? price - costPrice : 0;
 
@@ -143,6 +165,10 @@ class Product {
       category: (d['category'] ?? '') as String,
       name: (d['name'] ?? '') as String,
       note: (d['note'] ?? '') as String,
+      nameRu: (d['nameRu'] ?? '') as String,
+      nameEn: (d['nameEn'] ?? '') as String,
+      noteRu: (d['noteRu'] ?? '') as String,
+      noteEn: (d['noteEn'] ?? '') as String,
       image: (d['image'] ?? '') as String,
       images: List<String>.from(d['images'] ?? const []),
       sizes: List<String>.from(d['sizes'] ?? const []),
@@ -163,6 +189,10 @@ class Product {
         'category': category,
         'name': name,
         'note': note,
+        if (nameRu.isNotEmpty) 'nameRu': nameRu,
+        if (nameEn.isNotEmpty) 'nameEn': nameEn,
+        if (noteRu.isNotEmpty) 'noteRu': noteRu,
+        if (noteEn.isNotEmpty) 'noteEn': noteEn,
         'image': image,
         'images': images,
         'sizes': sizes,
@@ -180,6 +210,10 @@ class Product {
         category: category,
         name: name,
         note: note,
+        nameRu: nameRu,
+        nameEn: nameEn,
+        noteRu: noteRu,
+        noteEn: noteEn,
         image: image,
         images: images,
         sizes: sizes,

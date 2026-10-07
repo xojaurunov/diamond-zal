@@ -459,6 +459,10 @@
   "ru": "Если пусто, картинка подбирается по названию",
   "en": "If empty, an image is picked by name"
  },
+ "Bo'sh qolsa, rus va ingliz tilida ham o'zbekcha nom chiqadi": {
+  "ru": "Если оставить пустым, на русском и английском будет показано узбекское название",
+  "en": "If left empty, the Uzbek name is shown in Russian and English too"
+ },
  "Bo'ston": {
   "ru": "Бустон",
   "en": "Buston"
@@ -1255,6 +1259,14 @@
   "ru": "Комментарий / совет",
   "en": "Note / tip"
  },
+ "Izoh — inglizcha": {
+  "ru": "Описание — по-английски",
+  "en": "Note — English"
+ },
+ "Izoh — ruscha": {
+  "ru": "Описание — по-русски",
+  "en": "Note — Russian"
+ },
  "Jalaquduq": {
   "ru": "Джалакудук",
   "en": "Jalakuduk"
@@ -1842,6 +1854,14 @@
  "Nomi": {
   "ru": "Название",
   "en": "Name"
+ },
+ "Nomi — inglizcha": {
+  "ru": "Название — по-английски",
+  "en": "Name — English"
+ },
+ "Nomi — ruscha": {
+  "ru": "Название — по-русски",
+  "en": "Name — Russian"
  },
  "Nomsiz": {
   "ru": "Без названия",
@@ -3055,6 +3075,10 @@
   "ru": "История",
   "en": "History"
  },
+ "Tarjima (ixtiyoriy)": {
+  "ru": "Перевод (необязательно)",
+  "en": "Translation (optional)"
+ },
  "Taxtako'pir": {
   "ru": "Тахтакупыр",
   "en": "Takhtakupyr"
@@ -3951,6 +3975,14 @@
   "ru": "из {0}",
   "en": "of {0}"
  },
+ "haki": {
+  "ru": "хаки",
+  "en": "khaki"
+ },
+ "haki-kamuflyaj": {
+  "ru": "хаки-камуфляж",
+  "en": "khaki camo"
+ },
  "iyul": {
   "ru": "июля",
   "en": "July"
@@ -3970,6 +4002,14 @@
  "kkal qoldi": {
   "ru": "ккал осталось",
   "en": "kcal left"
+ },
+ "ko'k": {
+  "ru": "синий",
+  "en": "blue"
+ },
+ "kulrang": {
+  "ru": "серый",
+  "en": "grey"
  },
  "maqsad tomon": {
   "ru": "к цели",
@@ -3999,6 +4039,34 @@
   "ru": "октября",
   "en": "October"
  },
+ "oq-qora": {
+  "ru": "бело-чёрный",
+  "en": "white-black"
+ },
+ "qora": {
+  "ru": "чёрный",
+  "en": "black"
+ },
+ "qora (kulrang chok)": {
+  "ru": "чёрный (серый шов)",
+  "en": "black (grey stitching)"
+ },
+ "qora (yashil chok)": {
+  "ru": "чёрный (зелёный шов)",
+  "en": "black (green stitching)"
+ },
+ "qora-kamuflyaj": {
+  "ru": "чёрный камуфляж",
+  "en": "black camo"
+ },
+ "qora-yashil": {
+  "ru": "чёрно-зелёный",
+  "en": "black-green"
+ },
+ "sariq": {
+  "ru": "жёлтый",
+  "en": "yellow"
+ },
  "sariq, kulrang, yashil": {
   "ru": "жёлтый, серый, зелёный",
   "en": "yellow, grey, green"
@@ -4015,6 +4083,10 @@
   "ru": "сум",
   "en": "UZS"
  },
+ "sof qora": {
+  "ru": "чистый чёрный",
+  "en": "solid black"
+ },
  "stakan / 8": {
   "ru": "стаканов / 8",
   "en": "glasses / 8"
@@ -4022,6 +4094,10 @@
  "yanvar": {
   "ru": "января",
   "en": "January"
+ },
+ "yashil": {
+  "ru": "зелёный",
+  "en": "green"
  },
  "yedim belgisi": {
   "ru": "отметки «съел»",

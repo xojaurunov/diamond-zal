@@ -77,7 +77,7 @@ class _ShopScreenState extends State<ShopScreen> {
               const SizedBox(width: AppSpace.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(p.name, style: t.titleMedium),
+                  Text(p.displayName, style: t.titleMedium),
                   Text(p.priceText,
                       style: t.bodyMedium?.copyWith(color: AppColors.accent)),
                 ]),
@@ -118,7 +118,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ChoiceChip(
                       selected: color == c,
                       onSelected: (_) => setS(() => color = c),
-                      label: Text(c),
+                      label: Text(tr(c)),
                     ),
                 ]),
               ),
@@ -401,11 +401,11 @@ class _ProductTile extends StatelessWidget {
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(p.name, style: t.titleSmall),
-            if (p.note.isNotEmpty)
+            Text(p.displayName, style: t.titleSmall),
+            if (p.displayNote.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: Text(p.note,
+                child: Text(p.displayNote,
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis),

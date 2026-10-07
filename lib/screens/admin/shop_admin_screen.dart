@@ -298,7 +298,7 @@ class _ProductAdminTile extends StatelessWidget {
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(p.name, style: t.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(p.displayName, style: t.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
             const SizedBox(height: 4),
             Wrap(spacing: 6, runSpacing: 4, children: [
               Pill(text: p.priceText, color: AppColors.accent),
@@ -328,6 +328,10 @@ class _ProductAdminTile extends StatelessWidget {
 Future<void> editProduct(BuildContext context, [Product? p]) async {
   final name = TextEditingController(text: p?.name);
   final note = TextEditingController(text: p?.note);
+  final nameRu = TextEditingController(text: p?.nameRu);
+  final nameEn = TextEditingController(text: p?.nameEn);
+  final noteRu = TextEditingController(text: p?.noteRu);
+  final noteEn = TextEditingController(text: p?.noteEn);
   final price = TextEditingController(text: p == null || p.price == 0 ? '' : '${p.price}');
   final stock = TextEditingController(text: '${p?.stock ?? 1}');
   final costPrice =
@@ -393,6 +397,29 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
               labelText: tr('Izoh (ixtiyoriy)'),
               hintText: tr("O'lchami, ta'mi, ishlab chiqaruvchi"),
             ),
+          ),
+          // Ruscha / inglizcha nom va izoh — ixtiyoriy; bo'sh bo'lsa o'zbekchasi ko'rinadi
+          ExpansionTile(
+            tilePadding: EdgeInsets.zero,
+            childrenPadding: const EdgeInsets.only(bottom: AppSpace.sm),
+            title: Text(tr('Tarjima (ixtiyoriy)')),
+            subtitle: Text(tr("Bo'sh qolsa, rus va ingliz tilida ham o'zbekcha nom chiqadi")),
+            children: [
+              TextField(controller: nameRu, decoration: InputDecoration(labelText: tr('Nomi — ruscha'))),
+              const SizedBox(height: AppSpace.sm),
+              TextField(
+                  controller: noteRu,
+                  maxLines: 2,
+                  decoration: InputDecoration(labelText: tr('Izoh — ruscha'))),
+              const SizedBox(height: AppSpace.sm),
+              TextField(
+                  controller: nameEn, decoration: InputDecoration(labelText: tr('Nomi — inglizcha'))),
+              const SizedBox(height: AppSpace.sm),
+              TextField(
+                  controller: noteEn,
+                  maxLines: 2,
+                  decoration: InputDecoration(labelText: tr('Izoh — inglizcha'))),
+            ],
           ),
           const SizedBox(height: AppSpace.md),
           Row(children: [
@@ -548,6 +575,10 @@ Future<void> editProduct(BuildContext context, [Product? p]) async {
       category: category,
       name: name.text.trim(),
       note: note.text.trim(),
+      nameRu: nameRu.text.trim(),
+      nameEn: nameEn.text.trim(),
+      noteRu: noteRu.text.trim(),
+      noteEn: noteEn.text.trim(),
       image: urls.isEmpty ? '' : urls.first,
       images: urls.length > 1 ? urls.sublist(1) : const [],
       sizes: sizeList,
