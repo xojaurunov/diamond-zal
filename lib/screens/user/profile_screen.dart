@@ -252,7 +252,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: AppSpace.xs),
-                        Text('kkal', style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+                        Text(tr('kkal'), style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
                       ]),
                 ]),
               ),

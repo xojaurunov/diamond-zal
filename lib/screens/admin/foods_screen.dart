@@ -20,7 +20,7 @@ class FoodsScreen extends StatefulWidget {
     Widget field(TextEditingController ctl, String label, String suffix) => TextField(
           controller: ctl,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: label, suffixText: suffix),
+          decoration: InputDecoration(labelText: label, suffixText: tr(suffix)),
         );
 
     final img = TextEditingController(text: f?.image);
@@ -230,7 +230,7 @@ class _FoodTile extends StatelessWidget {
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text('${f.kcal.round()}', style: t.titleMedium),
-            Text('kkal', style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
+            Text(tr('kkal'), style: t.bodySmall?.copyWith(color: s.onSurfaceVariant)),
           ]),
           IconButton(
             tooltip: tr("O'chirish"),

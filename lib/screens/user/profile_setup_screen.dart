@@ -346,7 +346,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
           labelText: label,
-          suffixText: suffix,
+          suffixText: tr(suffix),
           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         ),
       );

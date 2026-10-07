@@ -47,7 +47,7 @@ class ProgressScreen extends StatelessWidget {
               style:
                   const TextStyle(fontSize: 32, fontWeight: FontWeight.w700, fontFeatures: tabular),
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(suffixText: 'kg'),
+              decoration: InputDecoration(suffixText: tr('kg')),
             ),
             const SizedBox(height: AppSpace.lg),
             FilledButton(
@@ -367,7 +367,7 @@ class _ChangePanel extends StatelessWidget {
               const SizedBox(width: AppSpace.sm),
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text('kg', style: t.titleMedium?.copyWith(color: AppColors.textFaint)),
+                child: Text(tr('kg'), style: t.titleMedium?.copyWith(color: AppColors.textFaint)),
               ),
             ]),
         const SizedBox(height: AppSpace.sm),

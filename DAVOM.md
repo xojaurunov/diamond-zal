@@ -1640,7 +1640,12 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - **Chatdagi tizim xabarlari** (buyurtma, abonement eslatmasi) bazada o'zbekcha turadi,
       ko'rsatishda `trChat()` (`lib/l10n/tr.dart`) naqsh bo'yicha tarjima qiladi; odam yozgan
       xabar o'zgarmaydi.
-    - Lug'at: **1 076 kalit**, koddagi 713 kalitning hammasida rus va ingliz tarjimasi bor.
+    - O'lchov birliklari (`kkal`, `kg`, `g`, `sm`, `yosh`) ham ulandi — bular birinchi
+      o'tishda o'tkazib yuborilgan edi (vosita bitta kichik harfli so'zni matn deb hisoblamaydi).
+    - Lug'at: **1 081 kalit**, koddagi hamma `tr`/`trf` kalitida rus va ingliz tarjimasi bor.
+    - Kodda tarjimaga ulanmagan qolgan matnlar (ataylab): brend nomi ("Qobil"), Firestore
+      maydon nomlari, sana formatlari, misol tariqasidagi maydon ko'rsatmalari ("Bunyodkor 12",
+      "Anvar aka"), "OK", ishlab chiquvchi uchun "Firebase sozlanmagan" ekrani.
       `flutter test` **121/121**. Web va APK joylandi.
     - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
       o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.
