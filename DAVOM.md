@@ -151,8 +151,9 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 - Tarjimani ko'zdan kechirish (Claude tarjima qilgan) — tuzatish `tools/l10n/tarjima.json` da,
   keyin `python tools/l10n/l10n.py gen`.
 
-**Qaror kutilmoqda:** Blaze (push); ikonkadagi "DISCIPLINA" yozuvi (boshqa brend rasmi —
-"DIAMOND"ga almashtirish taklif qilingan); guruh mashg'ulotlari bormi (jadval kerakmi).
+**Qaror kutilmoqda:** guruh mashg'ulotlari bormi (jadval kerakmi).
+**Hal bo'ldi (7-okt):** ikonka va nom — "Qobil" (84-band); **Blaze kerak emas** (zal egasi) —
+push bildirishnoma qilinmaydi, bu haqda qayta so'ralmaydi.
 
 **Navbatdagi ishlar** — 83-banddagi reja: 1) muzlatish, muddati o'tganlar ro'yxati, kunlik
 kassa; 2) QR skaner, davomat seriyasi; 3) Play Market, push; 4) "rejadan tashqari yedim",
