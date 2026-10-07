@@ -13,14 +13,27 @@
 
 ## 0. ▶ SHU YERDAN BOSHLANG (7-oktabr holati)
 
-**7-oktabr:** ilova nomi **"Qobil"** bo'ldi (ikonka osti, ilova ichi, sayt sahifasi) va ikonka
-almashtirildi ("QOBIL", ko'krakda "Q", "ZAL · TOSHKENT") — **84-band**. **Yangi APK saytga
-joylandi** (tezlik + uch til + yangi nom): `public/app/kq.bin`, nusxasi `Qobil-2026-10-07.apk`.
-⚠️ Bu APK **telefonda sinalmagan** (bu kompyuterda telefon ham, emulyator ham yo'q) — zal
-egasi "joyla" dedi. Ishlamasa qaytarish: `Diamond-2026-10-05.apk` ni `public/app/kq.bin` ga
-ko'chirib `firebase deploy --only hosting`. Ichki nomlar (paket, imzo, Firebase loyihasi, repo
-`diamond-zal`, bildirishnoma kanali `diamond_general`) O'ZGARMAGAN.
+**▶ ERTAGA SHU YERDAN (7-oktabr kechqurun holati).** Hamma kod GitHub'da, web va APK
+saytda. Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar (7-oktabr kechqurun)".
 
+**7-oktabrda qilingan** (84–89-bandlar):
+- ilova nomi **"Qobil"**, yangi ikonka ("QOBIL", ko'krakda "Q", "ZAL · TOSHKENT") — 84;
+- tillar to'liq yopildi: viloyat-tumanlar, tizim oynalari, chatdagi tizim xabarlari, o'lchov
+  birliklari — 85; do'kondagi 146 tovar nomi va izohi uch tilda — 86;
+- shogirdda skrinshot bloklandi (`FLAG_SECURE`) — 87;
+- suv belgisi — pahlavon rasmi; ism-telefon yozuvi olib tashlandi — 88;
+- til tugmasi ichkarida ham (xodimlar tepa paneli, shogird Profili) — 89.
+
+**Saytdagi APK — 7-oktabr 18:05** (nusxasi: `Qobil-2026-10-07.apk`, zal egasining `Music`
+papkasida). ⚠️ **Telefonda sinalmagan** — bu kompyuterda telefon ham, emulyator ham yo'q; zal
+egasi "joyla" dedi. Ichida yangi Android kodi bor: rasm keshi (sqflite, path_provider) va
+`MainActivity.kt` dagi skrinshot bloki. Ishlamasa qaytarish: `Diamond-2026-10-05.apk` ni
+`public/app/kq.bin` ga ko'chirib `firebase deploy --only hosting`.
+Ichki nomlar (paket, imzo, Firebase loyihasi, repo `diamond-zal`, bildirishnoma kanali
+`diamond_general`) O'ZGARMAGAN — yangi APK eski ilova ustiga o'rnatiladi.
+
+Commit'lar zal egasi nomidan (`Diamond <…@users.noreply.github.com>`), Claude hammuallif
+qatorisiz — u shunday so'radi.
 
 **6-oktabr:** uch ish qilindi, hammasi kodda va **web'da joylangan**:
 1. **Tezlik** (81-band) — bo'limlar birinchi ochilganda yuklanadi, rasmlar telefonda
@@ -142,31 +155,46 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 19. **Abonement, davomat, do'kon ustamasi/o'lchami, QR, zaxira** (4-okt, 61–65-band):
     kod tayyor va lokal emulyatorda sinaldi, **haqiqiy bazaga hali joylanmagan**.
 
-### ⏳ Ochiq ishlar (6-oktabr holati)
+### ⏳ Ochiq ishlar (7-oktabr kechqurun)
 
-**Birinchi navbatda — zal egasi:**
-- Sinov APK'ni telefonda ochib ko'rish; ishlasa saytga joylanadi (`deploy.ps1`).
-- Telefonda hali ko'rilmagan: tezlik, rasm keshi, do'konda rasmni kattalashtirish, til
-  almashtirish, "To'lovlar" (trener, barmen), rang tanlash, suv belgisi, ovqat eslatmasi.
-- Tarjimani ko'zdan kechirish (Claude tarjima qilgan) — tuzatish `tools/l10n/tarjima.json` da,
-  keyin `python tools/l10n/l10n.py gen`.
+**Birinchi navbatda — zal egasi telefonda tekshiradi (hech biri sinalmagan):**
+- yangi APK ochiladimi (eng muhimi);
+- shogird akkauntida skrinshot olinmasligi, xodimda olinishi;
+- rasmlar chiqishi va ikkinchi ochilishda darhol ko'rinishi (kesh), tezlik;
+- til almashtirish (tepa paneldagi globus, shogird Profilidagi "Til"), tovar nomlari tarjimasi;
+- suv belgisi (pahlavon rasmi) "Bugun" ekranida;
+- ovqat eslatmasi bildirishnomasi, Progress'da kamera.
 
-**Qaror kutilmoqda:** guruh mashg'ulotlari bormi (jadval kerakmi).
-**Hal bo'ldi (7-okt):** ikonka va nom — "Qobil" (84-band); **Blaze kerak emas** (zal egasi) —
-push bildirishnoma qilinmaydi, bu haqda qayta so'ralmaydi.
+**Zal egasidan kutilayotgan ma'lumot:**
+- **Kiyimlarning haqiqiy qoldig'i** (19 ta, o'lcham bo'yicha). Hozir hammasida taxminiy
+  XL 3 / XXL 3 / 3XL 2 / 4XL 2. Yo barmen ilovada yozadi (Do'kon → Tovarlar → tovar →
+  "Qoldiq (o'lcham bo'yicha)"), yo zal egasi `Nom: XL 2, XXL 0, …` ko'rinishida yuboradi.
+- **Sport sumka** — rasm va narx.
+- **Trener bilan gaplashgach:** guruh mashg'ulotlari bormi (jadval kerakmi), abonement oynasi
+  va "To'lovlar" unga to'g'ri ishlayaptimi. Ungacha bu "kutilayotgan" — qayta so'ralmaydi.
+- Tarjimani ruscha biladigan odam ko'rib chiqsa (Claude tarjima qilgan).
 
-**Navbatdagi ishlar** — 83-banddagi reja: 1) muzlatish, muddati o'tganlar ro'yxati, kunlik
-kassa; 2) QR skaner, davomat seriyasi; 3) Play Market, push; 4) "rejadan tashqari yedim",
-mashq jurnali; 5) Payme/Click, iPhone.
+**Javob kutayotgan taklif:** o'zbekcha tovar izohlaridagi ichki eslatmani ("Narx AllPituz
+kanalidan (24-sent)", "hozirgi narxni tekshiring") tozalash — u mijozga ko'rinadi (86-band).
 
-**Tillardan qolgan:** viloyat-tuman nomlari (`hudud.dart`), do'kon tovarlari nomi (bazada
-o'zbekcha — `nameRu`/`nameEn` maydoni kerak), vaqt tanlash oynasi tugmalari (inglizcha).
+**Zal egasiga bog'liq bo'lmagan navbatdagi ishlar** (83-banddagi reja, boshlanmagan):
+1. pul — abonementni muzlatish, muddati o'tganlar ro'yxati, kunlik kassa (uchalasi kichik);
+2. Play Market shartlari — akkauntni o'zi o'chirish tugmasi, maxfiylik siyosati sahifasi;
+3. davomat — kirishda QR skaner, keyin davomat seriyasi (trener bilan gaplashgach ma'qul);
+4. boyitish — "rejadan tashqari yedim" + kun yakuni, mashq jurnali, chegirma, tana o'lchamlari;
+5. katta — Play Market'ga topshirish, Payme/Click, iPhone, o'z serverga o'tish.
 
-**Zal egasi to'xtatgan / kerak emas degan:** trener parolini almashtirish, imzo kaliti nusxasi,
-mijozning o'zi abonement so'rovi yuborishi, APK'ni hammaga tarqatish (o'zi sekin tarqatadi).
-O'lcham bo'yicha haqiqiy qoldiqni zal egasi yoki barmen yozadi. `ZAXIRA.bat` — haftada bir.
+**Qarorlar (qayta so'ralmaydi):** Blaze va push — kerak emas; `ZAXIRA.bat` ni
+avtomatlashtirish — pauzada (zal egasi qo'lda bosadi); Crashlytics — hozir kerak emas, Play
+Market vaqtida; trener parolini almashtirish, imzo kaliti nusxasi, mijozning o'zi abonement
+so'rovi yuborishi — kerak emas.
 
-**Qilinmagan:** Crashlytics'ni qayta qo'shish (faqat telefonda sinab), sport sumka (rasm yo'q).
+**Zal egasiga tushuntirilgan mavzular (7-okt, kod emas):** Firebase bepul chegaralari
+(eng yaqini — saytdan kuniga ~360 MB, ya'ni ~14 ta APK yuklab olish); o'z serverga o'tish
+(5–8 hafta, hozir tavsiya qilinmadi); Play Market va App Store to'siqlari — Word hujjati
+`Qobil-Play-Market-va-App-Store.docx` (`Music` papkasida, repoda yo'q). Asosiy to'siqlar:
+ikonka, suv belgisi va tovar rasmlari birovniki; mijoz akkauntini o'zi o'chira olmaydi;
+shaxsiy ma'lumotni mamlakat ichida saqlash talabi (yuristdan so'rash kerak).
 
 ### Eski ochiq ro'yxat (5-oktabrgacha — ko'pi hal bo'lgan, tarix uchun)
 - **Qaror kutilmoqda: skrinshotni bloklash yoki suv belgisi** (51-band oxiri). Variantlar:
