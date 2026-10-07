@@ -61,7 +61,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **120/120**, qoida testlari **213/213**.
+`flutter test` **121/121**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1629,6 +1629,21 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - "g" (gramm) birligi ham tarjimaga ulandi. `flutter test` 120/120, lug'at 871 kalit.
     - **Sinalmagan:** telefondagi APK (ochilishi, rasm keshi, bildirishnomalar, kamera).
       Reja: `specs/nom-qobil.md` (lokal).
+
+85. **Tillar to'liq yopildi (7-okt)** — qolgan ikki guruh:
+    - **Viloyat va tumanlar** (`hudud.dart`, 199 nom) rus va ingliz tiliga tarjima qilindi;
+      "Zal qo'shish" oynasi ro'yxatlarida va zal manzilida (`Gym.place`) `tr()` bilan chiqadi.
+      Bazaga avvalgidek o'zbekcha kalit yoziladi.
+    - **Tizim oynalari** (vaqt tanlash, "Orqaga" va h.k.) — `flutter_localizations` qo'shildi
+      (sof Dart, Android plagini emas); `MaterialApp.locale` = ilova tili. `intl` 0.19 → 0.20.3.
+    - **Bildirishnoma kanali tavsifi** — ilova tilida.
+    - **Chatdagi tizim xabarlari** (buyurtma, abonement eslatmasi) bazada o'zbekcha turadi,
+      ko'rsatishda `trChat()` (`lib/l10n/tr.dart`) naqsh bo'yicha tarjima qiladi; odam yozgan
+      xabar o'zgarmaydi.
+    - Lug'at: **1 076 kalit**, koddagi 713 kalitning hammasida rus va ingliz tarjimasi bor.
+      `flutter test` **121/121**. Web va APK joylandi.
+    - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
+      o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.
 
 ---
 

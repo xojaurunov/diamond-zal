@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'screens/auth/auth_gate.dart';
 import 'firebase_options.dart';
@@ -96,6 +97,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           // Ranglar const emas — rejim almashganda butun daraxt qayta quriladi
           key: ValueKey('$light-$lang'),
           title: 'Qobil',
+          // Tizim oynalari (vaqt tanlash, "Orqaga" va h.k.) ham ilova tilida chiqsin
+          locale: Locale(lang),
+          supportedLocales: const [Locale('uz'), Locale('ru'), Locale('en')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.current(),
           darkTheme: AppTheme.current(),

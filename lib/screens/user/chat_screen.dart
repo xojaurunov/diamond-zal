@@ -172,7 +172,7 @@ class _Bubble extends StatelessWidget {
           border: mine ? null : Border.all(color: s.outlineVariant),
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Text(message.text, style: t.bodyLarge?.copyWith(color: fg)),
+          Text(trChat(message.text), style: t.bodyLarge?.copyWith(color: fg)),
           const SizedBox(height: 2),
           Text(DateFormat('HH:mm').format(message.createdAt),
               style: t.labelSmall?.copyWith(color: fg.withValues(alpha: 0.7))),

@@ -19,15 +19,18 @@ class Notifications {
   static bool get supported => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   static const channelId = 'diamond_general';
-  static const _details = NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      'Qobil',
-      channelDescription: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
-      importance: Importance.high,
-      priority: Priority.high,
-    ),
-  );
+  /// Kanal tavsifi — telefonning bildirishnoma sozlamalarida ko'rinadi (ilova tilida)
+  static String get _channelDesc => tr('Ovqat vaqti, vazn, chat va reja eslatmalari');
+
+  static NotificationDetails get _details => NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          'Qobil',
+          channelDescription: _channelDesc,
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      );
 
   // Bildirishnoma id oralig'lari
   static const _mealBase = 1000; // 1000..1099 — ovqat mahallari
@@ -47,10 +50,10 @@ class Notifications {
           android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         ),
       );
-      await _android?.createNotificationChannel(const AndroidNotificationChannel(
+      await _android?.createNotificationChannel(AndroidNotificationChannel(
         channelId,
         'Qobil',
-        description: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
+        description: _channelDesc,
         importance: Importance.high,
       ));
       _ready = true;
@@ -123,7 +126,7 @@ class Notifications {
         android: AndroidNotificationDetails(
           channelId,
           'Qobil',
-          channelDescription: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
+          channelDescription: _channelDesc,
           importance: Importance.high,
           priority: Priority.high,
           tag: tag,

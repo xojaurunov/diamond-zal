@@ -243,7 +243,7 @@ class Gym {
   });
 
   /// Ro'yxatda ko'rsatish uchun: "Chilonzor, Toshkent shahri"
-  String get place => [district, region].where((e) => e.isNotEmpty).join(', ');
+  String get place => [district, region].where((e) => e.isNotEmpty).map(tr).join(', ');
 
   /// To'liq manzil: "Chilonzor, Toshkent shahri · Bunyodkor 12"
   String get fullAddress =>

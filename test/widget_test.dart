@@ -1273,6 +1273,15 @@ void main() {
       expect(trf('gacha {0}', [5]), 'of 5');
     });
 
+    test('chatdagi tizim xabari tarjima bo-ladi, odam yozgani - yo-q', () {
+      const order = "🛒 Buyurtma: Venum (XL) × 2 — 450 000 so'm";
+      expect(trChat(order), order);
+      appLang.value = 'ru';
+      expect(trChat(order), '🛒 Заказ: Venum (XL) × 2 — 450 000 сум');
+      expect(trChat('⏰ Abonementingiz 3 kundan keyin tugaydi'), '⏰ Ваш абонемент закончится через 3 дн.');
+      expect(trChat('Bugun kelolmayman'), 'Bugun kelolmayman');
+    });
+
     test('sana tilga qarab yoziladi', () {
       final d = DateTime(2026, 10, 5); // dushanba
       expect(uzDate(d), 'Dushanba, 5-oktyabr');

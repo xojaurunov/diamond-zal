@@ -64,7 +64,7 @@ List<FeedItem> studentFeed({
     items.add(FeedItem(
       kind: FeedKind.chat,
       title: tr('Trener xabar yozdi'),
-      body: m.text,
+      body: trChat(m.text),
       at: m.createdAt,
     ));
   }
@@ -164,7 +164,7 @@ List<FeedItem> trainerFeed({
       items.add(FeedItem(
         kind: FeedKind.chat,
         title: nameOf[e.key] ?? tr('Shogird'),
-        body: m.text,
+        body: trChat(m.text),
         at: m.createdAt,
       ));
     }

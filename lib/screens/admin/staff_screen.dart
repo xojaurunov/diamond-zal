@@ -425,7 +425,7 @@ class _StaffScreenState extends State<StaffScreen> {
                   isExpanded: true,
                   decoration: InputDecoration(labelText: tr('Mamlakat')),
                   items: [
-                    for (final c in countries) DropdownMenuItem(value: c, child: Text(c)),
+                    for (final c in countries) DropdownMenuItem(value: c, child: Text(tr(c))),
                   ],
                   onChanged: (v) => setS(() => country = v ?? countries.first),
                 ),
@@ -440,7 +440,7 @@ class _StaffScreenState extends State<StaffScreen> {
                     hintText: tr('Tanlang'),
                   ),
                   items: [
-                    for (final r in regionNames) DropdownMenuItem(value: r, child: Text(r)),
+                    for (final r in regionNames) DropdownMenuItem(value: r, child: Text(tr(r))),
                   ],
                   onChanged: (v) => setS(() {
                     region = v;
@@ -462,7 +462,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       ? const []
                       : [
                           for (final d in districtsOf(region!))
-                            DropdownMenuItem(value: d, child: Text(d)),
+                            DropdownMenuItem(value: d, child: Text(tr(d))),
                         ],
                   onChanged:
                       region == null ? null : (v) => setS(() => district = v),

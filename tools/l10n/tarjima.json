@@ -151,6 +151,26 @@
   "ru": "Действия",
   "en": "Actions"
  },
+ "Amudaryo": {
+  "ru": "Амударья",
+  "en": "Amudarya"
+ },
+ "Andijon": {
+  "ru": "Андижанская область",
+  "en": "Andijan region"
+ },
+ "Andijon shahri": {
+  "ru": "город Андижан",
+  "en": "Andijan city"
+ },
+ "Angor": {
+  "ru": "Ангор",
+  "en": "Angor"
+ },
+ "Angren": {
+  "ru": "Ангрен",
+  "en": "Angren"
+ },
  "Anjomlar": {
   "ru": "Инвентарь",
   "en": "Equipment"
@@ -174,6 +194,14 @@
  "Aprel": {
   "ru": "Апрель",
   "en": "April"
+ },
+ "Arnasoy": {
+  "ru": "Арнасай",
+  "en": "Arnasay"
+ },
+ "Asaka": {
+  "ru": "Асака",
+  "en": "Asaka"
  },
  "Avgust": {
   "ru": "Август",
@@ -251,6 +279,10 @@
   "ru": "Рыба или говядина",
   "en": "Fish or beef"
  },
+ "Baliqchi": {
+  "ru": "Балыкчи",
+  "en": "Balykchi"
+ },
  "Ball tarkibi": {
   "ru": "Из чего складывается балл",
   "en": "Score breakdown"
@@ -266,6 +298,10 @@
  "Banan yoki boshqa meva": {
   "ru": "Банан или другой фрукт",
   "en": "Banana or another fruit"
+ },
+ "Bandixon": {
+  "ru": "Бандихан",
+  "en": "Bandikhan"
  },
  "Barakalla!": {
   "ru": "Отлично!",
@@ -315,6 +351,14 @@
   "ru": "Снять с должности бармена",
   "en": "Remove bar staff role"
  },
+ "Baxmal": {
+  "ru": "Бахмал",
+  "en": "Bakhmal"
+ },
+ "Bekobod": {
+  "ru": "Бекабад",
+  "en": "Bekabad"
+ },
  "Bekor": {
   "ru": "Отмена",
   "en": "Cancel"
@@ -326,6 +370,10 @@
  "Bekor qilish": {
   "ru": "Отмена",
   "en": "Cancel"
+ },
+ "Bektemir": {
+  "ru": "Бектемир",
+  "en": "Bektemir"
  },
  "Belgilashni unutmang": {
   "ru": "Не забудьте отметить",
@@ -342,6 +390,14 @@
  "Berildi deb belgilandi": {
   "ru": "Отмечено как выданное",
   "en": "Marked as handed over"
+ },
+ "Beruniy": {
+  "ru": "Беруни",
+  "en": "Beruni"
+ },
+ "Beshariq": {
+  "ru": "Бешарык",
+  "en": "Besharyk"
  },
  "Bildirishnoma yo‘q": {
   "ru": "Уведомлений нет",
@@ -391,6 +447,10 @@
   "ru": "Добавить первый товар",
   "en": "Add the first product"
  },
+ "Bo'ka": {
+  "ru": "Бука",
+  "en": "Buka"
+ },
  "Bo'lmadi: {0}": {
   "ru": "Не получилось: {0}",
   "en": "Failed: {0}"
@@ -398,6 +458,14 @@
  "Bo'sh bo'lsa, nomiga qarab rasm tanlanadi": {
   "ru": "Если пусто, картинка подбирается по названию",
   "en": "If empty, an image is picked by name"
+ },
+ "Bo'ston": {
+  "ru": "Бустон",
+  "en": "Buston"
+ },
+ "Bo'stonliq": {
+  "ru": "Бостанлык",
+  "en": "Bostanlyk"
  },
  "Bo'y": {
   "ru": "Рост",
@@ -410,6 +478,14 @@
  "Bodring": {
   "ru": "Огурец",
   "en": "Cucumber"
+ },
+ "Bog'dod": {
+  "ru": "Багдад",
+  "en": "Bagdad"
+ },
+ "Bog'ot": {
+  "ru": "Багат",
+  "en": "Bagat"
  },
  "Bosh admin": {
   "ru": "Главный админ",
@@ -458,6 +534,18 @@
  "Boshqa kunlarga nusxalash": {
   "ru": "Скопировать на другие дни",
   "en": "Copy to other days"
+ },
+ "Boshqa…": {
+  "ru": "Другое…",
+  "en": "Other…"
+ },
+ "Boyovut": {
+  "ru": "Баяут",
+  "en": "Bayaut"
+ },
+ "Boysun": {
+  "ru": "Байсун",
+  "en": "Baysun"
  },
  "Brokkoli yoki gulkaram": {
   "ru": "Брокколи или цветная капуста",
@@ -567,6 +655,26 @@
   "ru": "Вес сегодня",
   "en": "Today's weight"
  },
+ "Buloqboshi": {
+  "ru": "Булакбаши",
+  "en": "Bulakbashi"
+ },
+ "Bulung'ur": {
+  "ru": "Булунгур",
+  "en": "Bulungur"
+ },
+ "Buvayda": {
+  "ru": "Бувайда",
+  "en": "Buvayda"
+ },
+ "Buxoro": {
+  "ru": "Бухарская область",
+  "en": "Bukhara region"
+ },
+ "Buxoro shahri": {
+  "ru": "город Бухара",
+  "en": "Bukhara city"
+ },
  "Buyurtma bekor qilindi": {
   "ru": "Заказ отменён",
   "en": "Order canceled"
@@ -619,9 +727,29 @@
   "ru": "Ответы в чате",
   "en": "Chat replies"
  },
+ "Chilonzor": {
+  "ru": "Чиланзар",
+  "en": "Chilanzar"
+ },
+ "Chimboy": {
+  "ru": "Чимбай",
+  "en": "Chimbay"
+ },
+ "Chinoz": {
+  "ru": "Чиназ",
+  "en": "Chinaz"
+ },
  "Chiqish": {
   "ru": "Выйти",
   "en": "Sign out"
+ },
+ "Chirchiq": {
+  "ru": "Чирчик",
+  "en": "Chirchik"
+ },
+ "Chiroqchi": {
+  "ru": "Чиракчи",
+  "en": "Chirakchi"
  },
  "Chor": {
   "ru": "Ср",
@@ -631,9 +759,21 @@
   "ru": "Среда",
   "en": "Wednesday"
  },
+ "Chortoq": {
+  "ru": "Чартак",
+  "en": "Chartak"
+ },
+ "Chust": {
+  "ru": "Чуст",
+  "en": "Chust"
+ },
  "Dam olish kuni": {
   "ru": "День отдыха",
   "en": "Rest day"
+ },
+ "Dang'ara": {
+  "ru": "Дангара",
+  "en": "Dangara"
  },
  "Davom etish": {
   "ru": "Продолжить",
@@ -643,9 +783,17 @@
   "ru": "Отметка о посещении снята",
   "en": "Attendance mark removed"
  },
+ "Dehqonobod": {
+  "ru": "Дехканабад",
+  "en": "Dekhkanabad"
+ },
  "Dekabr": {
   "ru": "Декабрь",
   "en": "December"
+ },
+ "Denov": {
+  "ru": "Денау",
+  "en": "Denau"
  },
  "Do'kon": {
   "ru": "Магазин",
@@ -671,6 +819,10 @@
   "ru": "Магазин и продажи",
   "en": "Shop and sales"
  },
+ "Do'stlik": {
+  "ru": "Дустлик",
+  "en": "Dustlik"
+ },
  "Dobavkalar": {
   "ru": "Добавки",
   "en": "Supplements"
@@ -690,6 +842,10 @@
  "E'tibor kerak": {
   "ru": "Требуют внимания",
   "en": "Need attention"
+ },
+ "Ellikqal'a": {
+  "ru": "Элликкала",
+  "en": "Ellikkala"
  },
  "Erkak": {
   "ru": "Мужчина",
@@ -739,9 +895,21 @@
   "ru": "Видите только вы — тренер эту оценку не видит.",
   "en": "Only you can see this — the trainer doesn't see the rating."
  },
+ "Farg'ona": {
+  "ru": "Ферганская область",
+  "en": "Fergana region"
+ },
+ "Farg'ona shahri": {
+  "ru": "город Фергана",
+  "en": "Fergana city"
+ },
  "Fevral": {
   "ru": "Февраль",
   "en": "February"
+ },
+ "Forish": {
+  "ru": "Фариш",
+  "en": "Farish"
  },
  "Forma": {
   "ru": "Форма",
@@ -758,6 +926,22 @@
  "Foyda: {0} {1}": {
   "ru": "Прибыль: {0} {1}",
   "en": "Profit: {0} {1}"
+ },
+ "Furqat": {
+  "ru": "Фуркат",
+  "en": "Furkat"
+ },
+ "G'allaorol": {
+  "ru": "Галляарал",
+  "en": "Gallaaral"
+ },
+ "G'ijduvon": {
+  "ru": "Гиждуван",
+  "en": "Gijduvan"
+ },
+ "G'uzor": {
+  "ru": "Гузар",
+  "en": "Guzar"
  },
  "Gainer": {
   "ru": "Гейнер",
@@ -794,6 +978,14 @@
  "Grechka, quruq": {
   "ru": "Гречка, сухая",
   "en": "Buckwheat, dry"
+ },
+ "Guliston": {
+  "ru": "Гулистан",
+  "en": "Gulistan"
+ },
+ "Gurlan": {
+  "ru": "Гурлен",
+  "en": "Gurlen"
  },
  "Guruch (quruq vazni)": {
   "ru": "Рис (сухой вес)",
@@ -935,6 +1127,10 @@
   "ru": "Скопировать ссылку",
   "en": "Copy link"
  },
+ "Hazorasp": {
+  "ru": "Хазарасп",
+  "en": "Khazarasp"
+ },
  "Hech kim uyda mashq qilmaydi": {
   "ru": "Никто не тренируется дома",
   "en": "Nobody is training at home"
@@ -1007,6 +1203,10 @@
   "ru": "Нет интернета",
   "en": "No internet"
  },
+ "Ishtixon": {
+  "ru": "Иштыхан",
+  "en": "Ishtykhan"
+ },
  "Ism": {
   "ru": "Имя",
   "en": "Name"
@@ -1043,6 +1243,10 @@
   "ru": "Июнь",
   "en": "June"
  },
+ "Izboskan": {
+  "ru": "Избаскан",
+  "en": "Izbaskan"
+ },
  "Izoh (ixtiyoriy)": {
   "ru": "Комментарий (необязательно)",
   "en": "Note (optional)"
@@ -1050,6 +1254,10 @@
  "Izoh / maslahat": {
   "ru": "Комментарий / совет",
   "en": "Note / tip"
+ },
+ "Jalaquduq": {
+  "ru": "Джалакудук",
+  "en": "Jalakuduk"
  },
  "Jami": {
   "ru": "Всего",
@@ -1067,6 +1275,10 @@
   "ru": "Итого: {0}",
   "en": "Total: {0}"
  },
+ "Jarqo'rg'on": {
+  "ru": "Джаркурган",
+  "en": "Jarkurgan"
+ },
  "Javob kutmoqda: {0} kun": {
   "ru": "Ждёт ответа: {0} дн.",
   "en": "Waiting for a reply: {0} days"
@@ -1078,6 +1290,22 @@
  "Jins": {
   "ru": "Пол",
   "en": "Sex"
+ },
+ "Jizzax": {
+  "ru": "Джизакская область",
+  "en": "Jizzakh region"
+ },
+ "Jizzax shahri": {
+  "ru": "город Джизак",
+  "en": "Jizzakh city"
+ },
+ "Jomboy": {
+  "ru": "Джамбай",
+  "en": "Jambay"
+ },
+ "Jondor": {
+  "ru": "Жондор",
+  "en": "Jondor"
  },
  "Ju": {
   "ru": "Пт",
@@ -1115,6 +1343,14 @@
   "ru": "Минимум 6 символов — сообщите этот пароль сотруднику",
   "en": "At least 6 characters — give this password to the staff member"
  },
+ "Karmana": {
+  "ru": "Кармана",
+  "en": "Karmana"
+ },
+ "Kasbi": {
+  "ru": "Касби",
+  "en": "Kasbi"
+ },
  "Katalogda ko'rinmaysiz — yangi shogird tanlay olmaydi": {
   "ru": "Вас нет в каталоге — новые ученики не могут вас выбрать",
   "en": "You're hidden from the catalog — new clients can't choose you"
@@ -1131,6 +1367,10 @@
   "ru": "Выберите категорию: похудение или набор массы",
   "en": "Choose a category: weight loss or muscle gain"
  },
+ "Kattaqo'rg'on": {
+  "ru": "Каттакурган",
+  "en": "Kattakurgan"
+ },
  "Kecha": {
   "ru": "Вчера",
   "en": "Yesterday"
@@ -1146,6 +1386,10 @@
  "Kefir yoki yogurt": {
   "ru": "Кефир или йогурт",
   "en": "Kefir or yogurt"
+ },
+ "Kegeyli": {
+  "ru": "Кегейли",
+  "en": "Kegeyli"
  },
  "Keldi": {
   "ru": "Пришёл",
@@ -1195,6 +1439,10 @@
   "ru": "Введите",
   "en": "Required"
  },
+ "Kitob": {
+  "ru": "Китаб",
+  "en": "Kitab"
+ },
  "Ko'cha, uy (ixtiyoriy)": {
   "ru": "Улица, дом (необязательно)",
   "en": "Street, building (optional)"
@@ -1214,6 +1462,22 @@
  "Ko'rsatish": {
   "ru": "Показать",
   "en": "Show"
+ },
+ "Kogon": {
+  "ru": "Каган",
+  "en": "Kagan"
+ },
+ "Konimex": {
+  "ru": "Канимех",
+  "en": "Kanimekh"
+ },
+ "Koson": {
+  "ru": "Касан",
+  "en": "Kasan"
+ },
+ "Kosonsoy": {
+  "ru": "Касансай",
+  "en": "Kasansay"
  },
  "Kotlet yoki go'sht — 150 g norma (yoki 4 ta qaynatilgan tuxum oqi)": {
   "ru": "Котлета или мясо — норма 150 г (или 4 варёных яичных белка)",
@@ -1351,6 +1615,14 @@
   "ru": "Выберите цель: похудение или набор массы",
   "en": "Choose your goal: weight loss or muscle gain"
  },
+ "Marg'ilon": {
+  "ru": "Маргилан",
+  "en": "Margilan"
+ },
+ "Marhamat": {
+  "ru": "Мархамат",
+  "en": "Markhamat"
+ },
  "Mart": {
   "ru": "Март",
   "en": "March"
@@ -1455,9 +1727,37 @@
   "ru": "Клиенты появятся здесь после регистрации в приложении.",
   "en": "Clients appear here once they sign up in the app."
  },
+ "Mingbuloq": {
+  "ru": "Мингбулак",
+  "en": "Mingbulak"
+ },
  "Miqdori": {
   "ru": "Количество",
   "en": "Amount"
+ },
+ "Mirishkor": {
+  "ru": "Миришкор",
+  "en": "Mirishkor"
+ },
+ "Mirobod": {
+  "ru": "Мирабад",
+  "en": "Mirabad"
+ },
+ "Mirzacho'l": {
+  "ru": "Мирзачуль",
+  "en": "Mirzachul"
+ },
+ "Mirzaobod": {
+  "ru": "Мирзаабад",
+  "en": "Mirzaabad"
+ },
+ "Mirzo Ulug'bek": {
+  "ru": "Мирзо-Улугбек",
+  "en": "Mirzo Ulugbek"
+ },
+ "Mo'ynoq": {
+  "ru": "Муйнак",
+  "en": "Muynak"
  },
  "Moddalar almashinuvi (metabolizm)": {
   "ru": "Обмен веществ (метаболизм)",
@@ -1475,6 +1775,10 @@
   "ru": "Говядина, нежирная",
   "en": "Beef, lean"
  },
+ "Muborak": {
+  "ru": "Мубарек",
+  "en": "Mubarek"
+ },
  "Muddati o'tdi": {
   "ru": "Срок истёк",
   "en": "Expired"
@@ -1487,6 +1791,22 @@
   "ru": "Нельзя (через запятую)",
   "en": "Not allowed (comma-separated)"
  },
+ "Muzrabot": {
+  "ru": "Музрабат",
+  "en": "Muzrabat"
+ },
+ "Namangan": {
+  "ru": "Наманганская область",
+  "en": "Namangan region"
+ },
+ "Namangan shahri": {
+  "ru": "город Наманган",
+  "en": "Namangan city"
+ },
+ "Narpay": {
+  "ru": "Нарпай",
+  "en": "Narpay"
+ },
  "Narxi": {
   "ru": "Цена",
   "en": "Price"
@@ -1495,9 +1815,25 @@
   "ru": "Результат (вес)",
   "en": "Results (weight)"
  },
+ "Navbahor": {
+  "ru": "Навбахор",
+  "en": "Navbakhor"
+ },
  "Navbatdagi": {
   "ru": "Следующий",
   "en": "Up next"
+ },
+ "Navoiy": {
+  "ru": "Навоийская область",
+  "en": "Navoi region"
+ },
+ "Navoiy shahri": {
+  "ru": "город Навои",
+  "en": "Navoi city"
+ },
+ "Nishon": {
+  "ru": "Нишан",
+  "en": "Nishan"
  },
  "Noma’lum": {
   "ru": "Неизвестно",
@@ -1523,6 +1859,10 @@
   "ru": "Завтрак",
   "en": "Breakfast"
  },
+ "Norin": {
+  "ru": "Нарын",
+  "en": "Naryn"
+ },
  "Norma": {
   "ru": "Норма",
   "en": "Target"
@@ -1546,6 +1886,22 @@
  "Noyabr": {
   "ru": "Ноябрь",
   "en": "November"
+ },
+ "Nukus shahri": {
+  "ru": "город Нукус",
+  "en": "Nukus city"
+ },
+ "Nurafshon": {
+  "ru": "Нурафшон",
+  "en": "Nurafshon"
+ },
+ "Nurobod": {
+  "ru": "Нурабад",
+  "en": "Nurabad"
+ },
+ "Nurota": {
+  "ru": "Нурата",
+  "en": "Nurata"
  },
  "Nusxa olish": {
   "ru": "Сделать копию",
@@ -1587,9 +1943,21 @@
   "ru": "Замеры",
   "en": "Entries"
  },
+ "O'rtachirchiq": {
+  "ru": "Уртачирчик",
+  "en": "Urta Chirchik"
+ },
  "O'simlik yog'i": {
   "ru": "Растительное масло",
   "en": "Vegetable oil"
+ },
+ "O'zbekiston": {
+  "ru": "Узбекистан",
+  "en": "Uzbekistan"
+ },
+ "O'zbekiston tumani": {
+  "ru": "Узбекистанский район",
+  "en": "Uzbekistan district"
  },
  "O'zgartirib bo'lmadi: {0}": {
   "ru": "Не удалось изменить: {0}",
@@ -1602,6 +1970,10 @@
  "O'zingizga qulay variantni tanlang: Seshanba, Payshanba, Shanba yoki Dushanba, Chorshanba, Juma.": {
   "ru": "Выберите удобный вариант: вторник, четверг, суббота или понедельник, среда, пятница.",
   "en": "Pick the option that suits you: Tuesday, Thursday, Saturday or Monday, Wednesday, Friday."
+ },
+ "Ohangaron": {
+  "ru": "Ахангаран",
+  "en": "Akhangaran"
  },
  "Oktabr": {
   "ru": "Октябрь",
@@ -1643,6 +2015,42 @@
   "ru": "Яблоко или клубника (или немного изюма)",
   "en": "Apple or strawberries (or a few raisins)"
  },
+ "Olmaliq": {
+  "ru": "Алмалык",
+  "en": "Almalyk"
+ },
+ "Olmazor": {
+  "ru": "Алмазар",
+  "en": "Almazar"
+ },
+ "Olot": {
+  "ru": "Алат",
+  "en": "Alat"
+ },
+ "Oltiariq": {
+  "ru": "Алтыарык",
+  "en": "Altyaryk"
+ },
+ "Oltinko'l": {
+  "ru": "Алтынкуль",
+  "en": "Altynkul"
+ },
+ "Oltinsoy": {
+  "ru": "Алтынсай",
+  "en": "Altynsay"
+ },
+ "Oqdaryo": {
+  "ru": "Акдарья",
+  "en": "Akdarya"
+ },
+ "Oqoltin": {
+  "ru": "Акалтын",
+  "en": "Akaltyn"
+ },
+ "Oqqo'rg'on": {
+  "ru": "Аккурган",
+  "en": "Akkurgan"
+ },
  "Oqsil": {
   "ru": "Белок",
   "en": "Protein"
@@ -1662,6 +2070,10 @@
  "Ovqat vaqti eslatmasi": {
   "ru": "Напоминание о приёме пищи",
   "en": "Meal time reminder"
+ },
+ "Ovqat vaqti, vazn, chat va reja eslatmalari": {
+  "ru": "Напоминания о еде, весе, чате и плане",
+  "en": "Meal, weight, chat and plan reminders"
  },
  "Ovqatlanish mahallari ({0})": {
   "ru": "Приёмы пищи ({0})",
@@ -1731,6 +2143,10 @@
   "ru": "Удалить",
   "en": "Delete"
  },
+ "Parkent": {
+  "ru": "Паркент",
+  "en": "Parkent"
+ },
  "Parol": {
   "ru": "Пароль",
   "en": "Password"
@@ -1779,17 +2195,45 @@
   "ru": "Скрыть пароль",
   "en": "Hide password"
  },
+ "Pastdarg'om": {
+  "ru": "Пастдаргом",
+  "en": "Pastdargom"
+ },
+ "Paxtachi": {
+  "ru": "Пахтачи",
+  "en": "Pakhtachi"
+ },
+ "Paxtakor": {
+  "ru": "Пахтакор",
+  "en": "Pakhtakor"
+ },
+ "Paxtaobod": {
+  "ru": "Пахтаабад",
+  "en": "Pakhtaabad"
+ },
  "Pay": {
   "ru": "Чт",
   "en": "Thu"
+ },
+ "Payariq": {
+  "ru": "Пайарык",
+  "en": "Payaryk"
  },
  "Payshanba": {
   "ru": "Четверг",
   "en": "Thursday"
  },
+ "Peshku": {
+  "ru": "Пешку",
+  "en": "Peshku"
+ },
  "Pishloq (sir)": {
   "ru": "Сыр",
   "en": "Cheese"
+ },
+ "Piskent": {
+  "ru": "Пскент",
+  "en": "Pskent"
  },
  "Piyoz (omletga aralashtiriladi)": {
   "ru": "Лук (добавляется в омлет)",
@@ -1806,6 +2250,10 @@
  "Pomidor, bodring, ko'kat": {
   "ru": "Помидор, огурец, зелень",
   "en": "Tomato, cucumber, greens"
+ },
+ "Pop": {
+  "ru": "Пап",
+  "en": "Pap"
  },
  "Profil": {
   "ru": "Профиль",
@@ -1851,9 +2299,25 @@
   "ru": "QR-код",
   "en": "QR code"
  },
+ "Qamashi": {
+  "ru": "Камаши",
+  "en": "Kamashi"
+ },
+ "Qanliko'l": {
+  "ru": "Канлыкуль",
+  "en": "Kanlykul"
+ },
  "Qanot (orqa) + oyoq": {
   "ru": "Спина + ноги",
   "en": "Back + legs"
+ },
+ "Qarshi shahri": {
+  "ru": "город Карши",
+  "en": "Karshi city"
+ },
+ "Qashqadaryo": {
+  "ru": "Кашкадарьинская область",
+  "en": "Kashkadarya region"
  },
  "Qaynatilgan grechka": {
   "ru": "Варёная гречка",
@@ -1903,6 +2367,10 @@
   "ru": "Зарегистрироваться заново",
   "en": "Sign up again"
  },
+ "Qibray": {
+  "ru": "Кибрай",
+  "en": "Kibray"
+ },
  "Qidiruv natijasi": {
   "ru": "Результат поиска",
   "en": "Search results"
@@ -1911,6 +2379,26 @@
   "ru": "Коротко о себе",
   "en": "Short bio"
  },
+ "Qiziltepa": {
+  "ru": "Кызылтепа",
+  "en": "Kyzyltepa"
+ },
+ "Qiziriq": {
+  "ru": "Кизирик",
+  "en": "Kizirik"
+ },
+ "Qo'ng'irot": {
+  "ru": "Кунград",
+  "en": "Kungrad"
+ },
+ "Qo'qon": {
+  "ru": "Коканд",
+  "en": "Kokand"
+ },
+ "Qo'rg'ontepa": {
+  "ru": "Кургантепа",
+  "en": "Kurgantepa"
+ },
  "Qo'shilish": {
   "ru": "Присоединиться",
   "en": "Join"
@@ -1918,6 +2406,18 @@
  "Qo'shish": {
   "ru": "Добавить",
   "en": "Add"
+ },
+ "Qo'shko'pir": {
+  "ru": "Кушкупыр",
+  "en": "Kushkupyr"
+ },
+ "Qo'shrabot": {
+  "ru": "Кушрабат",
+  "en": "Kushrabat"
+ },
+ "Qo'shtepa": {
+  "ru": "Куштепа",
+  "en": "Kushtepa"
  },
  "Qobil zal shablonidan boshlang yoki yangi reja tuzing.": {
   "ru": "Начните с шаблона зала Qobil или составьте новый план.",
@@ -1943,13 +2443,45 @@
   "ru": "Остаток: {0}",
   "en": "Stock: {0}"
  },
+ "Qorako'l": {
+  "ru": "Каракуль",
+  "en": "Karakul"
+ },
+ "Qorao'zak": {
+  "ru": "Караузяк",
+  "en": "Karauzyak"
+ },
+ "Qoraqalpog'iston": {
+  "ru": "Каракалпакстан",
+  "en": "Karakalpakstan"
+ },
  "Qorong'i": {
   "ru": "Тёмное",
   "en": "Dark"
  },
+ "Qorovulbozor": {
+  "ru": "Караулбазар",
+  "en": "Karaulbazar"
+ },
  "Qulupnay": {
   "ru": "Клубника",
   "en": "Strawberries"
+ },
+ "Qumqo'rg'on": {
+  "ru": "Кумкурган",
+  "en": "Kumkurgan"
+ },
+ "Quva": {
+  "ru": "Кува",
+  "en": "Kuva"
+ },
+ "Quvasoy": {
+  "ru": "Кувасай",
+  "en": "Kuvasay"
+ },
+ "Quyichirchiq": {
+  "ru": "Куйичирчик",
+  "en": "Quyi Chirchik"
  },
  "Ranglar (ixtiyoriy)": {
   "ru": "Цвета (необязательно)",
@@ -2099,6 +2631,10 @@
   "ru": "Соблюдение {0}{1}",
   "en": "Adherence {0}{1}"
  },
+ "Rishton": {
+  "ru": "Риштан",
+  "en": "Rishtan"
+ },
  "Ro'yxat": {
   "ru": "Список",
   "en": "List"
@@ -2123,6 +2659,10 @@
   "ru": "QR-код для регистрации",
   "en": "Sign-up QR code"
  },
+ "Romitan": {
+  "ru": "Ромитан",
+  "en": "Romitan"
+ },
  "SMS yuborilmaydi, shuning uchun parolni zal tiklaydi:\n\n1. Zal egasiga (bosh adminga) telefon raqamingizni ayting.\n2. U sizga vaqtinchalik yangi parol beradi.\n3. Shu parol bilan kiring va Profil → «Parolni o'zgartirish» orqali o'zingizning parolingizni qo'ying.": {
   "ru": "SMS не отправляются, поэтому пароль восстанавливает зал:\n\n1. Сообщите владельцу зала (главному админу) свой номер телефона.\n2. Он выдаст вам временный новый пароль.\n3. Войдите с этим паролем и задайте свой в Профиль → «Сменить пароль».",
   "en": "No SMS is sent, so the gym resets your password:\n\n1. Tell the gym owner (head admin) your phone number.\n2. They will give you a temporary new password.\n3. Sign in with it and set your own in Profile → “Change password”."
@@ -2143,6 +2683,14 @@
   "ru": "Привет, {0}",
   "en": "Hi, {0}"
  },
+ "Samarqand": {
+  "ru": "Самаркандская область",
+  "en": "Samarkand region"
+ },
+ "Samarqand shahri": {
+  "ru": "город Самарканд",
+  "en": "Samarkand city"
+ },
  "Saqlab bo'lmadi: {0}": {
   "ru": "Не удалось сохранить: {0}",
   "en": "Could not save: {0}"
@@ -2159,9 +2707,21 @@
   "ru": "Сохранить",
   "en": "Save"
  },
+ "Sardoba": {
+  "ru": "Сардоба",
+  "en": "Sardoba"
+ },
+ "Sariosiyo": {
+  "ru": "Сариасия",
+  "en": "Sariasiya"
+ },
  "Savollaringizga javob beradi": {
   "ru": "Ответит на ваши вопросы",
   "en": "Answers your questions"
+ },
+ "Sayxunobod": {
+  "ru": "Сайхунабад",
+  "en": "Saykhunabad"
  },
  "Se": {
   "ru": "Вт",
@@ -2178,6 +2738,10 @@
  "Sentabr": {
   "ru": "Сентябрь",
   "en": "September"
+ },
+ "Sergeli": {
+  "ru": "Сергели",
+  "en": "Sergeli"
  },
  "Seshanba": {
   "ru": "Вторник",
@@ -2199,6 +2763,14 @@
   "ru": "Выберите шаблон",
   "en": "Choose a template"
  },
+ "Shahrisabz": {
+  "ru": "Шахрисабз",
+  "en": "Shakhrisabz"
+ },
+ "Shahrixon": {
+  "ru": "Шахрихан",
+  "en": "Shakhrikhan"
+ },
  "Shakar": {
   "ru": "Сахар",
   "en": "Sugar"
@@ -2211,6 +2783,22 @@
   "ru": "Соки",
   "en": "Juices"
  },
+ "Sharof Rashidov": {
+  "ru": "Шароф Рашидов",
+  "en": "Sharof Rashidov"
+ },
+ "Shayxontohur": {
+  "ru": "Шайхантахур",
+  "en": "Shaykhantakhur"
+ },
+ "Sherobod": {
+  "ru": "Шерабад",
+  "en": "Sherabad"
+ },
+ "Shirin": {
+  "ru": "Ширин",
+  "en": "Shirin"
+ },
  "Shirin mevalar": {
   "ru": "Сладкие фрукты",
   "en": "Sweet fruits"
@@ -2218,6 +2806,14 @@
  "Shirinliklar": {
   "ru": "Сладости",
   "en": "Sweets"
+ },
+ "Sho'rchi": {
+  "ru": "Шурчи",
+  "en": "Shurchi"
+ },
+ "Shofirkon": {
+  "ru": "Шафиркан",
+  "en": "Shafirkan"
  },
  "Shogird": {
   "ru": "Ученик",
@@ -2287,9 +2883,25 @@
   "ru": "Шоколад (с низким содержанием сахара)",
   "en": "Chocolate (low sugar)"
  },
+ "Shovot": {
+  "ru": "Шават",
+  "en": "Shavat"
+ },
  "Shu ma'lumotni xodimga bering — ilovaga shu bilan kiradi:": {
   "ru": "Передайте эти данные сотруднику — с ними он войдёт в приложение:",
   "en": "Give these details to the staff member — they sign in with them:"
+ },
+ "Shumanay": {
+  "ru": "Шуманай",
+  "en": "Shumanay"
+ },
+ "Sirdaryo": {
+  "ru": "Сырдарьинская область",
+  "en": "Syrdarya region"
+ },
+ "Sirdaryo tumani": {
+  "ru": "Сырдарьинский район",
+  "en": "Syrdarya district"
  },
  "Siz": {
   "ru": "Вы",
@@ -2310,6 +2922,10 @@
  "So'nggi {0} kun. Ball shogirdlarga reja berilgani, chatga javob, shogirdlarning rejaga rioyasi va vazn natijasidan avtomatik hisoblanadi.": {
   "ru": "Последние {0} дн. Балл считается автоматически: назначенные планы, ответы в чате, соблюдение плана учениками и результат по весу.",
   "en": "Last {0} days. The score is calculated automatically from plans assigned, chat replies, client adherence and weight results."
+ },
+ "So'x": {
+  "ru": "Сох",
+  "en": "Sokh"
  },
  "Solishtirish": {
   "ru": "Сравнение",
@@ -2391,6 +3007,10 @@
   "ru": "Сумма не указана",
   "en": "Amount not recorded"
  },
+ "Surxondaryo": {
+  "ru": "Сурхандарьинская область",
+  "en": "Surkhandarya region"
+ },
  "Sut (250 ml)": {
   "ru": "Молоко (250 мл)",
   "en": "Milk (250 ml)"
@@ -2435,6 +3055,10 @@
   "ru": "История",
   "en": "History"
  },
+ "Taxtako'pir": {
+  "ru": "Тахтакупыр",
+  "en": "Takhtakupyr"
+ },
  "Telefon": {
   "ru": "Как в телефоне",
   "en": "System"
@@ -2458,6 +3082,10 @@
  "Telefon: {0}": {
   "ru": "Телефон: {0}",
   "en": "Phone: {0}"
+ },
+ "Termiz shahri": {
+  "ru": "город Термез",
+  "en": "Termez city"
  },
  "Tez": {
   "ru": "Быстрый",
@@ -2515,6 +3143,30 @@
   "ru": "Оплаты показываются по залу. Главный админ должен прикрепить вас к залу.",
   "en": "Payments are shown per gym. The head admin needs to assign you to a gym."
  },
+ "To'raqo'rg'on": {
+  "ru": "Туракурган",
+  "en": "Turakurgan"
+ },
+ "To'rtko'l": {
+  "ru": "Турткуль",
+  "en": "Turtkul"
+ },
+ "Tomdi": {
+  "ru": "Тамды",
+  "en": "Tamdy"
+ },
+ "Toshkent shahri": {
+  "ru": "город Ташкент",
+  "en": "Tashkent city"
+ },
+ "Toshkent viloyati": {
+  "ru": "Ташкентская область",
+  "en": "Tashkent region"
+ },
+ "Toshloq": {
+  "ru": "Ташлак",
+  "en": "Tashlak"
+ },
  "Tovar": {
   "ru": "Товар",
   "en": "Product"
@@ -2542,6 +3194,10 @@
  "Tovuq ko'kragi (grill) / bifshteks / mol go'shti / baliq": {
   "ru": "Куриная грудка (гриль) / бифштекс / говядина / рыба",
   "en": "Chicken breast (grilled) / steak / beef / fish"
+ },
+ "Toyloq": {
+  "ru": "Тайлак",
+  "en": "Taylak"
  },
  "Trener": {
   "ru": "Тренер",
@@ -2707,6 +3363,10 @@
   "ru": "Название района",
   "en": "District name"
  },
+ "Tuproqqal'a": {
+  "ru": "Тупроккала",
+  "en": "Tuprakkala"
+ },
  "Tushlik": {
   "ru": "Обед",
   "en": "Lunch"
@@ -2751,9 +3411,29 @@
   "ru": "Творог 5%",
   "en": "Cottage cheese 5%"
  },
+ "Uchko'prik": {
+  "ru": "Учкуприк",
+  "en": "Uchkuprik"
+ },
+ "Uchqo'rg'on": {
+  "ru": "Учкурган",
+  "en": "Uchkurgan"
+ },
+ "Uchquduq": {
+  "ru": "Учкудук",
+  "en": "Uchkuduk"
+ },
+ "Uchtepa": {
+  "ru": "Учтепа",
+  "en": "Uchtepa"
+ },
  "Uglevod": {
   "ru": "Углеводы",
   "en": "Carbs"
+ },
+ "Ulug'nor": {
+  "ru": "Улугнор",
+  "en": "Ulugnor"
  },
  "Umumiy ball": {
   "ru": "Общий балл",
@@ -2762,6 +3442,18 @@
  "Umumiy o’zgarish": {
   "ru": "Общее изменение",
   "en": "Total change"
+ },
+ "Urganch shahri": {
+  "ru": "город Ургенч",
+  "en": "Urgench city"
+ },
+ "Urgut": {
+  "ru": "Ургут",
+  "en": "Urgut"
+ },
+ "Uychi": {
+  "ru": "Уйчи",
+  "en": "Uychi"
  },
  "Uyda mashq": {
   "ru": "Тренировка дома",
@@ -2774,6 +3466,10 @@
  "Uyda mashq belgilangan": {
   "ru": "Назначена тренировка дома",
   "en": "Home workout set"
+ },
+ "Uzun": {
+  "ru": "Узун",
+  "en": "Uzun"
  },
  "Vaqt: {0}": {
   "ru": "Время: {0}",
@@ -2855,13 +3551,33 @@
   "ru": "Область / город",
   "en": "Region / city"
  },
+ "Vobkent": {
+  "ru": "Вабкент",
+  "en": "Vabkent"
+ },
  "Xabar yozing...": {
   "ru": "Напишите сообщение...",
   "en": "Type a message..."
  },
+ "Xatirchi": {
+  "ru": "Хатырчи",
+  "en": "Khatyrchi"
+ },
  "Xatolik yuz berdi": {
   "ru": "Произошла ошибка",
   "en": "Something went wrong"
+ },
+ "Xiva": {
+  "ru": "Хива",
+  "en": "Khiva"
+ },
+ "Xo'jaobod": {
+  "ru": "Ходжаабад",
+  "en": "Khodjaabad"
+ },
+ "Xo'jayli": {
+  "ru": "Ходжейли",
+  "en": "Khodjeyli"
  },
  "Xodim": {
   "ru": "Сотрудник",
@@ -2875,9 +3591,33 @@
   "ru": "Сотрудники и ученики",
   "en": "Staff and clients"
  },
+ "Xonobod": {
+  "ru": "Ханабад",
+  "en": "Khanabad"
+ },
+ "Xonqa": {
+  "ru": "Ханка",
+  "en": "Khanka"
+ },
+ "Xorazm": {
+  "ru": "Хорезмская область",
+  "en": "Khorezm region"
+ },
+ "Xovos": {
+  "ru": "Хаваст",
+  "en": "Khavast"
+ },
  "Yak": {
   "ru": "Вс",
   "en": "Sun"
+ },
+ "Yakkabog'": {
+  "ru": "Яккабаг",
+  "en": "Yakkabag"
+ },
+ "Yakkasaroy": {
+  "ru": "Яккасарай",
+  "en": "Yakkasaray"
  },
  "Yakshanba": {
   "ru": "Воскресенье",
@@ -2975,6 +3715,18 @@
   "ru": "Новый зал",
   "en": "New gym"
  },
+ "Yangiariq": {
+  "ru": "Янгиарык",
+  "en": "Yangiaryk"
+ },
+ "Yangibozor": {
+  "ru": "Янгибазар",
+  "en": "Yangibazar"
+ },
+ "Yangihayot": {
+  "ru": "Янгихаёт",
+  "en": "Yangihayot"
+ },
  "Yangilash": {
   "ru": "Обновить",
   "en": "Refresh"
@@ -2982,6 +3734,22 @@
  "Yangilash uchun trenerga murojaat qiling": {
   "ru": "Чтобы продлить, обратитесь к тренеру",
   "en": "Contact your trainer to renew"
+ },
+ "Yangiobod": {
+  "ru": "Янгиабад",
+  "en": "Yangiabad"
+ },
+ "Yangiqo'rg'on": {
+  "ru": "Янгикурган",
+  "en": "Yangikurgan"
+ },
+ "Yangiyer": {
+  "ru": "Янгиер",
+  "en": "Yangiyer"
+ },
+ "Yangiyo'l": {
+  "ru": "Янгиюль",
+  "en": "Yangiyul"
  },
  "Yanvar": {
   "ru": "Январь",
@@ -2994,6 +3762,10 @@
  "Yashirish": {
   "ru": "Скрыть",
   "en": "Hide"
+ },
+ "Yashnobod": {
+  "ru": "Яшнабад",
+  "en": "Yashnabad"
  },
  "Yaxshi": {
   "ru": "Хорошо",
@@ -3035,9 +3807,25 @@
   "ru": "Перед сном",
   "en": "Before bed"
  },
+ "Yozyovon": {
+  "ru": "Язъяван",
+  "en": "Yazyavan"
+ },
  "Yuborish": {
   "ru": "Отправить",
   "en": "Send"
+ },
+ "Yunusobod": {
+  "ru": "Юнусабад",
+  "en": "Yunusabad"
+ },
+ "Yuqorichirchiq": {
+  "ru": "Юкоричирчик",
+  "en": "Yukori Chirchik"
+ },
+ "Zafarobod": {
+  "ru": "Зафарабад",
+  "en": "Zafarabad"
  },
  "Zal": {
   "ru": "Зал",
@@ -3122,6 +3910,18 @@
  "Zalsiz": {
   "ru": "Без зала",
   "en": "No gym"
+ },
+ "Zangiota": {
+  "ru": "Зангиата",
+  "en": "Zangiata"
+ },
+ "Zarafshon": {
+  "ru": "Зарафшан",
+  "en": "Zarafshan"
+ },
+ "Zomin": {
+  "ru": "Заамин",
+  "en": "Zaamin"
  },
  "aprel": {
   "ru": "апреля",
@@ -3482,5 +4282,25 @@
  "— Trener yo’q —": {
   "ru": "— Без тренера —",
   "en": "— No trainer —"
+ },
+ "⏰ Abonementingiz tugadi — yangilang": {
+  "ru": "⏰ Ваш абонемент закончился — продлите его",
+  "en": "⏰ Your membership has expired — please renew"
+ },
+ "⏰ Abonementingiz {0} kundan keyin tugaydi": {
+  "ru": "⏰ Ваш абонемент закончится через {0} дн.",
+  "en": "⏰ Your membership expires in {0} days"
+ },
+ "✅ Buyurtma berildi: {0} × {1} — {2}": {
+  "ru": "✅ Заказ выдан: {0} × {1} — {2}",
+  "en": "✅ Order handed over: {0} × {1} — {2}"
+ },
+ "❌ Buyurtma bekor qilindi: {0}": {
+  "ru": "❌ Заказ отменён: {0}",
+  "en": "❌ Order canceled: {0}"
+ },
+ "🛒 Buyurtma: {0} × {1} — {2}": {
+  "ru": "🛒 Заказ: {0} × {1} — {2}",
+  "en": "🛒 Order: {0} × {1} — {2}"
  }
 }
