@@ -1,11 +1,11 @@
 {
-    "name": "kotta_qani_diet",
-    "short_name": "kotta_qani_diet",
+    "name": "Qobil",
+    "short_name": "Qobil",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#16191E",
     "theme_color": "#4AF2FF",
-    "description": "A new Flutter project.",
+    "description": "Qobil zal — ovqatlanish rejasi, zal va do'kon",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

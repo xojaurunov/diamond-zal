@@ -89,7 +89,7 @@ class PlansScreen extends StatelessWidget {
             return EmptyState(
               icon: Icons.menu_book_outlined,
               title: tr("Hali reja yo'q"),
-              subtitle: tr('Diamond zal shablonidan boshlang yoki yangi reja tuzing.'),
+              subtitle: tr('Qobil zal shablonidan boshlang yoki yangi reja tuzing.'),
               action: FilledButton.icon(
                 onPressed: () => _pickTemplate(context),
                 icon: const Icon(Icons.auto_awesome),
@@ -539,7 +539,7 @@ class _PlanEditorState extends State<PlanEditor> {
               child: StatTile(
                 icon: Icons.egg_alt_outlined,
                 label: tr('Oqsil'),
-                value: '${_protein.round()} g',
+                value: trf('{0} g', [_protein.round()]),
                 color: AppColors.protein,
               ),
             ),
@@ -719,7 +719,7 @@ class _PlanEditorState extends State<PlanEditor> {
                 FoodImage(name: m.items[ii].name, url: m.items[ii].image, size: 36),
                 const SizedBox(width: AppSpace.md),
                 Expanded(child: Text(tr(m.items[ii].name), style: t.bodyMedium)),
-                Text('${m.items[ii].grams.round()} g',
+                Text(trf('{0} g', [m.items[ii].grams.round()]),
                     style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
                 SizedBox(
                   width: 64,

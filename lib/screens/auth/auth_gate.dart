@@ -72,7 +72,7 @@ class _Splash extends StatelessWidget {
               ),
               const SizedBox(height: AppSpace.xl),
               Text(
-                'Diamond zal',
+                'Qobil zal',
                 style: TextStyle(
                   color: AppColors.text,
                   fontSize: 26,

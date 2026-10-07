@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-06**
+> Oxirgi yangilanish: **2026-10-07**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,7 +11,16 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (6-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (7-oktabr holati)
+
+**7-oktabr:** ilova nomi **"Qobil"** bo'ldi (ikonka osti, ilova ichi, sayt sahifasi) va ikonka
+almashtirildi ("QOBIL", ko'krakda "Q", "ZAL · TOSHKENT") — **84-band**. **Yangi APK saytga
+joylandi** (tezlik + uch til + yangi nom): `public/app/kq.bin`, nusxasi `Qobil-2026-10-07.apk`.
+⚠️ Bu APK **telefonda sinalmagan** (bu kompyuterda telefon ham, emulyator ham yo'q) — zal
+egasi "joyla" dedi. Ishlamasa qaytarish: `Diamond-2026-10-05.apk` ni `public/app/kq.bin` ga
+ko'chirib `firebase deploy --only hosting`. Ichki nomlar (paket, imzo, Firebase loyihasi, repo
+`diamond-zal`, bildirishnoma kanali `diamond_general`) O'ZGARMAGAN.
+
 
 **6-oktabr:** uch ish qilindi, hammasi kodda va **web'da joylangan**:
 1. **Tezlik** (81-band) — bo'limlar birinchi ochilganda yuklanadi, rasmlar telefonda
@@ -20,7 +29,7 @@
    shablonlari va standart mahsulotlar ham (jami lug'atda 870 kalit).
 3. **Ish rejasi** raqobatchilar bilan solishtirib tuzildi (83-band).
 
-⚠️ **APK saytga QO'YILMAGAN.** Saytdagi APK — 5-oktabr 17:55 (Crashlytics'siz, ishlaydi, lekin
+(6-oktabr holati — 7-oktabrda APK joylandi, yuqoriga qarang.) Saytdagi APK — 5-oktabr 17:55 (Crashlytics'siz, ishlaydi, lekin
 tezlik va til yo'q). Yangi kod bilan sinov nusxasi: `Diamond-SINOV-2026-10-06.apk` (loyihadan
 tashqarida, zal egasining `Music` papkasida). Unda yangi Android plaginlari bor (rasm keshi:
 sqflite, path_provider) — **telefonda ochilishi tekshirilgach** `deploy.ps1` bilan joylanadi.
@@ -1602,6 +1611,24 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       oldin ishlamaydi), oylik natija kartasi, Excel.
     - Qiziqtirish g'oyalari (ball, daraja, nishon, seriya, zal reytingi, ball evaziga chegirma)
       muhokama qilindi — qaror yo'q; QR skanerdan keyin ma'noli (davomat aniq bo'lishi kerak).
+
+84. **Ilova nomi "Qobil", yangi ikonka, APK joylandi (7-okt)** — zal egasi so'rovi:
+    - **Ikonka:** `assets/icon/logo_src_3.png` — oldingi rasmdagi "DISCIPLINA · FOCO · FORÇA ·
+      CONSTÂNCIA" o'rniga oltin "QOBIL" va "ZAL · TOSHKENT", ko'krakdagi "W" o'rniga "Q"
+      (eski belgi `cv2.inpaint` bilan atrofdagi to'qimadan tiklab yopildi). Rasm asli
+      internetdan — mualliflik xavfi qoladi.
+    - **Nom:** `android:label`, `MaterialApp.title`, "Qobil zal" (kirish ekrani),
+      "Bosh admin • Qobil" / "Trener paneli • Qobil" / "Barmen • Qobil", bildirishnoma kanali
+      nomi, `web/index.html`, `web/manifest.json`, yuklab olish sahifasi (`public/index.html`),
+      lug'at kalitlari. Kod izohlaridagi "Diamond dizayn tizimi" va hujjatlardagi eski nom qoldi.
+    - **Brauzerda sinaldi** (vaqtinchalik sinov shogirdi ochilib, keyin o'chirildi — hujjat
+      va kirish akkaunti, 404 bilan tasdiqlandi), rus tilida: "Bugun" (reja nomi, mahallar,
+      taqiq ro'yxati, trener maslahati tarjimada; suv belgisi ko'rinadi), Do'kon (bo'limlar
+      tarjimada, rasm bosilsa to'liq ekranda ochiladi, rangli tovarda o'lcham va rang tanlash),
+      Profil (abonement kartasi). Tovar nomi va rang nomlari bazadan — o'zbekcha.
+    - "g" (gramm) birligi ham tarjimaga ulandi. `flutter test` 120/120, lug'at 871 kalit.
+    - **Sinalmagan:** telefondagi APK (ochilishi, rasm keshi, bildirishnomalar, kamera).
+      Reja: `specs/nom-qobil.md` (lokal).
 
 ---
 

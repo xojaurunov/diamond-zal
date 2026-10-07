@@ -95,7 +95,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return MaterialApp(
           // Ranglar const emas — rejim almashganda butun daraxt qayta quriladi
           key: ValueKey('$light-$lang'),
-          title: 'Diamond',
+          title: 'Qobil',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.current(),
           darkTheme: AppTheme.current(),

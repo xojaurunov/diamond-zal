@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Icon(Icons.fitness_center, size: 22, color: AppColors.onAccent),
                   ),
                   const SizedBox(width: AppSpace.md),
-                  Eyebrow('Diamond zal', color: AppColors.textFaint),
+                  Eyebrow('Qobil zal', color: AppColors.textFaint),
                   const Spacer(),
                   const LangPicker(compact: true),
                 ]),

@@ -72,7 +72,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
           children: [
             Text(tr(titles[tab])),
             Text(
-              me.isOwner ? tr('Bosh admin • Diamond') : tr('Trener paneli • Diamond'),
+              me.isOwner ? tr('Bosh admin • Qobil') : tr('Trener paneli • Qobil'),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall

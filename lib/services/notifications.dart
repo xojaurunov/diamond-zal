@@ -22,7 +22,7 @@ class Notifications {
   static const _details = NotificationDetails(
     android: AndroidNotificationDetails(
       channelId,
-      'Diamond',
+      'Qobil',
       channelDescription: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
       importance: Importance.high,
       priority: Priority.high,
@@ -49,7 +49,7 @@ class Notifications {
       );
       await _android?.createNotificationChannel(const AndroidNotificationChannel(
         channelId,
-        'Diamond',
+        'Qobil',
         description: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
         importance: Importance.high,
       ));
@@ -122,7 +122,7 @@ class Notifications {
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           channelId,
-          'Diamond',
+          'Qobil',
           channelDescription: 'Ovqat vaqti, vazn, chat va reja eslatmalari',
           importance: Importance.high,
           priority: Priority.high,

@@ -303,7 +303,7 @@ class _MetricsGrid extends StatelessWidget {
         child: StatTile(
           icon: Icons.egg_alt_outlined,
           label: tr('Oqsil'),
-          value: '${plan.proteinFor(weekday).round()} g',
+          value: trf('{0} g', [plan.proteinFor(weekday).round()]),
           color: AppColors.protein,
         ),
       ),
@@ -511,7 +511,7 @@ class _MealCard extends StatelessWidget {
                 Expanded(child: Text(tr(i.name), style: t.bodyMedium)),
                 const SizedBox(width: AppSpace.sm),
                 Text(
-                  '${i.grams.round()} g',
+                  trf('{0} g', [i.grams.round()]),
                   style: t.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     fontFeatures: tabular,

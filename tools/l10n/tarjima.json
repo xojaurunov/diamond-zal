@@ -303,9 +303,9 @@
   "ru": "Бармен назначен",
   "en": "Bar staff assigned"
  },
- "Barmen • Diamond": {
-  "ru": "Бармен • Diamond",
-  "en": "Bar • Diamond"
+ "Barmen • Qobil": {
+  "ru": "Бармен • Qobil",
+  "en": "Bar • Qobil"
  },
  "Barmenlar": {
   "ru": "Бармены",
@@ -427,9 +427,9 @@
   "ru": "Главный админ назначен",
   "en": "Head admin assigned"
  },
- "Bosh admin • Diamond": {
-  "ru": "Главный админ • Diamond",
-  "en": "Head admin • Diamond"
+ "Bosh admin • Qobil": {
+  "ru": "Главный админ • Qobil",
+  "en": "Head admin • Qobil"
  },
  "Bosh adminlar": {
   "ru": "Главные админы",
@@ -646,10 +646,6 @@
  "Dekabr": {
   "ru": "Декабрь",
   "en": "December"
- },
- "Diamond zal shablonidan boshlang yoki yangi reja tuzing.": {
-  "ru": "Начните с шаблона зала Diamond или составьте новый план.",
-  "en": "Start from a Diamond gym template or build a new plan."
  },
  "Do'kon": {
   "ru": "Магазин",
@@ -1923,6 +1919,10 @@
   "ru": "Добавить",
   "en": "Add"
  },
+ "Qobil zal shablonidan boshlang yoki yangi reja tuzing.": {
+  "ru": "Начните с шаблона зала Qobil или составьте новый план.",
+  "en": "Start from a Qobil gym template or build a new plan."
+ },
  "Qoldi: {0}": {
   "ru": "Осталось: {0}",
   "en": "Left: {0}"
@@ -2579,9 +2579,9 @@
   "ru": "Тренер снят",
   "en": "Trainer removed"
  },
- "Trener paneli • Diamond": {
-  "ru": "Панель тренера • Diamond",
-  "en": "Trainer panel • Diamond"
+ "Trener paneli • Qobil": {
+  "ru": "Панель тренера • Qobil",
+  "en": "Trainer panel • Qobil"
  },
  "Trener panelidan chiqmoqchimisiz?": {
   "ru": "Выйти из панели тренера?",
@@ -3226,6 +3226,10 @@
  "{0} faqat do'kon bilan ishlaydi: tovar, buyurtma va qoldiq. Shogirdlar, rejalar va chatni ko'rmaydi.{1}": {
   "ru": "{0} будет работать только с магазином: товары, заказы и остатки. Учеников, планы и чат не видит.{1}",
   "en": "{0} will work only with the shop: products, orders and stock. They won't see clients, plans or chat.{1}"
+ },
+ "{0} g": {
+  "ru": "{0} г",
+  "en": "{0} g"
  },
  "{0} g oqsil": {
   "ru": "{0} г белка",

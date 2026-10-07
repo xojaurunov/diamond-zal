@@ -51,7 +51,7 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
           children: [
             Text(tr(_titles[_tab])),
             Text(
-              tr('Barmen • Diamond'),
+              tr('Barmen • Qobil'),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
