@@ -1673,6 +1673,22 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       Ikkinchi telefon bilan suratga olishni ham to'smaydi.
     - **Telefonda sinalmagan** (Kotlin kodi kompilyatsiya bo'ldi, APK yig'ildi).
       Reja: `specs/skrinshot-bloklash.md` (lokal).
+
+88. **Suv belgisi — rasm (7-okt)** — zal egasi bergan rasm (pahlavon) "Bugun" ekrani o'rtasida
+    juda xira (10%) turadi: `assets/brand/suv_belgisi.png` — asl rasmning yorqinligi
+    shaffoflikka aylantirilgan (qora fon yo'q), `Image.asset(color: onSurface, srcIn)` bilan
+    matn rangiga bo'yaladi (qorong'i va yorug' rejimda ko'rinadi). `lib/widgets/watermark.dart`.
+    - **Ism va telefon yozuvi olib tashlandi** (zal egasi so'rovi). Oqibati: rasm tarqalsa
+      kimniki ekani ko'rinmaydi; himoya endi faqat `FLAG_SECURE` ga tayanadi (87-band) —
+      web versiyada va ikkinchi telefon bilan suratga olishda himoya yo'q.
+    - Vaqtinchalik sinov shogirdi bilan brauzerda ko'rildi (akkaunt o'chirildi).
+      Rasm internetdan — mualliflik xavfi (ikonka kabi).
+
+    **7-oktabr yakuni:** nom "Qobil" va ikonka (84), tillar to'liq (85), tovarlar uch tilda
+    (86), skrinshot bloki (87), suv belgisi rasmi (88). Web va APK joylangan;
+    APK nusxasi `Qobil-2026-10-07.apk`. **Bu kungi APK'larning hech biri telefonda
+    sinalmagan.** Qarorlar: Blaze kerak emas; guruh mashg'ulotlari — trener bilan gaplashgach;
+    zaxirani avtomatlashtirish — pauzada.
       `flutter test` **121/121**. Web va APK joylandi.
     - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
       o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.

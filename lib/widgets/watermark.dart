@@ -1,61 +1,36 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-/// Suv belgisi — [child] ustida xira, qiya takrorlanadigan matn (shogird ismi va telefoni).
-/// Skrinshotni bloklamaydi, lekin tarqatilgan rasmda reja kimniki ekani ko'rinib turadi.
+/// Suv belgisi — [child] ustida, ekran o'rtasida juda xira rasm (`assets/brand/suv_belgisi.png`).
+/// Shaffof PNG matn rangiga bo'yaladi — qorong'i va yorug' rejimda ham ko'rinadi.
 /// Bosish va aylantirishga xalaqit bermaydi.
+///
+/// 7-okt 2026 gacha ustida shogird ismi va telefoni ham takrorlanib turardi — zal egasi
+/// olib tashlatdi (skrinshot endi `ScreenGuard` bilan bloklanadi).
 class Watermark extends StatelessWidget {
-  final String text;
   final Widget child;
-  const Watermark({super.key, required this.text, required this.child});
+  const Watermark({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
-    if (text.trim().isEmpty) return child;
-    final color = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.055);
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Stack(children: [
       child,
       Positioned.fill(
         child: IgnorePointer(
-          child: CustomPaint(painter: _WatermarkPainter(text.trim(), color)),
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.86,
+              child: Image.asset(
+                'assets/brand/suv_belgisi.png',
+                fit: BoxFit.contain,
+                color: onSurface.withValues(alpha: 0.10),
+                colorBlendMode: BlendMode.srcIn,
+                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              ),
+            ),
+          ),
         ),
       ),
     ]);
   }
-}
-
-class _WatermarkPainter extends CustomPainter {
-  final String text;
-  final Color color;
-  _WatermarkPainter(this.text, this.color);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final tp = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: TextStyle(color: color, fontSize: 15, fontWeight: FontWeight.w600),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-    final stepX = tp.width + 56;
-    const stepY = 96.0;
-    canvas.save();
-    canvas.clipRect(Offset.zero & size);
-    // burilgandan keyin ham butun ekran qoplansin — chegaradan kengroq chiziladi
-    canvas.translate(size.width / 2, size.height / 2);
-    canvas.rotate(-math.pi / 7);
-    final r = size.longestSide;
-    var row = 0;
-    for (var y = -r; y < r; y += stepY, row++) {
-      // har ikkinchi qator yarim qadam surilgan — shaxmat tartibi
-      for (var x = -r - (row.isOdd ? stepX / 2 : 0); x < r; x += stepX) {
-        tp.paint(canvas, Offset(x, y));
-      }
-    }
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(_WatermarkPainter old) => old.text != text || old.color != color;
 }

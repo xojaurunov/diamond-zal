@@ -24,9 +24,8 @@ class TodayScreen extends StatelessWidget {
         );
 
     return Scaffold(
-      // Suv belgisi: reja skrinshot qilib tarqatilsa, kimniki ekani ko'rinib turadi
+      // Suv belgisi: ekran o'rtasida xira rasm
       body: Watermark(
-        text: [user.name, if (user.phone.isNotEmpty) '+${user.phone}'].join(' · '),
         child: SafeArea(
         child: user.planId == null
             ? page(const [SizedBox(height: AppSpace.xxl), _NoPlan()])
