@@ -1662,6 +1662,17 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - Eski APK'da tovar tahrirlansa (`set`), tarjima maydonlari o'chadi — keyin skriptni qayta
       ishga tushirish kerak. `flutter test` **122/122**, lug'at 1 100 kalit.
       Reja: `specs/tovar-tarjima.md` (lokal).
+
+87. **Shogirdda skrinshot bloklandi (7-okt)** — zal egasi so'rovi (5-oktabrdagi "faqat suv
+    belgisi" qarori o'zgardi; suv belgisi ham qoldi). Android `FLAG_SECURE`:
+    `MainActivity.kt` da `qobil/ekran` kanali, Dart tomoni `lib/services/screen_guard.dart`,
+    `auth_gate.dart` shogird kirganda yoqadi, xodim yoki kirish ekranida o'chiradi.
+    Skrinshot va ekran yozuvi qora chiqadi; "oxirgi ilovalar" ro'yxatida ham ko'rinmaydi.
+    - **Faqat shogirdda** (taxmin — xodimlar xatoni skrinshot qilib yubora olsin).
+    - **Web versiyada bloklanmaydi** — shogird brauzerdan (`/ilova/`) kirsa skrinshot oladi.
+      Ikkinchi telefon bilan suratga olishni ham to'smaydi.
+    - **Telefonda sinalmagan** (Kotlin kodi kompilyatsiya bo'ldi, APK yig'ildi).
+      Reja: `specs/skrinshot-bloklash.md` (lokal).
       `flutter test` **121/121**. Web va APK joylandi.
     - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
       o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/tr.dart';
 import '../../services/db.dart';
+import '../../services/screen_guard.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
 import '../admin/admin_home.dart';
@@ -22,7 +23,10 @@ class AuthGate extends ConsumerWidget {
       loading: () => const _Splash(),
       error: (e, _) => _ErrorView(message: '$e'),
       data: (user) {
-        if (user == null) return const LoginScreen();
+        if (user == null) {
+          ScreenGuard.set(false);
+          return const LoginScreen();
+        }
         final me = ref.watch(meProvider);
         return me.when(
           loading: () => const _Splash(),
@@ -31,6 +35,8 @@ class AuthGate extends ConsumerWidget {
             // Hujjat yo'q: yo hozir ro'yxatdan o'tilyapti (hujjat yaratilmoqda),
             // yo bosh admin akkauntni o'chirgan. Farqini kutib aniqlaymiz.
             if (u == null) return const _NoProfile();
+            // Shogirdda skrinshot bloklanadi (reja tarqalmasin); xodimlarda ochiq
+            ScreenGuard.set(!u.isAdmin && !u.isBarmen);
             if (u.isAdmin) return const AdminHome();
             // Barmen — faqat do'kon paneli
             if (u.isBarmen) return const BarmenHome();
