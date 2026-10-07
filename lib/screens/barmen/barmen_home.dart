@@ -5,6 +5,7 @@ import '../../services/db.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lazy_stack.dart';
 import '../../widgets/settings_sheet.dart';
+import '../../widgets/lang_picker.dart';
 import '../../widgets/ui.dart';
 import '../admin/sales_report_screen.dart';
 import '../admin/shop_admin_screen.dart';
@@ -60,6 +61,8 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
           ],
         ),
         actions: [
+          // til — ichkarida ham bir bosishda almashadi
+          const LangPicker(iconOnly: true),
           IconButton(
             tooltip: tr('Sozlamalar'),
             onPressed: () => showSettings(context, student: false),

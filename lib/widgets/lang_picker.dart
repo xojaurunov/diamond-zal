@@ -3,14 +3,16 @@ import '../l10n/tr.dart';
 import '../services/settings.dart';
 
 /// Til tanlash: O'zbek / Русский / English. Tanlanganda butun ilova shu tilga o'tadi.
-/// [compact] — kirish ekrani uchun kichik tugma (ochiladigan ro'yxat),
-/// aks holda Sozlamalar uchun uch bo'lakli tugma.
+/// [compact] — kirish ekrani va Profil uchun kichik tugma (ochiladigan ro'yxat);
+/// [iconOnly] — tepa panel uchun faqat globus belgisi; aks holda Sozlamalar uchun
+/// uch bo'lakli tugma.
 class LangPicker extends StatelessWidget {
   final bool compact;
+  final bool iconOnly;
 
   /// Til almashgandan keyin (masalan, varaqni yopish uchun)
   final VoidCallback? onChanged;
-  const LangPicker({super.key, this.compact = false, this.onChanged});
+  const LangPicker({super.key, this.compact = false, this.iconOnly = false, this.onChanged});
 
   void _set(String code) {
     onChanged?.call();
@@ -22,6 +24,17 @@ class LangPicker extends StatelessWidget {
     return ValueListenableBuilder<String>(
       valueListenable: appLang,
       builder: (context, lang, _) {
+        if (iconOnly) {
+          return PopupMenuButton<String>(
+            tooltip: tr('Til'),
+            initialValue: lang,
+            onSelected: _set,
+            icon: const Icon(Icons.language),
+            itemBuilder: (_) => [
+              for (final e in appLangs.entries) PopupMenuItem(value: e.key, child: Text(e.value)),
+            ],
+          );
+        }
         if (compact) {
           return PopupMenuButton<String>(
             initialValue: lang,

@@ -1684,6 +1684,11 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - Vaqtinchalik sinov shogirdi bilan brauzerda ko'rildi (akkaunt o'chirildi).
       Rasm internetdan — mualliflik xavfi (ikonka kabi).
 
+89. **Til tugmasi ichkarida ham (7-okt)** — avval faqat kirish ekranida va Sozlamalar ichida
+    edi (topish qiyin). Endi: xodimlar tepa panelida globus belgisi (`LangPicker(iconOnly)`),
+    shogird Profilida alohida "Til" qatori. Brauzerda bosh admin bo'lib sinaldi. Til
+    almashganda ilova qayta chiziladi va birinchi bo'limga qaytadi.
+
     **7-oktabr yakuni:** nom "Qobil" va ikonka (84), tillar to'liq (85), tovarlar uch tilda
     (86), skrinshot bloki (87), suv belgisi rasmi (88). Web va APK joylangan;
     APK nusxasi `Qobil-2026-10-07.apk`. **Bu kungi APK'larning hech biri telefonda

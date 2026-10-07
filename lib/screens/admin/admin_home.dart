@@ -8,6 +8,7 @@ import '../../widgets/join_qr_sheet.dart';
 import '../../widgets/lazy_stack.dart';
 import '../../widgets/notification_sync.dart';
 import '../../widgets/settings_sheet.dart';
+import '../../widgets/lang_picker.dart';
 import '../../widgets/ui.dart';
 import '../notifications_screen.dart';
 import 'clients_screen.dart';
@@ -86,6 +87,8 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
             onPressed: () => showJoinQr(context),
             icon: const Icon(Icons.qr_code_2_outlined),
           ),
+          // til — ichkarida ham bir bosishda almashadi
+          const LangPicker(iconOnly: true),
           IconButton(
             tooltip: tr('Sozlamalar'),
             onPressed: () => showSettings(context, student: false),

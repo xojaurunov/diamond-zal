@@ -4,6 +4,7 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/change_password.dart';
+import '../../widgets/lang_picker.dart';
 import '../../widgets/settings_sheet.dart';
 import '../../widgets/subscription_card.dart';
 import '../../widgets/ui.dart';
@@ -264,6 +265,21 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.edit_outlined),
                 label: Text(tr("Ma'lumotlarni o'zgartirish")),
+              ),
+              const SizedBox(height: 8),
+              // Til — kirgandan keyin ham shu yerdan almashadi
+              Container(
+                padding: const EdgeInsets.only(left: AppSpace.lg, right: AppSpace.sm),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.language, size: 20),
+                  const SizedBox(width: AppSpace.sm),
+                  Expanded(child: Text(tr('Til'))),
+                  const LangPicker(compact: true),
+                ]),
               ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
