@@ -572,3 +572,45 @@ class ChatMessage {
     );
   }
 }
+
+/// Rejadan tashqari yeyilgan ovqat — shogird "+ Yedim" bilan qo'shadi.
+/// `users/{uid}/days/{sana}.extras` ro'yxatida saqlanadi; kaloriya va oqsil qo'shilgan paytda
+/// hisoblanib yoziladi (mahsulot keyin o'zgarsa ham kunlik yozuv o'zgarmaydi).
+class ExtraFood {
+  final String name;
+  final double grams, kcal, protein;
+
+  /// Qo'shilgan payt (millisekund) — ro'yxatda tartib va o'chirish uchun noyob belgi
+  final int at;
+
+  const ExtraFood({
+    required this.name,
+    required this.grams,
+    required this.kcal,
+    required this.protein,
+    this.at = 0,
+  });
+
+  /// [food] ning 100 g uchun qiymatlaridan [grams] gramm uchun hisob
+  factory ExtraFood.of(Food food, double grams, {DateTime? now}) => ExtraFood(
+        name: food.name,
+        grams: grams,
+        kcal: (food.kcal * grams / 100).roundToDouble(),
+        protein: double.parse((food.protein * grams / 100).toStringAsFixed(1)),
+        at: (now ?? DateTime.now()).millisecondsSinceEpoch,
+      );
+
+  factory ExtraFood.fromMap(Map<String, dynamic> d) => ExtraFood(
+        name: (d['name'] ?? '') as String,
+        grams: ((d['grams'] ?? 0) as num).toDouble(),
+        kcal: ((d['kcal'] ?? 0) as num).toDouble(),
+        protein: ((d['protein'] ?? 0) as num).toDouble(),
+        at: ((d['at'] ?? 0) as num).toInt(),
+      );
+
+  Map<String, dynamic> toMap() =>
+      {'name': name, 'grams': grams, 'kcal': kcal, 'protein': protein, 'at': at};
+
+  /// Ro'yxat bo'yicha jami kaloriya
+  static double totalKcal(Iterable<ExtraFood> list) => list.fold(0, (s, e) => s + e.kcal);
+}

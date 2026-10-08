@@ -3,6 +3,7 @@ import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/extra_food_sheet.dart';
 import '../../widgets/ui.dart';
 import '../user/chat_screen.dart';
 import '../user/progress_screen.dart';
@@ -294,6 +295,8 @@ class ClientDetail extends StatelessWidget {
                     ),
                   ]),
                   const SizedBox(height: AppSpace.md),
+                  // shogird bugun rejadan tashqari nima yegan (bo'sh bo'lsa chiqmaydi)
+                  ExtrasToday(uid: u.id, day: todayKey(), readOnly: true),
                   _PlanPicker(user: u),
                   // Trenerni faqat bosh admin biriktiradi
                   if (admin.isOwner) ...[

@@ -31,9 +31,17 @@
   "ru": "«{0}» будет удалён. Его тренеры останутся без зала — прикрепите их к другому. На учеников это не влияет.",
   "en": "“{0}” will be deleted. Its trainers will have no gym — assign them to another one. Clients are not affected."
  },
+ "\"{0}\" olib tashlansinmi?": {
+  "ru": "Убрать «{0}»?",
+  "en": "Remove “{0}”?"
+ },
  "\"{0}\" va undagi mahsulotlar olib tashlanadi.": {
   "ru": "«{0}» и его продукты будут убраны.",
   "en": "“{0}” and its foods will be removed."
+ },
+ "100 g da {0} kkal": {
+  "ru": "{0} ккал на 100 г",
+  "en": "{0} kcal per 100 g"
  },
  "100 gramm uchun:": {
   "ru": "На 100 граммов:",
@@ -539,6 +547,10 @@
   "ru": "Скопировать на другие дни",
   "en": "Copy to other days"
  },
+ "Boshqasi": {
+  "ru": "Другое",
+  "en": "Change"
+ },
  "Boshqa…": {
   "ru": "Другое…",
   "en": "Other…"
@@ -642,6 +654,10 @@
  "Bugun · {0}": {
   "ru": "Сегодня · {0}",
   "en": "Today · {0}"
+ },
+ "Bugun · {0} kkal": {
+  "ru": "Сегодня · {0} ккал",
+  "en": "Today · {0} kcal"
  },
  "Bugungi ovqatlar": {
   "ru": "Питание на сегодня",
@@ -2323,6 +2339,10 @@
   "ru": "Камаши",
   "en": "Kamashi"
  },
+ "Qancha yedingiz?": {
+  "ru": "Сколько вы съели?",
+  "en": "How much did you eat?"
+ },
  "Qanliko'l": {
   "ru": "Канлыкуль",
   "en": "Kanlykul"
@@ -2611,9 +2631,21 @@
   "ru": "План · {0}",
   "en": "Plan · {0}"
  },
+ "Rejada yo'q narsa yesangiz, shu yerga qo'shing — kunlik hisob to'g'ri chiqadi.": {
+  "ru": "Съели что-то не из плана — добавьте сюда, и дневной подсчёт будет верным.",
+  "en": "If you eat something outside your plan, add it here so the daily total stays accurate."
+ },
  "Rejadagi har mahal vaqtida eslatadi": {
   "ru": "Напомнит о каждом приёме пищи по плану",
   "en": "Reminds you at each meal time in your plan"
+ },
+ "Rejadan tashqari": {
+  "ru": "Вне плана",
+  "en": "Outside the plan"
+ },
+ "Rejadan tashqari nima yedingiz?": {
+  "ru": "Что вы съели вне плана?",
+  "en": "What did you eat outside the plan?"
  },
  "Rejaga rioya past: {0}%": {
   "ru": "Низкое соблюдение плана: {0}%",
@@ -2678,6 +2710,10 @@
  "Ro'yxatdan o'tish QR kodi": {
   "ru": "QR-код для регистрации",
   "en": "Sign-up QR code"
+ },
+ "Ro'yxatdan olib tashlash": {
+  "ru": "Убрать из списка",
+  "en": "Remove from list"
  },
  "Romitan": {
   "ru": "Ромитан",
@@ -3178,6 +3214,10 @@
  "Tomdi": {
   "ru": "Тамды",
   "en": "Tamdy"
+ },
+ "Topilmadi. Bazada yo'q taomni treneringiz qo'shib beradi — chatda yozing.": {
+  "ru": "Не найдено. Блюдо, которого нет в базе, добавит ваш тренер — напишите в чат.",
+  "en": "Not found. Your trainer can add a missing food — message them in chat."
  },
  "Toshkent shahri": {
   "ru": "город Ташкент",
@@ -3971,6 +4011,10 @@
   "ru": "г",
   "en": "g"
  },
+ "g oqsil": {
+  "ru": "г белка",
+  "en": "g protein"
+ },
  "gacha {0}": {
   "ru": "из {0}",
   "en": "of {0}"
@@ -3998,6 +4042,10 @@
  "kkal": {
   "ru": "ккал",
   "en": "kcal"
+ },
+ "kkal ortiqcha": {
+  "ru": "ккал сверх плана",
+  "en": "kcal over"
  },
  "kkal qoldi": {
   "ru": "ккал осталось",
@@ -4126,6 +4174,10 @@
  "{0} g": {
   "ru": "{0} г",
   "en": "{0} g"
+ },
+ "{0} g  ·  {1} kkal  ·  {2} g oqsil": {
+  "ru": "{0} г  ·  {1} ккал  ·  {2} г белка",
+  "en": "{0} g  ·  {1} kcal  ·  {2} g protein"
  },
  "{0} g oqsil": {
   "ru": "{0} г белка",

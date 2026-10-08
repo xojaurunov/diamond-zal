@@ -1305,4 +1305,26 @@ void main() {
       expect(uzDate(d), 'Monday, October 5');
     });
   });
+
+  group('Rejadan tashqari yedim', () {
+    test('kaloriya va oqsil grammga qarab hisoblanadi', () {
+      final osh = Food(name: 'Osh', kcal: 180, protein: 6.5, fat: 8, carbs: 20);
+      final e = ExtraFood.of(osh, 250, now: DateTime.fromMillisecondsSinceEpoch(1000));
+      expect(e.kcal, 450);
+      expect(e.protein, 16.3);
+      expect(e.grams, 250);
+      expect(e.at, 1000);
+    });
+
+    test('yozuv bazaga borib qaytganda o-zgarmaydi; jami', () {
+      const a = ExtraFood(name: 'Osh', grams: 250, kcal: 450, protein: 16.3, at: 1);
+      const b = ExtraFood(name: 'Non', grams: 50, kcal: 130, protein: 4, at: 2);
+      final back = ExtraFood.fromMap(a.toMap());
+      expect(back.name, 'Osh');
+      expect(back.kcal, 450);
+      expect(back.at, 1);
+      expect(ExtraFood.totalKcal([a, b]), 580);
+      expect(ExtraFood.totalKcal(const []), 0);
+    });
+  });
 }

@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-07**
+> Oxirgi yangilanish: **2026-10-08**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -24,7 +24,7 @@ saytda. Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar (7-oktabr kechqurun)"
 - suv belgisi — pahlavon rasmi; ism-telefon yozuvi olib tashlandi — 88;
 - til tugmasi ichkarida ham (xodimlar tepa paneli, shogird Profili) — 89.
 
-**Saytdagi APK — 7-oktabr 18:05** (nusxasi: `Qobil-2026-10-07.apk`, zal egasining `Music`
+**Saytdagi APK — 8-oktabr** ("Yedim" tugmasi bilan, 90-band; nusxasi: `Qobil-2026-10-08.apk`, zal egasining `Music`
 papkasida). ⚠️ **Telefonda sinalmagan** — bu kompyuterda telefon ham, emulyator ham yo'q; zal
 egasi "joyla" dedi. Ichida yangi Android kodi bor: rasm keshi (sqflite, path_provider) va
 `MainActivity.kt` dagi skrinshot bloki. Ishlamasa qaytarish: `Diamond-2026-10-05.apk` ni
@@ -74,7 +74,7 @@ zaxirani birinchi marta olish, deploy.
 **2-oktabr:** loyiha GitHub'da ochiq (public) nashr qilindi — <https://github.com/xojaurunov/diamond-zal>, shox `main`. Maxfiy ma'lumot repodan va tarixdan olib tashlandi, **parollar o'zgarmadi** (**14-bo'lim** — u yerda yangi qoida: parol kuzatiladigan faylga yozilmaydi; haqiqiy parollar `PAROLLAR.md` va `.env` da).
 
 **Hammasi joylangan** (Cloud Functions bundan mustasno — Blaze kerak). `flutter analyze` 0 xato,
-`flutter test` **122/122**, qoida testlari **213/213**.
+`flutter test` **124/124**, qoida testlari **213/213**.
 
 Oxirgi APK: **5-oktabr 09:57, 25,3 MB** (abonement, davomat, QR, o'lcham bo'yicha qoldiq) —
 saytda ham, `public/app/kq.bin` da ham shu turibdi. Web versiyasi ham shu kunniki.
@@ -1725,6 +1725,29 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       `flutter test` **121/121**. Web va APK joylandi.
     - **Tarjima bo'lmaydigan yagona narsa** — odam yozgan matn: tovar nomi/izohi/rangi, trener
       o'zi yozgan reja va taom nomi, zal nomi, ismlar, chat.
+
+90. **"Rejadan tashqari yedim" (8-okt)** — Eda AI kabi rasmdan kaloriya o'lchash so'ralgan edi;
+    tavsiya qilinmadi (aralash taomda 25–35% xato, har rasm pullik, server kerak — Blaze
+    rad etilgan). O'rniga: shogird "Bugun" ekranida **"+ Yedim"** → mahsulotlar bazasidan
+    taom tanlaydi → gramm yozadi (tez tugmalar 50/100/150/200/300) → kkal va oqsil darhol
+    ko'rinadi → qo'shiladi.
+    - `ExtraFood` (`models.dart`), `Db.extras / addExtra / removeExtra`; yozuv
+      `users/{uid}/days/{sana}.extras` ro'yxatida (qoidalar o'zgarmadi). Kaloriya qo'shilgan
+      paytda hisoblanib yoziladi: `kkal = food.kcal * gramm / 100`.
+    - `lib/widgets/extra_food_sheet.dart`: tanlash oynasi va `ExtrasToday` ro'yxati.
+    - Kunlik halqa va "kkal qoldi" rejadagi + qo'shimchalarni birga sanaydi; rejadan oshsa
+      "N kkal ortiqcha" (qizil).
+    - Trener / bosh admin shogird kartasida ("Reja" tabi) bugungi qo'shimchalarni ko'radi.
+    - **Brauzerda sinaldi** (vaqtinchalik sinov shogirdi, keyin o'chirildi): Osh 300 g →
+      600 kkal, halqa 600 / 1454, bosh adminda ko'rindi.
+    - **Cheklov:** faqat gramm ("1 kosa", "1 dona" yo'q); bazada 20 ta mahsulot, ko'pi
+      xomashyo — tayyor taomlarni (somsa, lag'mon …) trener qo'shishi kerak; bazada yo'q
+      taomni shogird o'zi yarata olmaydi.
+    - Yangi vosita: `node tools/sinov/shogird.mjs yarat | parol | ochir` — ekranlarni ko'rish
+      uchun vaqtinchalik shogird (haqiqiy bazada; ish tugagach ALBATTA `ochir`).
+    - `flutter test` **124/124**, lug'at 1 113 kalit. Web va APK joylandi
+      (`Qobil-2026-10-08.apk`), telefonda sinalmagan. Reja: `specs/yedim-tugmasi.md` (lokal).
+
 
 ---
 

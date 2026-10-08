@@ -517,6 +517,26 @@ class Db {
         'done': done ? FieldValue.arrayUnion([index]) : FieldValue.arrayRemove([index])
       }, SetOptions(merge: true));
 
+  /// Rejadan tashqari yeyilgan ovqatlar — qo'shilgan tartibda
+  static Stream<List<ExtraFood>> extras(String uid, String day) =>
+      _dayRef(uid, day).snapshots().map((d) {
+        final data = d.data() as Map<String, dynamic>?;
+        final list = [
+          for (final e in (data?['extras'] as List? ?? const []))
+            ExtraFood.fromMap(Map<String, dynamic>.from(e as Map)),
+        ]..sort((a, b) => a.at.compareTo(b.at));
+        return list;
+      });
+
+  static Future<void> addExtra(String uid, String day, ExtraFood e) => _dayRef(uid, day).set({
+        'extras': FieldValue.arrayUnion([e.toMap()])
+      }, SetOptions(merge: true));
+
+  static Future<void> removeExtra(String uid, String day, ExtraFood e) =>
+      _dayRef(uid, day).set({
+        'extras': FieldValue.arrayRemove([e.toMap()])
+      }, SetOptions(merge: true));
+
   static Stream<int> water(String uid, String day) => _dayRef(uid, day)
       .snapshots()
       .map((d) => ((d.data() as Map<String, dynamic>?)?['water'] ?? 0) as int);

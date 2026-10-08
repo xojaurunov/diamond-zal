@@ -4,6 +4,7 @@ import '../../models/gym.dart' show weekdayNames;
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/extra_food_sheet.dart';
 import '../../widgets/food_image.dart';
 import '../../widgets/plan_photo.dart';
 import '../../widgets/ui.dart';
@@ -53,10 +54,16 @@ class TodayScreen extends StatelessWidget {
                       final meals = plan.mealsFor(weekday);
                       final indexes = List.generate(meals.length, (i) => i);
                       final doneCount = indexes.where(done.contains).length;
-                      final eaten =
+                      final planEaten =
                           indexes.where(done.contains).fold<double>(0, (s, i) => s + meals[i].kcal);
                       final next = indexes.firstWhere((i) => !done.contains(i), orElse: () => -1);
 
+                      // Rejadan tashqari yeyilganlar ham kunlik hisobga qo'shiladi
+                      return StreamBuilder<List<ExtraFood>>(
+                        stream: Db.extras(user.id, day),
+                        builder: (context, extraSnap) {
+                      final eaten =
+                          planEaten + ExtraFood.totalKcal(extraSnap.data ?? const <ExtraFood>[]);
                       return page([
                         FadeInUp(child: _HeroPanel(plan: plan, eaten: eaten, weekday: weekday)),
                         const SizedBox(height: AppSpace.md),
@@ -114,6 +121,8 @@ class TodayScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                        const SizedBox(height: AppSpace.md),
+                        ExtrasToday(uid: user.id, day: day),
                         if (plan.forbidden.isNotEmpty) ...[
                           const SizedBox(height: AppSpace.md),
                           _ForbiddenCard(items: plan.forbidden),
@@ -123,6 +132,8 @@ class TodayScreen extends StatelessWidget {
                           _NoteCard(note: plan.note),
                         ],
                       ]);
+                        },
+                      );
                     },
                   );
                 },
@@ -200,6 +211,8 @@ class _HeroPanel extends StatelessWidget {
     final t = Theme.of(context).textTheme;
     final total = plan.kcalFor(weekday);
     final left = (total - eaten).clamp(0.0, total);
+    // rejadan tashqari ovqat bilan me'yordan oshgan bo'lsa — qancha ortiqcha
+    final over = eaten > total && total > 0 ? eaten - total : 0.0;
     final pct = total > 0 ? (eaten / total * 100).round() : 0;
 
     return BentoTile(
@@ -231,18 +244,19 @@ class _HeroPanel extends StatelessWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   CountUp(
-                    left,
-                    style: t.displaySmall?.copyWith(color: AppColors.accent),
+                    over > 0 ? over : left,
+                    style: t.displaySmall
+                        ?.copyWith(color: over > 0 ? AppColors.danger : AppColors.accent),
                   ),
                   const SizedBox(width: AppSpace.sm),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3),
-                    child: Text(tr('kkal qoldi'),
+                    child: Text(over > 0 ? tr('kkal ortiqcha') : tr('kkal qoldi'),
                         style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
                   ),
                 ]),
             const SizedBox(height: AppSpace.md),
-            _ProgressBar(value: total > 0 ? eaten / total : 0),
+            _ProgressBar(value: total > 0 ? (eaten / total).clamp(0.0, 1.0) : 0),
             const SizedBox(height: AppSpace.sm),
             Text(trf('{0}% bajarildi', [pct]),
                 style: t.labelSmall?.copyWith(
