@@ -11,10 +11,15 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (7-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (8-oktabr holati)
 
-**▶ ERTAGA SHU YERDAN (7-oktabr kechqurun holati).** Hamma kod GitHub'da, web va APK
-saytda. Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar (7-oktabr kechqurun)".
+**▶ KEYINGI SAFAR SHU YERDAN (8-oktabr holati).** Hamma kod GitHub'da, web va APK saytda.
+Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar".
+
+**8-oktabrda qilingan:** "Rejadan tashqari yedim" tugmasi — shogird bazadan taom tanlab,
+grammini yozadi; kunlik kaloriya hisobiga qo'shiladi; trener ko'radi (**90-band**). Bu Eda AI
+kabi rasmdan o'lchash O'RNIGA qilindi (u tavsiya qilinmadi: xato katta, pullik, server kerak).
+Brauzerda sinov shogirdi bilan boshidan oxirigacha tekshirildi.
 
 **7-oktabrda qilingan** (84–89-bandlar):
 - ilova nomi **"Qobil"**, yangi ikonka ("QOBIL", ko'krakda "Q", "ZAL · TOSHKENT") — 84;
@@ -155,7 +160,7 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 19. **Abonement, davomat, do'kon ustamasi/o'lchami, QR, zaxira** (4-okt, 61–65-band):
     kod tayyor va lokal emulyatorda sinaldi, **haqiqiy bazaga hali joylanmagan**.
 
-### ⏳ Ochiq ishlar (7-oktabr kechqurun)
+### ⏳ Ochiq ishlar (8-oktabr holati)
 
 **Birinchi navbatda — zal egasi telefonda tekshiradi (hech biri sinalmagan):**
 - yangi APK ochiladimi (eng muhimi);
@@ -174,8 +179,13 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
   va "To'lovlar" unga to'g'ri ishlayaptimi. Ungacha bu "kutilayotgan" — qayta so'ralmaydi.
 - Tarjimani ruscha biladigan odam ko'rib chiqsa (Claude tarjima qilgan).
 
-**Javob kutayotgan taklif:** o'zbekcha tovar izohlaridagi ichki eslatmani ("Narx AllPituz
-kanalidan (24-sent)", "hozirgi narxni tekshiring") tozalash — u mijozga ko'rinadi (86-band).
+**Javob kutayotgan takliflar:**
+- o'zbekcha tovar izohlaridagi ichki eslatmani ("Narx AllPituz kanalidan (24-sent)",
+  "hozirgi narxni tekshiring") tozalash — u mijozga ko'rinadi (86-band);
+- mahsulotlar bazasiga 20–30 ta tayyor o'zbek taomini (somsa, lag'mon, manti, shashlik, non,
+  sho'rva …) kaloriyasi bilan qo'shish — "Yedim" tugmasi foydali bo'lishi uchun. Hozir bazada
+  20 ta mahsulot, tayyor taomlardan faqat Osh. Raqamlar taxminiy bo'ladi — trener tasdiqlasin.
+- "Yedim" ni telefonda va haqiqiy shogird bilan sinash (hozir faqat brauzerda ko'rilgan).
 
 **Zal egasiga bog'liq bo'lmagan navbatdagi ishlar** (83-banddagi reja, boshlanmagan):
 1. pul — abonementni muzlatish, muddati o'tganlar ro'yxati, kunlik kassa (uchalasi kichik);
