@@ -333,6 +333,7 @@ const en = <String, String>{
   'Hozir biriktirilgan: {0}': 'Currently assigned: {0}',
   'Hozir reja har kuni bir xil': 'Right now the plan is the same every day',
   'Hozir yo\'q': 'Out of stock',
+  'Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali tayyor emas.': 'For now, gym exercises only. Home exercises are not ready yet.',
   'Hozircha shogird qabul qilayotgan boshqa trener yo\'q': 'No other trainer is accepting clients right now',
   'Hozircha shogird qabul qilayotgan trener yo\'q — trener keyin biriktiriladi.': 'No trainer is accepting clients right now — one will be assigned later.',
   'Hozirgi parol': 'Current password',

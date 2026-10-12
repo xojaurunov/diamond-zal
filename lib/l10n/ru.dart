@@ -333,6 +333,7 @@ const ru = <String, String>{
   'Hozir biriktirilgan: {0}': 'Сейчас назначен: {0}',
   'Hozir reja har kuni bir xil': 'Сейчас план одинаковый на каждый день',
   'Hozir yo\'q': 'Нет в наличии',
+  'Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali tayyor emas.': 'Пока только упражнения для зала. Упражнения для дома ещё не готовы.',
   'Hozircha shogird qabul qilayotgan boshqa trener yo\'q': 'Сейчас нет других тренеров, принимающих учеников',
   'Hozircha shogird qabul qilayotgan trener yo\'q — trener keyin biriktiriladi.': 'Сейчас нет тренеров, принимающих учеников — тренера назначат позже.',
   'Hozirgi parol': 'Текущий пароль',

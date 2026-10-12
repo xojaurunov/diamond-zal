@@ -1806,9 +1806,11 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       (MIT, Copyright (c) 2020 GV79): `python tools/tana/qismlar.py <index.ts>` →
       `lib/widgets/body_parts_data.dart`; litsenziya matni
       `tools/tana/LICENSE-react-body-highlighter.txt`.
+    - **Faqat zal:** ekran tepasida hammaga ko'rinadigan yozuv — "Hozircha faqat zaldagi
+      mashqlar. Uydagi mashqlar hali tayyor emas." (uch tilda). Uy mashqlari — ochiq ish.
     - **Video joyi:** mashq ochilganda "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach,
       shu yerda ko'rinadi." (uch tilda). Video yuklash va ko'rsatish **hali yo'q**.
-    - **Sinalgani:** `flutter analyze` toza, `flutter test` **127/127**, lug'at 1 220 kalit.
+    - **Sinalgani:** `flutter analyze` toza, `flutter test` **127/127**, lug'at 1 221 kalit.
       Ko'rinishlar test rasmlari orqali tekshirildi; trener uchun video ko'rinmas Chrome'da
       yozildi (bosish, surish, aylanish ishladi). **Telefonda sinalmagan.** Saytga va saytdagi
       APK ga chiqarilmagan.

@@ -1323,6 +1323,10 @@
   "ru": "Нет в наличии",
   "en": "Out of stock"
  },
+ "Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali tayyor emas.": {
+  "ru": "Пока только упражнения для зала. Упражнения для дома ещё не готовы.",
+  "en": "For now, gym exercises only. Home exercises are not ready yet."
+ },
  "Hozircha shogird qabul qilayotgan boshqa trener yo'q": {
   "ru": "Сейчас нет других тренеров, принимающих учеников",
   "en": "No other trainer is accepting clients right now"

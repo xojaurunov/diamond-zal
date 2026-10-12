@@ -102,7 +102,13 @@ class _MusclesScreenState extends State<MusclesScreen> {
               tr("Tanadagi mushakni bosing yoki pastdagi ro'yxatdan tanlang — shu joy uchun mashqlar chiqadi."),
               style: const TextStyle(fontSize: 17, height: 1.5, fontWeight: FontWeight.w300, color: _silver),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 14),
+            // zal egasi so'rovi: hamma ko'rsin — uy mashqlari hali yo'q
+            Text(
+              tr('Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali tayyor emas.'),
+              style: const TextStyle(fontSize: 14, height: 1.45, fontWeight: FontWeight.w400, color: _amber),
+            ),
+            const SizedBox(height: 26),
             // old / orqa — bitta to'ldirilgan tugma (ekranda yagona)
             Row(children: [
               _Side(
