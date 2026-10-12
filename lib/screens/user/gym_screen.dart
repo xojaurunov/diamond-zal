@@ -4,6 +4,7 @@ import '../../models/gym.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import 'muscles_screen.dart';
 import '../../widgets/ui.dart';
 
 /// Shogird: Zal bo'limi — 3 ta mashg'ulot kunini tanlaydi, bugungi mashg'ulotni ko'radi.
@@ -118,19 +119,26 @@ class GymScreen extends StatelessWidget {
               ),
           ],
           const SizedBox(height: AppSpace.xl),
-          SectionHeader(tr('Mashqlar'), eyebrow: tr('Tez orada')),
+          SectionHeader(tr('Mashqlar'), eyebrow: tr('Sinov')),
+          // Tana xaritasi: mushak bosiladi — mashqlari chiqadi (sinov versiyasi)
           BentoTile(
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const MusclesScreen())),
             padding: const EdgeInsets.all(AppSpace.lg),
             child: Row(children: [
-              Icon(Icons.construction_outlined, color: AppColors.warning),
+              Icon(Icons.accessibility_new, color: AppColors.accent),
               const SizedBox(width: AppSpace.md),
               Expanded(
-                child: Text(
-                  tr("Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari "
-                  "tez orada qo'shiladi."),
-                  style: t.bodyMedium,
-                ),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(tr('Tana xaritasi'), style: t.titleMedium),
+                  const SizedBox(height: 2),
+                  Text(
+                    tr("Mushakni bosing — shu joy uchun mashqlarni ko'ring"),
+                    style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                  ),
+                ]),
               ),
+              Icon(Icons.chevron_right, color: AppColors.textMuted),
             ]),
           ),
           const SizedBox(height: AppSpace.md),

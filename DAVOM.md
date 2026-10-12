@@ -11,10 +11,21 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (8-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
-**▶ KEYINGI SAFAR SHU YERDAN (8-oktabr holati).** Hamma kod GitHub'da, web va APK saytda.
-Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar".
+**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr holati).** Hamma kod GitHub'da. Saytdagi web va APK —
+hali 8-oktabrniki: 12-oktabrdagi "Tana xaritasi" **saytga va saytdagi APK ga chiqarilmagan**
+(zal egasi telefonda ko'rib, keyin aytadi). Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar".
+
+**12-oktabrda qilingan:** "Tana xaritasi" — yangi mashqlar ekrani (Zal → Tana xaritasi,
+**91-band**): nuqtalardan yig'iladigan, 360° aylanadigan tana; mushak bosilsa yonadi va shu
+mushak mashqlari chiqadi; pastida qismli (har mushak alohida bo'lak) chizma; har mashqda
+video joyi (video hali yo'q). **Sinov versiyasi** — zal egasi va trener ko'rib chiqishi kerak:
+- zal egasining kompyuterida, Desktop'da: `Qobil-2026-10-12-sinov.apk` (telefonda sinalmagan;
+  qismli chizma va oxirgi tuzatishlardan OLDIN yig'ilgan) va trener uchun izohli video
+  `Qobil-tana-xaritasi.mp4`;
+- ochiq savollar: telefonda qotadimi (12 480 nuqta); nuqtali va qismli tana birga qolsinmi;
+  kepkani olib tashlash; mashqlar ro'yxatini trener tasdiqlashi; mashq videolari.
 
 **8-oktabrda qilingan:** "Rejadan tashqari yedim" tugmasi — shogird bazadan taom tanlab,
 grammini yozadi; kunlik kaloriya hisobiga qo'shiladi; trener ko'radi (**90-band**). Bu Eda AI
@@ -160,7 +171,16 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 19. **Abonement, davomat, do'kon ustamasi/o'lchami, QR, zaxira** (4-okt, 61–65-band):
     kod tayyor va lokal emulyatorda sinaldi, **haqiqiy bazaga hali joylanmagan**.
 
-### ⏳ Ochiq ishlar (8-oktabr holati)
+### ⏳ Ochiq ishlar (12-oktabr holati)
+
+**Tana xaritasi (91-band) bo'yicha — zal egasi javobini kutadi:**
+- sinov APK ni telefonda ko'rish: aylanish va bosish qotadimi;
+- nuqtali va qismli tana birga qolsinmi yoki bittasi;
+- trener mashqlar ro'yxatini ko'rib tuzatishi; mashq videolarini tayyorlashi (video yuklash
+  hali qilinmagan);
+- ma'qul bo'lsa: web va APK ni saytga chiqarish.
+
+Quyidagilar — 8-oktabrdan qolgan ro'yxat:
 
 **Birinchi navbatda — zal egasi telefonda tekshiradi (hech biri sinalmagan):**
 - yangi APK ochiladimi (eng muhimi);
@@ -1757,6 +1777,45 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       uchun vaqtinchalik shogird (haqiqiy bazada; ish tugagach ALBATTA `ochir`).
     - `flutter test` **124/124**, lug'at 1 113 kalit. Web va APK joylandi
       (`Qobil-2026-10-08.apk`), telefonda sinalmagan. Reja: `specs/yedim-tugmasi.md` (lokal).
+
+91. **"Tana xaritasi" — mashqlar ekrani, sinov versiyasi (12-okt)** — zal egasi "Dala" sayti
+    uslubida (qora fon, binafsha urg'u, sariq yorliqlar, kartochkasiz) tana xaritasini so'radi:
+    tanadagi joy bosilsa — o'sha mushak mashqlari chiqsin. Zal → "Tana xaritasi" kafeli
+    (`gym_screen.dart`) → `lib/screens/user/muscles_screen.dart`. Ranglar shu faylda,
+    `AppColors` ga qo'shilmagan (faqat shu ekran).
+    - **Ma'lumot:** `lib/models/exercises.dart` — 12 mushak guruhi, 36 mashq (nomi, yondashuv ×
+      takror, maslahat, yordamchi mushaklar). **Namunaviy ro'yxat** — trener tasdiqlamagan.
+    - **Nuqtali tana** (`lib/widgets/particle_body.dart`): qomat 8 tomondan (har 45°), har
+      ko'rinishda 12 480 nuqta. Ekran ochilganda nuqtalar sochilib yig'iladi; barmoq bilan
+      surilsa yoki "O'GIRISH" bosilsa aylanadi (ko'rinishlar so'nib-paydo bo'ladi); mushak
+      bosilsa o'sha joyga yaqinlashadi va soya-yorug' bilan sariq yonadi. Mushak joylari
+      hamma 8 ko'rinishda qo'lda belgilangan (`_regions`): old va orqada aniqroq, qiya va yon
+      ko'rinishlarda taxminiy to'rtburchak.
+    - **Nuqtalar manbasi:** zal egasi bergan "360 gradus" rasmi (bitta qomat 8 tomondan).
+      `python tools/tana/zarrachalar.py <rasm>` → `lib/widgets/body_photo_points.dart` (1,3 MB,
+      generatsiya qilingan). **Manba rasm repoda yo'q** — faqat undan olingan nuqtalar. Skript
+      ichida: fonni ayirish, pol aksini kesish, qora kiyim ostidagi relyefni ko'tarish (mahalliy
+      kontrast), gavda ichidagi teshiklarni to'ldirish, uzilgan mayda dog'larni tashlash.
+    - **Tezlik:** har (ko'rinish, tanlangan mushak) uchun nuqtalar bir marta hisoblanib
+      saqlanadi (`_Layer`, `Float32List`); kadrda 15 ta `drawRawPoints`. Nuqtama-nuqta harakat
+      faqat ekran ochilgandagi yig'ilishda. Brauzerda debug rejimi sekin — ko'rish uchun
+      `flutter run -d chrome --release`.
+    - **Qismli tana** (`lib/widgets/body_map.dart`): har mushak alohida ko'pburchak, old va
+      orqa; nuqtali tana ostida ikkita shakl (bosiladi) va har mashq yonida kichik shakl
+      (asosiy mushak to'q, yordamchilar och binafsha). Chizma — **react-body-highlighter**
+      (MIT, Copyright (c) 2020 GV79): `python tools/tana/qismlar.py <index.ts>` →
+      `lib/widgets/body_parts_data.dart`; litsenziya matni
+      `tools/tana/LICENSE-react-body-highlighter.txt`.
+    - **Video joyi:** mashq ochilganda "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach,
+      shu yerda ko'rinadi." (uch tilda). Video yuklash va ko'rsatish **hali yo'q**.
+    - **Sinalgani:** `flutter analyze` toza, `flutter test` **127/127**, lug'at 1 220 kalit.
+      Ko'rinishlar test rasmlari orqali tekshirildi; trener uchun video ko'rinmas Chrome'da
+      yozildi (bosish, surish, aylanish ishladi). **Telefonda sinalmagan.** Saytga va saytdagi
+      APK ga chiqarilmagan.
+    - **Ma'lum kamchiliklar:** rasmda kepka bor (avval "kepka kerak emas" deyilgan); ko'krak
+      ko'ylak ostida — ikki bo'lagi ajralmaydi; 225° va 270° da bosh yonida bir-ikki ortiqcha
+      nuqta; manbada 135° va 225° ko'rinishlar deyarli bir xil; qismli chizma burchakli.
+    - Reja va qarorlar tarixi: `specs/tana-xaritasi.md` (lokal).
 
 
 ---

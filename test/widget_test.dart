@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kotta_qani_diet/l10n/tr.dart';
+import 'package:kotta_qani_diet/models/exercises.dart';
 import 'package:kotta_qani_diet/models/feed.dart';
 import 'package:kotta_qani_diet/models/finance.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
@@ -14,6 +15,7 @@ import 'package:kotta_qani_diet/screens/notifications_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
 import 'package:kotta_qani_diet/services/reminders.dart';
 import 'package:kotta_qani_diet/widgets/change_password.dart';
+import 'package:kotta_qani_diet/widgets/body_map.dart';
 import 'package:kotta_qani_diet/widgets/food_image.dart';
 import 'package:kotta_qani_diet/widgets/lazy_stack.dart';
 import 'package:kotta_qani_diet/widgets/ui.dart';
@@ -1325,6 +1327,33 @@ void main() {
       expect(back.at, 1);
       expect(ExtraFood.totalKcal([a, b]), 580);
       expect(ExtraFood.totalKcal(const []), 0);
+    });
+  });
+
+  group('Tana xaritasi', () {
+    test('har mushak guruhi shaklda bor va kamida 3 ta mashqi bor', () {
+      final drawn = {...BodyMap.musclesOn(back: false), ...BodyMap.musclesOn(back: true)};
+      for (final m in muscles) {
+        expect(drawn.contains(m.id), isTrue, reason: '${m.id} shaklda yo-q');
+        expect(exercisesFor(m.id).length, greaterThanOrEqualTo(3), reason: m.id);
+      }
+    });
+
+    test('mashqlardagi mushak id-lari to-g-ri', () {
+      final ids = {for (final m in muscles) m.id};
+      for (final e in exercises) {
+        expect(ids.contains(e.muscle), isTrue, reason: e.name);
+        expect(e.also.every(ids.contains), isTrue, reason: e.name);
+      }
+    });
+
+    test('bosilgan nuqta mushakni topadi', () {
+      expect(BodyMap.hit(back: false, x: 76, y: 108), 'chest');
+      expect(BodyMap.hit(back: false, x: 52, y: 126), 'biceps');
+      expect(BodyMap.hit(back: true, x: 50, y: 102), 'triceps');
+      expect(BodyMap.hit(back: false, x: 66, y: 140), 'abs');
+      expect(BodyMap.hit(back: true, x: 86, y: 202), 'glutes');
+      expect(BodyMap.hit(back: false, x: 5, y: 5), isNull);
     });
   });
 }

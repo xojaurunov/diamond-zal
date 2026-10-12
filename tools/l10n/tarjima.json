@@ -11,6 +11,18 @@
   "ru": " · вес {0} кг",
   "en": " · weight {0} kg"
  },
+ "\"Bolg'a\" usulida bukish": {
+  "ru": "Сгибания «молот»",
+  "en": "Hammer curl"
+ },
+ "\"Fermer yurishi\"": {
+  "ru": "«Прогулка фермера»",
+  "en": "Farmer's walk"
+ },
+ "\"Xayrli tong\" egilishi": {
+  "ru": "Наклоны «гуд морнинг»",
+  "en": "Good morning"
+ },
  "\"{0}\" bazadan o'chirilsinmi? Mavjud rejalarga ta'sir qilmaydi.": {
   "ru": "Удалить «{0}» из базы? На существующие планы это не повлияет.",
   "en": "Delete “{0}” from the database? Existing plans are not affected."
@@ -50,6 +62,22 @@
  "2-nonushta": {
   "ru": "2-й завтрак",
   "en": "Second breakfast"
+ },
+ "3 × 1 daqiqa": {
+  "ru": "3 × 1 минута",
+  "en": "3 × 1 min"
+ },
+ "3 × 30 metr": {
+  "ru": "3 × 30 метров",
+  "en": "3 × 30 m"
+ },
+ "3 × 30–40 soniya": {
+  "ru": "3 × 30–40 секунд",
+  "en": "3 × 30–40 sec"
+ },
+ "3 × 40–60 soniya": {
+  "ru": "3 × 40–60 секунд",
+  "en": "3 × 40–60 sec"
  },
  "30 kun": {
   "ru": "30 дней",
@@ -206,6 +234,14 @@
  "Arnasoy": {
   "ru": "Арнасай",
   "en": "Arnasay"
+ },
+ "Arqonda sakrash": {
+  "ru": "Прыжки на скакалке",
+  "en": "Jump rope"
+ },
+ "Arqonni peshonaga torting, tirsaklarni yoying.": {
+  "ru": "Тяните канат ко лбу, разводя локти.",
+  "en": "Pull the rope to the forehead, flaring the elbows."
  },
  "Asaka": {
   "ru": "Асака",
@@ -383,6 +419,26 @@
   "ru": "Бектемир",
   "en": "Bektemir"
  },
+ "Bel tekis, oldinga egiling. Yelkaning orqa qismi ishlaydi.": {
+  "ru": "Спина ровная, наклон вперёд. Работает задняя часть плеч.",
+  "en": "Flat back, lean forward. Works the rear delts."
+ },
+ "Bel tekis, shtangani qoringa torting.": {
+  "ru": "Спина ровная, тяните штангу к животу.",
+  "en": "Flat back, pull the bar to the stomach."
+ },
+ "Bel tekis, tizzalar oyoq uchi yo'nalishida. Son polga parallel bo'lguncha.": {
+  "ru": "Спина ровная, колени по направлению носков. До параллели бёдер с полом.",
+  "en": "Flat back, knees in line with the toes. Down to thighs parallel to the floor."
+ },
+ "Bel tekis, tosni orqaga suring. Shtanga oyoq bo'ylab sirpanadi.": {
+  "ru": "Спина ровная, таз отводите назад. Штанга скользит вдоль ног.",
+  "en": "Flat back, push the hips back. The bar slides along the legs."
+ },
+ "Bel tik, gantellarni quloq balandligidan tepaga siqing.": {
+  "ru": "Спина прямая; выжимайте гантели вверх от уровня ушей.",
+  "en": "Back upright; press the dumbbells up from ear level."
+ },
  "Belgilashni unutmang": {
   "ru": "Не забудьте отметить",
   "en": "Don't forget to mark it"
@@ -390,6 +446,18 @@
  "Belgini olib tashlash": {
   "ru": "Снять отметку",
   "en": "Unmark"
+ },
+ "Belni bukmasdan, oyoqni dumba kuchi bilan ko'taring.": {
+  "ru": "Не прогибая поясницу, поднимайте ногу силой ягодиц.",
+  "en": "Without arching the back, lift the leg with the glutes."
+ },
+ "Belni poldan uzmang, iyakni ko'krakka tortmang.": {
+  "ru": "Поясницу не отрывайте от пола, подбородок не прижимайте к груди.",
+  "en": "Keep the lower back on the floor, don't tuck the chin to the chest."
+ },
+ "Belning pastki qismi ishlaydi. Keskin harakat qilmang.": {
+  "ru": "Работает низ спины. Без резких движений.",
+  "en": "Works the lower back. No jerky movements."
  },
  "Berildi": {
   "ru": "Выдан",
@@ -406,6 +474,14 @@
  "Beshariq": {
   "ru": "Бешарык",
   "en": "Besharyk"
+ },
+ "Bilak": {
+  "ru": "Предплечья",
+  "en": "Forearms"
+ },
+ "Bilak sonda yotadi, faqat kaft harakatlanadi.": {
+  "ru": "Предплечья лежат на бёдрах, двигается только кисть.",
+  "en": "Forearms rest on the thighs, only the wrists move."
  },
  "Bildirishnoma yo‘q": {
   "ru": "Уведомлений нет",
@@ -455,6 +531,14 @@
   "ru": "Добавить первый товар",
   "en": "Add the first product"
  },
+ "Blokda pastga siqish": {
+  "ru": "Разгибание рук на блоке",
+  "en": "Cable pushdown"
+ },
+ "Blokni yuzga tortish": {
+  "ru": "Тяга блока к лицу",
+  "en": "Face pull"
+ },
  "Bo'ka": {
   "ru": "Бука",
   "en": "Buka"
@@ -498,6 +582,10 @@
  "Bog'ot": {
   "ru": "Багат",
   "en": "Bagat"
+ },
+ "Boldir": {
+  "ru": "Икры",
+  "en": "Calves"
  },
  "Bosh admin": {
   "ru": "Главный админ",
@@ -566,6 +654,10 @@
  "Brokkoli yoki gulkaram": {
   "ru": "Брокколи или цветная капуста",
   "en": "Broccoli or cauliflower"
+ },
+ "Brusda siqilish": {
+  "ru": "Отжимания на брусьях",
+  "en": "Dips"
  },
  "Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari tez orada qo'shiladi.": {
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
@@ -855,6 +947,10 @@
   "ru": "Пн",
   "en": "Mon"
  },
+ "Dumba": {
+  "ru": "Ягодицы",
+  "en": "Glutes"
+ },
  "Dushanba": {
   "ru": "Понедельник",
   "en": "Monday"
@@ -862,6 +958,14 @@
  "E'tibor kerak": {
   "ru": "Требуют внимания",
   "en": "Need attention"
+ },
+ "Egilib gantelni yonga ochish": {
+  "ru": "Разведение гантелей в наклоне",
+  "en": "Bent-over dumbbell reverse fly"
+ },
+ "Egilib shtangani tortish": {
+  "ru": "Тяга штанги в наклоне",
+  "en": "Bent-over barbell row"
  },
  "Ellikqal'a": {
   "ru": "Элликкала",
@@ -979,6 +1083,34 @@
   "ru": "Галерея",
   "en": "Gallery"
  },
+ "Gantel bilan navbatma-navbat bukish": {
+  "ru": "Попеременный подъём гантелей на бицепс",
+  "en": "Alternating dumbbell curl"
+ },
+ "Gantel bilan qiya skameykada siqish": {
+  "ru": "Жим гантелей на наклонной скамье",
+  "en": "Incline dumbbell press"
+ },
+ "Gantel bilan yelka qisish": {
+  "ru": "Шраги с гантелями",
+  "en": "Dumbbell shrugs"
+ },
+ "Gantelni bosh orqasidan ko'tarish": {
+  "ru": "Разгибание гантели из-за головы",
+  "en": "Overhead dumbbell extension"
+ },
+ "Gantelni tepaga ko'tarish (o'tirib)": {
+  "ru": "Жим гантелей вверх (сидя)",
+  "en": "Seated dumbbell shoulder press"
+ },
+ "Gantelni yonga ko'tarish": {
+  "ru": "Разведение гантелей в стороны",
+  "en": "Dumbbell lateral raise"
+ },
+ "Giperekstenziya": {
+  "ru": "Гиперэкстензия",
+  "en": "Back extension"
+ },
  "Go'sht (yog'siz, qaynatilgan yoki soya yog'ida dimlangan)": {
   "ru": "Мясо (нежирное, варёное или тушёное на соевом масле)",
   "en": "Meat (lean, boiled or stewed in soybean oil)"
@@ -1074,6 +1206,10 @@
  "Hali mijoz yo'q": {
   "ru": "Клиентов пока нет",
   "en": "No clients yet"
+ },
+ "Hali mushak tanlanmagan.": {
+  "ru": "Мышца ещё не выбрана.",
+  "en": "No muscle selected yet."
  },
  "Hali reja yo'q": {
   "ru": "Планов пока нет",
@@ -1355,6 +1491,10 @@
   "ru": "УЧИМСЯ СЧИТАТЬ КАЛОРИИ\n\nЗапомните: калории берутся на 1 кг веса, и это число вы умножаете на свой вес. То есть если вы весите 70 кг, умножьте вес на число ниже и получите дневную норму калорий:\n• Для женщин с медленным обменом веществ — 31\n• Для женщин с быстрым обменом веществ — 33\n• Для мужчин с медленным обменом веществ — 33\n• Для мужчин с быстрым обменом веществ — 35\n(Например: мужчина, 70 кг, метаболизм медленный — 70 × 33 = 2310 ккал.)\n\nТеперь об обмене веществ — возник вопрос «Алишер, а что это?», верно? Обмен веществ есть у каждого человека, по-русски это «метаболизм». То есть вы поели — организм быстро переварил и снова требует еды; или наоборот — еда переваривается очень медленно, и вы едите всего 2 раза в день. По этому и можно понять, быстрый у вас метаболизм или медленный!\n\nЧтобы ускорить метаболизм, нужно правильно питаться и есть небольшими порциями каждые 2 часа — организм перестраивается, как машина после прошивки, и ускоряется!\n\n«Зачем нам ускоряться?» — спросите вы, верно? Но при быстром метаболизме организм сам использует и сжигает лишний жир, и тело становится рельефным. Кто же не хочет такое тело?\n\nКАК ОПРЕДЕЛИТЬ КАЛОРИЙНОСТЬ?\n\nДля примера сравним калорийность одного гамбургера и риса с курицей — примерные цифры можно найти в интернете. Пример: в гамбургере 374 ккал на 100 г. В рисе с курицей — 250 ккал. Теперь посмотрим на разницу: в рисе и курице есть очень нужные медленные углеводы и белки, а в гамбургере — быстрые углеводы и холестерин. Можете убедиться сами — в таблице ниже.\n\nДЛЯ НАБОРА МЫШЕЧНОЙ МАССЫ\n\nСовет для всех, кто набирает массу: если хотите нарастить мышцы, в дневном рационе нужно увеличить углеводы и калории. Это не значит есть сколько хочется — мы составляем правильный рацион. Например: вы хотите набрать жир или красивую мышечную фигуру? Конечно, мышечную, но чтобы достичь этого, придётся немного потрудиться!\n\nКогда едите углеводы, выбирайте медленные. Это: рис, гречка, макароны 2-го сорта, овсянка и геркулесовая каша. Все эти продукты есть в магазине!\n\nУглеводы в виде коктейля — в основном гейнеры, то есть спортивные добавки; их можно приготовить и дома. Чаще всего их лучше принимать до и сразу после тренировки. Причина: в другое время быстрые углеводы могут дать лишний жир. Быстрые углеводы дают нужную энергию, когда мышечные волокна открыты!\n\nЖиры при наборе массы нужны, но не сверх меры. Если не есть нужные жиры, вы не сможете поднять тестостерон. Тестостерон — гормон роста и восстановления мышц, в целом гормон, который делает мужчину мужчиной!\n\nИНДЕКС МЕДЛЕННЫХ УГЛЕВОДОВ (на 100 г)\n• Рис — 78,9 г углеводов — 349 ккал\n• Гречка — 69,2 г углеводов — 349 ккал\n• Овсяная крупа — 67,8 г углеводов — 349 ккал\n• Продукты из гороха — 60,2 г углеводов\n• Макароны (из муки 2 и 3 сорта) — 52–62 г углеводов — 368 ккал\n\nО ПРИЁМАХ ПИЩИ\nПриёмы пищи ниже составлены по этим советам (порции примерные): небольшая порция каждые 2–3 часа, медленные углеводы, гейнер до и после тренировки, жиры в меру.",
   "en": "LEARNING TO COUNT CALORIES\n\nRemember: calories are taken per 1 kg of body weight, and you multiply that number by your own weight. So if you weigh 70 kg, multiply by the number below to get your daily calories:\n• For women with a slow metabolism — 31\n• For women with a fast metabolism — 33\n• For men with a slow metabolism — 33\n• For men with a fast metabolism — 35\n(Example: a man, 70 kg, slow metabolism — 70 × 33 = 2310 kcal.)\n\nNow, about metabolism — you're asking “Alisher, what is that?”, right? Everyone has a metabolism. You eat — your body digests it quickly and asks for more; or the opposite — it digests very slowly and you end up eating only twice a day. That's how you can tell whether your metabolism is fast or slow!\n\nTo speed up your metabolism you need to eat right and have small portions every 2 hours — the body gets reprogrammed, like a car after a firmware update, and speeds up!\n\n“Why do we need it faster?” you ask, right? With a fast metabolism your body uses up and burns excess fat by itself, and your body becomes defined. Who wouldn't want a body like that?\n\nHOW DO WE WORK OUT CALORIES?\n\nAs an example, let's compare the calories in a hamburger with rice and chicken — you can look up approximate numbers online. Example: a hamburger has 374 kcal per 100 g. Rice and chicken have 250 kcal. Now look at the difference: rice and chicken contain much-needed slow carbs and protein, while a hamburger has fast carbs and cholesterol. You can see for yourself in the table below.\n\nFOR GAINING MUSCLE MASS\n\nAdvice for everyone gaining mass: if you want to build muscle, you need to increase carbs and calories in your daily diet. That doesn't mean eating whatever you like — we build a proper diet. For example: do you want to gain fat, or a good-looking muscular build? Muscle, of course, but to get there you'll have to push yourself a little!\n\nWhen you eat carbs, choose slow ones. These are: rice, buckwheat, grade-2 pasta, oatmeal and rolled-oat porridge. All of these are sold in shops!\n\nCarbs in shake form are mostly gainers, i.e. sports supplements; you can also make them at home. It's usually best to take them right before and after training. The reason: at other times their fast carbs may turn into extra fat. Fast carbs give the energy you need while the muscle fibers are open!\n\nFats are needed when gaining mass, but not in excess. If you don't eat the fats you need, you can't raise your testosterone. Testosterone is the hormone for muscle growth and recovery — in short, the hormone that makes a man a man!\n\nSLOW CARB INDEX (per 100 g)\n• Rice — 78.9 g carbs — 349 kcal\n• Buckwheat — 69.2 g carbs — 349 kcal\n• Oat groats — 67.8 g carbs — 349 kcal\n• Pea products — 60.2 g carbs\n• Pasta (grade 2 and 3 flour) — 52–62 g carbs — 368 kcal\n\nABOUT THE MEALS\nThe meals below follow the advice above (portions are approximate): a small portion every 2–3 hours, slow carbs, a gainer before and after training, fat in moderation."
  },
+ "Kaftlar bir-biriga qaragan holda. Bilak ham kuchli ishlaydi.": {
+  "ru": "Ладони смотрят друг на друга. Сильно работает и предплечье.",
+  "en": "Palms face each other. The forearms work hard too."
+ },
  "Kaloriya": {
   "ru": "Калории",
   "en": "Calories"
@@ -1479,9 +1619,17 @@
   "ru": "Зелень",
   "en": "Greens"
  },
+ "Ko'krak": {
+  "ru": "Грудь",
+  "en": "Chest"
+ },
  "Ko'krak (grud) + qo'lning oldi (biceps)": {
   "ru": "Грудь + бицепс",
   "en": "Chest + biceps"
+ },
+ "Ko'krakni turnikka torting, kuraklarni siqing.": {
+  "ru": "Тянитесь грудью к перекладине, сводите лопатки.",
+  "en": "Pull the chest to the bar, squeeze the shoulder blades."
  },
  "Ko'rinish": {
   "ru": "Оформление",
@@ -1490,6 +1638,10 @@
  "Ko'rsatish": {
   "ru": "Показать",
   "en": "Show"
+ },
+ "Ko'tarayotganda kaftni tashqariga burang.": {
+  "ru": "При подъёме разворачивайте ладонь наружу.",
+  "en": "Rotate the palm outward as you lift."
  },
  "Kogon": {
   "ru": "Каган",
@@ -1535,6 +1687,14 @@
   "ru": "Дневная норма · {0}",
   "en": "Daily target · {0}"
  },
+ "Kuraklar skameykada, tepada dumbani siqing.": {
+  "ru": "Лопатки на скамье, вверху сожмите ягодицы.",
+  "en": "Shoulder blades on the bench, squeeze the glutes at the top."
+ },
+ "Kuraklarni siqib yoting, shtangani ko'krak o'rtasiga tushiring.": {
+  "ru": "Лягте, сведя лопатки; опускайте штангу к середине груди.",
+  "en": "Lie with shoulder blades squeezed; lower the bar to mid-chest."
+ },
  "Kutilmoqda": {
   "ru": "Ожидает",
   "en": "Pending"
@@ -1554,6 +1714,10 @@
  "Loviya (fosol), qaynatilgan": {
   "ru": "Фасоль, варёная",
   "en": "Beans, boiled"
+ },
+ "MASHQLAR": {
+  "ru": "УПРАЖНЕНИЯ",
+  "en": "EXERCISES"
  },
  "Ma'lumot olinmadi": {
   "ru": "Не удалось получить данные",
@@ -1819,6 +1983,10 @@
   "ru": "Нельзя (через запятую)",
   "en": "Not allowed (comma-separated)"
  },
+ "Mushakni bosing — shu joy uchun mashqlarni ko'ring": {
+  "ru": "Нажмите на мышцу — увидите упражнения для неё",
+  "en": "Tap a muscle to see exercises for it"
+ },
  "Muzrabot": {
   "ru": "Музрабат",
   "en": "Muzrabat"
@@ -1947,6 +2115,10 @@
   "ru": "Скопировать",
   "en": "Copy"
  },
+ "O'GIRISH": {
+  "ru": "ПОВЕРНУТЬ",
+  "en": "FLIP"
+ },
  "O'chirilgan trener": {
   "ru": "Удалённый тренер",
   "en": "Deleted trainer"
@@ -1987,6 +2159,14 @@
   "ru": "Растительное масло",
   "en": "Vegetable oil"
  },
+ "O'tirib oyoq uchiga ko'tarilish": {
+  "ru": "Подъём на носки сидя",
+  "en": "Seated calf raise"
+ },
+ "O'tirib oyoqni yozish": {
+  "ru": "Разгибание ног сидя",
+  "en": "Leg extension"
+ },
  "O'zbekiston": {
   "ru": "Узбекистан",
   "en": "Uzbekistan"
@@ -2007,6 +2187,18 @@
   "ru": "Выберите удобный вариант: вторник, четверг, суббота или понедельник, среда, пятница.",
   "en": "Pick the option that suits you: Tuesday, Thursday, Saturday or Monday, Wednesday, Friday."
  },
+ "OLD": {
+  "ru": "СПЕРЕДИ",
+  "en": "FRONT"
+ },
+ "ORQA": {
+  "ru": "СЗАДИ",
+  "en": "BACK"
+ },
+ "Og'ir gantellarni ushlab, tik qomat bilan yuring.": {
+  "ru": "Держите тяжёлые гантели и идите с прямой осанкой.",
+  "en": "Hold heavy dumbbells and walk tall."
+ },
  "Ohangaron": {
   "ru": "Ахангаран",
   "en": "Akhangaran"
@@ -2026,6 +2218,10 @@
  "Oldin / keyin": {
   "ru": "До / после",
   "en": "Before / after"
+ },
+ "Oldinga qadam tashlab o'tirish": {
+  "ru": "Выпады вперёд",
+  "en": "Forward lunges"
  },
  "Oldingi buyurtmalar": {
   "ru": "Прошлые заказы",
@@ -2091,6 +2287,10 @@
   "ru": "Белок",
   "en": "Protein"
  },
+ "Orqaga": {
+  "ru": "Назад",
+  "en": "Back"
+ },
  "Ortiqcha vazn": {
   "ru": "Избыточный вес",
   "en": "Overweight"
@@ -2098,6 +2298,14 @@
  "Osh": {
   "ru": "Плов",
   "en": "Plov (pilaf)"
+ },
+ "Osilib oyoqni ko'tarish": {
+  "ru": "Подъём ног в висе",
+  "en": "Hanging leg raise"
+ },
+ "Otjimaniya": {
+  "ru": "Отжимания",
+  "en": "Push-ups"
  },
  "Ovqat": {
   "ru": "Приёмы пищи",
@@ -2158,6 +2366,18 @@
  "Oylik hisobot": {
   "ru": "Месячный отчёт",
   "en": "Monthly report"
+ },
+ "Oyoq bilan platformani siqish": {
+  "ru": "Жим ногами",
+  "en": "Leg press"
+ },
+ "Oyoq uchida, past sakrang.": {
+  "ru": "На носках, невысокие прыжки.",
+  "en": "Stay on the toes, keep the jumps low."
+ },
+ "Oyoqni orqaga ko'tarish (blokda)": {
+  "ru": "Отведение ноги назад (на блоке)",
+  "en": "Cable glute kickback"
  },
  "Ozish": {
   "ru": "Похудение",
@@ -2275,6 +2495,10 @@
   "ru": "Лук (добавляется в омлет)",
   "en": "Onion (mixed into the omelette)"
  },
+ "Planka": {
+  "ru": "Планка",
+  "en": "Plank"
+ },
  "Poldnik": {
   "ru": "Полдник",
   "en": "Afternoon snack"
@@ -2335,6 +2559,10 @@
   "ru": "QR-код",
   "en": "QR code"
  },
+ "Qadam keng, oldingi tizza oyoq uchidan o'tmasin.": {
+  "ru": "Шаг широкий, переднее колено не выходит за носок.",
+  "en": "Take a wide step, front knee stays behind the toes."
+ },
  "Qamashi": {
   "ru": "Камаши",
   "en": "Kamashi"
@@ -2346,6 +2574,10 @@
  "Qanliko'l": {
   "ru": "Канлыкуль",
   "en": "Kanlykul"
+ },
+ "Qanot (orqa)": {
+  "ru": "Спина (широчайшие)",
+  "en": "Back (lats)"
  },
  "Qanot (orqa) + oyoq": {
   "ru": "Спина + ноги",
@@ -2387,6 +2619,10 @@
   "ru": "Варёные: рис / гречка / макароны",
   "en": "Boiled: rice / buckwheat / pasta"
  },
+ "Qaysi mushakni mashq qilamiz?": {
+  "ru": "Какую мышцу тренируем?",
+  "en": "Which muscle are we training?"
+ },
  "Qaysi tovar": {
   "ru": "Какой товар",
   "en": "By product"
@@ -2426,6 +2662,14 @@
  "Qiziriq": {
   "ru": "Кизирик",
   "en": "Kizirik"
+ },
+ "Qo'lning oldi (biceps)": {
+  "ru": "Бицепс",
+  "en": "Biceps"
+ },
+ "Qo'lning orqasi (triceps)": {
+  "ru": "Трицепс",
+  "en": "Triceps"
  },
  "Qo'ng'irot": {
   "ru": "Кунград",
@@ -2494,6 +2738,10 @@
  "Qoraqalpog'iston": {
   "ru": "Каракалпакстан",
   "en": "Karakalpakstan"
+ },
+ "Qorin (press)": {
+  "ru": "Пресс",
+  "en": "Abs"
  },
  "Qorong'i": {
   "ru": "Тёмное",
@@ -2787,6 +3035,10 @@
   "ru": "Медленный",
   "en": "Slow"
  },
+ "Sekin va to'liq amplituda bilan.": {
+  "ru": "Медленно и в полную амплитуду.",
+  "en": "Slowly, through the full range."
+ },
  "Semizlik": {
   "ru": "Ожирение",
   "en": "Obesity"
@@ -2943,6 +3195,34 @@
   "ru": "Шават",
   "en": "Shavat"
  },
+ "Shtanga bilan kaftni bukish": {
+  "ru": "Сгибание кистей со штангой",
+  "en": "Barbell wrist curl"
+ },
+ "Shtanga bilan o'tirib-turish": {
+  "ru": "Приседания со штангой",
+  "en": "Barbell squat"
+ },
+ "Shtanga bilan tosni ko'tarish": {
+  "ru": "Ягодичный мост со штангой",
+  "en": "Barbell hip thrust"
+ },
+ "Shtanga bilan yotib siqish": {
+  "ru": "Жим штанги лёжа",
+  "en": "Barbell bench press"
+ },
+ "Shtanga yelkada, bel tekis holda oldinga egiling.": {
+  "ru": "Штанга на плечах, наклон вперёд с ровной спиной.",
+  "en": "Bar on the shoulders, lean forward with a flat back."
+ },
+ "Shtangani iyakka tortish": {
+  "ru": "Тяга штанги к подбородку",
+  "en": "Upright row"
+ },
+ "Shtangani tik turib bukish": {
+  "ru": "Подъём штанги на бицепс стоя",
+  "en": "Standing barbell curl"
+ },
  "Shu ma'lumotni xodimga bering — ilovaga shu bilan kiradi:": {
   "ru": "Передайте эти данные сотруднику — с ними он войдёт в приложение:",
   "en": "Give these details to the staff member — they sign in with them:"
@@ -2950,6 +3230,14 @@
  "Shumanay": {
   "ru": "Шуманай",
   "en": "Shumanay"
+ },
+ "Sinov": {
+  "ru": "Тест",
+  "en": "Beta"
+ },
+ "Sinov versiyasi: mashqlar ro'yxati namunaviy — treneringiz bergan dastur ustun turadi.": {
+  "ru": "Тестовая версия: список упражнений примерный — программа вашего тренера важнее.",
+  "en": "Beta version: the exercise list is a sample — your trainer's program comes first."
  },
  "Sirdaryo": {
   "ru": "Сырдарьинская область",
@@ -2971,6 +3259,10 @@
   "ru": "Ваша оценка",
   "en": "Your rating"
  },
+ "Skameyka 30° qiya. Ko'krakning tepa qismi ishlaydi.": {
+  "ru": "Скамья под углом 30°. Работает верх груди.",
+  "en": "Bench at 30°. Works the upper chest."
+ },
  "So'm": {
   "ru": "Сум",
   "en": "UZS"
@@ -2990,6 +3282,14 @@
  "Solishtirish, ball va kimga e'tibor kerak": {
   "ru": "Сравнение, баллы и кому нужно внимание",
   "en": "Comparison, scores and who needs attention"
+ },
+ "Sonning oldi": {
+  "ru": "Квадрицепсы",
+  "en": "Quads"
+ },
+ "Sonning orqasi": {
+  "ru": "Бицепс бедра",
+  "en": "Hamstrings"
  },
  "Sotilgan narx − tan narx": {
   "ru": "Цена продажи − себестоимость",
@@ -3063,6 +3363,10 @@
   "ru": "Сумма не указана",
   "en": "Amount not recorded"
  },
+ "Surib aylantiring": {
+  "ru": "Проведите, чтобы повернуть",
+  "en": "Swipe to rotate"
+ },
  "Surxondaryo": {
   "ru": "Сурхандарьинская область",
   "en": "Surkhandarya region"
@@ -3079,6 +3383,10 @@
   "ru": "Вода · 1 стакан = 250 мл",
   "en": "Water · 1 glass = 250 ml"
  },
+ "TO'LIQ KO'RINISH": {
+  "ru": "ВСЁ ТЕЛО",
+  "en": "FULL VIEW"
+ },
  "Tahrirlash": {
   "ru": "Изменить",
   "en": "Edit"
@@ -3091,6 +3399,10 @@
   "ru": "Себестоимость (необязательно)",
   "en": "Cost price (optional)"
  },
+ "Tana bir chiziqda, bel pastga cho'kmasin.": {
+  "ru": "Тело в одну линию, поясница не провисает.",
+  "en": "Body in one line, don't let the lower back sag."
+ },
  "Tana massasi indeksi": {
   "ru": "Индекс массы тела",
   "en": "Body mass index"
@@ -3098,6 +3410,26 @@
  "Tana o'lchamlari": {
   "ru": "Параметры тела",
   "en": "Body measurements"
+ },
+ "Tana tekis, tirsaklar 45° burchakda. Ko'krak polga yaqin tushsin.": {
+  "ru": "Тело прямое, локти под 45°. Грудь опускается близко к полу.",
+  "en": "Body straight, elbows at 45°. Lower the chest close to the floor."
+ },
+ "Tana tik, tirsaklar orqaga qaraydi. Chuqur tushmang.": {
+  "ru": "Корпус вертикально, локти смотрят назад. Не опускайтесь слишком глубоко.",
+  "en": "Torso upright, elbows pointing back. Don't go too deep."
+ },
+ "Tana xaritasi": {
+  "ru": "Карта тела",
+  "en": "Body map"
+ },
+ "Tanadagi mushakni bosing yoki pastdagi ro'yxatdan tanlang — shu joy uchun mashqlar chiqadi.": {
+  "ru": "Нажмите на мышцу на теле или выберите из списка ниже — появятся упражнения для неё.",
+  "en": "Tap a muscle on the body or pick one from the list below to see its exercises."
+ },
+ "Tanadagi mushakni bosing — shu joy uchun mashqlar chiqadi.": {
+  "ru": "Нажмите на мышцу на теле — появятся упражнения для неё.",
+  "en": "Tap a muscle on the body to see exercises for it."
  },
  "Tanlagan treneringiz rejangizni tuzadi va siz bilan yozishadi. Keyin Profil bo'limida almashtirishingiz mumkin.": {
   "ru": "Выбранный тренер составит ваш план и будет с вами на связи. Позже его можно сменить в разделе «Профиль».",
@@ -3118,6 +3450,10 @@
  "Taxtako'pir": {
   "ru": "Тахтакупыр",
   "en": "Takhtakupyr"
+ },
+ "Tebranmasdan, tizzalarni ko'krakka torting.": {
+  "ru": "Без раскачки подтягивайте колени к груди.",
+  "en": "Without swinging, pull the knees to the chest."
  },
  "Telefon": {
   "ru": "Как в телефоне",
@@ -3143,6 +3479,14 @@
   "ru": "Телефон: {0}",
   "en": "Phone: {0}"
  },
+ "Tepada 1 soniya ushlab, sekin tushiring.": {
+  "ru": "Вверху задержитесь на 1 секунду, опускайте медленно.",
+  "en": "Hold 1 second at the top, lower slowly."
+ },
+ "Tepada 1 soniya ushlang, pastda to'liq cho'zing.": {
+  "ru": "Вверху задержитесь на 1 секунду, внизу полностью растяните.",
+  "en": "Hold 1 second at the top, stretch fully at the bottom."
+ },
  "Termiz shahri": {
   "ru": "город Термез",
   "en": "Termez city"
@@ -3163,13 +3507,45 @@
   "ru": "Быстрый — еда переваривается быстро, вы часто хотите есть. Медленный — еда переваривается медленно, вам хватает 2 приёмов пищи в день. Не знаете — выберите «Медленный».",
   "en": "Fast — food digests quickly and you get hungry often. Slow — food digests slowly and two meals a day are enough. If unsure, choose “Slow”."
  },
+ "Tik turib oyoq uchiga ko'tarilish": {
+  "ru": "Подъём на носки стоя",
+  "en": "Standing calf raise"
+ },
  "Til": {
   "ru": "Язык",
   "en": "Language"
  },
+ "Tirsak biroz bukilgan, yelka balandligigacha. Silkitmang.": {
+  "ru": "Локоть слегка согнут, до уровня плеч. Без рывков.",
+  "en": "Elbows slightly bent, up to shoulder height. No swinging."
+ },
+ "Tirsaklar kaftdan baland ko'tariladi.": {
+  "ru": "Локти поднимаются выше кистей.",
+  "en": "Elbows rise higher than the hands."
+ },
+ "Tirsaklar tanaga yopishgan, faqat bilak harakatlanadi.": {
+  "ru": "Локти прижаты к телу, двигается только предплечье.",
+  "en": "Elbows tucked in, only the forearms move."
+ },
+ "Tirsaklar tanaga yopishgan, tanani tebratmang.": {
+  "ru": "Локти прижаты к телу, корпус не раскачивайте.",
+  "en": "Elbows tucked in, don't swing your body."
+ },
+ "Tirsaklar tepaga qaraydi va ochilib ketmaydi.": {
+  "ru": "Локти смотрят вверх и не расходятся.",
+  "en": "Elbows point up and don't flare out."
+ },
+ "Tizzani oxirigacha to'g'rilamang, bel suyanchiqdan uzilmasin.": {
+  "ru": "Не выпрямляйте колени до конца, поясница не отрывается от спинки.",
+  "en": "Don't lock the knees, keep the lower back on the pad."
+ },
  "To'g'ri ovqatlanish —": {
   "ru": "Правильное питание —",
   "en": "Eating right is"
+ },
+ "To'g'ri oyoqda egilish (rumin tortishi)": {
+  "ru": "Румынская тяга",
+  "en": "Romanian deadlift"
  },
  "To'langan: {0}": {
   "ru": "Оплачено: {0}",
@@ -3182,6 +3558,10 @@
  "To'langan: {0} · keyingi to'lov: {1}": {
   "ru": "Оплачено: {0} · следующая оплата: {1}",
   "en": "Paid: {0} · next payment: {1}"
+ },
+ "To'liq osiling, yelkalarni bo'shashtirmang.": {
+  "ru": "Висите полностью, плечи не расслабляйте.",
+  "en": "Hang fully, keep the shoulders engaged."
  },
  "To'lov zalda qilinadi, abonementni trener belgilaydi.": {
   "ru": "Оплата в зале, абонемент оформляет тренер.",
@@ -3231,6 +3611,10 @@
   "ru": "Ташлак",
   "en": "Tashlak"
  },
+ "Tosni skameykadan ko'tarmang.": {
+  "ru": "Не отрывайте таз от скамьи.",
+  "en": "Don't lift the hips off the bench."
+ },
  "Tovar": {
   "ru": "Товар",
   "en": "Product"
@@ -3262,6 +3646,10 @@
  "Toyloq": {
   "ru": "Тайлак",
   "en": "Taylak"
+ },
+ "Trapetsiya": {
+  "ru": "Трапеции",
+  "en": "Traps"
  },
  "Trener": {
   "ru": "Тренер",
@@ -3431,6 +3819,14 @@
   "ru": "Тупроккала",
   "en": "Tuprakkala"
  },
+ "Turnikda osilib turish": {
+  "ru": "Вис на турнике",
+  "en": "Dead hang"
+ },
+ "Turnikda tortilish": {
+  "ru": "Подтягивания на турнике",
+  "en": "Pull-ups"
+ },
  "Tushlik": {
   "ru": "Обед",
   "en": "Lunch"
@@ -3535,6 +3931,10 @@
   "ru": "Узун",
   "en": "Uzun"
  },
+ "VIDEO": {
+  "ru": "ВИДЕО",
+  "en": "VIDEO"
+ },
  "Vaqt: {0}": {
   "ru": "Время: {0}",
   "en": "Time: {0}"
@@ -3610,6 +4010,10 @@
  "Vergul bilan. Yozilsa — shogird buyurtmada rangni tanlaydi": {
   "ru": "Через запятую. Если указано — ученик выберет цвет при заказе",
   "en": "Comma-separated. If set, the client picks a color when ordering"
+ },
+ "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi.": {
+  "ru": "Видео ещё не готово. Когда тренер его подготовит, оно появится здесь.",
+  "en": "The video isn't ready yet. Once your trainer prepares it, it will appear here."
  },
  "Viloyat / shahar": {
   "ru": "Область / город",
@@ -3839,9 +4243,17 @@
   "ru": "Съел",
   "en": "Eaten"
  },
+ "Yelka": {
+  "ru": "Плечи",
+  "en": "Shoulders"
+ },
  "Yelka + qo'lning orqasi (triceps)": {
   "ru": "Плечи + трицепс",
   "en": "Shoulders + triceps"
+ },
+ "Yelkalarni quloqqa torting, tepada 1 soniya ushlang.": {
+  "ru": "Тяните плечи к ушам, вверху задержитесь на 1 секунду.",
+  "en": "Pull the shoulders to the ears, hold 1 second at the top."
  },
  "Yog'": {
   "ru": "Жиры",
@@ -3859,6 +4271,10 @@
   "ru": "Закрыть",
   "en": "Close"
  },
+ "Yordamchi: {0}": {
+  "ru": "Также работают: {0}",
+  "en": "Also works: {0}"
+ },
  "Yorug'": {
   "ru": "Светлое",
   "en": "Light"
@@ -3866,6 +4282,14 @@
  "Yosh": {
   "ru": "Возраст",
   "en": "Age"
+ },
+ "Yotib oyoqni bukish": {
+  "ru": "Сгибание ног лёжа",
+  "en": "Lying leg curl"
+ },
+ "Yotib tanani bukish": {
+  "ru": "Скручивания лёжа",
+  "en": "Crunches"
  },
  "Yotishdan oldin": {
   "ru": "Перед сном",
@@ -4338,6 +4762,10 @@
  "{0} ta mahsulot • O — oqsil, Y — yog', U — uglevod (100 g uchun)": {
   "ru": "Продуктов: {0} • Б — белки, Ж — жиры, У — углеводы (на 100 г)",
   "en": "{0} foods • P — protein, F — fat, C — carbs (per 100 g)"
+ },
+ "{0} ta mashq": {
+  "ru": "Упражнений: {0}",
+  "en": "{0} exercises"
  },
  "{0} ta reja": {
   "ru": "Планов: {0}",
