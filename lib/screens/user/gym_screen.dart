@@ -9,9 +9,26 @@ import '../../widgets/ui.dart';
 
 /// Shogird: Zal bo'limi — 3 ta mashg'ulot kunini tanlaydi, bugungi mashg'ulotni ko'radi.
 /// Mashqlarni belgilash yo'q (mashqlar ro'yxati hali ishlab chiqilmoqda).
-class GymScreen extends StatelessWidget {
+class GymScreen extends StatefulWidget {
   final AppUser user;
   const GymScreen({super.key, required this.user});
+
+  @override
+  State<GymScreen> createState() => _GymScreenState();
+}
+
+class _GymScreenState extends State<GymScreen> {
+  AppUser get user => widget.user;
+
+  /// "Tana xaritasi" ochiqmi. Alohida sahifa qilib ochilmaydi — shu tab ichida ko'rsatiladi,
+  /// shunda pastki menyu yo'qolib qolmaydi.
+  bool _muscles = false;
+
+  /// Trener qo'shgan mashqlar — bir marta ochiladi (har qurilishda qayta ulanmasin)
+  late final _custom = Db.customExercises();
+
+  /// Bugungi mashg'ulot holati (boshlangan, bajarilgan mashqlar)
+  late final _progress = Db.workout(user.id, todayKey());
 
   Future<void> _chooseDays(BuildContext context) async {
     final days = await showSheet<List<int>>(context, _DaysPicker(initial: user.gymDays));
@@ -34,6 +51,17 @@ class GymScreen extends StatelessWidget {
     final todayWorkout = workoutFor(days, today);
     final next = nextWorkout(days, today);
 
+    if (_muscles) {
+      return MusclesScreen(
+        gymDays: days,
+        homeToday: isHome,
+        custom: _custom,
+        progress: _progress,
+        onStart: () => Db.startWorkout(user.id, todayKey()),
+        onDone: (key, done) => Db.toggleExercise(user.id, todayKey(), key, done),
+        onBack: () => setState(() => _muscles = false),
+      );
+    }
     return Scaffold(
       appBar: AppBar(title: Text(tr('Zal'))),
       body: ListView(
@@ -122,8 +150,7 @@ class GymScreen extends StatelessWidget {
           SectionHeader(tr('Mashqlar'), eyebrow: tr('Sinov')),
           // Tana xaritasi: mushak bosiladi — mashqlari chiqadi (sinov versiyasi)
           BentoTile(
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const MusclesScreen())),
+            onTap: () => setState(() => _muscles = true),
             padding: const EdgeInsets.all(AppSpace.lg),
             child: Row(children: [
               Icon(Icons.accessibility_new, color: AppColors.accent),
@@ -133,7 +160,7 @@ class GymScreen extends StatelessWidget {
                   Text(tr('Tana xaritasi'), style: t.titleMedium),
                   const SizedBox(height: 2),
                   Text(
-                    tr("Mushakni bosing — shu joy uchun mashqlarni ko'ring"),
+                    tr("Bugungi mashqlar — haftalik reja bo'yicha"),
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                   ),
                 ]),

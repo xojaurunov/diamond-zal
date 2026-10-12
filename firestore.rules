@@ -216,6 +216,32 @@ service cloud.firestore {
       allow write: if isStaff();
     }
 
+    // Trener qo'shgan mashqlar ("Tana xaritasi"). Hamma kirganlar o'qiydi; qo'shish,
+    // tahrirlash va o'chirish — trener va bosh adminda (barmen va shogirdda yo'q).
+    // Mushak — ilovadagi 12 guruhdan biri; matn uzunligi cheklangan.
+    match /exercises/{id} {
+      function validExercise() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['name', 'muscle', 'sets', 'tip', 'also', 'video', 'createdAt', 'createdBy', 'base'])
+          && d.name is string && d.name.size() > 0 && d.name.size() <= 80
+          && d.muscle in ['chest', 'shoulders', 'biceps', 'triceps', 'forearms', 'abs',
+                          'back', 'traps', 'glutes', 'quads', 'hamstrings', 'calves']
+          && d.sets is string && d.sets.size() <= 40
+          && d.tip is string && d.tip.size() <= 500
+          && d.also is list && d.also.size() <= 6
+          && d.video is string && d.video.size() <= 300
+          && d.createdAt is int
+          && d.createdBy is string
+          // namunaviy mashqning o'zgartirilgan nusxasi bo'lsa — o'sha mashq nomi
+          && d.get('base', '') is string && d.get('base', '').size() <= 80;
+      }
+      allow read: if signedIn();
+      // kim qo'shgani soxtalashtirilmaydi; tahrirda birinchi muallif va vaqt saqlanadi
+      allow create: if isStaff() && validExercise() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isStaff() && validExercise() && same('createdBy') && same('createdAt') && same('base');
+      allow delete: if isStaff();
+    }
+
     // Zallar (filiallar). Hamma kirganlar o'qiydi (trener o'z zalining nomini ko'radi),
     // qo'shish va o'chirish — faqat bosh adminda.
     match /gyms/{id} {

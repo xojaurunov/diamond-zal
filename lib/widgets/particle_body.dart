@@ -20,6 +20,10 @@ class ParticleBody extends StatefulWidget {
   /// Tanlangan mushak (null yoki shu ko'rinishda yo'q mushak — butun tana ko'rinadi)
   final String? selected;
 
+  /// Hech narsa tanlanmaganda yonib turadigan mushaklar (bugungi mashg'ulot) —
+  /// yaqinlashmaydi, faqat ajralib turadi
+  final Set<String> today;
+
   /// Mushak bosildi; bo'sh joy bosilsa null (tanlov bekor bo'ladi)
   final ValueChanged<String?> onTap;
 
@@ -31,6 +35,7 @@ class ParticleBody extends StatefulWidget {
     super.key,
     this.angle = front,
     required this.selected,
+    this.today = const {},
     required this.onTap,
     this.onRotate,
     this.width = 300,
@@ -255,8 +260,10 @@ class _Layer {
 
 final _layers = <String, _Layer>{};
 
-/// [angle] ko'rinishi; [selected] mushak nuqtalari alohida (sariq) ro'yxatlarga tushadi
+/// [angle] ko'rinishi; [selected] mushaklar (vergul bilan, bitta yoki bir nechta) nuqtalari
+/// alohida (sariq) ro'yxatlarga tushadi
 _Layer _layer(int angle, String? selected) => _layers.putIfAbsent('$angle|$selected', () {
+      final lit = selected?.split(',').toSet() ?? const <String>{};
       final src = bodyViews[angle];
       final n = src.length ~/ 3;
       final accent = _accents();
@@ -264,7 +271,7 @@ _Layer _layer(int angle, String? selected) => _layers.putIfAbsent('$angle|$selec
       final count = List.filled(_tones.length + _lit.length, 0);
       for (var i = 0; i < n; i++) {
         final x = src[i * 3].toDouble(), y = src[i * 3 + 1].toDouble(), level = src[i * 3 + 2];
-        final on = selected != null && ParticleBody.hit(x, y, angle: angle) == selected;
+        final on = lit.isNotEmpty && lit.contains(ParticleBody.hit(x, y, angle: angle));
         final b = on ? _tones.length + level : (accent[i] < 0 ? level : accent[i]);
         bucket[i] = b;
         count[b]++;
@@ -419,6 +426,14 @@ class _ParticleBodyState extends State<ParticleBody> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final sel = widget.selected;
+    // yonadigan mushaklar: tanlangani; tanlanmagan bo'lsa — bugungi mashg'ulotdagilar
+    String? lit;
+    if (sel != null && ParticleBody.has(sel, angle: widget.angle)) {
+      lit = sel;
+    } else if (sel == null) {
+      final t = widget.today.where((m) => ParticleBody.has(m, angle: widget.angle)).toList()..sort();
+      if (t.isNotEmpty) lit = t.join(',');
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapUp: _tap,
@@ -434,7 +449,7 @@ class _ParticleBodyState extends State<ParticleBody> with TickerProviderStateMix
               t: _intro.value,
               view: _view,
               angle: widget.angle,
-              selected: sel != null && ParticleBody.has(sel, angle: widget.angle) ? sel : null,
+              selected: lit,
             ),
           ),
         ),
@@ -448,7 +463,7 @@ class _ParticlePainter extends CustomPainter {
   final double pos, t;
   final Rect view;
 
-  /// Hozirgi (maqsad) ko'rinish va undagi tanlangan mushak
+  /// Hozirgi (maqsad) ko'rinish va undagi yonadigan mushaklar (vergul bilan)
   final int angle;
   final String? selected;
   _ParticlePainter({

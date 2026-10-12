@@ -4,12 +4,14 @@ import 'package:kotta_qani_diet/l10n/tr.dart';
 import 'package:kotta_qani_diet/models/exercises.dart';
 import 'package:kotta_qani_diet/models/feed.dart';
 import 'package:kotta_qani_diet/models/finance.dart';
+import 'package:kotta_qani_diet/screens/user/muscles_screen.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/hudud.dart';
 import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/shop.dart';
 import 'package:kotta_qani_diet/models/stats.dart';
 import 'package:kotta_qani_diet/models/subscription.dart';
+import 'package:kotta_qani_diet/screens/admin/exercises_admin_screen.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
 import 'package:kotta_qani_diet/screens/notifications_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
@@ -1354,6 +1356,255 @@ void main() {
       expect(BodyMap.hit(back: false, x: 66, y: 140), 'abs');
       expect(BodyMap.hit(back: true, x: 86, y: 202), 'glutes');
       expect(BodyMap.hit(back: false, x: 5, y: 5), isNull);
+    });
+  });
+
+  group('Tana xaritasi — haftalik reja', () {
+    test('har mashg-ulot mushaklari to-g-ri va hamma mushak rejada bor', () {
+      final ids = {for (final m in muscles) m.id};
+      expect(workoutMuscles.length, workoutGroups.length);
+      final planned = {for (final w in workoutMuscles) ...w};
+      expect(planned, ids, reason: 'har mushak guruhi qaysidir kunda bo-lishi kerak');
+      expect(workoutMuscles.expand((w) => w).length, planned.length, reason: 'takror yo-q');
+    });
+
+    test('kun bo-yicha mushaklar', () {
+      expect(musclesFor(evenDays, DateTime.tuesday), contains('chest'));
+      expect(musclesFor(evenDays, DateTime.thursday), contains('quads'));
+      expect(musclesFor(evenDays, DateTime.saturday), contains('triceps'));
+      expect(musclesFor(evenDays, DateTime.monday), isEmpty, reason: 'dam olish kuni');
+      expect(musclesFor(const [], DateTime.tuesday), isEmpty, reason: 'kunlar tanlanmagan');
+      expect(weekdayOfMuscle(evenDays, 'back'), DateTime.thursday);
+      expect(weekdayOfMuscle(oddDays, 'shoulders'), DateTime.friday);
+      expect(weekdayOfMuscle(const [], 'back'), isNull);
+    });
+
+    Future<void> open(WidgetTester t, {required List<int> days, required int weekday, bool home = false}) async {
+      t.view.physicalSize = const Size(420, 6000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(gymDays: days, weekday: weekday, homeToday: home, onBack: () {}),
+      ));
+      await t.pump(const Duration(seconds: 3));
+    }
+
+    testWidgets('zal kuni — faqat bugungi mushaklar mashqlari', (t) async {
+      await open(t, days: evenDays, weekday: DateTime.tuesday);
+      expect(find.text('BUGUNGI MASHQLAR'), findsOneWidget);
+      expect(find.text('Shtanga bilan yotib siqish'), findsOneWidget, reason: 'ko-krak — bugun');
+      expect(find.text(exercisesFor('quads').first.name), findsNothing, reason: 'oyoq — boshqa kun');
+    });
+
+    testWidgets('mashg-ulotdan tashqari mushak ro-yxatda yo-q, bugungisi tanlanadi', (t) async {
+      await open(t, days: evenDays, weekday: DateTime.tuesday);
+      expect(find.text(muscleById('quads')!.name), findsNothing, reason: 'oyoq — boshqa kun');
+      expect(find.text(muscleById('shoulders')!.name), findsNothing);
+      // bugungi mushak tanlansa — faqat o'shaning mashqlari qoladi
+      await t.tap(find.text(muscleById('biceps')!.name));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.text(exercisesFor('biceps').first.name), findsOneWidget);
+      expect(find.text('Shtanga bilan yotib siqish'), findsNothing, reason: 'ko-krak tanlanmagan');
+    });
+
+    testWidgets('dam olish kuni — keyingi mashg-ulot ko-rsatiladi', (t) async {
+      await open(t, days: evenDays, weekday: DateTime.monday);
+      expect(find.text('Dam olish kuni'), findsOneWidget);
+      expect(find.text("KEYINGI MASHG'ULOT MASHQLARI"), findsOneWidget);
+    });
+
+    testWidgets('kunlar tanlanmagan — hamma mushak ochiq', (t) async {
+      await open(t, days: const [], weekday: DateTime.tuesday);
+      expect(find.text('Zal kunlari tanlanmagan'), findsOneWidget);
+      await t.tap(find.text(muscleById('quads')!.name));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.text(exercisesFor('quads').first.name), findsOneWidget);
+    });
+  });
+
+  group('Trener mashq qo-shadi', () {
+    final now = DateTime(2026, 10, 12, 12);
+    Exercise custom({String muscle = 'chest', DateTime? at, String name = 'Trener mashqi'}) => Exercise(
+          name, muscle, '5 × 5', 'Sekin tushiring',
+          also: const ['triceps'], id: 'e1', video: 'https://example.com/v', createdAt: at ?? now, createdBy: 't1');
+
+    test('bazaga yozilib qaytganda o-zgarmaydi', () {
+      final e = Exercise.fromMap('e1', custom().toMap())!;
+      expect([e.id, e.name, e.muscle, e.sets, e.tip, e.video, e.createdBy],
+          ['e1', 'Trener mashqi', 'chest', '5 × 5', 'Sekin tushiring', 'https://example.com/v', 't1']);
+      expect(e.also, ['triceps']);
+      expect(e.createdAt, now);
+      expect(e.isCustom, isTrue);
+      expect(exercises.first.isCustom, isFalse, reason: 'namunaviy mashq');
+    });
+
+    test('noto-g-ri yozuv ro-yxatga tushmaydi', () {
+      expect(Exercise.fromMap('x', {'name': 'A', 'muscle': 'bosh'}), isNull, reason: 'bunday mushak yo-q');
+      expect(Exercise.fromMap('x', {'name': '  ', 'muscle': 'chest'}), isNull, reason: 'nom bo-sh');
+      final e = Exercise.fromMap('x', {'name': 'A', 'muscle': 'chest', 'also': ['chest', 'qosh', 'abs']})!;
+      expect(e.also, ['abs'], reason: 'asosiy mushak va noma-lum id olib tashlanadi');
+    });
+
+    test('yangi belgisi 7 kun turadi', () {
+      expect(custom().isNew(now.add(const Duration(days: 6))), isTrue);
+      expect(custom().isNew(now.add(const Duration(days: 8))), isFalse);
+      expect(exercises.first.isNew(now), isFalse, reason: 'namunaviy — hech qachon yangi emas');
+    });
+
+    test('mushak mashqlari: trener qo-shgani tepada, namunaviylar joyida', () {
+      final old = custom(at: now.subtract(const Duration(days: 30)), name: 'Eski');
+      final list = exercisesFor('chest', [old, custom(), custom(muscle: 'abs', name: 'Boshqa')]);
+      expect(list.map((e) => e.name).take(2), ['Trener mashqi', 'Eski']);
+      expect(list.length, exercisesFor('chest').length + 2);
+      expect(list.any((e) => e.name == 'Boshqa'), isFalse);
+    });
+
+    test('takror nom topiladi (harf, tutuq belgisi, bo-shliq farq qilmaydi)', () {
+      expect(sameExercise('  shtanga  BILAN yotib siqish ', const [])?.muscle, 'chest');
+      expect(sameExercise("Gantelni yonga ko‘tarish", const [])?.muscle, 'shoulders');
+      expect(sameExercise('Trener mashqi', [custom()])?.id, 'e1');
+      expect(sameExercise('Trener mashqi', [custom()], exceptId: 'e1'), isNull, reason: 'o-zini tahrirlash');
+      expect(sameExercise('Butunlay yangi mashq', [custom()]), isNull);
+    });
+
+    test('namunaviy mashqqa video: o-rniga chiqadi, kaliti va tartibi saqlanadi', () {
+      final first = exercisesFor('chest').first;
+      final over = Exercise(first.name, first.muscle, first.sets, first.tip,
+          also: first.also, id: 'o1', video: 'https://example.com/v', createdAt: now, createdBy: 't1', base: first.name);
+      final back = Exercise.fromMap('o1', over.toMap())!;
+      expect(back.base, first.name);
+      expect(back.isOverride, isTrue);
+      final list = exercisesFor('chest', [back]);
+      expect(list.length, exercisesFor('chest').length, reason: 'qo-shilmaydi — almashtiriladi');
+      expect(list.first.video, 'https://example.com/v');
+      expect(list.first.key, first.key, reason: 'bajardim belgisi yo-qolmaydi');
+      expect(back.isNew(now), isFalse, reason: 'o-zgartirilgan namunaviy — yangi emas');
+      // o'zini tahrirlash takror hisoblanmaydi, boshqa mashq nomini olish — hisoblanadi
+      expect(sameExercise(first.name, [back], exceptId: 'o1', exceptBase: first.name), isNull);
+      expect(sameExercise(first.name, const [], exceptBase: first.name), isNull);
+      expect(sameExercise('Otjimaniya', [back], exceptId: 'o1', exceptBase: first.name)?.name, 'Otjimaniya');
+    });
+
+    testWidgets('shogird trener qo-shgan mashqni va video havolasini ko-radi', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(
+          gymDays: evenDays,
+          weekday: DateTime.tuesday,
+          onBack: () {},
+          custom: Stream.value([custom(at: DateTime.now())]),
+        ),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      expect(find.text('Trener mashqi'), findsOneWidget);
+      expect(find.text('YANGI'), findsOneWidget);
+      await t.tap(find.text('Trener mashqi'));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.text('https://example.com/v'), findsOneWidget);
+      expect(find.text('Havolani nusxalash'), findsOneWidget);
+    });
+
+    testWidgets('qo-shish varag-i: chizma bosilsa mushak o-zgaradi, nomsiz saqlanmaydi', (t) async {
+      t.view.physicalSize = const Size(500, 2400);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(const MaterialApp(
+        home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest')),
+      ));
+      expect(find.text("Asosiy mushak: Ko'krak"), findsOneWidget);
+      expect(find.text("Yordamchi mushaklar: yo'q"), findsOneWidget);
+      // old tomon chizmasida qorin (press) bo'lagi bosiladi — asosiy mushak o'zgaradi
+      final front = t.getTopLeft(find.byType(BodyMap).first);
+      const k = 210 / 440;
+      await t.tapAt(front + const Offset(66 * k, 140 * k));
+      await t.pump();
+      expect(find.text('Asosiy mushak: Qorin (press)'), findsOneWidget);
+      // yordamchi rejimida ko'krak bosiladi — yordamchiga qo'shiladi
+      await t.tap(find.text('Yordamchi mushaklar'));
+      await t.pump();
+      await t.tapAt(front + const Offset(76 * k, 108 * k));
+      await t.pump();
+      expect(find.text("Yordamchi: Ko'krak"), findsOneWidget);
+      await t.tap(find.text('Saqlash'));
+      await t.pump();
+      expect(find.text('Mashq nomini yozing'), findsOneWidget);
+      // bor mashq nomi yozilsa — saqlanmaydi, qaysi mushakda borligi aytiladi
+      await t.enterText(find.byType(TextField).first, 'otjimaniya');
+      await t.tap(find.text('Saqlash'));
+      await t.pump();
+      expect(find.text("Bunday mashq bor: Otjimaniya — Ko'krak"), findsOneWidget);
+    });
+  });
+
+  group('Mashg-ulot navbati', () {
+    List<String> keys(String m) => [for (final e in exercisesFor(m)) e.key];
+
+    test('navbatdagi mushak: birinchisi tugamaguncha keyingisi ochilmaydi', () {
+      const plan = ['shoulders', 'triceps', 'traps'];
+      expect(activeMuscle(plan, {}, keys), 'shoulders');
+      expect(activeMuscle(plan, {keys('shoulders').first}, keys), 'shoulders', reason: 'bittasi bajarildi');
+      expect(activeMuscle(plan, {...keys('shoulders')}, keys), 'triceps', reason: 'yelka tugadi');
+      // tartibni buzib bo'lmaydi: triceps bajarilgan bo'lsa ham, yelka tugamagan — yelka turadi
+      expect(activeMuscle(plan, {...keys('triceps')}, keys), 'shoulders');
+      expect(activeMuscle(plan, {for (final m in plan) ...keys(m)}, keys), isNull, reason: 'hammasi tugadi');
+      expect(activeMuscle(const ['x', 'traps'], {}, (m) => m == 'x' ? [] : keys(m)), 'traps',
+          reason: 'mashqi yo-q mushak o-tkazib yuboriladi');
+    });
+
+    testWidgets('boshlash → faqat birinchi mushak; hammasi bajarilgach keyingisi ochiladi', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final marked = <String>[];
+      var started = false;
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(
+          gymDays: evenDays,
+          weekday: DateTime.tuesday, // ko'krak → biceps → bilak
+          onBack: () {},
+          onStart: () => started = true,
+          onDone: (k, d) => marked.add('$k=$d'),
+        ),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      expect(find.text('Bajardim'), findsNothing, reason: 'boshlanmaguncha belgi yo-q');
+      await t.tap(find.text("Mashg'ulotni boshlash"));
+      await t.pump(const Duration(seconds: 1));
+      expect(started, isTrue);
+      expect(find.text("HOZIR: KO'KRAK"), findsOneWidget);
+      expect(find.text('0 / 3 bajarildi'), findsOneWidget);
+      expect(find.text(exercisesFor('biceps').first.name), findsNothing, reason: 'qo-l hali yopiq');
+      expect(find.textContaining('Navbatda:'), findsOneWidget);
+
+      for (var i = 0; i < 3; i++) {
+        await t.tap(find.text('Bajardim').first);
+        await t.pump(const Duration(seconds: 1));
+      }
+      expect(marked.length, 3);
+      expect(find.text("HOZIR: QO'LNING OLDI (BICEPS)"), findsOneWidget, reason: 'ko-krak tugadi — qo-l ochildi');
+      expect(find.text("✓ Ko'krak — tugadi"), findsOneWidget);
+      expect(find.text('Shtanga bilan yotib siqish'), findsNothing);
+      expect(find.text(exercisesFor('biceps').first.name), findsOneWidget);
+    });
+
+    testWidgets('bazadan kelgan holat: hammasi bajarilgan — mashg-ulot tugadi', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final all = {for (final m in musclesFor(evenDays, DateTime.tuesday)) ...keys(m)};
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(
+          gymDays: evenDays,
+          weekday: DateTime.tuesday,
+          onBack: () {},
+          progress: Stream.value(WorkoutProgress(started: true, done: all)),
+        ),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      expect(find.text("Bugungi mashg'ulot tugadi"), findsOneWidget);
+      expect(find.text('Bajardim'), findsNothing);
     });
   });
 }

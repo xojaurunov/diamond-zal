@@ -1,6 +1,8 @@
 // Mushak guruhlari va mashqlar — "Tana xaritasi" ekrani uchun (sinov versiyasi).
-// Nomlar o'zbekcha (kalit); ekranda `tr()` bilan tarjima qilinadi.
-// Ro'yxat standart mashqlardan tuzilgan — trener ko'rib chiqishi kerak.
+// Ikki manba: shu fayldagi namunaviy ro'yxat ([exercises], o'zgarmaydi) va trener
+// ilovadan qo'shgan mashqlar (Firestore `exercises` kolleksiyasi, `Db.customExercises`).
+// Namunaviy nomlar o'zbekcha (kalit), ekranda `tr()` bilan tarjima qilinadi; trener
+// yozgan matn tarjima qilinmaydi — qanday yozilgan bo'lsa, shunday chiqadi.
 
 /// Mushak guruhi: [id] — `BodyMap` dagi shakllar bilan bog'laydi
 class Muscle {
@@ -32,6 +34,8 @@ Muscle? muscleById(String id) {
 }
 
 class Exercise {
+  /// Firestore hujjat id'si; namunaviy (koddagi) mashqda bo'sh
+  final String id;
   final String name;
 
   /// Asosiy ishlaydigan mushak ([Muscle.id])
@@ -45,7 +49,82 @@ class Exercise {
 
   /// Qisqa maslahat: qanday bajariladi
   final String tip;
-  const Exercise(this.name, this.muscle, this.sets, this.tip, {this.also = const []});
+
+  /// Video havolasi (YouTube, Telegram ...); yo'q bo'lsa bo'sh. Video fayli yuklanmaydi.
+  final String video;
+
+  /// Trener qo'shgan vaqt va kim qo'shgani (namunaviy mashqda yo'q)
+  final DateTime? createdAt;
+  final String createdBy;
+
+  /// Trener namunaviy mashqni o'zgartirgan bo'lsa (masalan video qo'shgan) — o'sha
+  /// namunaviy mashqning nomi. Bunday yozuv ro'yxatda namunaviyning O'RNIGA chiqadi;
+  /// o'chirilsa — namunaviy asl holiga qaytadi. Yangi mashqda bo'sh.
+  final String base;
+
+  const Exercise(
+    this.name,
+    this.muscle,
+    this.sets,
+    this.tip, {
+    this.also = const [],
+    this.id = '',
+    this.video = '',
+    this.createdAt,
+    this.createdBy = '',
+    this.base = '',
+  });
+
+  /// Trener qo'shganmi (tahrirlash va o'chirish mumkin); namunaviy mashq — yo'q
+  bool get isCustom => id.isNotEmpty;
+
+  /// Namunaviy mashqning trener o'zgartirgan nusxasimi
+  bool get isOverride => base.isNotEmpty;
+
+  /// "Bajardim" belgisi uchun barqaror kalit (kunlik yozuvda saqlanadi): trener qo'shgan
+  /// mashqda hujjat id'si, namunaviyda (o'zgartirilgan bo'lsa ham) — asl o'zbekcha nomi
+  String get key => isOverride ? base : (isCustom ? 'c:$id' : name);
+
+  /// Yaqinda qo'shilganmi — shogirdga "YANGI" belgisi bilan ko'rsatiladi
+  bool isNew([DateTime? now]) =>
+      !isOverride && createdAt != null && (now ?? DateTime.now()).difference(createdAt!) < newFor;
+
+  static const newFor = Duration(days: 7);
+
+  /// Bazadagi yozuvdan; noto'g'ri mushak yoki bo'sh nom — null (ro'yxatga tushmaydi)
+  static Exercise? fromMap(String id, Map<String, dynamic> m) {
+    final name = (m['name'] ?? '').toString().trim();
+    final muscle = (m['muscle'] ?? '').toString();
+    if (name.isEmpty || muscleById(muscle) == null) return null;
+    final at = m['createdAt'];
+    return Exercise(
+      name,
+      muscle,
+      (m['sets'] ?? '').toString(),
+      (m['tip'] ?? '').toString(),
+      also: [
+        for (final a in (m['also'] as List? ?? const []))
+          if (a != muscle && muscleById(a.toString()) != null) a.toString(),
+      ],
+      id: id,
+      video: (m['video'] ?? '').toString(),
+      createdAt: at is int ? DateTime.fromMillisecondsSinceEpoch(at) : null,
+      createdBy: (m['createdBy'] ?? '').toString(),
+      base: (m['base'] ?? '').toString(),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'muscle': muscle,
+        'sets': sets,
+        'tip': tip,
+        'also': also,
+        'video': video,
+        'createdAt': (createdAt ?? DateTime.now()).millisecondsSinceEpoch,
+        'createdBy': createdBy,
+        'base': base,
+      };
 }
 
 const exercises = [
@@ -164,5 +243,43 @@ const exercises = [
       also: ['shoulders', 'forearms']),
 ];
 
-List<Exercise> exercisesFor(String muscleId) =>
-    exercises.where((e) => e.muscle == muscleId).toList();
+/// Nomni solishtirish uchun: kichik harf, tutuq belgisi va ortiqcha bo'shliqsiz
+/// ("Gantel  bilan" va "gantel bilan", "qo'l" va "qo‘l" — bir xil)
+String exerciseKey(String name) => name
+    .toLowerCase()
+    .replaceAll(RegExp("[’'ʻ‘`ʼ\"«»]"), '')
+    .replaceAll(RegExp(r'\s+'), ' ')
+    .trim();
+
+/// Hamma mashq: trener qo'shgan yangilar va namunaviylar (trener o'zgartirgani — o'z
+/// nusxasi bilan almashtirilgan)
+List<Exercise> allExercises([List<Exercise> custom = const []]) {
+  final over = {
+    for (final e in custom)
+      if (e.isOverride) e.base: e,
+  };
+  return [
+    ...custom.where((e) => !e.isOverride).toList()
+      ..sort((a, b) => (b.createdAt ?? DateTime(0)).compareTo(a.createdAt ?? DateTime(0))),
+    for (final e in exercises) over[e.name] ?? e,
+  ];
+}
+
+/// [name] nomli mashq allaqachon bormi ([custom] bilan birga hamma mashq ichida).
+/// Tahrirlanayotgan mashqning o'zi hisobga olinmaydi: [exceptId] — bazadagi id'si,
+/// [exceptBase] — namunaviy nomi. Bor bo'lsa — o'sha mashq.
+Exercise? sameExercise(String name, List<Exercise> custom, {String exceptId = '', String exceptBase = ''}) {
+  final key = exerciseKey(name);
+  if (key.isEmpty) return null;
+  for (final e in allExercises(custom)) {
+    if (e.isCustom && e.id == exceptId) continue;
+    if (exceptBase.isNotEmpty && (e.base == exceptBase || (!e.isCustom && e.name == exceptBase))) continue;
+    if (exerciseKey(e.name) == key) return e;
+  }
+  return null;
+}
+
+/// [muscleId] mashqlari: avval trener qo'shgan yangilar (eng yangisi tepada), keyin
+/// namunaviylar (trener o'zgartirgani — o'z nusxasi bilan, o'sha joyida)
+List<Exercise> exercisesFor(String muscleId, [List<Exercise> custom = const []]) =>
+    allExercises(custom).where((e) => e.muscle == muscleId).toList();

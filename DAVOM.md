@@ -13,19 +13,28 @@
 
 ## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
-**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr holati).** Hamma kod GitHub'da. Saytdagi web va APK —
-hali 8-oktabrniki: 12-oktabrdagi "Tana xaritasi" **saytga va saytdagi APK ga chiqarilmagan**
-(zal egasi telefonda ko'rib, keyin aytadi). Ochiq ishlar ro'yxati — pastda "⏳ Ochiq ishlar".
+**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Ruxsat
+qoidalari jonli bazaga joylangan (12-okt, `exercises` kolleksiyasi qo'shildi). Saytdagi web
+va APK — **hali 8-oktabrniki**: 12-oktabrdagi ishlar (91–94-bandlar) saytga va saytdagi APK
+ga **chiqarilmagan** — zal egasi ko'rib, "joyla" desa chiqariladi. Ochiq ishlar — pastda
+"⏳ Ochiq ishlar".
 
-**12-oktabrda qilingan:** "Tana xaritasi" — yangi mashqlar ekrani (Zal → Tana xaritasi,
-**91-band**): nuqtalardan yig'iladigan, 360° aylanadigan tana; mushak bosilsa yonadi va shu
-mushak mashqlari chiqadi; pastida qismli (har mushak alohida bo'lak) chizma; har mashqda
-video joyi (video hali yo'q). **Sinov versiyasi** — zal egasi va trener ko'rib chiqishi kerak:
-- zal egasining kompyuterida, Desktop'da: `Qobil-2026-10-12-sinov.apk` (telefonda sinalmagan;
-  qismli chizma va oxirgi tuzatishlardan OLDIN yig'ilgan) va trener uchun izohli video
-  `Qobil-tana-xaritasi.mp4`;
-- ochiq savollar: telefonda qotadimi (12 480 nuqta); nuqtali va qismli tana birga qolsinmi;
-  kepkani olib tashlash; mashqlar ro'yxatini trener tasdiqlashi; mashq videolari.
+**12-oktabrda qilingan** (91–94-bandlar) — shogirdning "Zal" tabi butunlay yangilandi:
+- **Tana xaritasi** (91): nuqtalardan yig'iladigan, 360° aylanadigan tana + qismli (har mushak
+  alohida bo'lak) chizma; mushak bosilsa yonadi va mashqlari chiqadi; "Zal" tabi ichida
+  ochiladi (pastki menyu joyida qoladi);
+- **haftalik reja bo'yicha** (92): shogird faqat bugungi mashg'ulot mushaklarini ko'radi va
+  tanlaydi; rejadan tashqari mushak bosilmaydi;
+- **mashg'ulot navbati** (93): "Mashg'ulotni boshlash" → faqat navbatdagi mushak yonadi,
+  mashqlarida "Bajardim"; hammasi bajarilgach keyingi mushak ochiladi;
+- **trener mashq qo'shadi** (94): trenerning Zal tabi → "Mashqlar": tana sxemasidan mushak
+  tanlab yangi mashq qo'shadi, har mashqqa (namunaviysiga ham) video havolasi qo'yadi.
+
+**Tekshirilgani:** `flutter analyze` toza, `flutter test` 144/144, qoida testlari 230/230
+(emulyator). **Tekshirilmagani:** telefonda umuman sinalmagan; trener ekrani va haqiqiy
+saqlash brauzerda qo'lda bosib ko'rilmagan (qoidalar joylangandan keyin zal egasi ko'radi).
+Desktop'dagi `Qobil-2026-10-12-sinov.apk` va `Qobil-tana-xaritasi.mp4` — 91-bandning
+dastlabki holati, 92–94 ularda yo'q.
 
 **8-oktabrda qilingan:** "Rejadan tashqari yedim" tugmasi — shogird bazadan taom tanlab,
 grammini yozadi; kunlik kaloriya hisobiga qo'shiladi; trener ko'radi (**90-band**). Bu Eda AI
@@ -173,12 +182,15 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 
 ### ⏳ Ochiq ishlar (12-oktabr holati)
 
-**Tana xaritasi (91-band) bo'yicha — zal egasi javobini kutadi:**
-- sinov APK ni telefonda ko'rish: aylanish va bosish qotadimi;
-- nuqtali va qismli tana birga qolsinmi yoki bittasi;
-- trener mashqlar ro'yxatini ko'rib tuzatishi; mashq videolarini tayyorlashi (video yuklash
-  hali qilinmagan);
-- ma'qul bo'lsa: web va APK ni saytga chiqarish.
+**Zal va mashqlar (91–94-bandlar) bo'yicha:**
+- zal egasi brauzerda ko'rib "joyla" desa — web va APK ni saytga chiqarish (hozir saytda
+  8-oktabr holati);
+- telefonda sinash: nuqtali tana qotadimi (12 480 nuqta), bosish va surish;
+- trener tasdiqlashi: mashqlar ro'yxati; bilak / qorin / trapetsiya qaysi kunga; mushaklar
+  tartibi;
+- trener har mashqqa video havolasini qo'yib chiqishi;
+- taklif (qilinmagan): havolani ilovadan ochish (`url_launcher`); trener shogird bajargan
+  mashqlarni ko'rishi; uydagi mashqlar; rasmdagi kepkani olib tashlash.
 
 Quyidagilar — 8-oktabrdan qolgan ro'yxat:
 
@@ -1818,6 +1830,65 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       ko'ylak ostida — ikki bo'lagi ajralmaydi; 225° va 270° da bosh yonida bir-ikki ortiqcha
       nuqta; manbada 135° va 225° ko'rinishlar deyarli bir xil; qismli chizma burchakli.
     - Reja va qarorlar tarixi: `specs/tana-xaritasi.md` (lokal).
+
+92. **Mashqlar haftalik reja bo'yicha; pastki menyu (12-okt)** — zal egasi: "bosganda pastki
+    menyu yo'qolyapti" va "shogird mashg'ulot kunida mashg'ulotdan tashqari mashqni belgilay
+    olmaydi, faqat o'shalar turadi".
+    - `MusclesScreen` endi `Navigator.push` bilan emas — `GymScreen` (endi `StatefulWidget`)
+      ichida ko'rsatiladi; orqaga `onBack` + `PopScope`. Pastki menyu joyida qoladi.
+    - `lib/models/gym.dart`: `workoutMuscles` (3 mashg'ulot → mushak id'lari), `musclesFor`,
+      `weekdayOfMuscle`. Taqsimot: 1) ko'krak, biceps, **bilak**; 2) qanot, son oldi, son
+      orqasi, dumba, boldir, **qorin**; 3) yelka, triceps, **trapetsiya**. Qalin yozilganlari
+      mashg'ulot nomida yo'q edi — taxminan qo'shilgan, **trener tasdiqlashi kerak**.
+    - Ekran: tepada "BUGUN · kun" va mashg'ulot nomi; bugungi mushaklar yonib turadi
+      (`ParticleBody.today`); nomlar ro'yxatida va pastda faqat shu mashg'ulot. Rejadan
+      tashqari mushak tanada ham bosilmaydi. Dam olish va "uyda mashq" kunida — keyingi
+      mashg'ulot (oldindan ko'rish). Zal kunlari tanlanmagan shogirdda hamma mushak ochiq.
+    - Hammaga ko'rinadigan yozuv: "Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali
+      tayyor emas." (uch tilda).
+
+93. **Mashg'ulot navbati (12-okt)** — zal egasi: "boshlagandan keyin, masalan birinchi yelka
+    bo'lsa, yelka mashqlari tugamaguncha qo'lniki yonmaydi".
+    - `gym.dart`: `WorkoutProgress(started, done)`, `activeMuscle(plan, done, keysOf)` — reja
+      tartibida birinchi tugallanmagan mushak. `Exercise.key` — "bajardim" kaliti.
+    - Baza: kunlik yozuv `users/{uid}/days/{sana}` ga `gymStarted`, `gymDone: [kalit]`
+      (qoidalar o'zgarmadi). `Db.workout / startWorkout / toggleExercise`.
+    - Ekran: zal kunida "Tartib: A → B → C" va "Mashg'ulotni boshlash". Boshlangach faqat
+      navbatdagi mushak yonadi va faqat uning mashqlari ochiq, har birida "Bajardim" (qayta
+      bosilsa belgi olinadi). Tugagani — "✓ … — tugadi", keyingilari — "Navbatda: …".
+      Hammasi tugasa — "Bugungi mashg'ulot tugadi". Navbat rejimida mushak qo'lda tanlanmaydi.
+    - Holat bazada: ilova yopilib ochilsa ham davom etadi; ertasi kuni toza.
+    - **Yo'q:** trener shogird bajargan mashqlarni ko'radigan ekran (ma'lumot bazada bor);
+      "qaytadan boshlash" tugmasi.
+
+94. **Trener mashq qo'shadi, video havolasi (12-okt)** — zal egasi: "trener yangi mashq
+    qo'shayotganda tana sxemasida qayerga qo'shayotgani ko'rinsin; bir xil bo'lib qolmasin;
+    bor mashqlarga ham video qo'ysin".
+    - Baza: `exercises/{id}` — `name, muscle, sets, tip, also, video, createdAt (ms),
+      createdBy, base`. Qoida (`firestore.rules`): o'qish — kirgan hamma; yaratish — trener
+      va bosh admin, `createdBy == uid`; tahrir — xodim, `createdBy/createdAt/base`
+      o'zgarmaydi; o'chirish — xodim; maydonlar va uzunliklar tekshiriladi. Mashqlar hamma
+      zal uchun umumiy. **Qoidalar 12-okt jonli bazaga joylandi.**
+    - Trener / bosh admin: Zal tabi → "Mashqlar" (`lib/screens/admin/exercises_admin_screen.dart`).
+      Tepada nuqtali tana (shogird ko'radigani), ostida qismli chizma, mushaklar ro'yxati
+      sonlari bilan. Mushak bosilsa — shu mushak mashqlari va "Mashq qo'shish".
+    - Qo'shish varag'i (`ExerciseForm`): tana chizmasida asosiy mushak to'q, yordamchilar och
+      — bosib o'zgartiriladi; nom, yondashuv × takror, maslahat, video havolasi. "Bu mushakda
+      bor mashqlar" ro'yxati turadi; **bir xil nom saqlanmaydi** (`sameExercise` — harf,
+      tutuq belgisi, bo'shliq farqsiz; boshqa mushakda bo'lsa ham).
+    - **Namunaviy 36 mashq ham tahrirlanadi:** o'zgartirilganda bazaga nusxasi yoziladi
+      (`base` = namunaviy nomi) va ro'yxatda aslining o'rniga chiqadi; "Asl holiga qaytarish"
+      nusxani o'chiradi. Tegilmagan maydonlar tarjimasi saqlanadi; "bajardim" kaliti o'zgarmaydi.
+    - Shogird: trener qo'shganini darhol ko'radi (APK yangilamasdan); 7 kun "YANGI" yorlig'i,
+      mushak nomi yonida "· yangi"; video havolasi bo'lsa — havola va "Havolani nusxalash".
+    - **Cheklovlar:** video FAYL yuklanmaydi (Storage Blaze talab qiladi — rad etilgan), faqat
+      havola (YouTube, Telegram …); havola ilovadan ochilmaydi (loyihada `url_launcher` yo'q —
+      qo'shish zal egasi ruxsati bilan), shogird nusxalab brauzerda ochadi; trener yozgan matn
+      tarjima qilinmaydi; takror tekshiruvi faqat aynan bir xil nomni ushlaydi.
+    - Qoida testlari: `tools/rules_test` — **230 o'tdi** (17 tasi yangi). Emulyator Java 21
+      talab qiladi: `JAVA_HOME=%LOCALAPPDATA%\jdk21\jdk-21…` (PATH dagi Java 15 emas).
+    - `flutter test` **144/144**, lug'at 1 272 kalit. Reja va qarorlar:
+      `specs/trener-mashqlari/00-overview.md`, `specs/tana-xaritasi.md` (lokal).
 
 
 ---

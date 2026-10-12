@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../models/gym.dart';
+import '../models/exercises.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
 import '../models/stats.dart';
@@ -342,6 +344,20 @@ class Db {
 
   static Future<void> deleteFood(String id) => _fs.collection('foods').doc(id).delete();
 
+  // ---------- exercises (trener qo'shgan mashqlar) ----------
+  static Stream<List<Exercise>> customExercises() => _fs.collection('exercises').snapshots().map(
+        (s) => [
+          for (final d in s.docs)
+            if (Exercise.fromMap(d.id, d.data()) case final e?) e,
+        ],
+      );
+
+  static Future<void> saveExercise(Exercise e) => e.id.isEmpty
+      ? _fs.collection('exercises').add(e.toMap())
+      : _fs.collection('exercises').doc(e.id).set(e.toMap());
+
+  static Future<void> deleteExercise(String id) => _fs.collection('exercises').doc(id).delete();
+
   // ---------- plans ----------
   static Stream<List<Plan>> plans() =>
       _fs.collection('plans').snapshots().map((s) => s.docs.map(Plan.fromDoc).toList());
@@ -535,6 +551,24 @@ class Db {
   static Future<void> removeExtra(String uid, String day, ExtraFood e) =>
       _dayRef(uid, day).set({
         'extras': FieldValue.arrayRemove([e.toMap()])
+      }, SetOptions(merge: true));
+
+  /// Bugungi zal mashg'uloti: boshlanganmi va qaysi mashqlar bajarilgan
+  static Stream<WorkoutProgress> workout(String uid, String day) => _dayRef(uid, day).snapshots().map((d) {
+        final data = d.data() as Map<String, dynamic>?;
+        return WorkoutProgress(
+          started: data?['gymStarted'] == true,
+          done: {for (final k in (data?['gymDone'] as List? ?? const [])) k.toString()},
+        );
+      });
+
+  static Future<void> startWorkout(String uid, String day) =>
+      _dayRef(uid, day).set({'gymStarted': true}, SetOptions(merge: true));
+
+  static Future<void> toggleExercise(String uid, String day, String key, bool done) =>
+      _dayRef(uid, day).set({
+        'gymStarted': true,
+        'gymDone': done ? FieldValue.arrayUnion([key]) : FieldValue.arrayRemove([key]),
       }, SetOptions(merge: true));
 
   static Stream<int> water(String uid, String day) => _dayRef(uid, day)

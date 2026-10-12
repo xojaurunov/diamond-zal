@@ -39,6 +39,14 @@
   "ru": "Удалить «{0}» из магазина?",
   "en": "Delete “{0}” from the shop?"
  },
+ "\"{0}\" namunaviy holiga qaytadi: siz kiritgan o'zgarishlar va video havolasi o'chadi.": {
+  "ru": "«{0}» вернётся к образцу: ваши изменения и ссылка на видео удалятся.",
+  "en": "\"{0}\" will return to the sample: your changes and the video link will be removed."
+ },
+ "\"{0}\" o'chiriladi. Shogirdlar uni boshqa ko'rmaydi.": {
+  "ru": "«{0}» будет удалено. Ученики больше его не увидят.",
+  "en": "\"{0}\" will be deleted. Students will no longer see it."
+ },
  "\"{0}\" o'chiriladi. Undagi trenerlar zalsiz qoladi — ularni boshqa zalga biriktirasiz. Shogirdlarga ta'sir qilmaydi.": {
   "ru": "«{0}» будет удалён. Его тренеры останутся без зала — прикрепите их к другому. На учеников это не влияет.",
   "en": "“{0}” will be deleted. Its trainers will have no gym — assign them to another one. Clients are not affected."
@@ -247,6 +255,22 @@
   "ru": "Асака",
   "en": "Asaka"
  },
+ "Asl holiga qaytarish": {
+  "ru": "Вернуть исходный вид",
+  "en": "Restore original"
+ },
+ "Asl holiga qaytdi": {
+  "ru": "Возвращено к образцу",
+  "en": "Restored to original"
+ },
+ "Asosiy mushak": {
+  "ru": "Основная мышца",
+  "en": "Main muscle"
+ },
+ "Asosiy mushak: {0}": {
+  "ru": "Основная мышца: {0}",
+  "en": "Main muscle: {0}"
+ },
  "Avgust": {
   "ru": "Август",
   "en": "August"
@@ -302,6 +326,10 @@
  "Bahoni saqlash": {
   "ru": "Сохранить оценку",
   "en": "Save rating"
+ },
+ "Bajardim": {
+  "ru": "Сделал",
+  "en": "Done it"
  },
  "Bajarildi": {
   "ru": "Выполнено",
@@ -671,6 +699,18 @@
   "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
   "en": "Your daily calorie target is calculated from this data."
  },
+ "Bu mushak bugungi rejada yo'q. Rejadagi kuni: {0}.": {
+  "ru": "Этой мышцы нет в плане на сегодня. День по плану: {0}.",
+  "en": "This muscle is not in today's plan. Planned day: {0}."
+ },
+ "Bu mushak haftalik rejada yo'q.": {
+  "ru": "Этой мышцы нет в недельном плане.",
+  "en": "This muscle is not in the weekly plan."
+ },
+ "Bu mushakda bor mashqlar: {0}": {
+  "ru": "Упражнения этой мышцы: {0}",
+  "en": "Exercises for this muscle: {0}"
+ },
  "Bu raqam allaqachon ro'yxatdan o'tgan": {
   "ru": "Этот номер уже зарегистрирован",
   "en": "This number is already registered"
@@ -751,6 +791,18 @@
   "ru": "Сегодня · {0} ккал",
   "en": "Today · {0} kcal"
  },
+ "Bugungi mashg'ulot tugadi": {
+  "ru": "Тренировка на сегодня окончена",
+  "en": "Today's workout is finished"
+ },
+ "Bugungi mashqlar": {
+  "ru": "Упражнения на сегодня",
+  "en": "Today's exercises"
+ },
+ "Bugungi mashqlar — haftalik reja bo'yicha": {
+  "ru": "Упражнения на сегодня — по недельному плану",
+  "en": "Today's exercises — by the weekly plan"
+ },
  "Bugungi ovqatlar": {
   "ru": "Питание на сегодня",
   "en": "Today's meals"
@@ -774,6 +826,10 @@
  "Bulung'ur": {
   "ru": "Булунгур",
   "en": "Bulungur"
+ },
+ "Bunday mashq bor: {0} — {1}": {
+  "ru": "Такое упражнение уже есть: {0} — {1}",
+  "en": "This exercise already exists: {0} — {1}"
  },
  "Buvayda": {
   "ru": "Бувайда",
@@ -862,6 +918,10 @@
  "Chiroqchi": {
   "ru": "Чиракчи",
   "en": "Chirakchi"
+ },
+ "Chizmani bosing — tanlangan tur belgilanadi.": {
+  "ru": "Нажмите на схему — отметится выбранный тип.",
+  "en": "Tap the figure — the chosen type is marked."
  },
  "Chor": {
   "ru": "Ср",
@@ -1243,6 +1303,10 @@
   "ru": "На все дни",
   "en": "To all days"
  },
+ "Hamma mashq bajarildi. Barakalla!": {
+  "ru": "Все упражнения выполнены. Молодец!",
+  "en": "All exercises done. Well done!"
+ },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
   "en": "All clients' schedule"
@@ -1274,6 +1338,10 @@
  "Har mahalda ro'yxatdagi mahsulotlardan birini tanlab almashtirsa bo'ladi.\nShokolad — shakari kam bo'lsin.\nKechki go'shtni kungaboqar yog'ida pishirsa ham bo'ladi.\nYotishdan oldin: meva va qaynagan (iliq) suvga yarimta limon siqib ichiladi.\nNonushtada suli bo'tqasi o'rniga guruch / grechka / makaron / manniy bo'tqasi ham bo'ladi. 2-nonushta va poldnikda protein kokteyl yoki kefir/yogurt — birini tanlang.\nPorsiyalar taxminiy (~2700 kkal, ~200 g oqsil) — mijozga qarab o'zgartiring.": {
   "ru": "В каждом приёме пищи можно выбрать и заменить один из продуктов списка.\nШоколад — с низким содержанием сахара.\nМясо на ужин можно готовить и на подсолнечном масле.\nПеред сном: фрукт и тёплая кипячёная вода с соком половины лимона.\nНа завтрак вместо овсяной каши можно рис / гречку / макароны / манную кашу. На 2-й завтрак и полдник — протеиновый коктейль или кефир/йогурт, выберите одно.\nПорции примерные (~2700 ккал, ~200 г белка) — меняйте под клиента.",
   "en": "In each meal you can pick and swap one of the listed foods.\nChocolate should be low in sugar.\nThe dinner meat can also be cooked in sunflower oil.\nBefore bed: fruit and warm boiled water with half a lemon squeezed in.\nFor breakfast, rice / buckwheat / pasta / semolina porridge can replace oatmeal. For the second breakfast and afternoon snack, a protein shake or kefir/yogurt — choose one.\nPortions are approximate (~2700 kcal, ~200 g protein) — adjust for the client."
+ },
+ "Havola http:// yoki https:// bilan boshlanishi kerak": {
+  "ru": "Ссылка должна начинаться с http:// или https://",
+  "en": "The link must start with http:// or https://"
  },
  "Havola nusxalandi": {
   "ru": "Ссылка скопирована",
@@ -1575,6 +1643,10 @@
   "ru": "После",
   "en": "After"
  },
+ "Keyingi mashg'ulot mashqlari": {
+  "ru": "Упражнения следующей тренировки",
+  "en": "Next workout's exercises"
+ },
  "Keyingi o’lchov ertaga": {
   "ru": "Следующее взвешивание завтра",
   "en": "Next weigh-in is tomorrow"
@@ -1835,6 +1907,34 @@
   "ru": "Перед тренировкой",
   "en": "Before training"
  },
+ "Mashg'ulotni boshlash": {
+  "ru": "Начать тренировку",
+  "en": "Start workout"
+ },
+ "Mashq nomi": {
+  "ru": "Название упражнения",
+  "en": "Exercise name"
+ },
+ "Mashq nomini yozing": {
+  "ru": "Введите название упражнения",
+  "en": "Enter the exercise name"
+ },
+ "Mashq o'chirildi": {
+  "ru": "Упражнение удалено",
+  "en": "Exercise deleted"
+ },
+ "Mashq qo'shildi": {
+  "ru": "Упражнение добавлено",
+  "en": "Exercise added"
+ },
+ "Mashq qo'shish": {
+  "ru": "Добавить упражнение",
+  "en": "Add exercise"
+ },
+ "Mashq saqlandi": {
+  "ru": "Упражнение сохранено",
+  "en": "Exercise saved"
+ },
  "Mashqlar": {
   "ru": "Упражнения",
   "en": "Exercises"
@@ -1842,6 +1942,18 @@
  "Mashqlar hozir qo'shilmoqda — har bir mashg'ulotning mashqlari ro'yxati ishlab chiqilmoqda.": {
   "ru": "Упражнения сейчас добавляются — список для каждой тренировки в разработке.",
   "en": "Exercises are being added — the list for each workout is in progress."
+ },
+ "Mashqni o'chirish": {
+  "ru": "Удалить упражнение",
+  "en": "Delete exercise"
+ },
+ "Mashqni tahrirlash": {
+  "ru": "Изменить упражнение",
+  "en": "Edit exercise"
+ },
+ "Maslahat: qanday bajariladi": {
+  "ru": "Совет: как выполнять",
+  "en": "Tip: how to do it"
  },
  "Massa nabor": {
   "ru": "Набор массы",
@@ -2003,6 +2115,14 @@
   "ru": "город Наманган",
   "en": "Namangan city"
  },
+ "Namunaviy": {
+  "ru": "Образец",
+  "en": "Sample"
+ },
+ "Namunaviy · o'zgartirilgan": {
+  "ru": "Образец · изменён",
+  "en": "Sample · edited"
+ },
  "Narpay": {
   "ru": "Нарпай",
   "en": "Narpay"
@@ -2018,6 +2138,10 @@
  "Navbahor": {
   "ru": "Навбахор",
   "en": "Navbakhor"
+ },
+ "Navbatda: {0}": {
+  "ru": "Далее: {0}",
+  "en": "Up next: {0}"
  },
  "Navbatdagi": {
   "ru": "Следующий",
@@ -2123,6 +2247,10 @@
   "ru": "ПОВЕРНУТЬ",
   "en": "FLIP"
  },
+ "O'chirib bo'lmadi: {0}": {
+  "ru": "Не удалось удалить: {0}",
+  "en": "Could not delete: {0}"
+ },
  "O'chirilgan trener": {
   "ru": "Удалённый тренер",
   "en": "Deleted trainer"
@@ -2198,6 +2326,10 @@
  "ORQA": {
   "ru": "СЗАДИ",
   "en": "BACK"
+ },
+ "Och rang — oxirgi 7 kunda yangi mashq qo'shilgan mushaklar.": {
+  "ru": "Светлый цвет — мышцы, к которым за последние 7 дней добавлены упражнения.",
+  "en": "Light colour — muscles with exercises added in the last 7 days."
  },
  "Og'ir gantellarni ushlab, tik qomat bilan yuring.": {
   "ru": "Держите тяжёлые гантели и идите с прямой осанкой.",
@@ -2647,6 +2779,10 @@
   "ru": "Зарегистрироваться заново",
   "en": "Sign up again"
  },
+ "Qaytarish": {
+  "ru": "Вернуть",
+  "en": "Restore"
+ },
  "Qibray": {
   "ru": "Кибрай",
   "en": "Kibray"
@@ -3010,6 +3146,10 @@
  "Saqlandi: {0} kg": {
   "ru": "Сохранено: {0} кг",
   "en": "Saved: {0} kg"
+ },
+ "Saqlanmoqda…": {
+  "ru": "Сохранение…",
+  "en": "Saving…"
  },
  "Saqlash": {
   "ru": "Сохранить",
@@ -3407,6 +3547,10 @@
   "ru": "Тело в одну линию, поясница не провисает.",
   "en": "Body in one line, don't let the lower back sag."
  },
+ "Tana chizmasidan mushak tanlab, yangi mashq qo'shing": {
+  "ru": "Выберите мышцу на схеме тела и добавьте упражнение",
+  "en": "Pick a muscle on the body figure and add an exercise"
+ },
  "Tana massasi indeksi": {
   "ru": "Индекс массы тела",
   "en": "Body mass index"
@@ -3435,6 +3579,10 @@
   "ru": "Нажмите на мышцу на теле — появятся упражнения для неё.",
   "en": "Tap a muscle on the body to see exercises for it."
  },
+ "Tanadan mushakni bosing — shu joy mashqlarini ko'rasiz va yangisini qo'shasiz.": {
+  "ru": "Нажмите на мышцу — увидите её упражнения и добавите новое.",
+  "en": "Tap a muscle — see its exercises and add a new one."
+ },
  "Tanlagan treneringiz rejangizni tuzadi va siz bilan yozishadi. Keyin Profil bo'limida almashtirishingiz mumkin.": {
   "ru": "Выбранный тренер составит ваш план и будет с вами на связи. Позже его можно сменить в разделе «Профиль».",
   "en": "The trainer you choose will build your plan and chat with you. You can change trainers later in Profile."
@@ -3450,6 +3598,10 @@
  "Tarjima (ixtiyoriy)": {
   "ru": "Перевод (необязательно)",
   "en": "Translation (optional)"
+ },
+ "Tartib: {0}": {
+  "ru": "Порядок: {0}",
+  "en": "Order: {0}"
  },
  "Taxtako'pir": {
   "ru": "Тахтакупыр",
@@ -3707,6 +3859,14 @@
   "ru": "Сделать тренером",
   "en": "Make trainer"
  },
+ "Trener qo'shgan": {
+  "ru": "Добавил тренер",
+  "en": "Added by trainer"
+ },
+ "Trener qo'shgan mashqlar yuklanmadi — hozircha faqat namunaviy ro'yxat. Yangi mashq saqlanmasligi mumkin.": {
+  "ru": "Упражнения тренера не загрузились — пока только образцы. Новое упражнение может не сохраниться.",
+  "en": "Trainer-added exercises did not load — sample list only for now. A new exercise may not be saved."
+ },
  "Trener qo'shildi": {
   "ru": "Тренер добавлен",
   "en": "Trainer added"
@@ -3931,6 +4091,10 @@
   "ru": "Назначена тренировка дома",
   "en": "Home workout set"
  },
+ "Uydagi mashqlar hali tayyor emas.": {
+  "ru": "Упражнения для дома ещё не готовы.",
+  "en": "Home exercises are not ready yet."
+ },
  "Uzun": {
   "ru": "Узун",
   "en": "Uzun"
@@ -4015,9 +4179,17 @@
   "ru": "Через запятую. Если указано — ученик выберет цвет при заказе",
   "en": "Comma-separated. If set, the client picks a color when ordering"
  },
+ "Video": {
+  "ru": "Видео",
+  "en": "Video"
+ },
  "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi.": {
   "ru": "Видео ещё не готово. Когда тренер его подготовит, оно появится здесь.",
   "en": "The video isn't ready yet. Once your trainer prepares it, it will appear here."
+ },
+ "Video havolasi (ixtiyoriy)": {
+  "ru": "Ссылка на видео (необязательно)",
+  "en": "Video link (optional)"
  },
  "Viloyat / shahar": {
   "ru": "Область / город",
@@ -4263,6 +4435,10 @@
   "ru": "Жиры",
   "en": "Fat"
  },
+ "Yondashuv × takror": {
+  "ru": "Подходы × повторы",
+  "en": "Sets × reps"
+ },
  "Yong'oq": {
   "ru": "Грецкий орех",
   "en": "Walnuts"
@@ -4274,6 +4450,14 @@
  "Yopish": {
   "ru": "Закрыть",
   "en": "Close"
+ },
+ "Yordamchi mushaklar": {
+  "ru": "Вспомогательные мышцы",
+  "en": "Helper muscles"
+ },
+ "Yordamchi mushaklar: yo'q": {
+  "ru": "Вспомогательные мышцы: нет",
+  "en": "Helper muscles: none"
  },
  "Yordamchi: {0}": {
   "ru": "Также работают: {0}",
@@ -4307,6 +4491,10 @@
   "ru": "Отправить",
   "en": "Send"
  },
+ "Yuklab bo'lmadi: {0}": {
+  "ru": "Не удалось загрузить: {0}",
+  "en": "Could not load: {0}"
+ },
  "Yunusobod": {
   "ru": "Юнусабад",
   "en": "Yunusabad"
@@ -4326,6 +4514,10 @@
  "Zal biriktirilmagan": {
   "ru": "Зал не назначен",
   "en": "No gym assigned"
+ },
+ "Zal bo'limida kunlarni tanlang — bugungi mashqlar shu yerda chiqadi. Hozircha hamma mushak ochiq.": {
+  "ru": "Выберите дни в разделе «Зал» — здесь появятся упражнения на сегодня. Пока открыты все мышцы.",
+  "en": "Choose your days in the Gym section — today's exercises will appear here. For now all muscles are open."
  },
  "Zal egasi": {
   "ru": "Владелец зала",
@@ -4567,6 +4759,10 @@
   "ru": "стаканов / 8",
   "en": "glasses / 8"
  },
+ "yangi": {
+  "ru": "новое",
+  "en": "new"
+ },
  "yanvar": {
   "ru": "января",
   "en": "January"
@@ -4586,6 +4782,10 @@
  "{0} (nusxa)": {
   "ru": "{0} (копия)",
   "en": "{0} (copy)"
+ },
+ "{0} / {1} bajarildi": {
+  "ru": "Выполнено {0} / {1}",
+  "en": "{0} / {1} done"
  },
  "{0} daqiqa oldin": {
   "ru": "{0} мин назад",
@@ -4826,6 +5026,10 @@
  "{0} — mashg‘ulot kunlarini tanlamagan": {
   "ru": "{0} — не выбрал дни тренировок",
   "en": "{0} — hasn't chosen training days"
+ },
+ "{0} — tugadi": {
+  "ru": "{0} — готово",
+  "en": "{0} — finished"
  },
  "{0} — {1} ta variant": {
   "ru": "{0} — вариантов: {1}",

@@ -5,6 +5,7 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
+import 'exercises_admin_screen.dart';
 
 /// Trener: Zal bo'limi — shogirdlar kimda qaysi kun, bugun kim keladi, kim uyda.
 /// "Uyda mashq" faqat shogird bugun chatda kela olmasligini yozgan bo'lsa belgilanadi.
@@ -38,6 +39,30 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
         return ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
           children: [
+            // Mashqlar ro'yxati: trener tana chizmasidan mushak tanlab, yangi mashq qo'shadi
+            BentoTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ExercisesAdminScreen(admin: widget.admin)),
+              ),
+              padding: const EdgeInsets.all(AppSpace.lg),
+              child: Row(children: [
+                Icon(Icons.accessibility_new, color: AppColors.accent),
+                const SizedBox(width: AppSpace.md),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(tr('Mashqlar'), style: t.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      tr("Tana chizmasidan mushak tanlab, yangi mashq qo'shing"),
+                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                    ),
+                  ]),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.textMuted),
+              ]),
+            ),
+            const SizedBox(height: AppSpace.xl),
             Text(trf('Bugun · {0}', [tr(weekdayNames[today] ?? '')]), style: t.titleLarge),
             const SizedBox(height: AppSpace.md),
             SectionHeader(tr('Bugun zalga keladi'),

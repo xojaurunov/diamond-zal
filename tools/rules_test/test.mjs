@@ -651,6 +651,50 @@ await check('barmen hamma abonementlarni oqiy OLMAYDI', () =>
 await check('shogird hamma abonementlarni oqiy OLMAYDI', () =>
   assertFails(getDocs(collectionGroup(as(USER), 'subscriptions'))));
 
+console.log('\n== MASHQLAR (trener qoshadi) ==');
+const ex = (by, more = {}) => ({
+  name: 'Sinov mashqi', muscle: 'chest', sets: '4 x 10', tip: 'Sekin', also: ['triceps'],
+  video: '', createdAt: 1760000000000, createdBy: by, ...more,
+});
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'exercises', 'e1'), ex(TRAINER));
+});
+await check('trener mashq qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'exercises', 'e2'), ex(TRAINER))));
+await check('bosh admin mashq qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'exercises', 'e3'), ex(OWNER))));
+await check('shogird mashq qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'exercises', 'e4'), ex(USER))));
+await check('barmen mashq qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'exercises', 'e5'), ex(BARMEN))));
+await check('kirmagan odam mashqni oqiy OLMAYDI', () =>
+  assertFails(getDoc(doc(anon(), 'exercises', 'e1'))));
+await check('shogird mashqni oqiydi', () =>
+  assertSucceeds(getDoc(doc(as(USER), 'exercises', 'e1'))));
+await check('trener boshqa nomidan qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e6'), ex(OWNER))));
+await check('notogri mushak bilan qoshib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e7'), ex(TRAINER, { muscle: 'bosh' }))));
+await check('bosh nom bilan qoshib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e8'), ex(TRAINER, { name: '' }))));
+await check('ortiqcha maydon bilan qoshib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e9'), ex(TRAINER, { role: 'owner' }))));
+await check('trener namunaviy mashqqa video qoshadi (base bilan)', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'exercises', 'e10'),
+    ex(TRAINER, { base: 'Otjimaniya', video: 'https://example.com/v' }))));
+await check('tahrirda base ni ozgartirib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e10'), ex(TRAINER, { base: 'Boshqa' }))));
+await check('boshqa trener mashqni tahrirlaydi (muallif saqlanadi)', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER2), 'exercises', 'e1'), ex(TRAINER, { name: 'Yangi nom' }))));
+await check('tahrirda muallifni ozgartirib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER2), 'exercises', 'e1'), ex(TRAINER2))));
+await check('shogird mashqni tahrirlay OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'exercises', 'e1'), ex(TRAINER, { name: 'Buzdim' }))));
+await check('shogird mashqni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'exercises', 'e1'))));
+await check('trener mashqni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'exercises', 'e1'))));
+
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();
 process.exit(fail === 0 ? 0 : 1);

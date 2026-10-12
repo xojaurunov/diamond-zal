@@ -8,6 +8,53 @@ const workoutGroups = [
   "Yelka + qo'lning orqasi (triceps)",
 ];
 
+/// Har mashg'ulotda ishlaydigan mushak guruhlari ([workoutGroups] bilan bir tartibda;
+/// id'lar — `exercises.dart` dagi [Muscle.id]). Nomida yo'q mayda guruhlar yaqiniga
+/// qo'shilgan: bilak — qo'l kuniga, qorin — oyoq kuniga, trapetsiya — yelka kuniga
+/// (taxminiy taqsimot, trener tasdiqlashi kerak).
+const workoutMuscles = [
+  ['chest', 'biceps', 'forearms'],
+  ['back', 'quads', 'hamstrings', 'glutes', 'calves', 'abs'],
+  ['shoulders', 'triceps', 'traps'],
+];
+
+/// Shu hafta kuni ishlaydigan mushaklar (dam olish kuni yoki kunlar tanlanmagan — bo'sh)
+List<String> musclesFor(List<int> days, int weekday) {
+  if (!validGymDays(days)) return const [];
+  final i = ([...days]..sort()).indexOf(weekday);
+  return i < 0 ? const [] : workoutMuscles[i];
+}
+
+/// Bugungi mashg'ulot holati (kunlik yozuvda: `users/{uid}/days/{sana}`)
+class WorkoutProgress {
+  /// Shogird "Mashg'ulotni boshlash" ni bosganmi
+  final bool started;
+
+  /// Bajarilgan mashqlar kalitlari (`Exercise.key`)
+  final Set<String> done;
+  const WorkoutProgress({this.started = false, this.done = const {}});
+}
+
+/// Navbatdagi mushak: [plan] tartibida birinchi tugallanmagani ([keysOf] — mushakning
+/// mashq kalitlari). Mashqi yo'q mushak o'tkazib yuboriladi. Hammasi tugagan — null.
+/// Qoida (zal egasi): bir mushak mashqlari tugamaguncha keyingisi ochilmaydi.
+String? activeMuscle(List<String> plan, Set<String> done, List<String> Function(String) keysOf) {
+  for (final m in plan) {
+    if (keysOf(m).any((k) => !done.contains(k))) return m;
+  }
+  return null;
+}
+
+/// [muscle] haftaning qaysi kunida ishlaydi (rejada yo'q yoki kunlar tanlanmagan — null)
+int? weekdayOfMuscle(List<int> days, String muscle) {
+  if (!validGymDays(days)) return null;
+  final sorted = [...days]..sort();
+  for (var i = 0; i < workoutMuscles.length; i++) {
+    if (workoutMuscles[i].contains(muscle)) return sorted[i];
+  }
+  return null;
+}
+
 /// Hafta kunlari: DateTime.weekday bo'yicha (1 — dushanba)
 const weekdayNames = {
   1: 'Dushanba',
