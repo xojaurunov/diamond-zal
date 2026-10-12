@@ -1409,6 +1409,7 @@ void main() {
 
     testWidgets('dam olish kuni — keyingi mashg-ulot ko-rsatiladi', (t) async {
       await open(t, days: evenDays, weekday: DateTime.monday);
+      expect(find.text("Mashg'ulotni boshlash"), findsNothing, reason: 'dam olish kunida boshlab bo-lmaydi');
       expect(find.text('Dam olish kuni'), findsOneWidget);
       expect(find.text("KEYINGI MASHG'ULOT MASHQLARI"), findsOneWidget);
     });
@@ -1503,6 +1504,7 @@ void main() {
       await t.tap(find.text('Trener mashqi'));
       await t.pump(const Duration(seconds: 1));
       expect(find.text('https://example.com/v'), findsOneWidget);
+      expect(find.text("Videoni ko'rish"), findsOneWidget);
       expect(find.text('Havolani nusxalash'), findsOneWidget);
     });
 
@@ -1573,8 +1575,10 @@ void main() {
       await t.tap(find.text("Mashg'ulotni boshlash"));
       await t.pump(const Duration(seconds: 1));
       expect(started, isTrue);
+      expect(find.text("Mashg'ulotni boshlash"), findsNothing, reason: 'boshlangach tugma yo-qoladi');
       expect(find.text("HOZIR: KO'KRAK"), findsOneWidget);
       expect(find.text('0 / 3 bajarildi'), findsOneWidget);
+      expect(find.text("Hozir: Ko'krak · 0 / 3 bajarildi"), findsOneWidget, reason: 'tepada ham holat');
       expect(find.text(exercisesFor('biceps').first.name), findsNothing, reason: 'qo-l hali yopiq');
       expect(find.textContaining('Navbatda:'), findsOneWidget);
 
@@ -1603,7 +1607,7 @@ void main() {
         ),
       ));
       await t.pump(const Duration(seconds: 3));
-      expect(find.text("Bugungi mashg'ulot tugadi"), findsOneWidget);
+      expect(find.text("Bugungi mashg'ulot tugadi"), findsNWidgets(2), reason: 'tepada va mashqlar o-rnida');
       expect(find.text('Bajardim'), findsNothing);
     });
   });

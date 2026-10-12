@@ -13,11 +13,11 @@
 
 ## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
-**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Ruxsat
-qoidalari jonli bazaga joylangan (12-okt, `exercises` kolleksiyasi qo'shildi). Saytdagi web
-va APK — **hali 8-oktabrniki**: 12-oktabrdagi ishlar (91–94-bandlar) saytga va saytdagi APK
-ga **chiqarilmagan** — zal egasi ko'rib, "joyla" desa chiqariladi. Ochiq ishlar — pastda
-"⏳ Ochiq ishlar".
+**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
+web va APK **saytga joylangan (12-okt kechqurun)** — 91–95-bandlar jonli. APK nusxasi:
+`Qobil-2026-10-12.apk` (zal egasining `Music` papkasi va Desktop). ⚠️ **Telefonda
+sinalmagan.** Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
+so'raydi (mashqlar ro'yxati, bilak/qorin/trapetsiya kuni, mushaklar tartibi).
 
 **12-oktabrda qilingan** (91–94-bandlar) — shogirdning "Zal" tabi butunlay yangilandi:
 - **Tana xaritasi** (91): nuqtalardan yig'iladigan, 360° aylanadigan tana + qismli (har mushak
@@ -30,11 +30,13 @@ ga **chiqarilmagan** — zal egasi ko'rib, "joyla" desa chiqariladi. Ochiq ishla
 - **trener mashq qo'shadi** (94): trenerning Zal tabi → "Mashqlar": tana sxemasidan mushak
   tanlab yangi mashq qo'shadi, har mashqqa (namunaviysiga ham) video havolasi qo'yadi.
 
+- **videoni ilovadan ochish va "boshlash" tugmasi tepada** (95).
+
 **Tekshirilgani:** `flutter analyze` toza, `flutter test` 144/144, qoida testlari 230/230
-(emulyator). **Tekshirilmagani:** telefonda umuman sinalmagan; trener ekrani va haqiqiy
-saqlash brauzerda qo'lda bosib ko'rilmagan (qoidalar joylangandan keyin zal egasi ko'radi).
-Desktop'dagi `Qobil-2026-10-12-sinov.apk` va `Qobil-tana-xaritasi.mp4` — 91-bandning
-dastlabki holati, 92–94 ularda yo'q.
+(emulyator); joylangandan keyin saytdagi web nusxada yangi matn borligi va `app/kq.bin`
+hajmi yangi APK bilan bir xilligi tekshirildi. **Tekshirilmagani:** telefonda umuman
+sinalmagan; trener ekrani va haqiqiy saqlash brauzerda qo'lda bosib ko'rilmagan.
+Desktop'dagi `Qobil-tana-xaritasi.mp4` — 91-bandning dastlabki holati (92–95 unda yo'q).
 
 **8-oktabrda qilingan:** "Rejadan tashqari yedim" tugmasi — shogird bazadan taom tanlab,
 grammini yozadi; kunlik kaloriya hisobiga qo'shiladi; trener ko'radi (**90-band**). Bu Eda AI
@@ -183,13 +185,11 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 ### ⏳ Ochiq ishlar (12-oktabr holati)
 
 **Zal va mashqlar (91–94-bandlar) bo'yicha:**
-- zal egasi brauzerda ko'rib "joyla" desa — web va APK ni saytga chiqarish (hozir saytda
-  8-oktabr holati);
 - telefonda sinash: nuqtali tana qotadimi (12 480 nuqta), bosish va surish;
 - trener tasdiqlashi: mashqlar ro'yxati; bilak / qorin / trapetsiya qaysi kunga; mushaklar
   tartibi;
 - trener har mashqqa video havolasini qo'yib chiqishi;
-- taklif (qilinmagan): havolani ilovadan ochish (`url_launcher`); trener shogird bajargan
+- taklif (qilinmagan): trener shogird bajargan
   mashqlarni ko'rishi; uydagi mashqlar; rasmdagi kepkani olib tashlash.
 
 Quyidagilar — 8-oktabrdan qolgan ro'yxat:
@@ -1889,6 +1889,20 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       talab qiladi: `JAVA_HOME=%LOCALAPPDATA%\jdk21\jdk-21…` (PATH dagi Java 15 emas).
     - `flutter test` **144/144**, lug'at 1 272 kalit. Reja va qarorlar:
       `specs/trener-mashqlari/00-overview.md`, `specs/tana-xaritasi.md` (lokal).
+
+95. **Videoni ilovadan ochish; "boshlash" tepada; saytga joylash (12-okt kech)** — zal egasi
+    "qil" dedi (kutubxona qo'shishga ruxsat) va "boshlash degan joyim qani" deb so'radi.
+    - **Yangi kutubxona: `url_launcher`.** Mashqda video havolasi bo'lsa — "Videoni ko'rish"
+      tugmasi (`LaunchMode.externalApplication`: YouTube, Telegram yoki brauzer); ochilmasa
+      xabar chiqadi; "Havolani nusxalash" ham qoladi. `AndroidManifest.xml` `<queries>` ga
+      `VIEW` + `https` qo'shildi (Android 11+).
+    - **"Mashg'ulotni boshlash"** avval mashqlar ro'yxati oldida (ikki tana ostida, juda
+      pastda) edi — ko'rinmas edi. Endi ekran tepasida, sarlavha ostida, "Tartib: …" bilan.
+      Boshlangach o'rnida "Hozir: mushak · N / M bajarildi" turadi.
+    - **Tugma faqat zal kunida chiqadi:** dam olish kunida, "uyda mashq" kunida va zal
+      kunlari tanlanmagan shogirdda yo'q (o'sha kunlari sarlavhada sababi yozilgan).
+    - **Joylandi:** qoidalar + web (`public/ilova`) + APK (`public/app/kq.bin`) —
+      `deploy.ps1`. `flutter test` 144/144, lug'at 1 274 kalit.
 
 
 ---

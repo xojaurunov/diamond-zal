@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/tr.dart';
 import '../../models/exercises.dart';
 import '../../models/gym.dart';
@@ -282,22 +283,6 @@ class _MusclesScreenState extends State<MusclesScreen> {
         trf('{0} ta mashq', [plan.fold<int>(0, (n, id) => n + _of(id).length)]),
         style: _count,
       ),
-      if (_gymToday) ...[
-        const SizedBox(height: 20),
-        Text(trf('Tartib: {0}', [_names(plan)]), style: _lead),
-        const SizedBox(height: 16),
-        FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: _violet,
-            foregroundColor: _white,
-            shape: const StadiumBorder(),
-            minimumSize: const Size(double.infinity, 52),
-            textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: 0.4),
-          ),
-          onPressed: _start,
-          child: Text(tr("Mashg'ulotni boshlash")),
-        ),
-      ],
       const SizedBox(height: 34),
       for (final id in plan) ...[
         Text(tr(muscleById(id)!.name).toUpperCase(), style: _label.copyWith(color: _violet)),
@@ -373,6 +358,33 @@ class _MusclesScreenState extends State<MusclesScreen> {
                 tr('Hozircha faqat zaldagi mashqlar. Uydagi mashqlar hali tayyor emas.'),
                 style: const TextStyle(fontSize: 14, height: 1.45, fontWeight: FontWeight.w400, color: _amber),
               ),
+              // Zal kunida: mashg'ulotni boshlash — ekranning eng tepasida, ko'z oldida.
+              // Boshlangach o'rnida navbatdagi mushak va hisob turadi.
+              if (_gymToday && _plan.isNotEmpty) ...[
+                const SizedBox(height: 22),
+                if (!_running) ...[
+                  Text(trf('Tartib: {0}', [_names(_plan)]), style: _lead),
+                  const SizedBox(height: 14),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: _violet,
+                      foregroundColor: _white,
+                      shape: const StadiumBorder(),
+                      minimumSize: const Size(double.infinity, 54),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 0.4),
+                    ),
+                    onPressed: _start,
+                    child: Text(tr("Mashg'ulotni boshlash")),
+                  ),
+                ] else
+                  Text(
+                    active == null
+                        ? tr("Bugungi mashg'ulot tugadi")
+                        : '${tr('Hozir')}: ${tr(muscleById(active)!.name)} · '
+                            '${trf('{0} / {1} bajarildi', [_doneIn(active), _of(active).length])}',
+                    style: const TextStyle(fontSize: 18, height: 1.3, fontWeight: FontWeight.w600, color: _white),
+                  ),
+              ],
               const SizedBox(height: 26),
               // old / orqa — bitta to'ldirilgan tugma (ekranda yagona)
               Row(children: [
@@ -627,9 +639,9 @@ class _ExerciseRow extends StatelessWidget {
   }
 }
 
-/// Mashq videosi o'rni. Trener havola qo'ygan bo'lsa — havola va "nusxalash" tugmasi
-/// (ilovada havola ochadigan kutubxona yo'q; shogird nusxalab brauzerda ochadi).
-/// Havola yo'q — "video hali tayyorlanmagan" yozuvi (ilova tilida).
+/// Mashq videosi o'rni. Trener havola qo'ygan bo'lsa — "Videoni ko'rish" (YouTube,
+/// Telegram yoki brauzerda ochiladi) va "nusxalash" tugmasi. Video fayli ilovada
+/// saqlanmaydi. Havola yo'q — "video hali tayyorlanmagan" yozuvi (ilova tilida).
 class _VideoSlot extends StatelessWidget {
   final String url;
   const _VideoSlot({this.url = ''});
@@ -662,6 +674,27 @@ class _VideoSlot extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300, color: _silver),
+                ),
+                const SizedBox(height: 8),
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _violet,
+                    foregroundColor: _white,
+                    shape: const StadiumBorder(),
+                    minimumSize: const Size(0, 44),
+                  ),
+                  onPressed: () async {
+                    var ok = false;
+                    try {
+                      ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                    } catch (_) {}
+                    if (!ok && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(tr("Havolani ochib bo'lmadi — nusxalab brauzerda oching"))));
+                    }
+                  },
+                  icon: const Icon(Icons.play_arrow, size: 20),
+                  label: Text(tr("Videoni ko'rish")),
                 ),
                 TextButton(
                   onPressed: () async {
