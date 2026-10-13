@@ -16,8 +16,10 @@
 **▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
 web va APK **saytga joylangan (13-okt)** — 91–96-bandlar jonli. APK nusxasi:
 `Qobil-2026-10-13.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
-telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band); ⚠️ **tuzatilgan APK
-telefonda hali tekshirilmagan.** Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
+telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
+telefonda tekshirdi:** "Chiqish" ishlaydi (qotmaydi), shogirdda skrinshot olinmaydi.
+Telefonda hali tasdiqlanmagani: orqa ko'rinishdagi oyoq, tana xaritasi tezligi, "Videoni
+ko'rish", mashg'ulot navbati. Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
 so'raydi (mashqlar ro'yxati, bilak/qorin/trapetsiya kuni, mushaklar tartibi).
 
 **12-oktabrda qilingan** (91–94-bandlar) — shogirdning "Zal" tabi butunlay yangilandi:
@@ -1924,6 +1926,8 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       (aks holda tarjima uzilardi). Qayta tekshirildi: bazada 0 qoldi, tarjimalar joyida.
     - `flutter test` 144/144. Web va APK joylandi (`Qobil-2026-10-13.apk`). Reja:
       `specs/chiqish-va-orqa-oyoq.md` (lokal).
+    - **Telefonda tasdiqlandi (zal egasi, 13-okt):** "Chiqish" qotmaydi; shogird akkauntida
+      skrinshot olinmaydi (`FLAG_SECURE`, 87-band — birinchi marta haqiqiy telefonda ko'rildi).
 
 97. **Do'kon ustamasi olib tashlandi (13-okt)** — zal egasi: "bardagi narsalar narxining
     ustiga qo'yma, hozircha o'sha narxda qolsin". 4-oktabrda hamma tovarga ~15% ustama
