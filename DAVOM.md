@@ -19,8 +19,11 @@ web va APK **saytga joylangan (13-okt)** — 91–96-bandlar jonli. APK nusxasi:
 telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
 telefonda tekshirdi:** "Chiqish" ishlaydi (qotmaydi); shogirdda skrinshot olinmaydi; tana
 xaritasi — nuqtalar yig'iladi va qotmaydi, surganda aylanadi, "ORQA" da oyoq joyida, bosilgan
-mushak to'g'ri yonadi, pastki menyu joyida. Telefonda hali tasdiqlanmagani: mashg'ulot
-navbati ("Bajardim"), trener mashq qo'shishi, "Videoni ko'rish", do'kon narxlari. Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
+mushak to'g'ri yonadi, pastki menyu joyida; mashg'ulot navbati ("Boshlash", "Bajardim",
+keyingi mushak ochilishi, belgilar saqlanishi); trener mashq qo'shishi, takror nom tekshiruvi,
+video havolasi; shogirdda "Videoni ko'rish" va "YANGI" belgisi — **zal egasi "hammasi
+ishladi" dedi**. Telefonda hali tasdiqlanmagani: do'kon (narx, buyurtma) va 8-oktabrdan
+qolgan eski ro'yxat (til, rasm keshi, "+ Yedim", kamera, ovqat eslatmasi). Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
 so'raydi (mashqlar ro'yxati, bilak/qorin/trapetsiya kuni, mushaklar tartibi).
 
 **12-oktabrda qilingan** (91–94-bandlar) — shogirdning "Zal" tabi butunlay yangilandi:
@@ -189,7 +192,6 @@ Holatni tekshirish: `node tools/holat/holat.mjs`.
 ### ⏳ Ochiq ishlar (12-oktabr holati)
 
 **Zal va mashqlar (91–94-bandlar) bo'yicha:**
-- telefonda sinash: nuqtali tana qotadimi (12 480 nuqta), bosish va surish;
 - trener tasdiqlashi: mashqlar ro'yxati; bilak / qorin / trapetsiya qaysi kunga; mushaklar
   tartibi;
 - trener har mashqqa video havolasini qo'yib chiqishi;
@@ -1931,6 +1933,8 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       skrinshot olinmaydi (`FLAG_SECURE`, 87-band — birinchi marta haqiqiy telefonda ko'rildi).
       Tana xaritasi ham (91-band): 12 480 nuqta bilan qotmaydi, aylanadi, orqada oyoq joyida,
       mushak to'g'ri tanlanadi, pastki menyu turadi.
+      Keyin 92–95-bandlar ham: mashg'ulot navbati, trener mashq qo'shishi, video havolasi va
+      "Videoni ko'rish" — "hammasi ishladi".
 
 97. **Do'kon ustamasi olib tashlandi (13-okt)** — zal egasi: "bardagi narsalar narxining
     ustiga qo'yma, hozircha o'sha narxda qolsin". 4-oktabrda hamma tovarga ~15% ustama
