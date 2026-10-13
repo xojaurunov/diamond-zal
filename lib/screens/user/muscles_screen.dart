@@ -5,8 +5,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/tr.dart';
 import '../../models/exercises.dart';
 import '../../models/gym.dart';
+import '../../models/video_link.dart';
 import '../../widgets/body_map.dart';
+import '../../widgets/food_image.dart';
 import '../../widgets/particle_body.dart';
+import '../../widgets/youtube_embed_io.dart'
+    if (dart.library.js_interop) '../../widgets/youtube_embed_web.dart';
 
 /// Tana xaritasi (sinov versiyasi): bugun haftalik reja bo'yicha qaysi mushaklar ishlashini
 /// va ularning mashqlarini ko'rsatadi. Mushak bosilsa — faqat o'shaning mashqlari.
@@ -562,9 +566,10 @@ class _ExerciseRow extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 36),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               if (e.isNew()) ...[
                 Text(tr('Yangi').toUpperCase(), style: _label),
                 const SizedBox(height: 6),
@@ -607,108 +612,188 @@ class _ExerciseRow extends StatelessWidget {
                   style: const TextStyle(fontSize: 13, height: 1.4, fontWeight: FontWeight.w300, color: _ash),
                 ),
               ],
-              AnimatedSize(
-                duration: const Duration(milliseconds: 180),
-                alignment: Alignment.topLeft,
-                child: open
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 14),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          _VideoSlot(url: e.video),
-                          const SizedBox(height: 14),
-                          Text(
-                            tr(e.tip),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              height: 1.5,
-                              fontWeight: FontWeight.w300,
-                              color: _silver,
-                            ),
-                          ),
-                        ]),
-                      )
-                    : const SizedBox(width: double.infinity),
-              ),
-            ]),
+              ]),
+            ),
+            const SizedBox(width: 18),
+            BodyMap(back: back, primary: e.muscle, secondary: e.also.toSet(), height: 150),
+          ]),
+          // video va maslahat butun kenglikda — kichik shakl yonida siqilib qolmasin
+          AnimatedSize(
+            duration: const Duration(milliseconds: 180),
+            alignment: Alignment.topLeft,
+            child: open
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      _VideoSlot(url: e.video),
+                      const SizedBox(height: 14),
+                      Text(
+                        tr(e.tip),
+                        style: const TextStyle(fontSize: 16, height: 1.5, fontWeight: FontWeight.w300, color: _silver),
+                      ),
+                    ]),
+                  )
+                : const SizedBox(width: double.infinity),
           ),
-          const SizedBox(width: 18),
-          BodyMap(back: back, primary: e.muscle, secondary: e.also.toSet(), height: 150),
         ]),
       ),
     );
   }
 }
 
-/// Mashq videosi o'rni. Trener havola qo'ygan bo'lsa — "Videoni ko'rish" (YouTube,
-/// Telegram yoki brauzerda ochiladi) va "nusxalash" tugmasi. Video fayli ilovada
-/// saqlanmaydi. Havola yo'q — "video hali tayyorlanmagan" yozuvi (ilova tilida).
-class _VideoSlot extends StatelessWidget {
+/// Testda muqova rasmini tarmoqsiz almashtirish uchun (rasm keshi testda ishlamaydi)
+@visibleForTesting
+Widget Function(String url)? debugVideoThumb;
+
+/// Mashq videosi o'rni.
+/// * YouTube havolasi — muqova rasmi va o'ynatish tugmasi; bosilsa video SHU JOYNING O'ZIDA
+///   o'ynaydi (telefonda ham, brauzerda ham — boshqa oyna yoki ilova ochilmaydi).
+///   Ramka doim yotiq (16:9); tik video (Shorts) ichida o'z nisbatida turadi.
+/// * Boshqa havola (Telegram …) — "Videoni ko'rish" tashqarida ochadi, "nusxalash" ham bor.
+/// * Havola yo'q — "video hali tayyorlanmagan" (ilova tilida).
+/// Video fayli ilovada saqlanmaydi.
+class _VideoSlot extends StatefulWidget {
   final String url;
   const _VideoSlot({this.url = ''});
 
   @override
-  Widget build(BuildContext context) => ConstrainedBox(
-        // balandlik matnga qarab o'sadi (tor ekranda havola va tugma sig'masdi)
-        constraints: const BoxConstraints(minHeight: 150, minWidth: double.infinity),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: const Color(0xFF0E0E0E),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Icon(Icons.play_circle_outline, color: _violet, size: 34),
-              const SizedBox(height: 10),
-              Text(tr('VIDEO'), style: _label),
-              const SizedBox(height: 6),
-              if (url.isEmpty)
-                Text(
-                  tr("Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi."),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 13, height: 1.45, fontWeight: FontWeight.w300, color: _ash),
-                )
-              else ...[
-                Text(
-                  url,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300, color: _silver),
-                ),
-                const SizedBox(height: 8),
-                FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: _violet,
-                    foregroundColor: _white,
-                    shape: const StadiumBorder(),
-                    minimumSize: const Size(0, 44),
+  State<_VideoSlot> createState() => _VideoSlotState();
+}
+
+class _VideoSlotState extends State<_VideoSlot> {
+  /// Muqova bosildi — o'rnida pleyer
+  bool _playing = false;
+
+  String get url => widget.url;
+
+  @override
+  void didUpdateWidget(_VideoSlot old) {
+    super.didUpdateWidget(old);
+    if (old.url != url) _playing = false;
+  }
+
+  Future<void> _outside(BuildContext context) async {
+    var ok = false;
+    try {
+      ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } catch (_) {}
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(tr("Havolani ochib bo'lmadi — nusxalab brauzerda oching"))));
+    }
+  }
+
+  // joy qop-qora bo'lib qolmasin: binafsha tusli yuza va ingichka hoshiya
+  static final _box = BoxDecoration(
+    gradient: const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF241A45), Color(0xFF12101C)],
+    ),
+    borderRadius: BorderRadius.circular(24),
+    border: Border.all(color: const Color(0x558052FF)),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final id = youtubeId(url);
+    if (id != null) {
+      final frame = ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: AspectRatio(
+          // ramka doim yotiq va ixcham; tik video (Shorts) ichida o'z nisbatida, yon tomoni
+          // qora bo'lib turadi — cho'zilmaydi. Kattaroq ko'rish — pleyerning to'liq ekran tugmasi.
+          aspectRatio: 16 / 9,
+          child: _playing
+              ? ColoredBox(color: Colors.black, child: youtubeEmbed(id))
+              : Semantics(
+                  button: true,
+                  label: tr("Videoni ko'rish"),
+                  child: InkWell(
+                    onTap: () => setState(() => _playing = true),
+                    child: Stack(fit: StackFit.expand, children: [
+                      DecoratedBox(decoration: _box),
+                      debugVideoThumb?.call(youtubeThumb(url)!) ??
+                          netImage(youtubeThumb(url)!, errorBuilder: (_, __, ___) => const SizedBox()),
+                      const DecoratedBox(decoration: BoxDecoration(color: Color(0x55000000))),
+                      Center(
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: const BoxDecoration(color: _violet, shape: BoxShape.circle),
+                          child: const Icon(Icons.play_arrow, color: _white, size: 38),
+                        ),
+                      ),
+                      Positioned(
+                        left: 14,
+                        bottom: 10,
+                        child: Text(tr('VIDEO'), style: _label.copyWith(color: _white)),
+                      ),
+                    ]),
                   ),
-                  onPressed: () async {
-                    var ok = false;
-                    try {
-                      ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                    } catch (_) {}
-                    if (!ok && context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(tr("Havolani ochib bo'lmadi — nusxalab brauzerda oching"))));
-                    }
-                  },
-                  icon: const Icon(Icons.play_arrow, size: 20),
-                  label: Text(tr("Videoni ko'rish")),
                 ),
-                TextButton(
-                  onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: url));
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(tr('Havola nusxalandi'))));
-                    }
-                  },
-                  child: Text(tr('Havolani nusxalash'), style: const TextStyle(color: _violet)),
-                ),
-              ],
-            ]),
-          ),
         ),
       );
+      return Column(children: [
+        Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 560), child: frame)),
+        if (_playing)
+          // video egasi boshqa joyda ko'rsatishni taqiqlagan bo'lsa pleyer xato chiqaradi
+          TextButton(
+            onPressed: () => _outside(context),
+            child: Text(tr("Video ochilmasa — YouTube'da ochish"), style: const TextStyle(color: _violet)),
+          ),
+      ]);
+    }
+    return ConstrainedBox(
+      // balandlik matnga qarab o'sadi (tor ekranda havola va tugma sig'masdi)
+      constraints: const BoxConstraints(minHeight: 150, minWidth: double.infinity),
+      child: DecoratedBox(
+        decoration: _box,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(url.isEmpty ? Icons.videocam_off_outlined : Icons.play_circle_outline, color: _violet, size: 38),
+            const SizedBox(height: 10),
+            Text(tr('VIDEO'), style: _label),
+            const SizedBox(height: 6),
+            if (url.isEmpty)
+              Text(
+                tr("Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi."),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13, height: 1.45, fontWeight: FontWeight.w300, color: _silver),
+              )
+            else ...[
+              Text(
+                url,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300, color: _silver),
+              ),
+              const SizedBox(height: 8),
+              FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  backgroundColor: _violet,
+                  foregroundColor: _white,
+                  shape: const StadiumBorder(),
+                  minimumSize: const Size(0, 44),
+                ),
+                onPressed: () => _outside(context),
+                icon: const Icon(Icons.play_arrow, size: 20),
+                label: Text(tr("Videoni ko'rish")),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await Clipboard.setData(ClipboardData(text: url));
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(tr('Havola nusxalandi'))));
+                  }
+                },
+                child: Text(tr('Havolani nusxalash'), style: const TextStyle(color: _violet)),
+              ),
+            ],
+          ]),
+        ),
+      ),
+    );
+  }
 }

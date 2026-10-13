@@ -1051,6 +1051,7 @@ const ru = <String, String>{
   'Video': 'Видео',
   'Video hali tayyorlanmagan. Trener tayyorlab qo\'ygach, shu yerda ko\'rinadi.': 'Видео ещё не готово. Когда тренер его подготовит, оно появится здесь.',
   'Video havolasi (ixtiyoriy)': 'Ссылка на видео (необязательно)',
+  'Video ochilmasa — YouTube\'da ochish': 'Если видео не открывается — открыть в YouTube',
   'Videoni ko\'rish': 'Смотреть видео',
   'Viloyat / shahar': 'Область / город',
   'Vobkent': 'Вабкент',

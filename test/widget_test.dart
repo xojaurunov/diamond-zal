@@ -11,6 +11,7 @@ import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/shop.dart';
 import 'package:kotta_qani_diet/models/stats.dart';
 import 'package:kotta_qani_diet/models/subscription.dart';
+import 'package:kotta_qani_diet/models/video_link.dart';
 import 'package:kotta_qani_diet/screens/admin/exercises_admin_screen.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
 import 'package:kotta_qani_diet/screens/notifications_screen.dart';
@@ -1609,6 +1610,62 @@ void main() {
       await t.pump(const Duration(seconds: 3));
       expect(find.text("Bugungi mashg'ulot tugadi"), findsNWidgets(2), reason: 'tepada va mashqlar o-rnida');
       expect(find.text('Bajardim'), findsNothing);
+    });
+  });
+
+  group('Video havolasi', () {
+    test('YouTube id har xil havoladan ajratiladi', () {
+      for (final u in [
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://youtu.be/dQw4w9WgXcQ?si=abc',
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=10s',
+        'https://m.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://youtube.com/shorts/dQw4w9WgXcQ',
+        'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        'https://www.youtube.com/live/dQw4w9WgXcQ?feature=share',
+        '  https://youtu.be/dQw4w9WgXcQ  ',
+      ]) {
+        expect(youtubeId(u), 'dQw4w9WgXcQ', reason: u);
+      }
+      expect(youtubeThumb('https://youtu.be/dQw4w9WgXcQ'), 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg');
+    });
+
+    test('YouTube bo-lmagan yoki buzuq havola — null', () {
+      for (final u in [
+        '',
+        'https://t.me/kanal/123',
+        'https://example.com/watch?v=dQw4w9WgXcQ',
+        'https://www.youtube.com/watch?v=qisqa',
+        'https://www.youtube.com/@kanal',
+        'youtu.be/dQw4w9WgXcQ',
+      ]) {
+        expect(youtubeId(u), isNull, reason: u);
+        expect(youtubeThumb(u), isNull, reason: u);
+      }
+    });
+
+    testWidgets('YouTube havolali mashqda muqova va o-ynatish tugmasi; havola matni yo-q', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      String? asked;
+      debugVideoThumb = (u) {
+        asked = u;
+        return const SizedBox();
+      };
+      addTearDown(() => debugVideoThumb = null);
+      final e = Exercise('Video mashq', 'chest', '3 × 10', 'Sekin',
+          id: 'v1', video: 'https://youtu.be/dQw4w9WgXcQ', createdAt: DateTime.now(), createdBy: 't1');
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(gymDays: evenDays, weekday: DateTime.tuesday, onBack: () {}, custom: Stream.value([e])),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      await t.tap(find.text('Video mashq'));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.byIcon(Icons.play_arrow), findsOneWidget);
+      expect(asked, 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg', reason: 'muqova so-raldi');
+      expect(find.text('https://youtu.be/dQw4w9WgXcQ'), findsNothing, reason: 'havola matni emas — muqova');
+      expect(find.text('Havolani nusxalash'), findsNothing);
     });
   });
 }

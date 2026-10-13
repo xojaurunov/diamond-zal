@@ -14,7 +14,7 @@
 ## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
 **▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
-web va APK **saytga joylangan (13-okt)** — 91–96-bandlar jonli. APK nusxasi:
+web va APK **saytga joylangan (13-okt kechqurun)** — 91–98-bandlar jonli. APK nusxasi:
 `Qobil-2026-10-13.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
 telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
 telefonda tekshirdi:** "Chiqish" ishlaydi (qotmaydi); shogirdda skrinshot olinmaydi; tana
@@ -1944,6 +1944,31 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     `node tools/dokon/narx_ustama.mjs <foiz>` bilan qaytarsa bo'ladi. Qayta tekshirildi:
     ustamali tovar 0 ta. **Oqibati:** "Do'kon foydasi" (sotilgan narx − tan narx) yangi
     sotuvlarda 0 chiqadi. Ilova kodi o'zgarmadi — yangi APK kerak emas, narx bazadan o'qiladi.
+
+98. **Video ilova ichida, muqova bilan (13-okt kech)** — zal egasi telefonda ko'rib: "video
+    programmaning o'zidan ochilishi kerak; foni qop-qora"; keyin brauzerda: "boshqa havola
+    ochyapti, o'zida qo'ysin; ramkani kichraytir, cho'zilmasin".
+    - `lib/models/video_link.dart`: `youtubeId` (youtu.be, watch?v=, shorts, embed, live,
+      m./music.) va `youtubeThumb` (muqova: `img.youtube.com/vi/<id>/hqdefault.jpg`).
+    - YouTube havolali mashqda video joyida muqova va "o'ynatish" tugmasi; bosilganda video
+      **shu joyning o'zida** o'ynaydi — boshqa ilova yoki oyna ochilmaydi. Telefonda
+      `lib/widgets/youtube_embed_io.dart` (**yangi kutubxona `webview_flutter`**), brauzerda
+      `youtube_embed_web.dart` (`<iframe>`, `HtmlElementView.fromTagName`); shartli import.
+      Sahifa `youtube-nocookie.com` manzili bilan yuklanadi (aks holda pleyer "153" xatosi).
+    - Ramka doim yotiq 16:9, eni 560 gacha; tik video (Shorts) ichida o'z nisbatida.
+      Video va maslahat mashq qatorida butun kenglikda (avval kichik shakl yonida siqilgan).
+    - Video yo'q mashqda joy binafsha tusli va hoshiyali (qora bo'sh quti emas).
+    - YouTube bo'lmagan havola (Telegram …) avvalgidek tashqarida ochiladi. Video egasi
+      boshqa joyda ko'rsatishni taqiqlagan bo'lsa — pleyer ostida "YouTube'da ochish".
+    - **Tekshirildi:** brauzerda sinov shogirdi bilan — muqova, joyida o'ynash, ixcham ramka.
+      `flutter test` 147/147. **Telefonda (WebView) tekshirilmagan** — zal egasi "joyla"
+      dedi. Web va APK joylandi (`Qobil-2026-10-13.apk`, kechki nusxa).
+    - **Eslatma:** release web nusxada `flutter_service_worker.js` eski kodni keshlaydi —
+      yangilangan sayt brauzerda ikkinchi yuklashda ko'rinadi.
+    - Video FAYL yuklash hali yo'q — saqlash joyi bo'yicha qaror kutilmoqda (Firebase
+      Storage/Blaze, Cloudflare R2 yoki bazada bo'laklab). Telegram YOPIQ kanal videosi ilova
+      ichida ko'rsatilmaydi; tavsiya — YouTube "Havola orqali" (Unlisted).
+      Reja: `specs/video-ilova-ichida.md` (lokal).
 
 
 ---
