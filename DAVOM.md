@@ -1925,6 +1925,15 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - `flutter test` 144/144. Web va APK joylandi (`Qobil-2026-10-13.apk`). Reja:
       `specs/chiqish-va-orqa-oyoq.md` (lokal).
 
+97. **Do'kon ustamasi olib tashlandi (13-okt)** — zal egasi: "bardagi narsalar narxining
+    ustiga qo'yma, hozircha o'sha narxda qolsin". 4-oktabrda hamma tovarga ~15% ustama
+    qo'yilgan edi (62-band). Aniqlashtirildi (uch variantdan "ustamani olib tashla" tanlandi).
+    `node tools/dokon/ustama_olish.mjs` — 146 tovarning hammasida `price` = `costPrice`
+    (masalan 632 500 → 550 000; forma 16 → 14 $). Tan narx o'zgarmadi — ustamani
+    `node tools/dokon/narx_ustama.mjs <foiz>` bilan qaytarsa bo'ladi. Qayta tekshirildi:
+    ustamali tovar 0 ta. **Oqibati:** "Do'kon foydasi" (sotilgan narx − tan narx) yangi
+    sotuvlarda 0 chiqadi. Ilova kodi o'zgarmadi — yangi APK kerak emas, narx bazadan o'qiladi.
+
 
 ---
 
