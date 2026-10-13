@@ -14,9 +14,10 @@
 ## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
 **▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
-web va APK **saytga joylangan (12-okt kechqurun)** — 91–95-bandlar jonli. APK nusxasi:
-`Qobil-2026-10-12.apk` (zal egasining `Music` papkasi va Desktop). ⚠️ **Telefonda
-sinalmagan.** Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
+web va APK **saytga joylangan (13-okt)** — 91–96-bandlar jonli. APK nusxasi:
+`Qobil-2026-10-13.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
+telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band); ⚠️ **tuzatilgan APK
+telefonda hali tekshirilmagan.** Ochiq ishlar — pastda "⏳ Ochiq ishlar"; ertaga zal egasi trenerdan
 so'raydi (mashqlar ro'yxati, bilak/qorin/trapetsiya kuni, mushaklar tartibi).
 
 **12-oktabrda qilingan** (91–94-bandlar) — shogirdning "Zal" tabi butunlay yangilandi:
@@ -212,8 +213,6 @@ Quyidagilar — 8-oktabrdan qolgan ro'yxat:
 - Tarjimani ruscha biladigan odam ko'rib chiqsa (Claude tarjima qilgan).
 
 **Javob kutayotgan takliflar:**
-- o'zbekcha tovar izohlaridagi ichki eslatmani ("Narx AllPituz kanalidan (24-sent)",
-  "hozirgi narxni tekshiring") tozalash — u mijozga ko'rinadi (86-band);
 - mahsulotlar bazasiga 20–30 ta tayyor o'zbek taomini (somsa, lag'mon, manti, shashlik, non,
   sho'rva …) kaloriyasi bilan qo'shish — "Yedim" tugmasi foydali bo'lishi uchun. Hozir bazada
   20 ta mahsulot, tayyor taomlardan faqat Osh. Raqamlar taxminiy bo'ladi — trener tasdiqlasin.
@@ -1903,6 +1902,28 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       kunlari tanlanmagan shogirdda yo'q (o'sha kunlari sarlavhada sababi yozilgan).
     - **Joylandi:** qoidalar + web (`public/ilova`) + APK (`public/app/kq.bin`) —
       `deploy.ps1`. `flutter test` 144/144, lug'at 1 274 kalit.
+
+96. **Telefonda topilgan nuqsonlar; tovar izohlari (13-okt)** — zal egasi 12-okt APK ni
+    telefonda ko'rdi: "Chiqish bossa qotyapti (hamma rolda)" va "tana xaritasini orqaga
+    o'girsa oyoq sochilib yotibdi".
+    - **Chiqish qotishi.** Brauzerda qayta tekshirildi (sinov shogirdi): 1,5 soniyadan tez —
+      demak faqat telefonda. Sabab (kod bo'yicha; telefonda tasdiqlanmagan): `signOut`
+      chiqishdan oldin ketma-ket kutardi — FCM token yozuvini o'chirish (server javobi),
+      `deleteToken()` (tarmoq), `Notifications.cancelAll()`. Endi: token yozuvi 1,5 s dan
+      oshsa kutilmaydi, `deleteToken` umuman kutilmaydi, `cancelAll` 1 s (`push.dart`,
+      `db.dart`). Brauzerda token yo'q — u yerda bu qadamlar o'tkazib yuboriladi.
+    - **Orqada oyoq.** Orqa ko'rinishda (180°) boldirdan pastda pol yaltiraydi, botinka esa
+      qora — nuqtalar pol dog'larini chizgan edi. `tools/tana/pol_tozalash.py`: shu zonadagi
+      nuqtalar olib tashlanib, ikki botinka shakli qo'lda chizildi. Manba 360° rasm
+      saqlanmagan — tuzatish tayyor nuqtalar ustida. Ko'rinishlarda nuqtalar soni endi har
+      xil (`particle_body.dart` massivlari eng uzun ko'rinish bo'yicha). 135° va 225°
+      tegilmadi.
+    - **Tovar izohlari.** Mijozga ko'rinadigan ichki eslatma ("Narx AllPituz kanalidan …",
+      "… hozirgi narxni tekshiring") olib tashlandi: `node tools/dokon/izoh_tozalash.mjs` —
+      bazada 146 tovardan 129 tasi, manba json'lar va `tovar-tarjima.json` kalitlari birga
+      (aks holda tarjima uzilardi). Qayta tekshirildi: bazada 0 qoldi, tarjimalar joyida.
+    - `flutter test` 144/144. Web va APK joylandi (`Qobil-2026-10-13.apk`). Reja:
+      `specs/chiqish-va-orqa-oyoq.md` (lokal).
 
 
 ---

@@ -288,13 +288,16 @@ _Layer _layer(int angle, String? selected) => _layers.putIfAbsent('$angle|$selec
       return _Layer(pts, idx);
     });
 
+/// Eng ko'p nuqtali ko'rinishdagi nuqtalar soni (ko'rinishlarda son har xil bo'lishi mumkin)
+final _maxPoints = bodyViews.map((v) => v.length ~/ 3).reduce(math.max);
+
 Int8List? _accentCache;
 
 /// Rangli zarrachalar: 6, 7, 8 — [_tones] dagi urg'u rangi; -1 — rangi yorqinlikdan.
 /// Har 18-zarrachadan biri rangli — qomat bir xil kulrang bo'lib qolmasin.
 Int8List _accents() => _accentCache ??= () {
       final rnd = math.Random(5);
-      final out = Int8List(bodyViews[0].length ~/ 3);
+      final out = Int8List(_maxPoints);
       for (var i = 0; i < out.length; i++) {
         out[i] = rnd.nextInt(18) == 0 ? 6 + rnd.nextInt(3) : -1;
       }
@@ -307,7 +310,7 @@ Float32List? _scatterCache;
 /// va kechikishi (0..0.4) — uchtadan
 Float32List _scatter() => _scatterCache ??= () {
       final rnd = math.Random(7);
-      final out = Float32List(bodyViews[0].length);
+      final out = Float32List(_maxPoints * 3);
       for (var i = 0; i + 2 < out.length; i += 3) {
         final a = rnd.nextDouble() * math.pi * 2, d = 320 + rnd.nextDouble() * 700;
         out[i] = math.cos(a) * d;

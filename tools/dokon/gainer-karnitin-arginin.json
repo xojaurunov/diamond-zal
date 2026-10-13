@@ -2,7 +2,7 @@
   {
     "category": "Gainer",
     "name": "Gainer Pro (3 kg)",
-    "note": "Yuqori oqsilli gainer. Narx AllPituz kanalidan (24-sent).",
+    "note": "Yuqori oqsilli gainer.",
     "sizes": [],
     "price": 450000,
     "currency": "UZS",
@@ -14,7 +14,7 @@
   {
     "category": "Gainer",
     "name": "Gain Rulz (peanut butter)",
-    "note": "50 g oqsil, 1250 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 1250 kkal.",
     "sizes": [],
     "price": 540000,
     "currency": "UZS",
@@ -26,7 +26,7 @@
   {
     "category": "Gainer",
     "name": "Rule 1 Mass Gainer (shokolad)",
-    "note": "40 g oqsil, 1260 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "40 g oqsil, 1260 kkal.",
     "sizes": [],
     "price": 500000,
     "currency": "UZS",
@@ -38,7 +38,7 @@
   {
     "category": "Gainer",
     "name": "Mass Gainer (qizil qop)",
-    "note": "30 g oqsil, 2500 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "30 g oqsil, 2500 kkal.",
     "sizes": [],
     "price": 800000,
     "currency": "UZS",
@@ -50,7 +50,7 @@
   {
     "category": "Gainer",
     "name": "Basic Supplements Mass (shokolad)",
-    "note": "50 g oqsil, 1030 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 1030 kkal.",
     "sizes": [],
     "price": 850000,
     "currency": "UZS",
@@ -62,7 +62,7 @@
   {
     "category": "Gainer",
     "name": "Regain Fuel Trifuel",
-    "note": "50 g oqsil, 10,5 g BCAA. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 10,5 g BCAA.",
     "sizes": [],
     "price": 750000,
     "currency": "UZS",
@@ -74,7 +74,7 @@
   {
     "category": "Gainer",
     "name": "Dennis James Lean Muscle Mass Gainer",
-    "note": "15 lb, cookies & cream. Narx AllPituz kanalidan (24-sent).",
+    "note": "15 lb, cookies & cream.",
     "sizes": [],
     "price": 780000,
     "currency": "UZS",
@@ -86,7 +86,7 @@
   {
     "category": "Gainer",
     "name": "Dymatize Super Mass Gainer (vanil)",
-    "note": "52 g oqsil, 1280 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "52 g oqsil, 1280 kkal.",
     "sizes": [],
     "price": 920000,
     "currency": "UZS",
@@ -98,7 +98,7 @@
   {
     "category": "Gainer",
     "name": "FA Core Mass (7 kg)",
-    "note": "Ko'p oqsilli kompleks. Narx AllPituz kanalidan (24-sent).",
+    "note": "Ko'p oqsilli kompleks.",
     "sizes": [],
     "price": 850000,
     "currency": "UZS",
@@ -110,7 +110,7 @@
   {
     "category": "Gainer",
     "name": "4 Dimension Mass (15 lb)",
-    "note": "Yuqori kaloriyali, 50 g oqsil. Narx AllPituz kanalidan (24-sent).",
+    "note": "Yuqori kaloriyali, 50 g oqsil.",
     "sizes": [],
     "price": 780000,
     "currency": "UZS",
@@ -122,7 +122,7 @@
   {
     "category": "Gainer",
     "name": "ON Serious Mass",
-    "note": "50 g oqsil, 1250 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 1250 kkal.",
     "sizes": [],
     "price": 1100000,
     "currency": "UZS",
@@ -134,7 +134,7 @@
   {
     "category": "Gainer",
     "name": "ON Gold Standard Pro Gain (vanilla custard)",
-    "note": "60 g oqsil, 650 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "60 g oqsil, 650 kkal.",
     "sizes": [],
     "price": 1450000,
     "currency": "UZS",
@@ -146,7 +146,7 @@
   {
     "category": "Gainer",
     "name": "ON Serious Mass (peanut butter)",
-    "note": "50 g oqsil, 1250 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 1250 kkal.",
     "sizes": [],
     "price": 700000,
     "currency": "UZS",
@@ -158,7 +158,7 @@
   {
     "category": "Gainer",
     "name": "BSN True Mass 1200 (strawberry)",
-    "note": "50 g oqsil, 1200 kkal. Narx AllPituz kanalidan (24-sent).",
+    "note": "50 g oqsil, 1200 kkal.",
     "sizes": [],
     "price": 1050000,
     "currency": "UZS",
@@ -170,7 +170,7 @@
   {
     "category": "L-Karnitin",
     "name": "Flex Wheeler Liquid L-Carnitine 3500",
-    "note": "Suyuq, 3500 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3500 mg.",
     "sizes": [],
     "price": 230000,
     "currency": "UZS",
@@ -182,7 +182,7 @@
   {
     "category": "L-Karnitin",
     "name": "Labrada L-Carnitine 3000 (blue raspberry)",
-    "note": "Suyuq, amino kislotalar bilan. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, amino kislotalar bilan.",
     "sizes": [],
     "price": 250000,
     "currency": "UZS",
@@ -194,7 +194,7 @@
   {
     "category": "L-Karnitin",
     "name": "Own Game L-Carnitine",
-    "note": "Suyuq. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq.",
     "sizes": [],
     "price": 250000,
     "currency": "UZS",
@@ -206,7 +206,7 @@
   {
     "category": "L-Karnitin",
     "name": "Monster Labs L-Carnitine 3500 (blue raspberry)",
-    "note": "Suyuq, 3500 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3500 mg.",
     "sizes": [],
     "price": 230000,
     "currency": "UZS",
@@ -218,7 +218,7 @@
   {
     "category": "L-Karnitin",
     "name": "Black Skull L-Carnitine 3500",
-    "note": "Suyuq, 3500 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3500 mg.",
     "sizes": [],
     "price": 250000,
     "currency": "UZS",
@@ -230,7 +230,7 @@
   {
     "category": "L-Karnitin",
     "name": "L-Carnitine 3000 (blue raspberry)",
-    "note": "Suyuq, 3000 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3000 mg.",
     "sizes": [],
     "price": 240000,
     "currency": "UZS",
@@ -242,7 +242,7 @@
   {
     "category": "L-Karnitin",
     "name": "Ronnie Coleman L-Carnitine XS 3000 (mango-ananas)",
-    "note": "Suyuq, 3000 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3000 mg.",
     "sizes": [],
     "price": 260000,
     "currency": "UZS",
@@ -254,7 +254,7 @@
   {
     "category": "L-Karnitin",
     "name": "Matrix L-Carnitine 3000 (berry)",
-    "note": "Suyuq, 3000 mg. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, 3000 mg.",
     "sizes": [],
     "price": 250000,
     "currency": "UZS",
@@ -266,7 +266,7 @@
   {
     "category": "L-Karnitin",
     "name": "MR L-Carnitine Liquid 3000 mg",
-    "note": "Suyuq, yog' yoqish formulasi. Narx AllPituz kanalidan (24-sent).",
+    "note": "Suyuq, yog' yoqish formulasi.",
     "sizes": [],
     "price": 230000,
     "currency": "UZS",
@@ -278,7 +278,7 @@
   {
     "category": "L-Arginin",
     "name": "Army Arginine Powder (6000 mg)",
-    "note": "Kukun, ta'msiz. Narx AllPituz kanalidan (24-sent).",
+    "note": "Kukun, ta'msiz.",
     "sizes": [],
     "price": 260000,
     "currency": "UZS",
@@ -290,7 +290,7 @@
   {
     "category": "L-Arginin",
     "name": "L-Arginine 1000 mg (oltin banka)",
-    "note": "Tabletka, erkin shakl. Narx AllPituz kanalidan (24-sent).",
+    "note": "Tabletka, erkin shakl.",
     "sizes": [],
     "price": 260000,
     "currency": "UZS",
@@ -302,7 +302,7 @@
   {
     "category": "L-Arginin",
     "name": "GAT L-Arginine 1000 mg",
-    "note": "180 tabletka. Narx AllPituz kanalidan (24-sent).",
+    "note": "180 tabletka.",
     "sizes": [],
     "price": 260000,
     "currency": "UZS",
@@ -314,7 +314,7 @@
   {
     "category": "L-Arginin",
     "name": "MR L-Arginine 1000 mg",
-    "note": "180 tabletka. Narx AllPituz kanalidan (24-sent).",
+    "note": "180 tabletka.",
     "sizes": [],
     "price": 250000,
     "currency": "UZS",
@@ -326,7 +326,7 @@
   {
     "category": "L-Arginin",
     "name": "Ronnie Coleman L-Arginine",
-    "note": "Kukun. Narx AllPituz kanalidan (24-sent).",
+    "note": "Kukun.",
     "sizes": [],
     "price": 190000,
     "currency": "UZS",

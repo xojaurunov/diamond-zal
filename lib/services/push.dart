@@ -25,14 +25,17 @@ class Push {
     }
   }
 
-  /// Chiqishda — bu telefon endi shu akkaunt bildirishnomalarini olmasin
-  static Future<void> unregister(String uid) async {
+  /// Chiqishda — bu telefon endi shu akkaunt bildirishnomalarini olmasin.
+  /// Chiqishni ushlab turmaydi: token yozuvini o'chirish server javobini kutadi (tarmoq
+  /// sekin bo'lsa uzoq) — [wait] dan oshsa kutilmaydi (yozuv navbatda qoladi). Telefondagi
+  /// tokenni o'chirish ham tarmoq so'rovi — umuman kutilmaydi.
+  static Future<void> unregister(String uid, {Duration wait = const Duration(milliseconds: 1500)}) async {
     final t = _token;
     if (t == null) return;
-    try {
-      await Db.removeFcmToken(uid, t);
-      await FirebaseMessaging.instance.deleteToken();
-    } catch (_) {}
     _token = null;
+    try {
+      await Db.removeFcmToken(uid, t).timeout(wait);
+    } catch (_) {}
+    FirebaseMessaging.instance.deleteToken().catchError((_) {});
   }
 }

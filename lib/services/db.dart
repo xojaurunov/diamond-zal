@@ -63,8 +63,12 @@ class AuthService {
   /// Chiqish: bu telefon endi shu akkaunt bildirishnomalarini olmaydi, eslatmalar bekor
   static Future<void> signOut() async {
     final uid = _auth.currentUser?.uid;
+    // tozalash chiqishni ushlab turmasin (telefonda "Chiqish" bosilganda qotib qolardi):
+    // har qadam cheklangan vaqt kutiladi, xatosi chiqishga to'sqinlik qilmaydi
     if (uid != null) await Push.unregister(uid);
-    await Notifications.cancelAll();
+    try {
+      await Notifications.cancelAll().timeout(const Duration(seconds: 1));
+    } catch (_) {}
     await _auth.signOut();
   }
 
