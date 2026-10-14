@@ -14,8 +14,8 @@
 ## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
 
 **▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
-web va APK **saytga joylangan (13-okt kechqurun)** — 91–98-bandlar jonli. APK nusxasi:
-`Qobil-2026-10-13.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
+web va APK **saytga joylangan (14-okt)** — 91–99-bandlar jonli. APK nusxasi:
+`Qobil-2026-10-14.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
 telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
 telefonda tekshirdi:** "Chiqish" ishlaydi (qotmaydi); shogirdda skrinshot olinmaydi; tana
 xaritasi — nuqtalar yig'iladi va qotmaydi, surganda aylanadi, "ORQA" da oyoq joyida, bosilgan
@@ -1969,6 +1969,28 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       Storage/Blaze, Cloudflare R2 yoki bazada bo'laklab). Telegram YOPIQ kanal videosi ilova
       ichida ko'rsatilmaydi; tavsiya — YouTube "Havola orqali" (Unlisted).
       Reja: `specs/video-ilova-ichida.md` (lokal).
+
+99. **Mashq darajasi va shogirdga mashq tanlash (14-okt)** — zal egasi modeli: mashq va video
+    kutubxonaga bir marta kiritiladi; har mashqda daraja (faqat trener ko'radi); trener har
+    shogirdga o'z mashqlarini tanlaydi (kimga ko'p, kimga kam) va mushak o'rganib qolmasligi
+    uchun istagan payt almashtiradi; o'zgartirmasa — eski tanlov turadi.
+    - **Daraja:** `Exercise.level` ('' / beginner / middle / pro), `levels` nomlari. Trener
+      formasida tanlanadi; ro'yxatda belgi va daraja bo'yicha saralash. Shogird ko'rmaydi.
+      Namunaviy 36 mashq belgisiz — trener qo'yadi.
+    - **Tanlash:** `users/{uid}.program` (`{mushak: [mashq kaliti]}`, toMap'ga kirmaydi),
+      `Db.setProgram`. Trener: Mijozlar → shogird → yangi **"Mashqlar"** tabi
+      (`lib/screens/admin/student_program_tab.dart`) — zal kunlari bo'yicha mushaklar,
+      kutubxonadan belgilash, "Standartga qaytarish". Shogird: `exercisesForStudent` —
+      tanlangan bo'lsa shular (trener tartibida, o'chirilgan mashq tashlanadi); bo'lmasa
+      "Boshlovchi" belgililar; ular ham bo'lmasa hammasi. "Bajardim" navbati shu ro'yxat bo'yicha.
+    - **Qoidalar:** `exercises.level` faqat 4 qiymat; shogird o'z `program`ini o'zgartira
+      olmaydi; trener — faqat o'z shogirdiniki. **Joylandi (14-okt)** — majburiy edi: yangi
+      ilova mashqqa `level` yozadi, eski qoida uni rad etardi.
+    - **Diqqat:** trener biror mashqqa "Boshlovchi" qo'yishi bilan tanlovi yo'q shogirdlar
+      o'sha mushakda faqat boshlovchi mashqlarni ko'radi.
+    - `flutter test` 153/153, qoida testlari 237/237. Trenerning "Mashqlar" tabi telefonda
+      va ekranda ko'rilmagan. Zal egasi "webga chiqaz" dedi — web va APK joylandi.
+    - Keyingi: video FAYL yuklash va o'chirish (Blaze yoqilgach; `specs/mashq-dasturi/00-overview.md`).
 
 
 ---

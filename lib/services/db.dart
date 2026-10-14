@@ -362,6 +362,12 @@ class Db {
 
   static Future<void> deleteExercise(String id) => _fs.collection('exercises').doc(id).delete();
 
+  /// Trener shogirdga [muscle] uchun mashqlar tanlaydi; bo'sh ro'yxat — standartga qaytish
+  static Future<void> setProgram(String uid, String muscle, List<String> keys) =>
+      _fs.collection('users').doc(uid).update({
+        'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,
+      });
+
   // ---------- plans ----------
   static Stream<List<Plan>> plans() =>
       _fs.collection('plans').snapshots().map((s) => s.docs.map(Plan.fromDoc).toList());

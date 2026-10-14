@@ -33,6 +33,13 @@ Muscle? muscleById(String id) {
   return null;
 }
 
+/// Mashq darajalari: kalit (bazada) → o'zbekcha nom (ekranda `tr()` bilan)
+const levels = {
+  'beginner': 'Boshlovchi',
+  'middle': "O'rta",
+  'pro': 'Professional',
+};
+
 class Exercise {
   /// Firestore hujjat id'si; namunaviy (koddagi) mashqda bo'sh
   final String id;
@@ -62,6 +69,10 @@ class Exercise {
   /// o'chirilsa — namunaviy asl holiga qaytadi. Yangi mashqda bo'sh.
   final String base;
 
+  /// Daraja: '' (belgilanmagan), 'beginner', 'middle', 'pro' ([levels]). Faqat trener va bosh
+  /// admin ko'radi — shogird ekranida chiqmaydi.
+  final String level;
+
   const Exercise(
     this.name,
     this.muscle,
@@ -73,6 +84,7 @@ class Exercise {
     this.createdAt,
     this.createdBy = '',
     this.base = '',
+    this.level = '',
   });
 
   /// Trener qo'shganmi (tahrirlash va o'chirish mumkin); namunaviy mashq — yo'q
@@ -111,6 +123,7 @@ class Exercise {
       createdAt: at is int ? DateTime.fromMillisecondsSinceEpoch(at) : null,
       createdBy: (m['createdBy'] ?? '').toString(),
       base: (m['base'] ?? '').toString(),
+      level: levels.containsKey(m['level']) ? m['level'] as String : '',
     );
   }
 
@@ -124,6 +137,7 @@ class Exercise {
         'createdAt': (createdAt ?? DateTime.now()).millisecondsSinceEpoch,
         'createdBy': createdBy,
         'base': base,
+        'level': level,
       };
 }
 
@@ -277,6 +291,30 @@ Exercise? sameExercise(String name, List<Exercise> custom, {String exceptId = ''
     if (exerciseKey(e.name) == key) return e;
   }
   return null;
+}
+
+/// Shogird ko'radigan [muscleId] mashqlari:
+/// 1) trener shu shogirdga tanlagan bo'lsa ([program]) — faqat shular, trener tanlagan
+///    tartibda (o'chirilgan mashq kaliti tashlab ketiladi);
+/// 2) tanlamagan bo'lsa (yoki tanlanganlarning hammasi o'chirilgan) — "Boshlovchi" mashqlar;
+/// 3) ular ham bo'lmasa — mushakning hamma mashqi.
+List<Exercise> exercisesForStudent(
+  String muscleId,
+  List<Exercise> custom,
+  Map<String, List<String>> program,
+) {
+  final all = exercisesFor(muscleId, custom);
+  final chosen = program[muscleId] ?? const [];
+  if (chosen.isNotEmpty) {
+    final byKey = {for (final e in all) e.key: e};
+    final out = [
+      for (final k in chosen)
+        if (byKey[k] case final e?) e,
+    ];
+    if (out.isNotEmpty) return out;
+  }
+  final easy = all.where((e) => e.level == 'beginner').toList();
+  return easy.isNotEmpty ? easy : all;
 }
 
 /// [muscleId] mashqlari: avval trener qo'shgan yangilar (eng yangisi tepada), keyin

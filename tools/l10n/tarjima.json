@@ -475,6 +475,10 @@
   "ru": "Снять отметку",
   "en": "Unmark"
  },
+ "Belgisiz": {
+  "ru": "Без уровня",
+  "en": "No level"
+ },
  "Belni bukmasdan, oyoqni dumba kuchi bilan ko'taring.": {
   "ru": "Не прогибая поясницу, поднимайте ногу силой ягодиц.",
   "en": "Without arching the back, lift the leg with the glutes."
@@ -655,6 +659,10 @@
   "ru": "Начальный",
   "en": "Starting"
  },
+ "Boshlovchi": {
+  "ru": "Начинающий",
+  "en": "Beginner"
+ },
  "Boshqa": {
   "ru": "Другое",
   "en": "Other"
@@ -690,6 +698,10 @@
  "Bu bo'limda tuzatish ishlari olib borilmoqda — har bir mashg'ulot mashqlari tez orada qo'shiladi.": {
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
   "en": "This section is being improved — exercises for each workout are coming soon."
+ },
+ "Bu darajada mashq yo'q.": {
+  "ru": "Упражнений этого уровня нет.",
+  "en": "No exercises at this level."
  },
  "Bu davrda sotuv bo‘lmagan": {
   "ru": "За этот период продаж не было",
@@ -946,6 +958,10 @@
  "Dang'ara": {
   "ru": "Дангара",
   "en": "Dangara"
+ },
+ "Daraja (shogird ko'rmaydi)": {
+  "ru": "Уровень (ученик не видит)",
+  "en": "Level (hidden from students)"
  },
  "Davom etish": {
   "ru": "Продолжить",
@@ -1307,6 +1323,10 @@
   "ru": "Все упражнения выполнены. Молодец!",
   "en": "All exercises done. Well done!"
  },
+ "Hamma mushaklar": {
+  "ru": "Все мышцы",
+  "en": "All muscles"
+ },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
   "en": "All clients' schedule"
@@ -1338,6 +1358,10 @@
  "Har mahalda ro'yxatdagi mahsulotlardan birini tanlab almashtirsa bo'ladi.\nShokolad — shakari kam bo'lsin.\nKechki go'shtni kungaboqar yog'ida pishirsa ham bo'ladi.\nYotishdan oldin: meva va qaynagan (iliq) suvga yarimta limon siqib ichiladi.\nNonushtada suli bo'tqasi o'rniga guruch / grechka / makaron / manniy bo'tqasi ham bo'ladi. 2-nonushta va poldnikda protein kokteyl yoki kefir/yogurt — birini tanlang.\nPorsiyalar taxminiy (~2700 kkal, ~200 g oqsil) — mijozga qarab o'zgartiring.": {
   "ru": "В каждом приёме пищи можно выбрать и заменить один из продуктов списка.\nШоколад — с низким содержанием сахара.\nМясо на ужин можно готовить и на подсолнечном масле.\nПеред сном: фрукт и тёплая кипячёная вода с соком половины лимона.\nНа завтрак вместо овсяной каши можно рис / гречку / макароны / манную кашу. На 2-й завтрак и полдник — протеиновый коктейль или кефир/йогурт, выберите одно.\nПорции примерные (~2700 ккал, ~200 г белка) — меняйте под клиента.",
   "en": "In each meal you can pick and swap one of the listed foods.\nChocolate should be low in sugar.\nThe dinner meat can also be cooked in sunflower oil.\nBefore bed: fruit and warm boiled water with half a lemon squeezed in.\nFor breakfast, rice / buckwheat / pasta / semolina porridge can replace oatmeal. For the second breakfast and afternoon snack, a protein shake or kefir/yogurt — choose one.\nPortions are approximate (~2700 kcal, ~200 g protein) — adjust for the client."
+ },
+ "Har mushak uchun shu shogird qiladigan mashqlarni tanlang. O'zgartirmaguningizcha tanlov turadi. Tanlanmagan mushakda — \"Boshlovchi\" mashqlar.": {
+  "ru": "Выберите упражнения этого ученика для каждой мышцы. Выбор действует, пока вы его не измените. Где не выбрано — упражнения уровня «Начинающий».",
+  "en": "Choose this student's exercises for each muscle. The choice stays until you change it. Where nothing is chosen — beginner-level exercises."
  },
  "Havola http:// yoki https:// bilan boshlanishi kerak": {
   "ru": "Ссылка должна начинаться с http:// или https://",
@@ -1939,6 +1963,10 @@
   "ru": "Упражнение сохранено",
   "en": "Exercise saved"
  },
+ "Mashq yo'q": {
+  "ru": "Нет упражнений",
+  "en": "No exercises"
+ },
  "Mashqlar": {
   "ru": "Упражнения",
   "en": "Exercises"
@@ -1946,6 +1974,10 @@
  "Mashqlar hozir qo'shilmoqda — har bir mashg'ulotning mashqlari ro'yxati ishlab chiqilmoqda.": {
   "ru": "Упражнения сейчас добавляются — список для каждой тренировки в разработке.",
   "en": "Exercises are being added — the list for each workout is in progress."
+ },
+ "Mashqlar saqlandi": {
+  "ru": "Упражнения сохранены",
+  "en": "Exercises saved"
  },
  "Mashqni o'chirish": {
   "ru": "Удалить упражнение",
@@ -2286,6 +2318,10 @@
  "O'lchovlar": {
   "ru": "Замеры",
   "en": "Entries"
+ },
+ "O'rta": {
+  "ru": "Средний",
+  "en": "Intermediate"
  },
  "O'rtachirchiq": {
   "ru": "Уртачирчик",
@@ -2654,6 +2690,10 @@
  "Pop": {
   "ru": "Пап",
   "en": "Pap"
+ },
+ "Professional": {
+  "ru": "Профессионал",
+  "en": "Professional"
  },
  "Profil": {
   "ru": "Профиль",
@@ -3159,6 +3199,10 @@
   "ru": "Сохранить",
   "en": "Save"
  },
+ "Saqlash ({0})": {
+  "ru": "Сохранить ({0})",
+  "en": "Save ({0})"
+ },
  "Sardoba": {
   "ru": "Сардоба",
   "en": "Sardoba"
@@ -3479,9 +3523,17 @@
   "ru": "Настройки (оформление, уведомления)",
   "en": "Settings (appearance, notifications)"
  },
+ "Standart": {
+  "ru": "Стандарт",
+  "en": "Default"
+ },
  "Standart mahsulotlarni qo'shish": {
   "ru": "Добавить стандартные продукты",
   "en": "Add standard foods"
+ },
+ "Standartga qaytarish": {
+  "ru": "Вернуть стандарт",
+  "en": "Reset to default"
  },
  "Start": {
   "ru": "Старт",
@@ -4998,6 +5050,10 @@
  "{0} ta shogird hali zal kunlarini tanlamagan.": {
   "ru": "Учеников, не выбравших дни зала: {0}.",
   "en": "{0} clients haven't chosen gym days yet."
+ },
+ "{0} ta tanlangan": {
+  "ru": "Выбрано: {0}",
+  "en": "{0} selected"
  },
  "{0} ta trener zalga biriktirilmagan — ustiga bosib \"Zalga biriktirish\" ni tanlang.": {
   "ru": "Тренеров без зала: {0} — нажмите на тренера и выберите «Прикрепить к залу».",

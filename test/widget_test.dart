@@ -1440,6 +1440,15 @@ void main() {
       expect(exercises.first.isCustom, isFalse, reason: 'namunaviy mashq');
     });
 
+    test('daraja bazaga yozilib qaytadi; noma-lum daraja — belgisiz', () {
+      final e = Exercise('D', 'chest', '', '', id: 'd1', createdAt: now, createdBy: 't1', level: 'pro');
+      expect(Exercise.fromMap('d1', e.toMap())!.level, 'pro');
+      expect(Exercise.fromMap('d1', {...e.toMap(), 'level': 'chempion'})!.level, '');
+      expect(Exercise.fromMap('d1', {'name': 'D', 'muscle': 'chest'})!.level, '', reason: 'eski yozuv');
+      expect(exercises.every((x) => x.level.isEmpty), isTrue, reason: 'namunaviylar belgisiz');
+      expect(levels.keys, ['beginner', 'middle', 'pro']);
+    });
+
     test('noto-g-ri yozuv ro-yxatga tushmaydi', () {
       expect(Exercise.fromMap('x', {'name': 'A', 'muscle': 'bosh'}), isNull, reason: 'bunday mushak yo-q');
       expect(Exercise.fromMap('x', {'name': '  ', 'muscle': 'chest'}), isNull, reason: 'nom bo-sh');
@@ -1518,6 +1527,7 @@ void main() {
       ));
       expect(find.text("Asosiy mushak: Ko'krak"), findsOneWidget);
       expect(find.text("Yordamchi mushaklar: yo'q"), findsOneWidget);
+      expect(find.text('Professional'), findsOneWidget, reason: 'daraja tanlash formada bor');
       // old tomon chizmasida qorin (press) bo'lagi bosiladi — asosiy mushak o'zgaradi
       final front = t.getTopLeft(find.byType(BodyMap).first);
       const k = 210 / 440;
@@ -1666,6 +1676,62 @@ void main() {
       expect(asked, 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg', reason: 'muqova so-raldi');
       expect(find.text('https://youtu.be/dQw4w9WgXcQ'), findsNothing, reason: 'havola matni emas — muqova');
       expect(find.text('Havolani nusxalash'), findsNothing);
+    });
+  });
+
+  group('Shogird dasturi (trener tanlagan mashqlar)', () {
+    final chest = exercisesFor('chest');
+    final easy = Exercise('Yengil itarish', 'chest', '2 × 10', '', id: 'b1', level: 'beginner',
+        createdAt: DateTime(2026, 1, 1), createdBy: 't1');
+
+    test('tanlangan bo-lsa — faqat shular, trener tartibida', () {
+      final p = {'chest': [chest[2].key, chest[0].key]};
+      expect(exercisesForStudent('chest', const [], p).map((e) => e.key), [chest[2].key, chest[0].key]);
+    });
+
+    test('tanlanmagan — Boshlovchi; ular ham yo-q — hammasi', () {
+      expect(exercisesForStudent('chest', [easy], const {}).map((e) => e.name), ['Yengil itarish']);
+      expect(exercisesForStudent('chest', const [], const {}).length, chest.length);
+    });
+
+    test('o-chirilgan mashq kaliti tashlab ketiladi; hammasi o-chgan bo-lsa — standart', () {
+      expect(exercisesForStudent('chest', const [], {'chest': ['yoq-mashq', chest[1].key]}).map((e) => e.key),
+          [chest[1].key]);
+      expect(exercisesForStudent('chest', [easy], {'chest': ['yoq-mashq']}).map((e) => e.name), ['Yengil itarish']);
+    });
+
+    test('dastur profil saqlanganda yozilmaydi (toMap da yo-q)', () {
+      final u = AppUser(id: 'u1', name: 'A', email: '', program: const {'chest': ['x']});
+      expect(u.toMap().containsKey('program'), isFalse);
+      expect(u.copyWith(name: 'B').program, {'chest': ['x']}, reason: 'nusxada saqlanadi');
+    });
+
+    testWidgets('ikki shogird — har biri faqat o-ziga tanlanganini ko-radi', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      Future<void> open(Map<String, List<String>> program) async {
+        await t.pumpWidget(MaterialApp(
+          home: MusclesScreen(
+            key: UniqueKey(),
+            gymDays: evenDays,
+            weekday: DateTime.tuesday,
+            onBack: () {},
+            program: program,
+          ),
+        ));
+        await t.pump(const Duration(seconds: 3));
+      }
+
+      // Nodir: ko'krakdan uchala mashq; boshqa bola: faqat bittasi
+      await open({'chest': [for (final e in chest) e.key]});
+      for (final e in chest) {
+        expect(find.text(e.name), findsOneWidget, reason: e.name);
+      }
+      await open({'chest': [chest[2].key]});
+      expect(find.text(chest[2].name), findsOneWidget);
+      expect(find.text(chest[0].name), findsNothing);
+      expect(find.text(chest[1].name), findsNothing);
     });
   });
 }

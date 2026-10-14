@@ -682,6 +682,10 @@ await check('ortiqcha maydon bilan qoshib BOLMAYDI', () =>
 await check('trener namunaviy mashqqa video qoshadi (base bilan)', () =>
   assertSucceeds(setDoc(doc(as(TRAINER), 'exercises', 'e10'),
     ex(TRAINER, { base: 'Otjimaniya', video: 'https://example.com/v' }))));
+await check('trener mashqqa daraja qoyadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'exercises', 'e11'), ex(TRAINER, { level: 'pro' }))));
+await check('notogri daraja bilan saqlab BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e12'), ex(TRAINER, { level: 'chempion' }))));
 await check('tahrirda base ni ozgartirib BOLMAYDI', () =>
   assertFails(setDoc(doc(as(TRAINER), 'exercises', 'e10'), ex(TRAINER, { base: 'Boshqa' }))));
 await check('boshqa trener mashqni tahrirlaydi (muallif saqlanadi)', () =>
@@ -694,6 +698,18 @@ await check('shogird mashqni ochira OLMAYDI', () =>
   assertFails(deleteDoc(doc(as(USER), 'exercises', 'e1'))));
 await check('trener mashqni ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(TRAINER), 'exercises', 'e1'))));
+
+console.log('\n== SHOGIRD DASTURI (trener tanlagan mashqlar) ==');
+await check('trener oz shogirdiga mashq tanlaydi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { 'program.chest': ['Otjimaniya'] })));
+await check('shogird oz dasturini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER), { 'program.chest': ['Boshqa'] })));
+await check('shogird dasturga tegmasdan oz profilini saqlaydi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER), { name: 'Shogird' })));
+await check('boshqa trener begona shogirdga mashq tanlay OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER3), 'users', USER), { 'program.chest': ['X'] })));
+await check('bosh admin istalgan shogirdga mashq tanlaydi', () =>
+  assertSucceeds(updateDoc(doc(as(OWNER), 'users', USER), { 'program.back': ['Y'] })));
 
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();

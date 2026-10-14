@@ -48,6 +48,10 @@ class AppUser {
   /// Faqat trener/bosh admin yozadi. toMap() ga kirmaydi.
   final DateTime? subscriptionExpiresAt;
 
+  /// Trener shu shogirdga tanlagan mashqlar: mushak id'si → mashq kalitlari (`Exercise.key`).
+  /// Faqat trener/bosh admin yozadi (`Db.setProgram`). toMap() ga kirmaydi.
+  final Map<String, List<String>> program;
+
   AppUser({
     required this.id,
     required this.name,
@@ -68,6 +72,7 @@ class AppUser {
     this.gymDays = const [],
     this.homeWorkoutDate,
     this.subscriptionExpiresAt,
+    this.program = const {},
   });
 
   /// Bosh admin — zal egasi: trener tayinlaydi, hammani ko'radi, o'chira oladi
@@ -174,6 +179,7 @@ class AppUser {
         gymDays: gymDays,
         homeWorkoutDate: homeWorkoutDate,
         subscriptionExpiresAt: subscriptionExpiresAt,
+        program: program,
       );
 
   factory AppUser.fromDoc(DocumentSnapshot doc) {
@@ -198,6 +204,10 @@ class AppUser {
       gymDays: ((d['gymDays'] ?? []) as List).map((e) => (e as num).toInt()).toList(),
       homeWorkoutDate: d['homeWorkoutDate'] as String?,
       subscriptionExpiresAt: (d['subscriptionExpiresAt'] as Timestamp?)?.toDate(),
+      program: {
+        for (final e in ((d['program'] as Map?) ?? const {}).entries)
+          if (e.value is List) e.key.toString(): [for (final k in e.value as List) k.toString()],
+      },
     );
   }
 

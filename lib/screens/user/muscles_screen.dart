@@ -38,6 +38,9 @@ class MusclesScreen extends StatefulWidget {
   /// Trener qo'shgan mashqlar (`Db.customExercises()`); null — faqat namunaviy ro'yxat
   final Stream<List<Exercise>>? custom;
 
+  /// Trener shu shogirdga tanlagan mashqlar (`AppUser.program`); bo'sh — standart
+  final Map<String, List<String>> program;
+
   /// Bugungi mashg'ulot holati (`Db.workout`); null — faqat ekran xotirasida
   final Stream<WorkoutProgress>? progress;
 
@@ -54,6 +57,7 @@ class MusclesScreen extends StatefulWidget {
     required this.onBack,
     this.homeToday = false,
     this.custom,
+    this.program = const {},
     this.progress,
     this.onStart,
     this.onDone,
@@ -90,7 +94,8 @@ class _MusclesScreenState extends State<MusclesScreen> {
   /// Trener qo'shgan mashqlar (oqimdan; kelmaguncha yoki xato bo'lsa — bo'sh)
   List<Exercise> _custom = const [];
 
-  List<Exercise> _of(String id) => exercisesFor(id, _custom);
+  /// Shogird ko'radigan mashqlar: trener tanlagani, bo'lmasa "Boshlovchi", bo'lmasa hammasi
+  List<Exercise> _of(String id) => exercisesForStudent(id, _custom, widget.program);
 
   /// Mashg'ulot holati: bazadan keladi, bosilganda darhol shu yerda ham yangilanadi
   bool _started = false;

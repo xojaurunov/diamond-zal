@@ -7,6 +7,7 @@ import '../../widgets/extra_food_sheet.dart';
 import '../../widgets/ui.dart';
 import '../user/chat_screen.dart';
 import '../user/progress_screen.dart';
+import 'student_program_tab.dart';
 import 'plans_screen.dart' show planTemplates;
 
 class ClientsScreen extends StatefulWidget {
@@ -229,7 +230,7 @@ class ClientDetail extends StatelessWidget {
         final s = Theme.of(context).colorScheme;
         final dash = u.profileDone ? null : '—';
         return DefaultTabController(
-          length: 2,
+          length: 3,
           child: Scaffold(
             appBar: AppBar(
               title: Text(u.name),
@@ -237,6 +238,7 @@ class ClientDetail extends StatelessWidget {
               bottom: TabBar(tabs: [
                 Tab(icon: const Icon(Icons.restaurant_menu, size: 20), text: tr('Reja')),
                 Tab(icon: const Icon(Icons.show_chart, size: 20), text: tr('Progress')),
+                Tab(icon: const Icon(Icons.fitness_center, size: 20), text: tr('Mashqlar')),
               ]),
               actions: [
                 Padding(
@@ -306,6 +308,7 @@ class ClientDetail extends StatelessWidget {
                 ]),
               ),
               ProgressScreen(user: u, readOnly: true),
+              StudentProgramTab(student: u),
             ]),
           ),
         );

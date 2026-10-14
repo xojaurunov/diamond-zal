@@ -76,7 +76,8 @@ service cloud.firestore {
             && same('role') && same('trainerId') && same('gymId'))
         // foydalanuvchi o'zi — rol va rejaga tegmaydi; trenerni katalogdan tanlaydi;
         // vaznni haftada 1 martadan ko'p o'zgartira olmaydi
-        || (isSelf(uid) && same('role') && same('planId') && same('planAssignedAt')
+        // dasturni (trener tanlagan mashqlar) ham o'zi o'zgartira olmaydi
+        || (isSelf(uid) && same('role') && same('planId') && same('planAssignedAt') && same('program')
             && same('gymId') && trainerChoiceOk() && weightChangeOk()
             // "uyda mashq"ni va abonement muddatini faqat trener belgilaydi; zal kunlari — aynan 3 ta
             && same('homeWorkoutDate') && same('subscriptionExpiresAt')
@@ -222,7 +223,7 @@ service cloud.firestore {
     match /exercises/{id} {
       function validExercise() {
         let d = request.resource.data;
-        return d.keys().hasOnly(['name', 'muscle', 'sets', 'tip', 'also', 'video', 'createdAt', 'createdBy', 'base'])
+        return d.keys().hasOnly(['name', 'muscle', 'sets', 'tip', 'also', 'video', 'createdAt', 'createdBy', 'base', 'level'])
           && d.name is string && d.name.size() > 0 && d.name.size() <= 80
           && d.muscle in ['chest', 'shoulders', 'biceps', 'triceps', 'forearms', 'abs',
                           'back', 'traps', 'glutes', 'quads', 'hamstrings', 'calves']
@@ -233,7 +234,9 @@ service cloud.firestore {
           && d.createdAt is int
           && d.createdBy is string
           // namunaviy mashqning o'zgartirilgan nusxasi bo'lsa — o'sha mashq nomi
-          && d.get('base', '') is string && d.get('base', '').size() <= 80;
+          && d.get('base', '') is string && d.get('base', '').size() <= 80
+          // daraja (faqat trener ko'radi): bo'sh yoki shu uchtadan biri
+          && d.get('level', '') in ['', 'beginner', 'middle', 'pro'];
       }
       allow read: if signedIn();
       // kim qo'shgani soxtalashtirilmaydi; tahrirda birinchi muallif va vaqt saqlanadi

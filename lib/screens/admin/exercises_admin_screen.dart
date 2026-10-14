@@ -26,6 +26,9 @@ class _ExercisesAdminScreenState extends State<ExercisesAdminScreen> {
   late final _stream = Db.customExercises();
   String? _muscle;
 
+  /// Ro'yxat filtri: null — hammasi, '' — belgisiz, aks holda daraja kaliti ([levels])
+  String? _level;
+
   /// Nuqtali tana ko'rinishi: 0 — old, 4 — orqa (har qadam 45 gradus)
   int _angle = ParticleBody.front;
 
@@ -87,7 +90,8 @@ class _ExercisesAdminScreenState extends State<ExercisesAdminScreen> {
               if (e.isNew()) e.muscle,
           };
           final m = _muscle;
-          final list = m == null ? const <Exercise>[] : exercisesFor(m, custom);
+          final all = m == null ? const <Exercise>[] : exercisesFor(m, custom);
+          final list = _level == null ? all : all.where((e) => e.level == _level).toList();
           return ListView(
             padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.xs, AppSpace.lg, AppSpace.xxl),
             children: [
@@ -176,13 +180,29 @@ class _ExercisesAdminScreenState extends State<ExercisesAdminScreen> {
               else ...[
                 SectionHeader(
                   tr(muscleById(m)!.name),
-                  eyebrow: trf('{0} ta mashq', [list.length]),
+                  eyebrow: trf('{0} ta mashq', [all.length]),
                   trailing: FilledButton.icon(
                     onPressed: () => _edit(m),
                     icon: const Icon(Icons.add, size: 18),
                     label: Text(tr("Mashq qo'shish")),
                   ),
                 ),
+                // daraja bo'yicha saralash (faqat trener ko'radi)
+                Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.xs, children: [
+                  for (final (k, label) in <(String?, String)>[
+                    (null, tr('Hammasi')),
+                    for (final l in levels.entries) (l.key, tr(l.value)),
+                    ('', tr('Belgisiz')),
+                  ])
+                    ChoiceChip(
+                      label: Text(k == null ? label : '$label · ${all.where((e) => e.level == k).length}'),
+                      selected: _level == k,
+                      onSelected: (_) => setState(() => _level = k),
+                    ),
+                ]),
+                const SizedBox(height: AppSpace.md),
+                if (list.isEmpty)
+                  Text(tr("Bu darajada mashq yo'q."), style: t.bodyMedium?.copyWith(color: AppColors.textMuted)),
                 for (final e in list)
                   Padding(
                     padding: const EdgeInsets.only(bottom: AppSpace.sm),
@@ -210,6 +230,8 @@ class _ExercisesAdminScreenState extends State<ExercisesAdminScreen> {
                                 Pill(text: tr("Trener qo'shgan"), color: AppColors.water),
                               if (e.video.isNotEmpty)
                                 Pill(text: tr('Video'), color: AppColors.water, icon: Icons.play_circle_outline),
+                              if (levels[e.level] case final l?)
+                                Pill(text: tr(l), color: AppColors.warning, icon: Icons.signal_cellular_alt),
                             ]),
                           ]),
                         ),
@@ -286,6 +308,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
 
   late final _video = TextEditingController(text: widget.existing?.video);
 
+  /// Daraja ('' — belgilanmagan)
+  late String _lvl = widget.existing?.level ?? '';
+
   /// Chizma bosilganda nima o'zgaradi: true — yordamchi mushaklar, false — asosiy mushak
   bool _helpers = false;
   bool _busy = false;
@@ -335,6 +360,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
         also: _also.toList(),
         id: old?.id ?? '',
         video: video,
+        level: _lvl,
         // tahrirda birinchi muallif va vaqt saqlanadi (qoida ham shuni talab qiladi);
         // namunaviy birinchi marta o'zgartirilganda — yangi yozuv
         createdAt: old != null && old.isCustom ? old.createdAt : DateTime.now(),
@@ -406,6 +432,17 @@ class _ExerciseFormState extends State<ExerciseForm> {
               '· ${tr(e.name)}',
               style: t.bodySmall?.copyWith(color: AppColors.textMuted),
             ),
+        const SizedBox(height: AppSpace.md),
+        // daraja — shogird ko'rmaydi; trener mashq tanlayotganda saralash uchun
+        Text(tr('Daraja (shogird ko\'rmaydi)'), style: t.titleSmall),
+        const SizedBox(height: 6),
+        Wrap(spacing: AppSpace.sm, runSpacing: AppSpace.xs, children: [
+          for (final (k, label) in <(String, String)>[
+            for (final l in levels.entries) (l.key, tr(l.value)),
+            ('', tr('Belgisiz')),
+          ])
+            ChoiceChip(label: Text(label), selected: _lvl == k, onSelected: (_) => setState(() => _lvl = k)),
+        ]),
         const SizedBox(height: AppSpace.md),
         TextField(
           controller: _name,

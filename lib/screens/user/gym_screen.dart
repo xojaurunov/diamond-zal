@@ -56,6 +56,7 @@ class _GymScreenState extends State<GymScreen> {
         gymDays: days,
         homeToday: isHome,
         custom: _custom,
+        program: user.program,
         progress: _progress,
         onStart: () => Db.startWorkout(user.id, todayKey()),
         onDone: (key, done) => Db.toggleExercise(user.id, todayKey(), key, done),
