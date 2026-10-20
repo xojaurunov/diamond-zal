@@ -27,33 +27,46 @@ if (!s.idToken) throw new Error('kirib bolmadi: ' + JSON.stringify(s.error));
 
 const base = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents`;
 const auth = { Authorization: `Bearer ${s.idToken}` };
-const get = async (path) =>
-  (await fetch(`${base}/${path}?pageSize=300`, { headers: auth }).then((r) => r.json()))
-    .documents ?? [];
+// To'plamdagi HAMMA hujjat — sahifalab (`nextPageToken`) oxirigacha (bir sahifa 300 tagacha)
+const get = async (path) => {
+  const docs = [];
+  let token = '';
+  do {
+    const page = await fetch(
+      `${base}/${path}?pageSize=300${token ? `&pageToken=${encodeURIComponent(token)}` : ''}`,
+      { headers: auth },
+    ).then((r) => r.json());
+    if (page.error) throw new Error(`${path}: ${page.error.message}`);
+    docs.push(...(page.documents ?? []));
+    token = page.nextPageToken ?? '';
+  } while (token);
+  return docs;
+};
 const idOf = (d) => d.name.split('/').pop();
 
 console.log('Yuklanmoqda...');
 
 const topLevel = ['users', 'trainers', 'ratings', 'gyms', 'foods', 'plans', 'shop', 'orders',
-  'reminders'];
+  'reminders', 'exercises', 'memberships'];
 const backup = { exportedAt: new Date().toISOString() };
 for (const path of topLevel) {
   backup[path] = await get(path);
   console.log(` ${path}: ${backup[path].length} ta`);
 }
 
-// Har bir foydalanuvchining subcollectionlari (vazn, kunlik ovqat, abonement, davomat, chat)
+// Har bir foydalanuvchining subcollectionlari (vazn, kunlik ovqat, abonement, davomat, rasmlar, chat)
 backup.userSubcollections = {};
 for (const u of backup.users) {
   const uid = idOf(u);
-  const [weights, days, subscriptions, attendance, chatMessages] = await Promise.all([
+  const [weights, days, subscriptions, attendance, photos, chatMessages] = await Promise.all([
     get(`users/${uid}/weights`),
     get(`users/${uid}/days`),
     get(`users/${uid}/subscriptions`),
     get(`users/${uid}/attendance`),
+    get(`users/${uid}/photos`),
     get(`chats/${uid}/messages`),
   ]);
-  backup.userSubcollections[uid] = { weights, days, subscriptions, attendance, chatMessages };
+  backup.userSubcollections[uid] = { weights, days, subscriptions, attendance, photos, chatMessages };
 }
 console.log(` userSubcollections: ${Object.keys(backup.userSubcollections).length} foydalanuvchi`);
 
