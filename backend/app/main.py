@@ -305,14 +305,20 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
         return {'ids': run(uid, apply)}
 
     @app.websocket('/ws')
-    async def ws(websocket: WebSocket, token: str = ''):
+    async def ws(websocket: WebSocket):
         """Jonli yangilanish: o'zgargan to'plam nomi keladi ({"c": "messages"}), ilova qayta so'raydi.
-        Token so'rov qatorida — brauzer WebSocket'iga sarlavha qo'yib bo'lmaydi."""
-        uid = auth.read_token(token, secret)
+        Token manzilda EMAS (jurnalga yozilib qolardi) — ulangach birinchi xabar: {"token": "..."}."""
+        await websocket.accept()
+        try:
+            first = await asyncio.wait_for(websocket.receive_json(), timeout=10)
+        except Exception:
+            await websocket.close(code=4401)
+            return
+        token = first.get('token') if isinstance(first, dict) else None
+        uid = auth.read_token(token, secret) if isinstance(token, str) else None
         if not uid or not await run_in_threadpool(active, uid):
             await websocket.close(code=4401)
             return
-        await websocket.accept()
         hub.clients.add(websocket)
         try:
             while True:

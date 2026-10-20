@@ -36,16 +36,18 @@ def api():
 
 
 def test_tokensiz_va_soxta_token_yopiladi(api):
-    for url in ('/ws', '/ws?token=buzuq', f"/ws?token={auth.make_token('s1', 'boshqa-' + 'k' * 30)}"):
+    for first in ({}, {'token': 'buzuq'}, {'token': auth.make_token('s1', 'boshqa-' + 'k' * 30)}, 'matn'):
         with pytest.raises(WebSocketDisconnect):
-            with api.websocket_connect(url) as ws:
+            with api.websocket_connect('/ws') as ws:
+                ws.send_json(first)
                 ws.receive_json()
 
 
 def test_boshqasi_yozsa_toplam_nomi_keladi(api):
     trainer = auth.make_token('t1', SECRET)
     student = {'Authorization': f"Bearer {auth.make_token('s1', SECRET)}"}
-    with api.websocket_connect(f'/ws?token={trainer}') as ws:
+    with api.websocket_connect('/ws') as ws:
+        ws.send_json({'token': trainer})  # token manzilda emas — jurnalga tushmaydi
         r = api.post('/col/chats/s1/messages',
                      json={'data': {'senderId': 's1', 'text': 'salom', 'createdAt': {'$op': 'serverTimestamp'}}},
                      headers=student)
