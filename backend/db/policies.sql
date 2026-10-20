@@ -190,8 +190,22 @@ alter table weights enable row level security;
 drop policy if exists weights_select on weights;
 create policy weights_select on weights for select using (user_id = app.uid() or app.can_manage(user_id));
 drop policy if exists weights_insert on weights;
-create policy weights_insert on weights for insert
-  with check (user_id = app.uid() and app.last_weigh_in(user_id) = now());
+create policy weights_insert on weights for insert with check (user_id = app.uid());
+
+-- Profil bilan "birga" — tranzaksiya OXIRIDA tekshiriladi (Firestore `getAfter` kabi): batch ichida
+-- yozuv profildan oldin kelsa ham o'tadi, profilsiz yolg'iz yozuv esa commit'da rad etiladi.
+create or replace function app.weights_after_guard() returns trigger language plpgsql as $$
+begin
+  if app.is_bypass() then return null; end if;
+  if app.last_weigh_in(new.user_id) is distinct from now() then
+    raise exception 'weights: o''lchov faqat profil bilan birga' using errcode = '42501';
+  end if;
+  return null;
+end $$;
+
+drop trigger if exists weights_after_guard on weights;
+create constraint trigger weights_after_guard after insert on weights
+  deferrable initially deferred for each row execute function app.weights_after_guard();
 
 -- ---------- users/{uid}/photos ----------
 
