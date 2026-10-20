@@ -13,6 +13,7 @@ import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from psycopg.rows import tuple_row
 from pydantic import BaseModel
@@ -327,6 +328,12 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
             pass
         finally:
             hub.clients.discard(websocket)
+
+    # Telefonda sinov (03d): WEB_DIR berilsa ilovaning web nusxasi shu servisdan `/sinov/` da beriladi
+    # (bitta manzil — tunnel bitta, CORS kerak emas). Ishlab chiqarishda berilmaydi.
+    web_dir = env('WEB_DIR', '')
+    if web_dir:
+        app.mount('/sinov', StaticFiles(directory=web_dir, html=True), name='sinov')
 
     app.state.db = db
     return app
