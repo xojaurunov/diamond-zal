@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/api/api_firestore.dart' show Fv;
 import '../l10n/tr.dart';
 
 /// Abonement muddatlari (oy) — tanlov ro'yxati uchun
@@ -101,7 +102,7 @@ class Subscription {
         'price': price,
         'currency': currency,
         'paidDate': paidDate == null ? null : Timestamp.fromDate(paidDate!),
-        'createdAt': FieldValue.serverTimestamp(),
+        'createdAt': Fv.serverTimestamp(),
       };
 }
 
@@ -144,7 +145,7 @@ class Reminder {
         'clientName': clientName,
         'trainerId': trainerId,
         'sentBy': sentBy,
-        'sentAt': FieldValue.serverTimestamp(),
+        'sentAt': Fv.serverTimestamp(),
         'daysLeft': daysLeft,
       };
 }
@@ -234,6 +235,6 @@ class Membership {
         'currency': s.currency,
         'paidDate': Timestamp.fromDate(s.paidDate ?? s.startDate),
         'expiresAt': Timestamp.fromDate(s.expiresAt),
-        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedAt': Fv.serverTimestamp(),
       };
 }

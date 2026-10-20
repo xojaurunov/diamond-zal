@@ -26,6 +26,8 @@ dependencies:
     sdk: flutter
   url_launcher: ^6.3.3
   webview_flutter: ^4.14.1
+  # Qobil servisi bilan ishlash (`--dart-define=API_URL=…`); lockfile'da avvaldan bor edi
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

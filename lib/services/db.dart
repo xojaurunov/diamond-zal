@@ -12,10 +12,14 @@ import '../models/shop.dart';
 import '../models/stats.dart';
 import '../models/photo.dart';
 import '../models/subscription.dart';
+import 'api/api_auth.dart';
+import 'api/api_client.dart';
+import 'api/api_firestore.dart';
 import 'notifications.dart';
 import 'push.dart';
 
-final _fs = FirebaseFirestore.instance;
+/// Ma'lumot manbai: qurishda `API_URL` berilsa — Qobil servisi, aks holda Firestore
+FirebaseFirestore get _fs => useApi ? ApiAuth.firestore : FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 
 String todayKey([DateTime? d]) => DateFormat('yyyy-MM-dd').format(d ?? DateTime.now());
@@ -33,16 +37,24 @@ String normalizePhone(String input) {
 String phoneToEmail(String phone) => '${normalizePhone(phone)}@$_phoneDomain';
 
 class AuthService {
-  static Stream<User?> changes() => _auth.authStateChanges();
+  /// Kirgan foydalanuvchi uid'i (chiqsa — null)
+  static Stream<String?> changes() =>
+      useApi ? ApiAuth.instance.changes() : _auth.authStateChanges().map((u) => u?.uid);
 
-  static Future<void> signIn(String phone, String pass) =>
-      _auth.signInWithEmailAndPassword(email: phoneToEmail(phone), password: pass);
+  static Future<void> signIn(String phone, String pass) async {
+    if (useApi) {
+      await ApiAuth.instance.signIn(phone, pass);
+    } else {
+      await _auth.signInWithEmailAndPassword(email: phoneToEmail(phone), password: pass);
+    }
+  }
 
   static Future<void> register(String name, String phone, String pass) async {
-    final cred =
-        await _auth.createUserWithEmailAndPassword(email: phoneToEmail(phone), password: pass);
-    await _fs.collection('users').doc(cred.user!.uid).set(AppUser(
-          id: cred.user!.uid,
+    final uid = useApi
+        ? await ApiAuth.instance.register(phone, pass)
+        : (await _auth.createUserWithEmailAndPassword(email: phoneToEmail(phone), password: pass)).user!.uid;
+    await _fs.collection('users').doc(uid).set(AppUser(
+          id: uid,
           name: name.trim(),
           email: '',
           phone: normalizePhone(phone),
@@ -62,14 +74,18 @@ class AuthService {
 
   /// Chiqish: bu telefon endi shu akkaunt bildirishnomalarini olmaydi, eslatmalar bekor
   static Future<void> signOut() async {
-    final uid = _auth.currentUser?.uid;
+    final uid = useApi ? ApiAuth.instance.uid : _auth.currentUser?.uid;
     // tozalash chiqishni ushlab turmasin (telefonda "Chiqish" bosilganda qotib qolardi):
     // har qadam cheklangan vaqt kutiladi, xatosi chiqishga to'sqinlik qilmaydi
     if (uid != null) await Push.unregister(uid);
     try {
       await Notifications.cancelAll().timeout(const Duration(seconds: 1));
     } catch (_) {}
-    await _auth.signOut();
+    if (useApi) {
+      await ApiAuth.instance.signOut();
+    } else {
+      await _auth.signOut();
+    }
   }
 
   /// Hujjati o'chirilgan akkauntning kirish yozuvini o'chirish (faqat o'zi, hozir kirgan holda).
@@ -77,6 +93,10 @@ class AuthService {
   /// Firebase o'chirishdan oldin yaqinda kirishni talab qiladi — shuning uchun parol bilan
   /// qayta tasdiqlanadi.
   static Future<void> deleteOwnLogin(String password) async {
+    if (useApi) {
+      await Notifications.cancelAll();
+      return ApiAuth.instance.deleteOwnLogin(password);
+    }
     final u = _auth.currentUser!;
     await u.reauthenticateWithCredential(
       EmailAuthProvider.credential(email: u.email!, password: password),
@@ -87,6 +107,7 @@ class AuthService {
 
   /// Parolni almashtirish: Firebase avval hozirgi parol bilan qayta tasdiqlashni talab qiladi
   static Future<void> changePassword(String current, String next) async {
+    if (useApi) return ApiAuth.instance.changePassword(current, next);
     final u = _auth.currentUser!;
     await u.reauthenticateWithCredential(
       EmailAuthProvider.credential(email: u.email!, password: current),
@@ -177,6 +198,13 @@ class Db {
     String role = 'admin',
     String? gymId,
   }) async {
+    if (useApi) {
+      // servis akkaunt va profilni (rol 'user') yaratadi; rol va zalni bosh admin qo'yadi — pastdagidek
+      final uid = await ApiAuth.instance.createStaff(name.trim(), phone, password);
+      await setRole(uid, role);
+      if (gymId != null) await setUserGym(uid, gymId);
+      return uid;
+    }
     final app = await Firebase.initializeApp(
       name: 'trener-yaratish-${DateTime.now().millisecondsSinceEpoch}',
       options: Firebase.app().options,
@@ -207,7 +235,7 @@ class Db {
   static Future<void> assignPlan(String uid, String? planId) =>
       _fs.collection('users').doc(uid).update({
         'planId': planId,
-        'planAssignedAt': planId == null ? null : FieldValue.serverTimestamp(),
+        'planAssignedAt': planId == null ? null : Fv.serverTimestamp(),
       });
 
   /// Shogird maqsadini trener belgilaydi ('lose' / 'gain')
@@ -275,7 +303,7 @@ class Db {
       _fs.collection('ratings').doc(trainerId).set({
         'stars': stars,
         'comment': comment,
-        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedAt': Fv.serverTimestamp(),
       });
 
   /// Katalogni haqiqiy trenerlar bilan tenglashtirish — bosh admin ilovani ochganda:
@@ -365,7 +393,7 @@ class Db {
   /// Trener shogirdga [muscle] uchun mashqlar tanlaydi; bo'sh ro'yxat — standartga qaytish
   static Future<void> setProgram(String uid, String muscle, List<String> keys) =>
       _fs.collection('users').doc(uid).update({
-        'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,
+        'program.$muscle': keys.isEmpty ? Fv.delete() : keys,
       });
 
   // ---------- plans ----------
@@ -479,7 +507,7 @@ class Db {
       'currency': o.currency,
       'qty': o.qty,
       'status': orderNew,
-      'createdAt': FieldValue.serverTimestamp(),
+      'createdAt': Fv.serverTimestamp(),
     });
     await send(client.id, client.id, o.chatText);
   }
@@ -489,10 +517,10 @@ class Db {
   static Future<void> setOrderStatus(ShopOrder o, String status, String byId) async {
     await _fs.collection('orders').doc(o.id).update({
       'status': status,
-      'updatedAt': FieldValue.serverTimestamp(),
+      'updatedAt': Fv.serverTimestamp(),
       // kim berdi — sotuv hisoboti shunga tayanadi
       if (status == orderGiven) 'givenBy': byId,
-      if (status == orderGiven) 'givenAt': FieldValue.serverTimestamp(),
+      if (status == orderGiven) 'givenAt': Fv.serverTimestamp(),
     });
     if (status == orderGiven && o.productId.isNotEmpty) {
       final ref = _fs.collection('shop').doc(o.productId);
@@ -525,7 +553,7 @@ class Db {
   /// Shogird o'z buyurtmasini bekor qiladi (faqat hali berilmagan bo'lsa)
   static Future<void> cancelOrder(String id) => _fs.collection('orders').doc(id).update({
         'status': orderCanceled,
-        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedAt': Fv.serverTimestamp(),
       });
 
   // ---------- meal logs ----------
@@ -540,7 +568,7 @@ class Db {
 
   static Future<void> toggleMeal(String uid, String day, int index, bool done) =>
       _dayRef(uid, day).set({
-        'done': done ? FieldValue.arrayUnion([index]) : FieldValue.arrayRemove([index])
+        'done': done ? Fv.arrayUnion([index]) : Fv.arrayRemove([index])
       }, SetOptions(merge: true));
 
   /// Rejadan tashqari yeyilgan ovqatlar — qo'shilgan tartibda
@@ -555,12 +583,12 @@ class Db {
       });
 
   static Future<void> addExtra(String uid, String day, ExtraFood e) => _dayRef(uid, day).set({
-        'extras': FieldValue.arrayUnion([e.toMap()])
+        'extras': Fv.arrayUnion([e.toMap()])
       }, SetOptions(merge: true));
 
   static Future<void> removeExtra(String uid, String day, ExtraFood e) =>
       _dayRef(uid, day).set({
-        'extras': FieldValue.arrayRemove([e.toMap()])
+        'extras': Fv.arrayRemove([e.toMap()])
       }, SetOptions(merge: true));
 
   /// Bugungi zal mashg'uloti: boshlanganmi va qaysi mashqlar bajarilgan
@@ -578,7 +606,7 @@ class Db {
   static Future<void> toggleExercise(String uid, String day, String key, bool done) =>
       _dayRef(uid, day).set({
         'gymStarted': true,
-        'gymDone': done ? FieldValue.arrayUnion([key]) : FieldValue.arrayRemove([key]),
+        'gymDone': done ? Fv.arrayUnion([key]) : Fv.arrayRemove([key]),
       }, SetOptions(merge: true));
 
   static Stream<int> water(String uid, String day) => _dayRef(uid, day)
@@ -604,7 +632,7 @@ class Db {
     final user = _fs.collection('users').doc(uid);
     final batch = _fs.batch()
       ..set(user.collection('weights').doc(), {'date': Timestamp.now(), 'weight': w})
-      ..update(user, {'weight': w, 'lastWeighIn': FieldValue.serverTimestamp()});
+      ..update(user, {'weight': w, 'lastWeighIn': Fv.serverTimestamp()});
     await batch.commit();
   }
 
@@ -622,7 +650,7 @@ class Db {
   static Future<void> addPhoto(String uid, Uint8List bytes, double weight) =>
       _fs.collection('users').doc(uid).collection('photos').add({
         'data': Blob(bytes),
-        'takenAt': FieldValue.serverTimestamp(),
+        'takenAt': Fv.serverTimestamp(),
         'weight': weight,
       });
 
@@ -684,7 +712,7 @@ class Db {
       _attendanceRef(uid, day).set({
         'present': present,
         'markedBy': byId,
-        'markedAt': FieldValue.serverTimestamp(),
+        'markedAt': Fv.serverTimestamp(),
       });
 
   // ---------- eslatmalar (abonement tugashi haqida jo'natilgan jurnal) ----------
@@ -790,24 +818,25 @@ class Db {
   // ---------- push tokenlar (FCM) ----------
   static Future<void> addFcmToken(String uid, String token) =>
       _fs.collection('users').doc(uid).update({
-        'fcmTokens': FieldValue.arrayUnion([token])
+        'fcmTokens': Fv.arrayUnion([token])
       });
 
   static Future<void> removeFcmToken(String uid, String token) =>
       _fs.collection('users').doc(uid).update({
-        'fcmTokens': FieldValue.arrayRemove([token])
+        'fcmTokens': Fv.arrayRemove([token])
       });
 
   static Future<void> send(String chatUid, String senderId, String text) =>
       _fs.collection('chats').doc(chatUid).collection('messages').add({
         'senderId': senderId,
         'text': text,
-        'createdAt': FieldValue.serverTimestamp(),
+        'createdAt': Fv.serverTimestamp(),
       });
 }
 
 // ---------- providers ----------
-final authProvider = StreamProvider<User?>((ref) => AuthService.changes());
+/// Kirgan foydalanuvchi uid'i (kirmagan — null)
+final authProvider = StreamProvider<String?>((ref) => AuthService.changes());
 
 /// Trenerlar katalogi — anketa va AuthGate uchun (kirmagan bo'lsa bo'sh)
 final trainerDirectoryProvider = StreamProvider<List<TrainerInfo>>((ref) {
@@ -817,7 +846,7 @@ final trainerDirectoryProvider = StreamProvider<List<TrainerInfo>>((ref) {
 });
 
 final meProvider = StreamProvider<AppUser?>((ref) {
-  final u = ref.watch(authProvider).value;
-  if (u == null) return Stream.value(null);
-  return Db.user(u.uid);
+  final uid = ref.watch(authProvider).value;
+  if (uid == null) return Stream.value(null);
+  return Db.user(uid);
 });
