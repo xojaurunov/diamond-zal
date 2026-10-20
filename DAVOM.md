@@ -11,9 +11,29 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (20-oktabr holati)
 
-**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
+**▶ KEYINGI SAFAR SHU YERDAN (20-oktabr).** 19–20-oktabr ishlari (**100-band**) — hammasi
+GitHub'da, **alohida shoxlarda, `main` ga hali qo'shilmagan va saytga joylanmagan**:
+
+| Shox | Nima | Holat |
+|---|---|---|
+| `feat/login-banner` | "Qobil Fitness" logotipi: ilova ikonkasi + kirish ekrani banneri | APK Desktop'da (`Qobil-2026-10-20-yangi-logo.apk`) — zal egasi telefonda ko'rishi kerak |
+| `feat/video-r2-worker` | Trener ilovadan video yuklaydi (Cloudflare R2), shogird ilova ichida ko'radi | Worker joylanmagan — Cloudflare'da "Allow" kutilmoqda |
+| `fix/zaxira-toliq` | Haftalik zaxira to'liq (sahifalash, to'lovlar, mashqlar, rasmlar) | Tayyor, jonli sinaldi |
+| `feat/firebase-nusxa-model` | Firebase'ning Postgres nusxasi: jadvallar, ruxsatlar (237 test), ko'chirish, parollar | Tayyor, kompyuterda (Docker) |
+| `feat/servis-yadro` | Python servis (FastAPI): kirish, token, har so'rov foydalanuvchi nomidan | Tayyor, kompyuterda |
+
+**Qarorlar (19–20-okt):** Firebase'dan bosqichma-bosqich chiqiladi — Firebase'ga tegmasdan
+nusxasi yonida quriladi, keyin almashtiriladi; fayllar (video, rasm) — Cloudflare R2
+(`zalpro-files`), server va baza — Render (4-bosqich, **hozircha qilinmaydi**); Supabase kerak emas.
+Reja: `specs/firebase-nusxa/` (lokal, git'da emas). Logotip — B varianti ("QOBIL FITNESS · ZAL ·
+TOSHKENT"); rasm manbasi noma'lum — rasmiy tovar belgisi uchun yangi chizdirish kerak.
+
+**Zal egasidan kutilayotgan:** APK'ni telefonda ko'rish ("yaxshi" → `main` ga va saytga); Cloudflare
+"Allow" (video); ilova nomi "Qobil Fitness" bo'ladimi; 98–99-bandlarni telefonda tekshirish.
+
+**12-oktabr kechki holat (tarix):** Hamma kod GitHub'da. Qoidalar,
 web va APK **saytga joylangan (14-okt)** — 91–99-bandlar jonli. APK nusxasi:
 `Qobil-2026-10-14.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
 telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
@@ -1991,6 +2011,26 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - `flutter test` 153/153, qoida testlari 237/237. Trenerning "Mashqlar" tabi telefonda
       va ekranda ko'rilmagan. Zal egasi "webga chiqaz" dedi — web va APK joylandi.
     - Keyingi: video FAYL yuklash va o'chirish (Blaze yoqilgach; `specs/mashq-dasturi/00-overview.md`).
+100. **Firebase nusxasi, video R2'da, servis yadrosi, yangi logotip, to'liq zaxira (19–20-okt)** —
+    zal egasi: Firebase'dan chiqishni o'ylab ko'rish, video fayl yuklash, "Qobil Fitness" logotipi.
+    Hammasi alohida shoxlarda (0-bo'limdagi jadval), `main` ga qo'shilmagan, saytga joylanmagan.
+    - **Postgres nusxasi** (`backend/`, shox `feat/firebase-nusxa-model`): 17 jadval, `firestore.rules`
+      ning aynan nusxasi (RLS + triggerlar), 237 qoida testi Python'da; ko'chirish — Firestore'dan
+      faqat o'qib (224 hujjat, sonlar teng) va 11 akkaunt; parol — birinchi kirishda Firebase orqali
+      tekshiriladi, keyin o'z xeshimiz (sinov shogirdi bilan isbotlandi, shogird o'chirildi).
+      Haqiqiy ma'lumot faqat `backend/data/` (git'da emas). Mahalliy baza: `docker compose -f
+      backend/docker-compose.yml up -d` (port 5433), testlar: `backend/.venv` + `pytest backend/tests`.
+    - **Servis yadrosi** (`backend/app/`, shox `feat/servis-yadro`): FastAPI — `/auth/login`
+      (telefon + parol, urinishlar cheklangan), `/me`; har so'rov `app_user` + `app.uid` bilan —
+      ruxsatlarni baza tekshiradi. Testlar 257/257. Topilgan xato tuzatildi (uid o'rniga ustun nomi).
+    - **Video R2** (shox `feat/video-r2-worker`): `cloudflare/video` Worker (yuklash/o'chirish faqat
+      trener va bosh admin, 50 MB, ko'rsatish keshi va surish bilan) + ilova: "Video yuklash" (foiz),
+      "Videoni o'chirish", shogird ilova ichida ko'radi. Blaze kerak emas. Xavfsizlik: o'chirish
+      so'rovi faqat o'z serverimizga. Worker joylanmagan — `npx wrangler login` da "Allow" kerak.
+    - **Logotip** (shox `feat/login-banner`): ilova ikonkasi va kirish ekrani banneri — B varianti.
+      Instagram / YouTube rasmlari Desktop'da (`qobil-fitness-logo	ayyor`). Ilova nomi o'zgarmagan.
+    - **Zaxira** (shox `fix/zaxira-toliq`): sahifalash va `exercises`, `memberships`, `photos`.
+    - Tekshiruv: `flutter test` 158/158 (video shoxida), backend 257/257, Worker 10/10.
 
 
 ---
