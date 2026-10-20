@@ -14,6 +14,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from psycopg.rows import tuple_row
+
 N, R, P = 2 ** 14, 8, 1
 REPO = Path(__file__).resolve().parents[2]
 
@@ -53,10 +55,12 @@ def firebase_check(email, password):
 
 
 def login(conn, email, password, check=firebase_check):
-    """Kirish: to'g'ri bo'lsa — uid, aks holda None. `conn` — kirish sxemasiga ruxsati bor ulanish."""
-    row = conn.execute(
-        'select id, password_algo, password_hash from kirish.accounts where email = %s and not disabled',
-        (email,)).fetchone()
+    """Kirish: to'g'ri bo'lsa — uid, aks holda None. `conn` — kirish sxemasiga ruxsati bor ulanish.
+    Ulanishning qator turidan (dict_row va h.k.) qat'i nazar — natija har doim kortej sifatida o'qiladi."""
+    with conn.cursor(row_factory=tuple_row) as cur:
+        row = cur.execute(
+            'select id, password_algo, password_hash from kirish.accounts where email = %s and not disabled',
+            (email,)).fetchone()
     if row is None:
         return None
     uid, algo, stored = row
