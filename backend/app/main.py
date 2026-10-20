@@ -2,6 +2,7 @@
     .venv/Scripts/python -m uvicorn app.main:app --port 8000
 Sozlamalar: backend/.env — BACKEND_DB_PASS, JWT_SECRET (git'ga tushmaydi)."""
 
+import asyncio
 import json
 import secrets
 import time
@@ -9,14 +10,15 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 import psycopg
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi.concurrency import run_in_threadpool
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from psycopg.rows import tuple_row
 from pydantic import BaseModel
 
 from kochirish import parol
 
-from . import auth, store
+from . import auth, live, store
 from .db import Db, conninfo, env
 
 
@@ -64,23 +66,28 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
     check = firebase_check or parol.firebase_check
     limiter = auth.RateLimit()
     bearer = HTTPBearer(auto_error=False)
+    hub = live.Hub()
 
     @asynccontextmanager
     async def lifespan(_):
         db.open()
+        listener = live.Listener(db.info, hub, asyncio.get_running_loop())
+        listener.start()
         yield
+        listener.stop()
         db.close()
 
     app = FastAPI(title='Qobil', lifespan=lifespan)
 
+    def active(uid):
+        """Akkaunt bor va bloklanmagan (o'chirilgan akkauntning tokeni ishlamaydi)"""
+        with db.service() as conn, conn.cursor(row_factory=tuple_row) as cur:
+            return cur.execute('select 1 from kirish.accounts where id = %s and not disabled', (uid,)).fetchone()
+
     def current_uid(cred: HTTPAuthorizationCredentials | None = Depends(bearer)):
         uid = cred and auth.read_token(cred.credentials, secret)
-        if not uid:
+        if not uid or not active(uid):
             raise HTTPException(401, 'kirish kerak')
-        # o'chirilgan yoki bloklangan akkauntning tokeni ishlamaydi
-        with db.service() as conn, conn.cursor(row_factory=tuple_row) as cur:
-            if not cur.execute('select 1 from kirish.accounts where id = %s and not disabled', (uid,)).fetchone():
-                raise HTTPException(401, 'kirish kerak')
         return uid
 
     def client_ip(request):
@@ -284,6 +291,24 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
             return ids
 
         return {'ids': run(uid, apply)}
+
+    @app.websocket('/ws')
+    async def ws(websocket: WebSocket, token: str = ''):
+        """Jonli yangilanish: o'zgargan to'plam nomi keladi ({"c": "messages"}), ilova qayta so'raydi.
+        Token so'rov qatorida — brauzer WebSocket'iga sarlavha qo'yib bo'lmaydi."""
+        uid = auth.read_token(token, secret)
+        if not uid or not await run_in_threadpool(active, uid):
+            await websocket.close(code=4401)
+            return
+        await websocket.accept()
+        hub.clients.add(websocket)
+        try:
+            while True:
+                await websocket.receive_text()  # ilova vaqti-vaqti bilan "ping" yuboradi
+        except WebSocketDisconnect:
+            pass
+        finally:
+            hub.clients.discard(websocket)
 
     app.state.db = db
     return app

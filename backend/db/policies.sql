@@ -539,3 +539,23 @@ create policy chat_messages_insert on chat_messages for insert
 grant usage on schema public, app to app_user;
 grant select, insert, update, delete on all tables in schema public to app_user;
 grant execute on all functions in schema app to app_user;
+
+-- ---------- jonli yangilanish ----------
+-- Jadval o'zgarsa commit'da `qobil` kanaliga jadval NOMI yuboriladi (ma'lumot emas). Servis uni
+-- WebSocket orqali ilovaga uzatadi, ilova o'sha to'plamni qayta so'raydi (ruxsatni RLS tekshiradi).
+
+create or replace function app.notify_change() returns trigger language plpgsql as $$
+begin
+  perform pg_notify('qobil', tg_table_name);
+  return null;
+end $$;
+
+do $$
+declare t text;
+begin
+  for t in select tablename from pg_tables where schemaname = 'public' loop
+    execute format('drop trigger if exists %I on %I', t || '_notify', t);
+    execute format('create trigger %I after insert or update or delete on %I '
+                   'for each statement execute function app.notify_change()', t || '_notify', t);
+  end loop;
+end $$;

@@ -39,6 +39,7 @@ def conninfo(dbname=None):
 
 class Db:
     def __init__(self, info):
+        self.info = info
         self.pool = ConnectionPool(info, min_size=1, max_size=10, open=False,
                                    kwargs={'autocommit': True, 'row_factory': dict_row})
 
