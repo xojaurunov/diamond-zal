@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 /// Qobil servisi manzili. Qurishda beriladi: `--dart-define=API_URL=https://...`.
-/// Bo'sh bo'lsa ilova avvalgidek Firebase bilan ishlaydi.
-const apiUrl = String.fromEnvironment('API_URL');
+/// Bo'sh bo'lsa ilova avvalgidek Firebase bilan ishlaydi. `origin` — servis sahifaning o'zi
+/// turgan manzilda (web; telefonda tunnel orqali sinov — manzil har safar o'zgaradi).
+const _apiSetting = String.fromEnvironment('API_URL');
 
 /// Ilova Python servis bilan ishlayaptimi (aks holda Firebase)
-const useApi = apiUrl != '';
+const useApi = _apiSetting != '';
+
+String get apiUrl => _apiSetting == 'origin' ? Uri.base.origin : _apiSetting;
 
 /// Servis javobidagi xato (holat kodi va servis matni)
 class ApiException implements Exception {
