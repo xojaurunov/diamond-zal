@@ -173,8 +173,9 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
     def confirm_password(conn, uid, password):
         if not limiter.allow(f'pw:{uid}', clock()):
             raise too_many()
+        # 401 emas: ilova 401 ni "kirish muddati tugadi" deb tushunib chiqarib yuboradi
         if parol.login(conn, own_email(conn, uid), password, check) != uid:
-            raise HTTPException(401, "parol noto'g'ri")
+            raise HTTPException(403, "parol noto'g'ri")
 
     @app.post('/auth/password')
     def change_password(body: PasswordIn, uid: str = Depends(current_uid)):

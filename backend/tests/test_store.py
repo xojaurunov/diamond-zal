@@ -188,7 +188,7 @@ def test_xodimni_faqat_bosh_admin_ochadi(api):
 
 def test_parol_almashtirish_va_ochirilgan_akkaunt_tokeni(api):
     h = api.as_(3)
-    assert api.post('/auth/password', json={'current': 'xato', 'next': 'yangi123'}, headers=h).status_code == 401
+    assert api.post('/auth/password', json={'current': 'xato', 'next': 'yangi123'}, headers=h).status_code == 403
     assert api.post('/auth/password', json={'current': 'sir123', 'next': 'yangi123'}, headers=h).status_code == 200
     assert api.post('/auth/login', json={'phone': '900000003', 'password': 'yangi123'}).status_code == 200
     assert api.post('/auth/delete', json={'current': 'yangi123'}, headers=h).status_code == 200
