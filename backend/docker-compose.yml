@@ -1,0 +1,17 @@
+# Mahalliy sinov bazasi — faqat shu kompyuterda (127.0.0.1). Firebase'ga aloqasi yo'q.
+# Parol: backend/.env (namuna: backend/.env.namuna). Ishga tushirish:
+#     docker compose -f backend/docker-compose.yml up -d
+name: qobil-backend
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: ${BACKEND_DB_PASS:?backend/.env da BACKEND_DB_PASS yo'q}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
