@@ -1677,6 +1677,87 @@ void main() {
       expect(find.text('https://youtu.be/dQw4w9WgXcQ'), findsNothing, reason: 'havola matni emas — muqova');
       expect(find.text('Havolani nusxalash'), findsNothing);
     });
+
+    const r2 = 'https://qobil-video.misol.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4';
+
+    test('yuklangan video (R2) havolasini taniydi; YouTube va begona havola — yo-q', () {
+      expect(isUploadedVideo(r2), isTrue);
+      expect(isUploadedVideo(' $r2 '), isTrue);
+      for (final u in [
+        '',
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://example.com/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'http://qobil-video.misol.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'https://qobil-video.misol.workers.dev/v/maxfiy/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'https://qobil-video.misol.workers.dev/v/videos/qisqa.mp4',
+      ]) {
+        expect(isUploadedVideo(u), isFalse, reason: u);
+      }
+      expect(isUploadedVideo(youtubeThumb('https://youtu.be/dQw4w9WgXcQ')!), isFalse);
+      expect(isOwnVideo(r2), isFalse, reason: 'video serveri manzili berilmagan — token hech qayerga yuborilmaydi');
+    });
+
+    test('video turi fayl nomidan; boshqa fayl — null', () {
+      expect(videoContentType('mashq.MP4'), 'video/mp4');
+      expect(videoContentType('a.mov'), 'video/quicktime');
+      expect(videoContentType('a.3gp'), 'video/3gpp');
+      expect(videoContentType('rasm.jpg'), isNull);
+      expect(maxVideoBytes, 50 * 1024 * 1024);
+    });
+
+    testWidgets('yuklangan videoli mashqda pleyer darhol; YouTube muqovasi yo-q', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      String? played;
+      debugVideoPlayer = (u) {
+        played = u;
+        return const SizedBox(key: Key('pleyer'));
+      };
+      addTearDown(() => debugVideoPlayer = null);
+      final e = Exercise('Fayl mashq', 'chest', '3 × 10', 'Sekin',
+          id: 'v2', video: r2, createdAt: DateTime.now(), createdBy: 't1');
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(gymDays: evenDays, weekday: DateTime.tuesday, onBack: () {}, custom: Stream.value([e])),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      await t.tap(find.text('Fayl mashq'));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.byKey(const Key('pleyer')), findsOneWidget);
+      expect(played, r2);
+      expect(find.byIcon(Icons.play_arrow), findsNothing, reason: 'YouTube muqovasi emas');
+      expect(find.text(r2), findsNothing, reason: 'havola matni ko-rinmaydi');
+    });
+
+    testWidgets('formada: Video yuklash tugmasi; yuklangan videoni o-chirish maydonni bo-shatadi', (t) async {
+      t.view.physicalSize = const Size(420, 3000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      debugCanUploadVideo = true;
+      addTearDown(() => debugCanUploadVideo = null);
+      final e = Exercise('Fayl mashq', 'chest', '3 × 10', 'Sekin',
+          id: 'v2', video: r2, createdAt: DateTime(2026, 1, 1), createdBy: 't1');
+      await t.pumpWidget(MaterialApp(
+        home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest', existing: e)),
+      ));
+      expect(find.text('Video yuklash'), findsOneWidget);
+      expect(find.text('Yuklangan video'), findsOneWidget);
+      await t.ensureVisible(find.text("Videoni o'chirish"));
+      await t.tap(find.text("Videoni o'chirish"));
+      await t.pump();
+      expect(find.text("Videoni o'chirish"), findsNothing);
+      expect(find.text('Video havolasi (ixtiyoriy)'), findsOneWidget);
+    });
+
+    testWidgets('video serveri manzili yo-q — yuklash tugmasi ko-rinmaydi', (t) async {
+      t.view.physicalSize = const Size(420, 3000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(const MaterialApp(
+        home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest')),
+      ));
+      expect(find.text('Video yuklash'), findsNothing);
+    });
   });
 
   group('Shogird dasturi (trener tanlagan mashqlar)', () {

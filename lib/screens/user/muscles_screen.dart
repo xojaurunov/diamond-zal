@@ -650,13 +650,17 @@ class _ExerciseRow extends StatelessWidget {
 @visibleForTesting
 Widget Function(String url)? debugVideoThumb;
 
+/// Testda yuklangan video pleyerini (WebView) almashtirish uchun
+@visibleForTesting
+Widget Function(String url)? debugVideoPlayer;
+
 /// Mashq videosi o'rni.
 /// * YouTube havolasi — muqova rasmi va o'ynatish tugmasi; bosilsa video SHU JOYNING O'ZIDA
 ///   o'ynaydi (telefonda ham, brauzerda ham — boshqa oyna yoki ilova ochilmaydi).
 ///   Ramka doim yotiq (16:9); tik video (Shorts) ichida o'z nisbatida turadi.
 /// * Boshqa havola (Telegram …) — "Videoni ko'rish" tashqarida ochadi, "nusxalash" ham bor.
 /// * Havola yo'q — "video hali tayyorlanmagan" (ilova tilida).
-/// Video fayli ilovada saqlanmaydi.
+/// * Trener ilovadan yuklagan video (R2) — shu joyda pleyer (birinchi kadr, surish, to'liq ekran).
 class _VideoSlot extends StatefulWidget {
   final String url;
   const _VideoSlot({this.url = ''});
@@ -701,6 +705,21 @@ class _VideoSlotState extends State<_VideoSlot> {
 
   @override
   Widget build(BuildContext context) {
+    // trener ilovadan yuklagan video (R2): darhol pleyer — birinchi kadr va o'ynatish tugmasi
+    if (isUploadedVideo(url)) {
+      return Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ColoredBox(color: Colors.black, child: debugVideoPlayer?.call(url) ?? videoEmbed(url)),
+            ),
+          ),
+        ),
+      );
+    }
     final id = youtubeId(url);
     if (id != null) {
       final frame = ClipRRect(

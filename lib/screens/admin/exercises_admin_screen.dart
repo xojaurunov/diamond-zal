@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../l10n/tr.dart';
 import '../../models/exercises.dart';
 import '../../models/models.dart';
+import '../../models/video_link.dart';
 import '../../services/db.dart';
+import '../../services/video_upload.dart';
 import '../../theme.dart';
 import '../../widgets/body_map.dart';
 import '../../widgets/particle_body.dart';
@@ -67,6 +72,8 @@ class _ExercisesAdminScreenState extends State<ExercisesAdminScreen> {
     if (!ok) return;
     try {
       await Db.deleteExercise(e.id);
+      // ilovadan yuklangan video R2'da qolib ketmasin
+      if (isUploadedVideo(e.video)) unawaited(deleteVideo(e.video).catchError((_) {}));
       if (mounted) showSnack(context, e.isOverride ? tr('Asl holiga qaytdi') : tr("Mashq o'chirildi"));
     } catch (err) {
       if (mounted) showSnack(context, trf("O'chirib bo'lmadi: {0}", [err]));
@@ -284,6 +291,10 @@ class ExerciseForm extends StatefulWidget {
   State<ExerciseForm> createState() => _ExerciseFormState();
 }
 
+/// Testda "Video yuklash" tugmasini ko'rsatish uchun (testda video serveri manzili yo'q)
+@visibleForTesting
+bool? debugCanUploadVideo;
+
 class _ExerciseFormState extends State<ExerciseForm> {
   late String _muscle = widget.existing?.muscle ?? widget.muscle;
   late final Set<String> _also = {...?widget.existing?.also};
@@ -308,6 +319,13 @@ class _ExerciseFormState extends State<ExerciseForm> {
 
   late final _video = TextEditingController(text: widget.existing?.video);
 
+  /// Shu formada yuklangan videolar — saqlanmasa yoki almashtirilsa R2'dan o'chiriladi
+  final _uploads = <String>{};
+
+  /// Yuklanish (0..1); null — yuklanmayapti
+  double? _progress;
+  bool _saved = false;
+
   /// Daraja ('' — belgilanmagan)
   late String _lvl = widget.existing?.level ?? '';
 
@@ -322,7 +340,33 @@ class _ExerciseFormState extends State<ExerciseForm> {
     _sets.dispose();
     _tip.dispose();
     _video.dispose();
+    // forma saqlanmay yopildi — yuklangan, lekin mashqqa yozilmagan videolar R2'da qolmasin
+    if (!_saved) {
+      for (final u in _uploads) {
+        unawaited(deleteVideo(u).catchError((_) {}));
+      }
+    }
     super.dispose();
+  }
+
+  Future<void> _upload() async {
+    final file = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (file == null || !mounted) return;
+    setState(() {
+      _progress = 0;
+      _error = null;
+    });
+    try {
+      final url = await uploadVideo(file.path, file.name, onProgress: (p) {
+        if (mounted) setState(() => _progress = p);
+      });
+      _uploads.add(url);
+      if (mounted) setState(() => _video.text = url);
+    } catch (e) {
+      if (mounted) setState(() => _error = trf("Video yuklanmadi: {0}", [e]));
+    } finally {
+      if (mounted) setState(() => _progress = null);
+    }
   }
 
   void _tap(String id) => setState(() {
@@ -367,6 +411,11 @@ class _ExerciseFormState extends State<ExerciseForm> {
         createdBy: old != null && old.isCustom ? old.createdBy : widget.adminId,
         base: _base,
       ));
+      _saved = true;
+      // almashtirilgan yoki olib tashlangan yuklangan videolar R2'dan o'chadi
+      for (final u in {..._uploads, if (old != null) old.video}) {
+        if (u != video && isUploadedVideo(u)) unawaited(deleteVideo(u).catchError((_) {}));
+      }
       if (mounted) Navigator.pop(context, true);
     } catch (e) {
       if (mounted) {
@@ -467,18 +516,43 @@ class _ExerciseFormState extends State<ExerciseForm> {
           controller: _video,
           maxLength: 300,
           keyboardType: TextInputType.url,
+          readOnly: isUploadedVideo(_video.text),
+          onChanged: (_) => setState(() {}),
           decoration: InputDecoration(
-            labelText: tr('Video havolasi (ixtiyoriy)'),
+            labelText: isUploadedVideo(_video.text) ? tr('Yuklangan video') : tr('Video havolasi (ixtiyoriy)'),
             hintText: 'https://',
           ),
         ),
+        if (_progress != null) ...[
+          LinearProgressIndicator(value: _progress),
+          const SizedBox(height: 4),
+          Text(trf('Video yuklanmoqda… {0}%', [((_progress ?? 0) * 100).round()]), style: t.bodySmall),
+          const SizedBox(height: AppSpace.sm),
+        ] else
+          Wrap(spacing: AppSpace.sm, crossAxisAlignment: WrapCrossAlignment.center, children: [
+            if (debugCanUploadVideo ?? canUploadVideo)
+              OutlinedButton.icon(
+                onPressed: _busy ? null : _upload,
+                icon: const Icon(Icons.upload),
+                label: Text(tr('Video yuklash')),
+              ),
+            if (isUploadedVideo(_video.text))
+              TextButton.icon(
+                onPressed: _busy ? null : () => setState(() => _video.text = ''),
+                icon: const Icon(Icons.delete_outline),
+                label: Text(tr("Videoni o'chirish")),
+              ),
+            if (debugCanUploadVideo ?? canUploadVideo)
+              Text(tr('50 MB gacha (taxminan 1 daqiqa)'), style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+          ]),
+        const SizedBox(height: AppSpace.sm),
         if (_error != null)
           Padding(
             padding: const EdgeInsets.only(bottom: AppSpace.sm),
             child: Text(_error!, style: t.bodyMedium?.copyWith(color: AppColors.danger)),
           ),
         FilledButton(
-          onPressed: _busy ? null : _save,
+          onPressed: _busy || _progress != null ? null : _save,
           child: Text(_busy ? tr('Saqlanmoqda…') : tr('Saqlash')),
         ),
       ]),

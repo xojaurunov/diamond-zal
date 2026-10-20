@@ -95,6 +95,10 @@
   "ru": "За 30 дней: {0}",
   "en": "Last 30 days: {0}"
  },
+ "50 MB gacha (taxminan 1 daqiqa)": {
+  "ru": "До 50 МБ (примерно 1 минута)",
+  "en": "Up to 50 MB (about 1 minute)"
+ },
  "7 kun": {
   "ru": "7 дней",
   "en": "7 days"
@@ -706,6 +710,10 @@
  "Bu davrda sotuv bo‘lmagan": {
   "ru": "За этот период продаж не было",
   "en": "No sales in this period"
+ },
+ "Bu fayl video emas (mp4, mov, webm, 3gp)": {
+  "ru": "Этот файл не видео (mp4, mov, webm, 3gp)",
+  "en": "This file is not a video (mp4, mov, webm, 3gp)"
  },
  "Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi.": {
   "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
@@ -1706,6 +1714,10 @@
  "Kirish": {
   "ru": "Войти",
   "en": "Sign in"
+ },
+ "Kirish muddati tugagan — ilovadan chiqib, qayta kiring": {
+  "ru": "Сессия истекла — выйдите из приложения и войдите снова",
+  "en": "Your session has expired — sign out and sign in again"
  },
  "Kiriting": {
   "ru": "Введите",
@@ -4239,6 +4251,14 @@
   "ru": "Видео",
   "en": "Video"
  },
+ "Video 50 MB dan katta — qisqaroq yoki siqilgan video tanlang": {
+  "ru": "Видео больше 50 МБ — выберите покороче или сжатое",
+  "en": "The video is larger than 50 MB — choose a shorter or compressed one"
+ },
+ "Video faqat trener va bosh admin yuklaydi": {
+  "ru": "Видео загружают только тренер и главный админ",
+  "en": "Only trainers and the head admin can upload videos"
+ },
  "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi.": {
   "ru": "Видео ещё не готово. Когда тренер его подготовит, оно появится здесь.",
   "en": "The video isn't ready yet. Once your trainer prepares it, it will appear here."
@@ -4251,9 +4271,29 @@
   "ru": "Если видео не открывается — открыть в YouTube",
   "en": "If the video does not play — open in YouTube"
  },
+ "Video serveri xatosi ({0})": {
+  "ru": "Ошибка видеосервера ({0})",
+  "en": "Video server error ({0})"
+ },
+ "Video yuklanmadi: {0}": {
+  "ru": "Видео не загружено: {0}",
+  "en": "Video was not uploaded: {0}"
+ },
+ "Video yuklanmoqda… {0}%": {
+  "ru": "Видео загружается… {0}%",
+  "en": "Uploading video… {0}%"
+ },
+ "Video yuklash": {
+  "ru": "Загрузить видео",
+  "en": "Upload video"
+ },
  "Videoni ko'rish": {
   "ru": "Смотреть видео",
   "en": "Watch video"
+ },
+ "Videoni o'chirish": {
+  "ru": "Удалить видео",
+  "en": "Delete video"
  },
  "Viloyat / shahar": {
   "ru": "Область / город",
@@ -4558,6 +4598,10 @@
  "Yuklab bo'lmadi: {0}": {
   "ru": "Не удалось загрузить: {0}",
   "en": "Could not load: {0}"
+ },
+ "Yuklangan video": {
+  "ru": "Загруженное видео",
+  "en": "Uploaded video"
  },
  "Yunusobod": {
   "ru": "Юнусабад",

@@ -17,3 +17,19 @@ Widget youtubeEmbed(String id) => HtmlElementView.fromTagName(
           ..setProperty('background'.toJS, '#000'.toJS);
       },
     );
+
+/// Yuklangan video (R2) — brauzerda: sahifaning o'zidagi `<video>` (o'ynatish, surish, to'liq ekran).
+Widget videoEmbed(String url) => HtmlElementView.fromTagName(
+      key: ValueKey(url),
+      tagName: 'video',
+      onElementCreated: (el) {
+        final v = el as JSObject;
+        v.setProperty('src'.toJS, '$url#t=0.1'.toJS);
+        v.setProperty('controls'.toJS, true.toJS);
+        v.setProperty('playsInline'.toJS, true.toJS);
+        v.setProperty('preload'.toJS, 'metadata'.toJS);
+        (v.getProperty('style'.toJS) as JSObject)
+          ..setProperty('background'.toJS, '#000'.toJS)
+          ..setProperty('objectFit'.toJS, 'contain'.toJS);
+      },
+    );

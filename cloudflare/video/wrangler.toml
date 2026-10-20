@@ -1,0 +1,13 @@
+# Mashq videolari — R2 bucket `zalpro-files` oldidagi Worker. Joylash:
+#     cd cloudflare/video && npx wrangler deploy
+# Kalit kerak emas: R2 ga "binding" orqali ulanadi.
+name = "qobil-video"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+FIREBASE_PROJECT = "kotta-qani-09111753"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "zalpro-files"
