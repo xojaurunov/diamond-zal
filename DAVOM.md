@@ -23,6 +23,15 @@ GitHub'da, **alohida shoxlarda, `main` ga hali qo'shilmagan va saytga joylanmaga
 | `fix/zaxira-toliq` | Haftalik zaxira to'liq (sahifalash, to'lovlar, mashqlar, rasmlar) | Tayyor, jonli sinaldi |
 | `feat/firebase-nusxa-model` | Firebase'ning Postgres nusxasi: jadvallar, ruxsatlar (237 test), ko'chirish, parollar | Tayyor, kompyuterda (Docker) |
 | `feat/servis-yadro` | Python servis (FastAPI): kirish, token, har so'rov foydalanuvchi nomidan | Tayyor, kompyuterda |
+| `feat/servis-api` | Servis: Firestore'ga o'xshash hujjat API (`/doc /col /group /batch`), ro'yxat, xodim, parol | Tayyor, 271 test |
+| `feat/servis-jonli` | Servis: jonli yangilanish (Postgres NOTIFY → WebSocket), CORS, xato tuzatishlar | Tayyor, 274 test |
+| `feat/servis-sinov-web` | Servis ilovaning web nusxasini `/sinov/` da beradi (telefonda sinov) | Tayyor |
+| `feat/ilova-servis` | Ilova servis bilan ishlay oladi (`--dart-define=API_URL=…`), aks holda Firebase | Brauzerda sinaldi: ro'yxat, anketa, chat (jonli), do'kon |
+| `feat/sinov-telefon` | `API_URL=origin` + `tools/sinov/servis-tunnel.ps1` (servis + web + Cloudflare tunnel) | Tunnel zal egasi "tayyor" deganda |
+
+**Shoxlar tartibi (qo'shish uchun):** `feat/firebase-nusxa-model` → `feat/servis-yadro` → `feat/servis-api` →
+`feat/servis-jonli` → `feat/servis-sinov-web` (har biri oldingisidan); `feat/ilova-servis` → `feat/sinov-telefon`
+(`main` dan). Qolganlari `main` dan mustaqil.
 
 **Qarorlar (19–20-okt):** Firebase'dan bosqichma-bosqich chiqiladi — Firebase'ga tegmasdan
 nusxasi yonida quriladi, keyin almashtiriladi; fayllar (video, rasm) — Cloudflare R2
