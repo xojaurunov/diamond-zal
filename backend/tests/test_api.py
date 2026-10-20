@@ -149,3 +149,10 @@ def test_ruxsatsiz_ozgartirish_403(client):
         with client.db.as_user('s1') as conn:
             conn.execute("update users set role = 'owner' where id = 's1'")
     assert e.value.status_code == 403
+
+
+def test_cors_faqat_ruxsat_etilgan_manzil(client):
+    ok = client.options('/health', headers={'Origin': 'http://127.0.0.1:8099', 'Access-Control-Request-Method': 'GET'})
+    assert ok.headers.get('access-control-allow-origin') == 'http://127.0.0.1:8099'
+    bad = client.options('/health', headers={'Origin': 'https://begona.example', 'Access-Control-Request-Method': 'GET'})
+    assert 'access-control-allow-origin' not in bad.headers

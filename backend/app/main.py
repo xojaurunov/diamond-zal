@@ -12,6 +12,7 @@ from typing import Any
 import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.concurrency import run_in_threadpool
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from psycopg.rows import tuple_row
 from pydantic import BaseModel
@@ -54,6 +55,11 @@ class BatchIn(BaseModel):
     ops: list[BatchOp]
 
 
+# Sayt (Firebase Hosting) va kompyuterdagi sinov
+DEFAULT_ORIGINS = ('https://kotta-qani-09111753.web.app', 'https://kotta-qani-09111753.firebaseapp.com',
+                   'http://127.0.0.1:8099', 'http://localhost:8099')
+
+
 def new_uid():
     """Firebase uid'iga o'xshash 28 belgili id"""
     abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -78,6 +84,11 @@ def create_app(db=None, secret=None, firebase_check=None, clock=time.time):
         db.close()
 
     app = FastAPI(title='Qobil', lifespan=lifespan)
+    # Brauzerdagi ilova (sayt) boshqa manzildan murojaat qiladi — faqat ruxsat etilgan manzillar.
+    # Telefon ilovasiga CORS kerak emas.
+    origins = [o.strip() for o in env('ALLOWED_ORIGINS', ','.join(DEFAULT_ORIGINS)).split(',') if o.strip()]
+    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=['*'],
+                       allow_headers=['authorization', 'content-type'])
 
     def active(uid):
         """Akkaunt bor va bloklanmagan (o'chirilgan akkauntning tokeni ishlamaydi)"""
