@@ -96,7 +96,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return MaterialApp(
           // Ranglar const emas — rejim almashganda butun daraxt qayta quriladi
           key: ValueKey('$light-$lang'),
-          title: 'Qobil',
+          title: 'Qobil Fitness',
           // Tizim oynalari (vaqt tanlash, "Orqaga" va h.k.) ham ilova tilida chiqsin
           locale: Locale(lang),
           supportedLocales: const [Locale('uz'), Locale('ru'), Locale('en')],
