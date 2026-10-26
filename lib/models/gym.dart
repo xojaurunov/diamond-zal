@@ -32,8 +32,14 @@ class WorkoutProgress {
 
   /// Bajarilgan mashqlar kalitlari (`Exercise.key`)
   final Set<String> done;
-  const WorkoutProgress({this.started = false, this.done = const {}});
+
+  /// Mashg'ulot tugagach shogird fikri: [gymFeels] kaliti; null — hali aytmagan
+  final String? feel;
+  const WorkoutProgress({this.started = false, this.done = const {}, this.feel});
 }
+
+/// Mashg'ulotdan keyingi fikr (`days.gymFeel`): kalit — nomi. Trener yuklamani shunga qarab o'zgartiradi.
+const gymFeels = {'easy': 'Oson', 'ok': "To'g'ri", 'hard': 'Qiyin'};
 
 /// Navbatdagi mushak: [plan] tartibida birinchi tugallanmagani ([keysOf] — mushakning
 /// mashq kalitlari). Mashqi yo'q mushak o'tkazib yuboriladi. Hammasi tugagan — null.

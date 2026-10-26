@@ -49,6 +49,9 @@ class MusclesScreen extends StatefulWidget {
   final VoidCallback? onStart;
   final void Function(String key, bool done)? onDone;
 
+  /// Mashg'ulot tugagach fikr tanlandi ([gymFeels] kaliti)
+  final ValueChanged<String>? onFeel;
+
   /// Bugungi hafta kuni (test uchun; odatda `DateTime.now().weekday`)
   final int? weekday;
 
@@ -62,6 +65,7 @@ class MusclesScreen extends StatefulWidget {
     this.progress,
     this.onStart,
     this.onDone,
+    this.onFeel,
     this.weekday,
   });
 
@@ -101,6 +105,7 @@ class _MusclesScreenState extends State<MusclesScreen> {
   /// Mashg'ulot holati: bazadan keladi, bosilganda darhol shu yerda ham yangilanadi
   bool _started = false;
   Set<String> _done = {};
+  String? _feel;
   StreamSubscription<WorkoutProgress>? _sub;
 
   /// Dam olish taymeri: "Bajardim" bosilgach pastda sanaydi; null — ko'rinmaydi
@@ -116,6 +121,7 @@ class _MusclesScreenState extends State<MusclesScreen> {
         setState(() {
           _started = p.started;
           _done = {...p.done};
+          _feel = p.feel;
         });
       }
     }, onError: (_) {});
@@ -157,6 +163,11 @@ class _MusclesScreenState extends State<MusclesScreen> {
     } else if (!done) {
       _stopRest();
     }
+  }
+
+  void _pickFeel(String feel) {
+    setState(() => _feel = feel);
+    widget.onFeel?.call(feel);
   }
 
   void _startRest() {
@@ -286,6 +297,27 @@ class _MusclesScreenState extends State<MusclesScreen> {
         Text(tr("Bugungi mashg'ulot tugadi"), style: _count),
         const SizedBox(height: 12),
         Text(tr('Hamma mashq bajarildi. Barakalla!'), style: _lead),
+        const SizedBox(height: 30),
+        Text(tr("Bugungi mashg'ulot qanday bo'ldi?").toUpperCase(), style: _label),
+        const SizedBox(height: 12),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          for (final f in gymFeels.entries)
+            ChoiceChip(
+              label: Text(tr(f.value)),
+              selected: _feel == f.key,
+              onSelected: (_) => _pickFeel(f.key),
+              selectedColor: _violet,
+              backgroundColor: Colors.black,
+              labelStyle: TextStyle(
+                  color: _feel == f.key ? _white : _silver, fontSize: 15, fontWeight: FontWeight.w600),
+              side: const BorderSide(color: Color(0xFF3A3A3A)),
+              showCheckmark: false,
+            ),
+        ]),
+        if (_feel != null) ...[
+          const SizedBox(height: 10),
+          Text(tr("Rahmat! Trener ko'radi va yuklamani shunga qarab o'zgartiradi."), style: _lead),
+        ],
       ] else ...[
         const SizedBox(height: 14),
         Text('${tr('Hozir')}: ${tr(muscleById(active)!.name)}'.toUpperCase(), style: _label),

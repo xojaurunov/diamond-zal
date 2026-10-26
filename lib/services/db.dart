@@ -569,8 +569,13 @@ class Db {
         return WorkoutProgress(
           started: data?['gymStarted'] == true,
           done: {for (final k in (data?['gymDone'] as List? ?? const [])) k.toString()},
+          feel: gymFeels.containsKey(data?['gymFeel']) ? data!['gymFeel'] as String : null,
         );
       });
+
+  /// Mashg'ulot tugagach shogird fikri ([gymFeels] kaliti)
+  static Future<void> setGymFeel(String uid, String day, String feel) =>
+      _dayRef(uid, day).set({'gymFeel': feel}, SetOptions(merge: true));
 
   static Future<void> startWorkout(String uid, String day) =>
       _dayRef(uid, day).set({'gymStarted': true}, SetOptions(merge: true));

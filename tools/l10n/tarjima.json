@@ -803,6 +803,10 @@
   "ru": "Сегодня · {0} ккал",
   "en": "Today · {0} kcal"
  },
+ "Bugungi mashg'ulot qanday bo'ldi?": {
+  "ru": "Как прошла сегодняшняя тренировка?",
+  "en": "How was today's workout?"
+ },
  "Bugungi mashg'ulot tugadi": {
   "ru": "Тренировка на сегодня окончена",
   "en": "Today's workout is finished"
@@ -1935,6 +1939,10 @@
   "ru": "Например: 5 лет опыта, похудение и набор массы",
   "en": "E.g. 5 years of experience, weight loss and muscle gain"
  },
+ "Mashg'ulot:": {
+  "ru": "Тренировка:",
+  "en": "Workout:"
+ },
  "Mashg'ulotdan keyin": {
   "ru": "После тренировки",
   "en": "After training"
@@ -2491,6 +2499,10 @@
   "ru": "Подъём ног в висе",
   "en": "Hanging leg raise"
  },
+ "Oson": {
+  "ru": "Легко",
+  "en": "Easy"
+ },
  "Otjimaniya": {
   "ru": "Отжимания",
   "en": "Push-ups"
@@ -2851,6 +2863,10 @@
   "ru": "Коротко о себе",
   "en": "Short bio"
  },
+ "Qiyin": {
+  "ru": "Тяжело",
+  "en": "Hard"
+ },
  "Qiziltepa": {
   "ru": "Кызылтепа",
   "en": "Kyzyltepa"
@@ -2966,6 +2982,10 @@
  "Quyichirchiq": {
   "ru": "Куйичирчик",
   "en": "Quyi Chirchik"
+ },
+ "Rahmat! Trener ko'radi va yuklamani shunga qarab o'zgartiradi.": {
+  "ru": "Спасибо! Тренер увидит и скорректирует нагрузку.",
+  "en": "Thanks! Your trainer will see it and adjust the load."
  },
  "Ranglar (ixtiyoriy)": {
   "ru": "Цвета (необязательно)",
@@ -3762,6 +3782,10 @@
  "Tizzani oxirigacha to'g'rilamang, bel suyanchiqdan uzilmasin.": {
   "ru": "Не выпрямляйте колени до конца, поясница не отрывается от спинки.",
   "en": "Don't lock the knees, keep the lower back on the pad."
+ },
+ "To'g'ri": {
+  "ru": "В самый раз",
+  "en": "Just right"
  },
  "To'g'ri ovqatlanish —": {
   "ru": "Правильное питание —",

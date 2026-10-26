@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kotta_qani_diet/models/exercises.dart';
 import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/photo.dart';
 import 'package:kotta_qani_diet/screens/user/muscles_screen.dart';
@@ -77,6 +78,58 @@ void main() {
       await t.tap(find.text("O'tkazib yuborish"));
       await t.pump();
       expect(find.byKey(const Key('dam-olish')), findsNothing);
+    });
+  });
+
+  group("Mashg'ulotdan keyingi fikr", () {
+    testWidgets('tugagach Oson / To-g-ri / Qiyin; tanlov uzatiladi', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final plan = musclesFor(evenDays, DateTime.tuesday);
+      final all = {
+        for (final m in plan)
+          for (final e in exercisesFor(m)) e.key
+      };
+      final feels = <String>[];
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(
+          gymDays: evenDays,
+          weekday: DateTime.tuesday,
+          onBack: () {},
+          progress: Stream.value(WorkoutProgress(started: true, done: all)),
+          onFeel: feels.add,
+        ),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      expect(find.text("BUGUNGI MASHG'ULOT QANDAY BO'LDI?"), findsOneWidget);
+      expect(find.textContaining('Rahmat!'), findsNothing);
+      await t.tap(find.text('Qiyin'));
+      await t.pump();
+      expect(feels, ['hard']);
+      expect(find.textContaining('Rahmat!'), findsOneWidget);
+    });
+
+    testWidgets("bazada fikr bor — tanlangan ko'rinadi", (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final all = {
+        for (final m in musclesFor(evenDays, DateTime.tuesday))
+          for (final e in exercisesFor(m)) e.key
+      };
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(
+          gymDays: evenDays,
+          weekday: DateTime.tuesday,
+          onBack: () {},
+          progress: Stream.value(WorkoutProgress(started: true, done: all, feel: 'easy')),
+        ),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      final chip = t.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'Oson'));
+      expect(chip.selected, isTrue);
+      expect(find.textContaining('Rahmat!'), findsOneWidget);
     });
   });
 }

@@ -60,6 +60,7 @@ class _GymScreenState extends State<GymScreen> {
         progress: _progress,
         onStart: () => Db.startWorkout(user.id, todayKey()),
         onDone: (key, done) => Db.toggleExercise(user.id, todayKey(), key, done),
+        onFeel: (feel) => Db.setGymFeel(user.id, todayKey(), feel),
         onBack: () => setState(() => _muscles = false),
       );
     }

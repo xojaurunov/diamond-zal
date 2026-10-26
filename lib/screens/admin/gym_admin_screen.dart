@@ -255,6 +255,30 @@ class _ClientGymTile extends StatelessWidget {
                 );
               },
             ),
+          // Mashg'ulotdan keyingi fikri: Oson / To'g'ri / Qiyin — yuklamani o'zgartirish uchun
+          if (!showWeek && todayWorkout != null && !isHome)
+            StreamBuilder<WorkoutProgress>(
+              stream: Db.workout(u.id, todayKey()),
+              builder: (context, snap) {
+                final feel = snap.data?.feel;
+                if (feel == null) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(top: AppSpace.sm),
+                  child: Row(children: [
+                    Text(tr("Mashg'ulot:"), style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+                    const SizedBox(width: AppSpace.sm),
+                    Pill(
+                      text: tr(gymFeels[feel]!),
+                      color: switch (feel) {
+                        'hard' => AppColors.warning,
+                        'easy' => AppColors.water,
+                        _ => AppColors.success,
+                      },
+                    ),
+                  ]),
+                );
+              },
+            ),
         ]),
       ),
     );
