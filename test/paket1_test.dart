@@ -8,9 +8,11 @@ import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/models.dart';
 import 'package:kotta_qani_diet/models/photo.dart';
 import 'package:kotta_qani_diet/screens/admin/announcements_admin_screen.dart';
+import 'package:kotta_qani_diet/screens/admin/qr_scan_screen.dart';
 import 'package:kotta_qani_diet/screens/user/muscles_screen.dart';
 import 'package:kotta_qani_diet/widgets/announcements.dart';
 import 'package:kotta_qani_diet/widgets/before_after.dart';
+import 'package:kotta_qani_diet/widgets/gym_card.dart';
 
 /// 1Г—1 PNG вЂ” test rasmi
 final _png = base64Decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
@@ -185,6 +187,80 @@ void main() {
       await t.tap(find.text("E'lon qilish"));
       await t.pump();
       expect(added, ['Shanba kuni dam']);
+    });
+  });
+
+  group('QR davomat', () {
+    test('zal kartasi kodi: uid ichida, begona matn rad etiladi', () {
+      expect(attendanceCode('abcDEF123'), 'qobil:a:abcDEF123');
+      expect(attendanceUid(attendanceCode('abcDEF123')), 'abcDEF123');
+      expect(attendanceUid(' qobil:a:abcDEF123\n'), 'abcDEF123');
+      expect(attendanceUid('https://example.com'), isNull);
+      expect(attendanceUid('qobil:a:'), isNull);
+      expect(attendanceUid('qobil:a:abc/../x'), isNull);
+    });
+
+    Future<List<String>> scan(WidgetTester t, AppUser admin, List<String> codes, {Set<String> already = const {}}) async {
+      final users = {
+        'student01': AppUser(id: 'student01', name: 'Ali', email: '', role: 'user', trainerId: 't1'),
+        'student02': AppUser(id: 'student02', name: 'Vali', email: '', role: 'user', trainerId: 't2'),
+      };
+      final marked = <String>[];
+      late void Function(String) feed;
+      await t.pumpWidget(MaterialApp(
+        home: QrScanScreen(
+          admin: admin,
+          scanner: (onCode) {
+            feed = onCode;
+            return const SizedBox.expand();
+          },
+          lookup: (uid) async => users[uid],
+          alreadyMarked: (uid) async => already.contains(uid),
+          mark: (uid) async => marked.add(uid),
+        ),
+      ));
+      final seen = <String>[];
+      for (final c in codes) {
+        feed(c);
+        await t.pump();
+        await t.pump();
+        seen.add(t.widget<Text>(find.descendant(of: find.byType(Row), matching: find.byType(Text)).first).data!);
+      }
+      return [...seen, 'marked:${marked.join(',')}'];
+    }
+
+    testWidgets("trener: o'z shogirdi belgilanadi, begonasi yo'q", (t) async {
+      final r = await scan(t, AppUser(id: 't1', name: 'T', email: '', role: 'admin'), [
+        'salom',
+        attendanceCode('student01'),
+        attendanceCode('student02'),
+        attendanceCode('nobody99'),
+      ]);
+      expect(r, [
+        'Bu zal kartasi emas',
+        'Ali — keldi',
+        'Bu shogird sizniki emas',
+        'Shogird topilmadi',
+        'marked:student01',
+      ]);
+    });
+
+    testWidgets("bosh admin: hammasi; bugun belgilangan bo'lsa qayta yozilmaydi", (t) async {
+      final r = await scan(
+        t,
+        AppUser(id: 'o1', name: 'O', email: '', role: 'owner'),
+        [attendanceCode('student02'), attendanceCode('student01')],
+        already: {'student01'},
+      );
+      expect(r, ['Vali — keldi', 'Ali — bugun allaqachon belgilangan', 'marked:student02']);
+    });
+
+    testWidgets("shogird zal kartasi QR ko'rsatadi", (t) async {
+      await t.pumpWidget(MaterialApp(
+        home: Scaffold(body: GymCard(user: AppUser(id: 'student01', name: 'Ali', email: ''))),
+      ));
+      expect(find.text('Zal kartasi'), findsOneWidget);
+      expect(find.text('Ali'), findsOneWidget);
     });
   });
 }

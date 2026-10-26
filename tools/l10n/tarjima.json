@@ -735,9 +735,17 @@
   "ru": "Удалить это фото?",
   "en": "Delete this photo?"
  },
+ "Bu shogird sizniki emas": {
+  "ru": "Это не ваш клиент",
+  "en": "This client is not yours"
+ },
  "Bu yagona bosh admin — tushirib bo’lmaydi. Avval boshqa birovni bosh admin qiling.": {
   "ru": "Это единственный главный админ — понизить нельзя. Сначала назначьте главным админом кого-то ещё.",
   "en": "This is the only head admin — they can't be demoted. Make someone else head admin first."
+ },
+ "Bu zal kartasi emas": {
+  "ru": "Это не карта зала",
+  "en": "This is not a gym card"
  },
  "Bu zalda trener yo'q — qo'shing yoki boshqa zaldan ko'chiring": {
   "ru": "В этом зале нет тренеров — добавьте или переведите из другого зала",
@@ -1646,6 +1654,10 @@
  "Kamera": {
   "ru": "Камера",
   "en": "Camera"
+ },
+ "Kamera ochilmadi. Telefon sozlamalarida ilovaga kamera ruxsatini bering.": {
+  "ru": "Камера не открылась. Разрешите приложению доступ к камере в настройках телефона.",
+  "en": "The camera did not open. Allow camera access for the app in phone settings."
  },
  "Kamida 6 belgi — xodimga shu parolni aytasiz": {
   "ru": "Минимум 6 символов — сообщите этот пароль сотруднику",
@@ -2799,6 +2811,10 @@
   "ru": "QR-код",
   "en": "QR code"
  },
+ "QR skaner": {
+  "ru": "QR-сканер",
+  "en": "QR scanner"
+ },
  "Qadam keng, oldingi tizza oyoq uchidan o'tmasin.": {
   "ru": "Шаг широкий, переднее колено не выходит за носок.",
   "en": "Take a wide step, front knee stays behind the toes."
@@ -3403,6 +3419,10 @@
   "ru": "Ученик видит это изображение",
   "en": "The client sees this image"
  },
+ "Shogird topilmadi": {
+  "ru": "Клиент не найден",
+  "en": "Client not found"
+ },
  "Shogird yo'q": {
   "ru": "Учеников нет",
   "en": "No clients"
@@ -3450,6 +3470,14 @@
  "Shogirdni \"Mijozlar\" bo’limidan tanlab, shu trenerga biriktirishingiz mumkin.": {
   "ru": "Выберите ученика в разделе «Клиенты» и прикрепите к этому тренеру.",
   "en": "Pick a client in the Clients section and assign them to this trainer."
+ },
+ "Shogirdning \"Zal kartasi\" QR kodini ramkaga to'g'rilang.": {
+  "ru": "Наведите камеру на QR-код «Карта зала» клиента.",
+  "en": "Point the camera at the client's \"Gym card\" QR code."
+ },
+ "Shogirdning zal kartasini skanerlang — davomat belgilanadi": {
+  "ru": "Отсканируйте карту зала клиента — посещение отметится",
+  "en": "Scan the client's gym card to mark attendance"
  },
  "Shokolad (shakari kam)": {
   "ru": "Шоколад (с низким содержанием сахара)",
@@ -4667,6 +4695,10 @@
   "ru": "Владелец зала",
   "en": "Gym owner"
  },
+ "Zal kartasi": {
+  "ru": "Карта зала",
+  "en": "Gym card"
+ },
  "Zal kunlari": {
   "ru": "Дни зала",
   "en": "Gym days"
@@ -4722,6 +4754,10 @@
  "Zalga biriktirish": {
   "ru": "Прикрепить к залу",
   "en": "Assign to gym"
+ },
+ "Zalga kelganda trenerga ko'rsating — u skanerlaydi va davomat belgilanadi.": {
+  "ru": "Покажите тренеру при входе в зал — он отсканирует, и посещение отметится.",
+  "en": "Show it to your trainer at the gym — they scan it and your attendance is marked."
  },
  "Zallar": {
   "ru": "Залы",
@@ -5175,9 +5211,17 @@
   "ru": "{0} · скрыто (старше 7 дней)",
   "en": "{0} · hidden (older than 7 days)"
  },
+ "{0} — bugun allaqachon belgilangan": {
+  "ru": "{0} — уже отмечен сегодня",
+  "en": "{0} — already marked today"
+ },
  "{0} — hali ovqatlanish rejasi yo‘q": {
   "ru": "{0} — ещё нет плана питания",
   "en": "{0} — no meal plan yet"
+ },
+ "{0} — keldi": {
+  "ru": "{0} — пришёл",
+  "en": "{0} — checked in"
  },
  "{0} — mashg‘ulot kunlarini tanlamagan": {
   "ru": "{0} — не выбрал дни тренировок",
