@@ -95,6 +95,10 @@
   "ru": "За 30 дней: {0}",
   "en": "Last 30 days: {0}"
  },
+ "5 daqiqagacha — ilova o'zi kichraytiradi": {
+  "ru": "До 5 минут — приложение само сожмёт",
+  "en": "Up to 5 minutes — the app compresses it"
+ },
  "50 MB gacha (taxminan 1 daqiqa)": {
   "ru": "До 50 МБ (примерно 1 минута)",
   "en": "Up to 50 MB (about 1 minute)"
@@ -4251,6 +4255,10 @@
   "ru": "Видео",
   "en": "Video"
  },
+ "Video 5 daqiqadan uzun — qisqaroq video tanlang": {
+  "ru": "Видео длиннее 5 минут — выберите покороче",
+  "en": "The video is longer than 5 minutes — choose a shorter one"
+ },
  "Video 50 MB dan katta — qisqaroq yoki siqilgan video tanlang": {
   "ru": "Видео больше 50 МБ — выберите покороче или сжатое",
   "en": "The video is larger than 50 MB — choose a shorter or compressed one"
@@ -4266,6 +4274,14 @@
  "Video havolasi (ixtiyoriy)": {
   "ru": "Ссылка на видео (необязательно)",
   "en": "Video link (optional)"
+ },
+ "Video kichraytirilgandan keyin ham 80 MB dan katta — qisqaroq video tanlang": {
+  "ru": "Даже после сжатия видео больше 80 МБ — выберите покороче",
+  "en": "Even after compression the video is over 80 MB — choose a shorter one"
+ },
+ "Video kichraytirilmoqda… {0}% (ilovani yopmang)": {
+  "ru": "Видео сжимается… {0}% (не закрывайте приложение)",
+  "en": "Compressing video… {0}% (keep the app open)"
  },
  "Video ochilmasa — YouTube'da ochish": {
   "ru": "Если видео не открывается — открыть в YouTube",
@@ -4286,6 +4302,10 @@
  "Video yuklash": {
   "ru": "Загрузить видео",
   "en": "Upload video"
+ },
+ "Videoni kichraytirib bo'lmadi — boshqa video tanlang": {
+  "ru": "Не удалось сжать видео — выберите другое",
+  "en": "Could not compress the video — choose another one"
  },
  "Videoni ko'rish": {
   "ru": "Смотреть видео",

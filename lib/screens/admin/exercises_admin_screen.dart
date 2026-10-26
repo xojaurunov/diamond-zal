@@ -322,8 +322,9 @@ class _ExerciseFormState extends State<ExerciseForm> {
   /// Shu formada yuklangan videolar — saqlanmasa yoki almashtirilsa R2'dan o'chiriladi
   final _uploads = <String>{};
 
-  /// Yuklanish (0..1); null — yuklanmayapti
+  /// Yuklanish (0..1); null — yuklanmayapti. [_compressing] — hozir telefonda kichraytirilmoqda
   double? _progress;
+  bool _compressing = false;
   bool _saved = false;
 
   /// Daraja ('' — belgilanmagan)
@@ -340,6 +341,8 @@ class _ExerciseFormState extends State<ExerciseForm> {
     _sets.dispose();
     _tip.dispose();
     _video.dispose();
+    // yarim yo'lda yopildi — kichraytirish to'xtaydi
+    if (_progress != null) unawaited(cancelVideoUpload());
     // forma saqlanmay yopildi — yuklangan, lekin mashqqa yozilmagan videolar R2'da qolmasin
     if (!_saved) {
       for (final u in _uploads) {
@@ -354,11 +357,24 @@ class _ExerciseFormState extends State<ExerciseForm> {
     if (file == null || !mounted) return;
     setState(() {
       _progress = 0;
+      _compressing = false;
       _error = null;
     });
     try {
-      final url = await uploadVideo(file.path, file.name, onProgress: (p) {
-        if (mounted) setState(() => _progress = p);
+      final url = await uploadVideo(file.path, file.name, onCompress: (p) {
+        if (mounted) {
+          setState(() {
+            _compressing = true;
+            _progress = p;
+          });
+        }
+      }, onProgress: (p) {
+        if (mounted) {
+          setState(() {
+            _compressing = false;
+            _progress = p;
+          });
+        }
       });
       _uploads.add(url);
       if (mounted) setState(() => _video.text = url);
@@ -526,7 +542,12 @@ class _ExerciseFormState extends State<ExerciseForm> {
         if (_progress != null) ...[
           LinearProgressIndicator(value: _progress),
           const SizedBox(height: 4),
-          Text(trf('Video yuklanmoqda… {0}%', [((_progress ?? 0) * 100).round()]), style: t.bodySmall),
+          Text(
+            _compressing
+                ? trf('Video kichraytirilmoqda… {0}% (ilovani yopmang)', [((_progress ?? 0) * 100).round()])
+                : trf('Video yuklanmoqda… {0}%', [((_progress ?? 0) * 100).round()]),
+            style: t.bodySmall,
+          ),
           const SizedBox(height: AppSpace.sm),
         ] else
           Wrap(spacing: AppSpace.sm, crossAxisAlignment: WrapCrossAlignment.center, children: [
@@ -543,7 +564,8 @@ class _ExerciseFormState extends State<ExerciseForm> {
                 label: Text(tr("Videoni o'chirish")),
               ),
             if (debugCanUploadVideo ?? canUploadVideo)
-              Text(tr('50 MB gacha (taxminan 1 daqiqa)'), style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+              Text(tr("5 daqiqagacha — ilova o'zi kichraytiradi"),
+                  style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
           ]),
         const SizedBox(height: AppSpace.sm),
         if (_error != null)

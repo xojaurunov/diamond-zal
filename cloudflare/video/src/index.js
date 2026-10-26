@@ -5,7 +5,7 @@
 // Kimligi: Firebase ID token (ilova `Authorization: Bearer` bilan yuboradi). Rol — foydalanuvchining
 // o'z Firestore hujjatidan, o'z tokeni bilan o'qiladi. Firebase'ga hech narsa yozilmaydi.
 
-export const MAX_BYTES = 50 * 1024 * 1024;
+export const MAX_BYTES = 80 * 1024 * 1024;
 const TYPES = { 'video/mp4': 'mp4', 'video/quicktime': 'mov', 'video/webm': 'webm', 'video/3gpp': '3gp' };
 const KEYS_URL = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
 const STAFF = ['admin', 'owner'];
