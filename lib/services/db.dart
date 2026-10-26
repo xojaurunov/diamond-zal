@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/gym.dart';
+import '../models/lesson.dart';
 import '../models/exercises.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
@@ -363,6 +364,18 @@ class Db {
   static Future<void> deleteExercise(String id) => _fs.collection('exercises').doc(id).delete();
 
   /// Trener shogirdga [muscle] uchun mashqlar tanlaydi; bo'sh ro'yxat — standartga qaytish
+  // ---------- video darslar ----------
+  /// Trener darslari, yangisi tepada
+  static Stream<List<Lesson>> lessons() => _fs.collection('videos').snapshots().map((s) =>
+      s.docs.map(Lesson.fromDoc).toList()
+        ..sort((a, b) => (b.createdAt ?? DateTime(0)).compareTo(a.createdAt ?? DateTime(0))));
+
+  static Future<void> saveLesson(Lesson l) => l.id.isEmpty
+      ? _fs.collection('videos').add(l.toMap())
+      : _fs.collection('videos').doc(l.id).set(l.toMap());
+
+  static Future<void> deleteLesson(String id) => _fs.collection('videos').doc(id).delete();
+
   static Future<void> setProgram(String uid, String muscle, List<String> keys) =>
       _fs.collection('users').doc(uid).update({
         'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,

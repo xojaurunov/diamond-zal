@@ -64,3 +64,11 @@ String? videoContentType(String fileName) => switch (fileName.split('.').last.to
       '3gp' => 'video/3gpp',
       _ => null,
     };
+
+/// Video muqovasi: yuklangan video — yonidagi `.jpg` (trener yuklaganda ilova o'zi qo'yadi;
+/// eski videolarda bo'lmasligi mumkin), YouTube — o'z muqovasi; boshqa havola — null
+String? thumbOf(String url) {
+  final u = url.trim();
+  if (isUploadedVideo(u)) return u.replaceFirst(RegExp(r'\.[a-z0-9]+$'), '.jpg');
+  return youtubeThumb(u);
+}

@@ -711,6 +711,39 @@ await check('boshqa trener begona shogirdga mashq tanlay OLMAYDI', () =>
 await check('bosh admin istalgan shogirdga mashq tanlaydi', () =>
   assertSucceeds(updateDoc(doc(as(OWNER), 'users', USER), { 'program.back': ['Y'] })));
 
+console.log('\n== VIDEO DARSLAR (videos) ==');
+const dars = (by, more = {}) => ({
+  title: 'Ovqatlanish asoslari', category: 'ovqatlanish', description: '', seconds: 240,
+  url: 'https://qobil-video.qobilfitness.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+  createdAt: 1760000000000, createdBy: by, ...more,
+});
+await check('trener dars qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(TRAINER))));
+await check('bosh admin dars qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'videos', 'd2'), dars(OWNER))));
+await check('shogird dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'videos', 'd3'), dars(USER))));
+await check('barmen dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'videos', 'd4'), dars(BARMEN))));
+await check('shogird darsni koradi', () =>
+  assertSucceeds(getDoc(doc(as(USER), 'videos', 'd1'))));
+await check('kirmagan odam darsni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(anon(), 'videos', 'd1'))));
+await check('noma lum turdagi dars OTMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd5'), dars(TRAINER, { category: 'reklama' }))));
+await check('ortiqcha maydonli (izoh/layk) dars OTMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd6'), dars(TRAINER, { likes: 5 }))));
+await check('boshqa nomidan dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd7'), dars(OWNER))));
+await check('tahrirda muallifni ozgartirib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(OWNER))));
+await check('trener darsni tahrirlaydi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(TRAINER, { title: 'Yangi nom' }))));
+await check('shogird darsni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'videos', 'd1'))));
+await check('trener darsni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'videos', 'd1'))));
+
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();
 process.exit(fail === 0 ? 0 : 1);

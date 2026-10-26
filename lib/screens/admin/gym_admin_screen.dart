@@ -6,6 +6,7 @@ import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
 import 'exercises_admin_screen.dart';
+import 'lessons_admin_screen.dart';
 
 /// Trener: Zal bo'limi — shogirdlar kimda qaysi kun, bugun kim keladi, kim uyda.
 /// "Uyda mashq" faqat shogird bugun chatda kela olmasligini yozgan bo'lsa belgilanadi.
@@ -55,6 +56,30 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
                     const SizedBox(height: 2),
                     Text(
                       tr("Tana chizmasidan mushak tanlab, yangi mashq qo'shing"),
+                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                    ),
+                  ]),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.textMuted),
+              ]),
+            ),
+            const SizedBox(height: AppSpace.sm),
+            // Video darslar: ovqatlanish, texnika, motivatsiya — shogird "Videolar" bo'limida ko'radi
+            BentoTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => LessonsAdminScreen(admin: widget.admin)),
+              ),
+              padding: const EdgeInsets.all(AppSpace.lg),
+              child: Row(children: [
+                Icon(Icons.video_library_outlined, color: AppColors.accent),
+                const SizedBox(width: AppSpace.md),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(tr('Video darslar'), style: t.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      tr("Ovqatlanish, texnika, motivatsiya darslari — shogirdlar \"Videolar\"da ko'radi"),
                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     ),
                   ]),

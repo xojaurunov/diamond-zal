@@ -43,6 +43,10 @@
   "ru": "«{0}» вернётся к образцу: ваши изменения и ссылка на видео удалятся.",
   "en": "\"{0}\" will return to the sample: your changes and the video link will be removed."
  },
+ "\"{0}\" o'chiriladi — video ham.": {
+  "ru": "«{0}» будет удалён — вместе с видео.",
+  "en": "\"{0}\" will be deleted — the video too."
+ },
  "\"{0}\" o'chiriladi. Shogirdlar uni boshqa ko'rmaydi.": {
   "ru": "«{0}» будет удалено. Ученики больше его не увидят.",
   "en": "\"{0}\" will be deleted. Students will no longer see it."
@@ -707,6 +711,10 @@
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
   "en": "This section is being improved — exercises for each workout are coming soon."
  },
+ "Bu bo'limda video topilmadi.": {
+  "ru": "В этом разделе видео не найдено.",
+  "en": "No videos found in this section."
+ },
  "Bu darajada mashq yo'q.": {
   "ru": "Упражнений этого уровня нет.",
   "en": "No exercises at this level."
@@ -974,6 +982,38 @@
  "Daraja (shogird ko'rmaydi)": {
   "ru": "Уровень (ученик не видит)",
   "en": "Level (hidden from students)"
+ },
+ "Dars nomi": {
+  "ru": "Название урока",
+  "en": "Lesson title"
+ },
+ "Dars nomini yozing": {
+  "ru": "Введите название урока",
+  "en": "Enter the lesson title"
+ },
+ "Dars o'chirildi": {
+  "ru": "Урок удалён",
+  "en": "Lesson deleted"
+ },
+ "Dars qo'shish": {
+  "ru": "Добавить урок",
+  "en": "Add lesson"
+ },
+ "Dars saqlandi": {
+  "ru": "Урок сохранён",
+  "en": "Lesson saved"
+ },
+ "Darslar": {
+  "ru": "Уроки",
+  "en": "Lessons"
+ },
+ "Darsni o'chirish": {
+  "ru": "Удалить урок",
+  "en": "Delete lesson"
+ },
+ "Darsni tahrirlash": {
+  "ru": "Редактировать урок",
+  "en": "Edit lesson"
  },
  "Davom etish": {
   "ru": "Продолжить",
@@ -1283,6 +1323,10 @@
   "ru": "3 дня в неделю. Тренировки по порядку дней: 1) {0}, 2) {1}, 3) {2}.",
   "en": "3 days a week. Workouts follow the day order: 1) {0}, 2) {1}, 3) {2}."
  },
+ "Hali dars yo'q.": {
+  "ru": "Уроков пока нет.",
+  "en": "No lessons yet."
+ },
  "Hali kelgani belgilanmagan": {
   "ru": "Посещение ещё не отмечено",
   "en": "Attendance not marked yet"
@@ -1319,6 +1363,10 @@
   "ru": "Вес ещё не внесён",
   "en": "No weight logged yet"
  },
+ "Hali video yo'q. Trener mashqlarga video qo'shgach, shu yerda ko'rinadi.": {
+  "ru": "Пока нет видео. Они появятся здесь, когда тренер добавит видео к упражнениям.",
+  "en": "No videos yet. They will appear here once the trainer adds videos to exercises."
+ },
  "Hali zal qo'shilmagan": {
   "ru": "Залы ещё не добавлены",
   "en": "No gyms added yet"
@@ -1346,6 +1394,10 @@
  "Hamma shogirdlarda hammasi joyida": {
   "ru": "У всех учеников всё в порядке",
   "en": "All clients are on track"
+ },
+ "Hamma videolar": {
+  "ru": "Все видео",
+  "en": "All videos"
  },
  "Hamma zallar": {
   "ru": "Все залы",
@@ -1979,6 +2031,14 @@
   "ru": "Упражнение сохранено",
   "en": "Exercise saved"
  },
+ "Mashq videolari mashqning o'zida (Mashqlar). Bu yerda — ovqatlanish, texnika, nafas, motivatsiya darslari. Shogird ularni \"Videolar\" bo'limida ko'radi.": {
+  "ru": "Видео упражнений — в самих упражнениях (Упражнения). Здесь — уроки о питании, технике, дыхании, мотивации. Ученик видит их в разделе «Видео».",
+  "en": "Exercise videos live in the exercises themselves (Exercises). Here — lessons on nutrition, technique, breathing, motivation. Students see them in \"Videos\"."
+ },
+ "Mashq videolari va trener darslari — ko'rib, to'g'ri bajaring": {
+  "ru": "Видео упражнений и уроки тренера — смотрите и выполняйте правильно",
+  "en": "Exercise videos and trainer lessons — watch and do it right"
+ },
  "Mashq yo'q": {
   "ru": "Нет упражнений",
   "en": "No exercises"
@@ -2135,6 +2195,10 @@
   "ru": "Говядина, нежирная",
   "en": "Beef, lean"
  },
+ "Motivatsiya": {
+  "ru": "Мотивация",
+  "en": "Motivation"
+ },
  "Muborak": {
   "ru": "Мубарек",
   "en": "Mubarek"
@@ -2158,6 +2222,10 @@
  "Muzrabot": {
   "ru": "Музрабат",
   "en": "Muzrabat"
+ },
+ "Nafas va cho'zilish": {
+  "ru": "Дыхание и растяжка",
+  "en": "Breathing and stretching"
  },
  "Namangan": {
   "ru": "Наманганская область",
@@ -2511,6 +2579,10 @@
   "ru": "Напоминания о еде, весе, чате и плане",
   "en": "Meal, weight, chat and plan reminders"
  },
+ "Ovqatlanish": {
+  "ru": "Питание",
+  "en": "Nutrition"
+ },
  "Ovqatlanish mahallari ({0})": {
   "ru": "Приёмы пищи ({0})",
   "en": "Meals ({0})"
@@ -2522,6 +2594,10 @@
  "Ovqatlanish, mashq yoki reja bo'yicha savolingizni yozing.": {
   "ru": "Напишите вопрос о питании, тренировках или плане.",
   "en": "Ask a question about nutrition, training or your plan."
+ },
+ "Ovqatlanish, texnika, motivatsiya darslari — shogirdlar \"Videolar\"da ko'radi": {
+  "ru": "Уроки о питании, технике, мотивации — ученики видят их в «Видео»",
+  "en": "Nutrition, technique, motivation lessons — students see them in \"Videos\""
  },
  "Ovsyanka yoki gerkules bo'tqasi (quruq vazni)": {
   "ru": "Овсяная или геркулесовая каша (сухой вес)",
@@ -2767,6 +2843,10 @@
   "ru": "Сколько вы съели?",
   "en": "How much did you eat?"
  },
+ "Qanday bajariladi": {
+  "ru": "Как выполнять",
+  "en": "How to do it"
+ },
  "Qanliko'l": {
   "ru": "Канлыкуль",
   "en": "Kanlykul"
@@ -2847,9 +2927,17 @@
   "ru": "Кибрай",
   "en": "Kibray"
  },
+ "Qidirish": {
+  "ru": "Поиск",
+  "en": "Search"
+ },
  "Qidiruv natijasi": {
   "ru": "Результат поиска",
   "en": "Search results"
+ },
+ "Qisqa izoh (ixtiyoriy)": {
+  "ru": "Краткое описание (необязательно)",
+  "en": "Short description (optional)"
  },
  "Qisqa ma'lumot": {
   "ru": "Коротко о себе",
@@ -3463,6 +3551,10 @@
   "ru": "Вас нет в каталоге — ученики не могут вас выбрать.",
   "en": "You're not in the catalog — clients can't choose you."
  },
+ "Siz uchun": {
+  "ru": "Для вас",
+  "en": "For you"
+ },
  "Sizning bahoingiz": {
   "ru": "Ваша оценка",
   "en": "Your rating"
@@ -3719,6 +3811,10 @@
   "ru": "город Термез",
   "en": "Termez city"
  },
+ "Texnika": {
+  "ru": "Техника",
+  "en": "Technique"
+ },
  "Tez": {
   "ru": "Быстрый",
   "en": "Fast"
@@ -3734,6 +3830,10 @@
  "Tez — ovqat tez hazm bo'lib, tez-tez qorin ochadi. Sekin — ovqat sekin hazm bo'ladi, kuniga 2 mahal yeb ham yuraverasiz. Bilmasangiz — «Sekin»ni tanlang.": {
   "ru": "Быстрый — еда переваривается быстро, вы часто хотите есть. Медленный — еда переваривается медленно, вам хватает 2 приёмов пищи в день. Не знаете — выберите «Медленный».",
   "en": "Fast — food digests quickly and you get hungry often. Slow — food digests slowly and two meals a day are enough. If unsure, choose “Slow”."
+ },
+ "Tezlik:": {
+  "ru": "Скорость:",
+  "en": "Speed:"
  },
  "Tik turib oyoq uchiga ko'tarilish": {
   "ru": "Подъём на носки стоя",
@@ -4263,6 +4363,10 @@
   "ru": "Видео больше 50 МБ — выберите покороче или сжатое",
   "en": "The video is larger than 50 MB — choose a shorter or compressed one"
  },
+ "Video darslar": {
+  "ru": "Видеоуроки",
+  "en": "Video lessons"
+ },
  "Video faqat trener va bosh admin yuklaydi": {
   "ru": "Видео загружают только тренер и главный админ",
   "en": "Only trainers and the head admin can upload videos"
@@ -4274,6 +4378,14 @@
  "Video havolasi (ixtiyoriy)": {
   "ru": "Ссылка на видео (необязательно)",
   "en": "Video link (optional)"
+ },
+ "Video havolasi (yoki yuklang)": {
+  "ru": "Ссылка на видео (или загрузите)",
+  "en": "Video link (or upload)"
+ },
+ "Video internetni ko'p sarflaydi (4 daqiqa ≈ 45 MB) — Wi‑Fi'da ko'rish tavsiya etiladi.": {
+  "ru": "Видео расходует много трафика (4 минуты ≈ 45 МБ) — лучше смотреть по Wi‑Fi.",
+  "en": "Videos use a lot of data (4 minutes ≈ 45 MB) — watching on Wi‑Fi is recommended."
  },
  "Video kichraytirilgandan keyin ham 80 MB dan katta — qisqaroq video tanlang": {
   "ru": "Даже после сжатия видео больше 80 МБ — выберите покороче",
@@ -4291,6 +4403,10 @@
   "ru": "Ошибка видеосервера ({0})",
   "en": "Video server error ({0})"
  },
+ "Video yuklang yoki havola qo'ying": {
+  "ru": "Загрузите видео или вставьте ссылку",
+  "en": "Upload a video or paste a link"
+ },
  "Video yuklanmadi: {0}": {
   "ru": "Видео не загружено: {0}",
   "en": "Video was not uploaded: {0}"
@@ -4302,6 +4418,10 @@
  "Video yuklash": {
   "ru": "Загрузить видео",
   "en": "Upload video"
+ },
+ "Videolar": {
+  "ru": "Видео",
+  "en": "Videos"
  },
  "Videoni kichraytirib bo'lmadi — boshqa video tanlang": {
   "ru": "Не удалось сжать видео — выберите другое",
@@ -4374,6 +4494,10 @@
  "Xovos": {
   "ru": "Хаваст",
   "en": "Khavast"
+ },
+ "YANGI": {
+  "ru": "НОВОЕ",
+  "en": "NEW"
  },
  "Yak": {
   "ru": "Вс",

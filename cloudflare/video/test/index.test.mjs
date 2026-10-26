@@ -42,7 +42,7 @@ function bucket() {
       const r = opts?.range;
       return f && { body: r ? f.data.slice(r.offset, r.offset + r.length) : f.data };
     },
-    async delete(key) { files.delete(key); },
+    async delete(keys) { for (const k of [].concat(keys)) files.delete(k); },
   };
 }
 
@@ -142,4 +142,24 @@ test('parseRange', () => {
   assert.deepEqual(parseRange('bytes=0-5000', 1000), { offset: 0, length: 1000 });
   assert.equal(parseRange('bytes=1000-', 1000), 'invalid');
   assert.equal(parseRange(null, 1000), null);
+});
+
+test("muqova: trener qo'yadi, shogird yo'q, JPEG emas 415, katta 413; video o'chsa muqova ham", async () => {
+  const e = env();
+  const { url } = await (await upload(e, await token('trainer1'))).json();
+  const thumb = url.replace(/\.mp4$/, '.jpg');
+  const put = async (uid, type = 'image/jpeg', size = 1000) => handle(new Request(thumb, {
+    method: 'PUT', headers: { authorization: `Bearer ${await token(uid)}`, 'content-type': type },
+    body: new Uint8Array(size) }), e, null, deps);
+  assert.equal((await put('user1')).status, 403);
+  assert.equal((await put('trainer1', 'image/png')).status, 415);
+  assert.equal((await put('trainer1', 'image/jpeg', 600 * 1024)).status, 413);
+  assert.equal((await put('trainer1')).status, 204);
+  const got = await handle(new Request(thumb), e, null, deps);
+  assert.equal(got.status, 200);
+  assert.equal(got.headers.get('content-type'), 'image/jpeg');
+  const del = await handle(new Request(url, {
+    method: 'DELETE', headers: { authorization: `Bearer ${await token('trainer1')}` } }), e, null, deps);
+  assert.equal(del.status, 204);
+  assert.equal(e.BUCKET.files.size, 0, "video va muqova ikkalasi ham o'chdi");
 });
