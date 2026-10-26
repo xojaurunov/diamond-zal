@@ -47,7 +47,9 @@ class _WebVideoState extends State<_WebVideo> {
         tagName: 'video',
         onElementCreated: (el) {
           final v = _video = el as JSObject;
-          v.setProperty('src'.toJS, '${widget.url}#t=0.1'.toJS);
+          v.setProperty('src'.toJS, widget.url.toJS);
+          // video boshlanguncha zal banneri
+          v.setProperty('poster'.toJS, 'assets/assets/brand/video_muqova.jpg'.toJS);
           v.setProperty('controls'.toJS, true.toJS);
           v.setProperty('playsInline'.toJS, true.toJS);
           v.setProperty('preload'.toJS, 'metadata'.toJS);

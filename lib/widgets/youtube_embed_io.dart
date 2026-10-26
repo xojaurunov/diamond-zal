@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// YouTube pleyeri — telefonda: WebView ichida (sahifaning o'zida o'ynaydi).
@@ -70,8 +71,20 @@ class _FileVideoState extends State<_FileVideo> {
   @override
   void initState() {
     super.initState();
+    _web = WebViewController();
+    _load();
+  }
+
+  /// Video boshlanguncha zal banneri (poster) — ilova ichidagi rasm, sahifaga data-URI bo'lib
+  Future<void> _load() async {
+    var poster = '';
+    try {
+      final bytes = await rootBundle.load('assets/brand/video_muqova.jpg');
+      poster = 'data:image/jpeg;base64,${base64Encode(bytes.buffer.asUint8List())}';
+    } catch (_) {}
+    if (!mounted) return;
     final src = const HtmlEscape().convert(widget.url);
-    _web = WebViewController()
+    _web
       // JS faqat tezlikni o'rnatish uchun; sahifa — o'zimizniki, boshqa manzilga o'tish taqiqlangan
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.black)
@@ -83,7 +96,7 @@ class _FileVideoState extends State<_FileVideo> {
 <!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>html,body{margin:0;height:100%;background:#000}video{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:#000}</style>
 </head><body>
-<video id="v" src="$src#t=0.1" controls playsinline preload="metadata" controlsList="nodownload"></video>
+<video id="v" src="$src" poster="$poster" controls playsinline preload="metadata" controlsList="nodownload"></video>
 </body></html>''');
   }
 

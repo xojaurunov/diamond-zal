@@ -12,7 +12,6 @@ import '../../models/models.dart';
 import '../../models/video_link.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
-import '../../widgets/food_image.dart';
 import '../../widgets/youtube_embed_io.dart'
     if (dart.library.js_interop) '../../widgets/youtube_embed_web.dart';
 
@@ -169,9 +168,8 @@ class _VideosScreenState extends State<VideosScreen> {
   }
 }
 
-/// Testda muqova rasmini tarmoqsiz almashtirish uchun
-@visibleForTesting
-Widget Function(String url)? debugVideoCardThumb;
+/// Video muqovasi — hamma videolarda bir xil zal banneri (zal egasi tanlagan); nomi kartochka ostida
+const videoCoverAsset = 'assets/brand/video_muqova.jpg';
 
 /// Video kartochkasi: muqova (16:9), davomiyligi, "YANGI" / "Siz uchun", nomi
 class VideoCard extends StatelessWidget {
@@ -181,12 +179,6 @@ class VideoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final thumb = thumbOf(item.url);
-    final placeholder = Container(
-      color: AppColors.cardHigh,
-      alignment: Alignment.center,
-      child: Icon(Icons.play_circle_outline, size: 48, color: AppColors.textMuted),
-    );
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpace.lg),
       child: InkWell(
@@ -198,10 +190,7 @@ class VideoCard extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 16 / 9,
               child: Stack(fit: StackFit.expand, children: [
-                if (thumb == null)
-                  placeholder
-                else
-                  debugVideoCardThumb?.call(thumb) ?? netImage(thumb, errorBuilder: (_, __, ___) => placeholder),
+                Image.asset(videoCoverAsset, fit: BoxFit.cover),
                 Center(
                   child: Container(
                     width: 52,
