@@ -90,6 +90,11 @@ async function remove(key, request, env, deps) {
   const denied = await staffOnly(request, env, deps);
   if (denied) return denied;
   await env.BUCKET.delete(key);
+  // o'chirilgan video keshdan ham ketsin (bir yil keshlanadi). Cache API faqat shu ma'lumot markazini
+  // tozalaydi; boshqa joylarda havola taxmin qilib bo'lmaydigan bo'lib qoladi va ilovada ko'rinmaydi.
+  if (typeof caches !== 'undefined') {
+    await caches.default.delete(new Request(new URL(request.url).toString(), { method: 'GET' }));
+  }
   return new Response(null, { status: 204 });
 }
 
