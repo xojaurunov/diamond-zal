@@ -37,6 +37,7 @@ TABLES = {
     'foods': ('foods', None, 'id'),
     'plans': ('plans', None, 'id'),
     'exercises': ('exercises', None, 'id'),
+    'videos': ('videos', None, 'id'),
     'shop': ('shop', None, 'id'),
     'orders': ('orders', None, 'id'),
     'reminders': ('reminders', None, 'id'),

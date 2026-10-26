@@ -693,6 +693,41 @@ def _(pg): pg.no(BARMEN).list('subscriptions')
 def _(pg): pg.no(USER).list('subscriptions')
 
 
+# == VIDEO DARSLAR (videos) — firestore test.mjs dagi bilan bir xil ==
+def dars(by, **more):
+    return {'title': 'Ovqatlanish asoslari', 'category': 'ovqatlanish', 'description': '', 'seconds': 240,
+            'url': 'https://qobil-video.qobilfitness.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+            'created_at': 1760000000000, 'created_by': by, **more}
+
+
+@check('trener dars qoshadi')
+def _(pg): pg.ok(TRAINER).set('videos', dars(TRAINER), id='d1')
+@check('bosh admin dars qoshadi')
+def _(pg): pg.ok(OWNER).set('videos', dars(OWNER), id='d2')
+@check('shogird dars qosha OLMAYDI')
+def _(pg): pg.no(USER).set('videos', dars(USER), id='d3')
+@check('barmen dars qosha OLMAYDI')
+def _(pg): pg.no(BARMEN).set('videos', dars(BARMEN), id='d4')
+@check('shogird darsni koradi')
+def _(pg): pg.ok(USER).get('videos', id='d1')
+@check('kirmagan odam darsni kora OLMAYDI')
+def _(pg): pg.no(None).get('videos', id='d1')
+@check('noma lum turdagi dars OTMAYDI')
+def _(pg): pg.no(TRAINER).set('videos', dars(TRAINER, category='reklama'), id='d5')
+@check('ortiqcha maydonli (izoh/layk) dars OTMAYDI')
+def _(pg): pg.no_extra(TRAINER).set('videos', dars(TRAINER, likes=5), id='d6')
+@check('boshqa nomidan dars qosha OLMAYDI')
+def _(pg): pg.no(TRAINER).set('videos', dars(OWNER), id='d7')
+@check('tahrirda muallifni ozgartirib BOLMAYDI (dars)')
+def _(pg): pg.no(TRAINER).set('videos', dars(OWNER), id='d1')
+@check('trener darsni tahrirlaydi')
+def _(pg): pg.ok(TRAINER).set('videos', dars(TRAINER, title='Yangi nom'), id='d1')
+@check('shogird darsni ochira OLMAYDI')
+def _(pg): pg.no(USER).delete('videos', id='d1')
+@check('trener darsni ochiradi')
+def _(pg): pg.ok(TRAINER).delete('videos', id='d1')
+
+
 # == MASHQLAR (trener qoshadi) ==
 def ex(by, **more):
     return {'name': 'Sinov mashqi', 'muscle': 'chest', 'sets': '4 x 10', 'tip': 'Sekin', 'also': ['triceps'],

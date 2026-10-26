@@ -141,6 +141,18 @@ create table if not exists plans (
   forbidden text[]
 );
 
+-- videos/{id} — trener video darslari (ovqatlanish, texnika, nafas, motivatsiya); fayl R2'da
+create table if not exists videos (
+  id text primary key default gen_random_uuid()::text,
+  title text,
+  category text,
+  description text not null default '',
+  url text,
+  seconds int not null default 0,
+  created_at bigint,
+  created_by text
+);
+
 create table if not exists exercises (
   id text primary key default gen_random_uuid()::text,
   name text,

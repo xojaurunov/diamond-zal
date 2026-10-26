@@ -24,7 +24,7 @@ TOP = {
     'users': ('users', None, 'id'), 'trainers': ('trainers', None, 'id'),
     'ratings': ('ratings', None, 'trainer_id'), 'gyms': ('gyms', None, 'id'),
     'foods': ('foods', None, 'id'), 'plans': ('plans', None, 'id'),
-    'exercises': ('exercises', None, 'id'), 'shop': ('shop', None, 'id'),
+    'exercises': ('exercises', None, 'id'), 'shop': ('shop', None, 'id'), 'videos': ('videos', None, 'id'),
     'orders': ('orders', None, 'id'), 'reminders': ('reminders', None, 'id'),
     'memberships': ('memberships', None, 'user_id'),
 }

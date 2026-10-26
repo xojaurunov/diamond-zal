@@ -32,7 +32,7 @@ KEYS = {
     'photos': ['user_id', 'id'], 'subscriptions': ['user_id', 'id'], 'attendance': ['user_id', 'day'],
     'memberships': ['user_id'], 'trainers': ['id'], 'ratings': ['trainer_id'], 'foods': ['id'],
     'plans': ['id'], 'exercises': ['id'], 'gyms': ['id'], 'shop': ['id'], 'orders': ['id'],
-    'reminders': ['id'], 'chat_messages': ['chat_user_id', 'id'],
+    'reminders': ['id'], 'chat_messages': ['chat_user_id', 'id'], 'videos': ['id'],
 }
 
 # Rad etish deb hisoblanadigan xatolar: ruxsat (RLS / trigger), cheklov, noto'g'ri tur

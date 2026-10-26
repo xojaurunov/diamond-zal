@@ -401,6 +401,45 @@ end $$;
 drop trigger if exists exercises_guard on exercises;
 create trigger exercises_guard before update on exercises for each row execute function app.exercises_guard();
 
+-- ---------- videos (trener darslari) ----------
+-- Hamma kirganlar ko'radi; qo'shish, tahrirlash, o'chirish — trener va bosh admin; muallif soxtalanmaydi
+
+alter table videos enable row level security;
+
+create or replace function app.lesson_ok(v videos) returns boolean language sql immutable as $$
+  select char_length(v.title) between 1 and 80
+    and v.category in ('texnika', 'ovqatlanish', 'nafas', 'motivatsiya', 'boshqa')
+    and char_length(v.description) <= 500
+    and char_length(v.url) between 1 and 300
+    and v.seconds between 0 and 3600
+    and v.created_at is not null
+    and v.created_by is not null
+$$;
+
+drop policy if exists videos_select on videos;
+create policy videos_select on videos for select using (app.signed_in());
+drop policy if exists videos_insert on videos;
+create policy videos_insert on videos for insert
+  with check (app.is_staff() and app.lesson_ok(videos) and created_by = app.uid());
+drop policy if exists videos_update on videos;
+create policy videos_update on videos for update using (app.is_staff())
+  with check (app.is_staff() and app.lesson_ok(videos));
+drop policy if exists videos_delete on videos;
+create policy videos_delete on videos for delete using (app.is_staff());
+
+-- tahrirda birinchi muallif va vaqt saqlanadi
+create or replace function app.videos_guard() returns trigger language plpgsql as $$
+begin
+  if app.is_bypass() then return new; end if;
+  if new.created_by is distinct from old.created_by or new.created_at is distinct from old.created_at then
+    raise exception 'videos: muallif va vaqt o''zgarmaydi' using errcode = '42501';
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists videos_guard on videos;
+create trigger videos_guard before update on videos for each row execute function app.videos_guard();
+
 -- ---------- gyms ----------
 
 alter table gyms enable row level security;
