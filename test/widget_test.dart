@@ -1703,7 +1703,8 @@ void main() {
       expect(videoContentType('a.mov'), 'video/quicktime');
       expect(videoContentType('a.3gp'), 'video/3gpp');
       expect(videoContentType('rasm.jpg'), isNull);
-      expect(maxVideoBytes, 50 * 1024 * 1024);
+      expect(maxVideoBytes, 80 * 1024 * 1024);
+      expect(maxVideoSeconds, 330);
     });
 
     testWidgets('yuklangan videoli mashqda pleyer darhol; YouTube muqovasi yo-q', (t) async {

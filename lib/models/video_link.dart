@@ -36,8 +36,14 @@ String? youtubeThumb(String url) {
 const videoServer =
     String.fromEnvironment('VIDEO_SERVER', defaultValue: 'https://qobil-video.qobilfitness.workers.dev');
 
-/// Yuklanadigan video hajmi chegarasi (Worker ham shuni tekshiradi)
-const maxVideoBytes = 50 * 1024 * 1024;
+/// Yuklanadigan (kichraytirilgan) video hajmi chegarasi (Worker ham shuni tekshiradi)
+const maxVideoBytes = 80 * 1024 * 1024;
+
+/// Video davomiyligi chegarasi: 5 daqiqa + 30 soniya zaxira
+const maxVideoSeconds = 330;
+
+/// Shundan katta video yuklashdan oldin telefonda kichraytiriladi (kichigi — o'zicha, tez)
+const compressAboveBytes = 20 * 1024 * 1024;
 
 final _uploaded =
     RegExp(r'^https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev/v/videos/[0-9a-f-]{36}\.(mp4|mov|webm|3gp)$');

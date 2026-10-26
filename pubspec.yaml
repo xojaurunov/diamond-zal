@@ -26,6 +26,8 @@ dependencies:
     sdk: flutter
   url_launcher: ^6.3.3
   webview_flutter: ^4.14.1
+  # Trener videosini telefonda kichraytirish (telefon kodlovchisi; 4K 3 GB -> 720p ~45 MB)
+  video_compress: ^3.1.4
 
 dev_dependencies:
   flutter_test:

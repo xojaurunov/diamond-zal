@@ -7,8 +7,11 @@ import 'video_upload_common.dart';
 /// Brauzerda yuklash yo'q — trener paneli webda video havolasi qo'yadi
 bool get canUploadVideo => false;
 
-Future<String> uploadVideo(String path, String fileName, {void Function(double)? onProgress}) =>
+Future<String> uploadVideo(String path, String fileName,
+        {void Function(double)? onProgress, void Function(double)? onCompress}) =>
     throw UnsupportedError('video yuklash faqat telefonda');
+
+Future<void> cancelVideoUpload() async {}
 
 /// R2'dan o'chiradi (mashq webda o'chirilganda ham fayl qolib ketmasin)
 Future<void> deleteVideo(String url) async {
