@@ -38,8 +38,10 @@ Future<UploadedVideo> uploadVideo(String path, String fileName,
       }
     }
     final url = await _send(file, name, onProgress);
-    // muqova — kichraytirilgan fayldan (kichik va tez); bo'lmasa video muqovasiz ham ishlaydi
-    await _sendThumb(file.path, url);
+    // muqova: asl video 1080p gacha bo'lsa — asl videodan (tiniq), kattasi (4K) — kichraytirilganidan;
+    // birinchi kadr emas, 1-soniya (birinchi kadr ko'pincha xira). Bo'lmasa video muqovasiz ham ishlaydi.
+    final big = ((info.width ?? 0) > (info.height ?? 0) ? info.width : info.height) ?? 0;
+    await _sendThumb(big > 0 && big <= 1920 ? path : file.path, url, atMs: seconds >= 2 ? 1000 : 0);
     return UploadedVideo(url, seconds);
   } finally {
     // kichraytirilgan vaqtinchalik fayllar telefonda joy egallamasin
@@ -47,12 +49,14 @@ Future<UploadedVideo> uploadVideo(String path, String fileName,
   }
 }
 
-/// Muqova: birinchi kadr JPEG (512 KB gacha) video yonidagi `.jpg` ga. Xatosi yuklashni to'xtatmaydi.
-Future<void> _sendThumb(String videoPath, String videoUrl) async {
+/// Muqova: [atMs] dagi eng yaqin to'liq kadr (keyframe), JPEG (500 KB gacha) video yonidagi `.jpg` ga.
+/// Xatosi yuklashni to'xtatmaydi.
+Future<void> _sendThumb(String videoPath, String videoUrl, {int atMs = 0}) async {
   try {
     Uint8List? jpg;
-    for (final q in [70, 45, 25]) {
-      jpg = await VideoCompress.getByteThumbnail(videoPath, quality: q, position: -1);
+    for (final q in [85, 70, 50, 30]) {
+      // plagin vaqtni mikrosoniyada oladi (MediaMetadataRetriever.getFrameAtTime)
+      jpg = await VideoCompress.getByteThumbnail(videoPath, quality: q, position: atMs * 1000);
       if (jpg != null && jpg.length <= 500 * 1024) break;
     }
     if (jpg == null || jpg.length > 500 * 1024) return;
