@@ -31,9 +31,10 @@ String? youtubeThumb(String url) {
 
 // ---------- yuklangan video (Cloudflare R2, `cloudflare/video` Worker) ----------
 
-/// Video serveri manzili (Worker). Bo'sh bo'lsa — yuklash tugmasi ko'rinmaydi.
-/// Qurishda almashtirish mumkin: `--dart-define=VIDEO_SERVER=https://...`
-const videoServer = String.fromEnvironment('VIDEO_SERVER');
+/// Video serveri manzili (Worker, `cloudflare/video`; Cloudflare akkaunti Xojaurunov, bucket `qobil-video`).
+/// Qurishda almashtirish mumkin: `--dart-define=VIDEO_SERVER=https://...`; bo'sh — yuklash tugmasi yo'q.
+const videoServer =
+    String.fromEnvironment('VIDEO_SERVER', defaultValue: 'https://qobil-video.qobilfitness.workers.dev');
 
 /// Yuklanadigan video hajmi chegarasi (Worker ham shuni tekshiradi)
 const maxVideoBytes = 50 * 1024 * 1024;

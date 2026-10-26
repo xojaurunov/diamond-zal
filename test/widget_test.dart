@@ -1694,7 +1694,8 @@ void main() {
         expect(isUploadedVideo(u), isFalse, reason: u);
       }
       expect(isUploadedVideo(youtubeThumb('https://youtu.be/dQw4w9WgXcQ')!), isFalse);
-      expect(isOwnVideo(r2), isFalse, reason: 'video serveri manzili berilmagan — token hech qayerga yuborilmaydi');
+      expect(isOwnVideo(r2), isFalse, reason: 'boshqa Worker — token yuborilmaydi');
+      expect(isOwnVideo('$videoServer/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4'), isTrue);
     });
 
     test('video turi fayl nomidan; boshqa fayl — null', () {
@@ -1749,10 +1750,12 @@ void main() {
       expect(find.text('Video havolasi (ixtiyoriy)'), findsOneWidget);
     });
 
-    testWidgets('video serveri manzili yo-q — yuklash tugmasi ko-rinmaydi', (t) async {
+    testWidgets('yuklash mumkin bo-lmasa (web) — tugma ko-rinmaydi', (t) async {
       t.view.physicalSize = const Size(420, 3000);
       t.view.devicePixelRatio = 1;
       addTearDown(t.view.reset);
+      debugCanUploadVideo = false;
+      addTearDown(() => debugCanUploadVideo = null);
       await t.pumpWidget(const MaterialApp(
         home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest')),
       ));

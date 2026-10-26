@@ -1,4 +1,4 @@
-# Mashq videolari — R2 bucket `zalpro-files` oldidagi Worker. Joylash:
+# Mashq videolari — R2 bucket `qobil-video` (Cloudflare akkaunti Xojaurunov) oldidagi Worker. Joylash:
 #     cd cloudflare/video && npx wrangler deploy
 # Kalit kerak emas: R2 ga "binding" orqali ulanadi.
 name = "qobil-video"
@@ -10,4 +10,4 @@ FIREBASE_PROJECT = "kotta-qani-09111753"
 
 [[r2_buckets]]
 binding = "BUCKET"
-bucket_name = "zalpro-files"
+bucket_name = "qobil-video"
