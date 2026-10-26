@@ -931,6 +931,10 @@
   "ru": "Чиракчи",
   "en": "Chirakchi"
  },
+ "Chiziqni chapga-o'ngga suring: chapda — oldin, o'ngda — keyin.": {
+  "ru": "Двигайте линию влево-вправо: слева — до, справа — после.",
+  "en": "Drag the line left and right: left — before, right — after."
+ },
  "Chizmani bosing — tanlangan tur belgilanadi.": {
   "ru": "Нажмите на схему — отметится выбранный тип.",
   "en": "Tap the figure — the chosen type is marked."
@@ -3468,8 +3472,8 @@
   "en": "Sokh"
  },
  "Solishtirish": {
-  "ru": "Сравнение",
-  "en": "Comparison"
+  "ru": "Сравнить",
+  "en": "Compare"
  },
  "Solishtirish, ball va kimga e'tibor kerak": {
   "ru": "Сравнение, баллы и кому нужно внимание",
