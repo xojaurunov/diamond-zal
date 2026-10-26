@@ -955,6 +955,10 @@
   "ru": "Чуст",
   "en": "Chust"
  },
+ "DAM OLISH": {
+  "ru": "ОТДЫХ",
+  "en": "REST"
+ },
  "Dam olish kuni": {
   "ru": "День отдыха",
   "en": "Rest day"
@@ -2342,6 +2346,10 @@
  "O'tirib oyoqni yozish": {
   "ru": "Разгибание ног сидя",
   "en": "Leg extension"
+ },
+ "O'tkazib yuborish": {
+  "ru": "Пропустить",
+  "en": "Skip"
  },
  "O'zbekiston": {
   "ru": "Узбекистан",
@@ -4974,6 +4982,10 @@
  "{0} rasm": {
   "ru": "{0} фото",
   "en": "{0} photos"
+ },
+ "{0} s": {
+  "ru": "{0} с",
+  "en": "{0} s"
  },
  "{0} shogird": {
   "ru": "учеников: {0}",

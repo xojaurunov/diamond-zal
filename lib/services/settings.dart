@@ -75,4 +75,14 @@ class AppSettings {
     feedSeen.value = t;
     await _p?.setInt('feed_seen', t.millisecondsSinceEpoch);
   }
+
+  // ---------- dam olish taymeri ----------
+  /// Setlar orasidagi dam olish (soniya) — shogird tanlaydi: 60 / 90 / 120
+  static const restChoices = [60, 90, 120];
+  static int get restSeconds {
+    final v = _p?.getInt('rest_seconds');
+    return restChoices.contains(v) ? v! : 90;
+  }
+
+  static Future<void> setRestSeconds(int v) async => _p?.setInt('rest_seconds', v);
 }

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kotta_qani_diet/models/gym.dart';
 import 'package:kotta_qani_diet/models/photo.dart';
+import 'package:kotta_qani_diet/screens/user/muscles_screen.dart';
 import 'package:kotta_qani_diet/widgets/before_after.dart';
 
 /// 1×1 PNG — test rasmi
@@ -34,6 +36,47 @@ void main() {
       await t.drag(find.byType(BeforeAfterSlider), const Offset(200, 0));
       await t.pump();
       expect(clip().widthFactor, greaterThan(0.5));
+    });
+  });
+
+  group('Dam olish taymeri', () {
+    testWidgets("'Bajardim' — 90 s hisob; tanlov, o'tkazish, tugashi", (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(gymDays: evenDays, weekday: DateTime.tuesday, onBack: () {}),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      await t.tap(find.text("Mashg'ulotni boshlash"));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.byKey(const Key('dam-olish')), findsNothing, reason: 'hali hech narsa bajarilmadi');
+
+      await t.tap(find.text('Bajardim').first);
+      await t.pump();
+      expect(find.text('1:30'), findsOneWidget, reason: 'standart 90 s');
+      await t.pump(const Duration(seconds: 5));
+      expect(find.text('1:25'), findsOneWidget);
+
+      await t.tap(find.text('60 s'));
+      await t.pump();
+      expect(find.text('1:00'), findsOneWidget, reason: 'boshqa vaqt — qaytadan');
+      await t.pump(const Duration(seconds: 61));
+      expect(find.byKey(const Key('dam-olish')), findsNothing, reason: 'vaqt tugadi');
+
+      await t.tap(find.text('Bajardim').first);
+      await t.pump();
+      expect(find.text('1:00'), findsOneWidget, reason: 'tanlangan vaqt eslab qolindi');
+      // belgi olinsa hisob ham yo'qoladi
+      await t.tap(find.text('Bajarildi').first);
+      await t.pump();
+      expect(find.byKey(const Key('dam-olish')), findsNothing);
+
+      await t.tap(find.text('Bajardim').first);
+      await t.pump();
+      await t.tap(find.text("O'tkazib yuborish"));
+      await t.pump();
+      expect(find.byKey(const Key('dam-olish')), findsNothing);
     });
   });
 }
