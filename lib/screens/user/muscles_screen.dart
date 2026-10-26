@@ -6,6 +6,7 @@ import '../../l10n/tr.dart';
 import '../../models/exercises.dart';
 import '../../models/gym.dart';
 import '../../models/video_link.dart';
+import '../../services/settings.dart';
 import '../../widgets/body_map.dart';
 import '../../widgets/food_image.dart';
 import '../../widgets/particle_body.dart';
@@ -48,6 +49,9 @@ class MusclesScreen extends StatefulWidget {
   final VoidCallback? onStart;
   final void Function(String key, bool done)? onDone;
 
+  /// Mashg'ulot tugagach fikr tanlandi ([gymFeels] kaliti)
+  final ValueChanged<String>? onFeel;
+
   /// Bugungi hafta kuni (test uchun; odatda `DateTime.now().weekday`)
   final int? weekday;
 
@@ -61,6 +65,7 @@ class MusclesScreen extends StatefulWidget {
     this.progress,
     this.onStart,
     this.onDone,
+    this.onFeel,
     this.weekday,
   });
 
@@ -100,7 +105,13 @@ class _MusclesScreenState extends State<MusclesScreen> {
   /// Mashg'ulot holati: bazadan keladi, bosilganda darhol shu yerda ham yangilanadi
   bool _started = false;
   Set<String> _done = {};
+  String? _feel;
   StreamSubscription<WorkoutProgress>? _sub;
+
+  /// Dam olish taymeri: "Bajardim" bosilgach pastda sanaydi; null — ko'rinmaydi
+  int _restTotal = AppSettings.restSeconds;
+  int? _restLeft;
+  Timer? _rest;
 
   @override
   void initState() {
@@ -110,6 +121,7 @@ class _MusclesScreenState extends State<MusclesScreen> {
         setState(() {
           _started = p.started;
           _done = {...p.done};
+          _feel = p.feel;
         });
       }
     }, onError: (_) {});
@@ -118,6 +130,7 @@ class _MusclesScreenState extends State<MusclesScreen> {
   @override
   void dispose() {
     _sub?.cancel();
+    _rest?.cancel();
     super.dispose();
   }
 
@@ -144,6 +157,45 @@ class _MusclesScreenState extends State<MusclesScreen> {
       _open = null;
     });
     widget.onDone?.call(e.key, done);
+    // keyingi mashqqa dam olish; mashg'ulot tugagan bo'lsa — kerak emas
+    if (done && _running && _active != null) {
+      _startRest();
+    } else if (!done) {
+      _stopRest();
+    }
+  }
+
+  void _pickFeel(String feel) {
+    setState(() => _feel = feel);
+    widget.onFeel?.call(feel);
+  }
+
+  void _startRest() {
+    _rest?.cancel();
+    setState(() => _restLeft = _restTotal);
+    _rest = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      final left = (_restLeft ?? 1) - 1;
+      if (left > 0) {
+        setState(() => _restLeft = left);
+        return;
+      }
+      HapticFeedback.vibrate();
+      _stopRest();
+    });
+  }
+
+  void _stopRest() {
+    _rest?.cancel();
+    _rest = null;
+    if (_restLeft != null) setState(() => _restLeft = null);
+  }
+
+  /// Boshqa vaqt tanlandi: eslab qolinadi va hisob shu vaqtdan qaytadan boshlanadi
+  void _pickRest(int seconds) {
+    _restTotal = seconds;
+    AppSettings.setRestSeconds(seconds);
+    _startRest();
   }
 
   int get _today => widget.weekday ?? DateTime.now().weekday;
@@ -245,6 +297,27 @@ class _MusclesScreenState extends State<MusclesScreen> {
         Text(tr("Bugungi mashg'ulot tugadi"), style: _count),
         const SizedBox(height: 12),
         Text(tr('Hamma mashq bajarildi. Barakalla!'), style: _lead),
+        const SizedBox(height: 30),
+        Text(tr("Bugungi mashg'ulot qanday bo'ldi?").toUpperCase(), style: _label),
+        const SizedBox(height: 12),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          for (final f in gymFeels.entries)
+            ChoiceChip(
+              label: Text(tr(f.value)),
+              selected: _feel == f.key,
+              onSelected: (_) => _pickFeel(f.key),
+              selectedColor: _violet,
+              backgroundColor: Colors.black,
+              labelStyle: TextStyle(
+                  color: _feel == f.key ? _white : _silver, fontSize: 15, fontWeight: FontWeight.w600),
+              side: const BorderSide(color: Color(0xFF3A3A3A)),
+              showCheckmark: false,
+            ),
+        ]),
+        if (_feel != null) ...[
+          const SizedBox(height: 10),
+          Text(tr("Rahmat! Trener ko'radi va yuklamani shunga qarab o'zgartiradi."), style: _lead),
+        ],
       ] else ...[
         const SizedBox(height: 14),
         Text('${tr('Hozir')}: ${tr(muscleById(active)!.name)}'.toUpperCase(), style: _label),
@@ -330,6 +403,9 @@ class _MusclesScreenState extends State<MusclesScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.black,
+        bottomNavigationBar: _restLeft == null
+            ? null
+            : _RestBar(left: _restLeft!, total: _restTotal, onPick: _pickRest, onSkip: _stopRest),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(24, 6, 24, 60),
@@ -506,6 +582,63 @@ class _MusclesScreenState extends State<MusclesScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Dam olish hisobi: qolgan vaqt, 60/90/120 tanlov, "O'tkazib yuborish"
+class _RestBar extends StatelessWidget {
+  final int left, total;
+  final ValueChanged<int> onPick;
+  final VoidCallback onSkip;
+  const _RestBar({required this.left, required this.total, required this.onPick, required this.onSkip});
+
+  @override
+  Widget build(BuildContext context) {
+    final time = '${left ~/ 60}:${(left % 60).toString().padLeft(2, '0')}';
+    return Container(
+      key: const Key('dam-olish'),
+      color: const Color(0xFF141414),
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+      child: SafeArea(
+        top: false,
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          LinearProgressIndicator(
+            value: left / total,
+            minHeight: 3,
+            color: _violet,
+            backgroundColor: const Color(0xFF2A2A2A),
+          ),
+          const SizedBox(height: 10),
+          Row(children: [
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(tr('DAM OLISH'), style: _label),
+                Text(time, style: _count),
+              ]),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: _white),
+              onPressed: onSkip,
+              child: Text(tr("O'tkazib yuborish")),
+            ),
+          ]),
+          const SizedBox(height: 6),
+          Wrap(spacing: 8, children: [
+            for (final s in AppSettings.restChoices)
+              ChoiceChip(
+                label: Text(trf('{0} s', ['$s'])),
+                selected: s == total,
+                onSelected: (_) => onPick(s),
+                selectedColor: _violet,
+                backgroundColor: Colors.black,
+                labelStyle: TextStyle(color: s == total ? _white : _silver, fontWeight: FontWeight.w600),
+                side: const BorderSide(color: Color(0xFF3A3A3A)),
+                showCheckmark: false,
+              ),
+          ]),
+        ]),
       ),
     );
   }

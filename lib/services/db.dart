@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../models/announcement.dart';
 import '../models/gym.dart';
 import '../models/lesson.dart';
 import '../models/exercises.dart';
@@ -381,6 +382,23 @@ class Db {
         'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,
       });
 
+  // ---------- announcements (zal e'lonlari) ----------
+  /// Oxirgi e'lonlar, yangisi birinchi
+  static Stream<List<Announcement>> announcements({int limit = 20}) => _fs
+      .collection('announcements')
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map((s) => s.docs.map(Announcement.fromDoc).toList());
+
+  static Future<void> addAnnouncement(String text, String adminId) => _fs.collection('announcements').add({
+        'text': text,
+        'createdAt': FieldValue.serverTimestamp(),
+        'createdBy': adminId,
+      });
+
+  static Future<void> deleteAnnouncement(String id) => _fs.collection('announcements').doc(id).delete();
+
   // ---------- plans ----------
   static Stream<List<Plan>> plans() =>
       _fs.collection('plans').snapshots().map((s) => s.docs.map(Plan.fromDoc).toList());
@@ -582,8 +600,13 @@ class Db {
         return WorkoutProgress(
           started: data?['gymStarted'] == true,
           done: {for (final k in (data?['gymDone'] as List? ?? const [])) k.toString()},
+          feel: gymFeels.containsKey(data?['gymFeel']) ? data!['gymFeel'] as String : null,
         );
       });
+
+  /// Mashg'ulot tugagach shogird fikri ([gymFeels] kaliti)
+  static Future<void> setGymFeel(String uid, String day, String feel) =>
+      _dayRef(uid, day).set({'gymFeel': feel}, SetOptions(merge: true));
 
   static Future<void> startWorkout(String uid, String day) =>
       _dayRef(uid, day).set({'gymStarted': true}, SetOptions(merge: true));

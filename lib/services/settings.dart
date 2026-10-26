@@ -75,4 +75,23 @@ class AppSettings {
     feedSeen.value = t;
     await _p?.setInt('feed_seen', t.millisecondsSinceEpoch);
   }
+
+  // ---------- dam olish taymeri ----------
+  /// Setlar orasidagi dam olish (soniya) — shogird tanlaydi: 60 / 90 / 120
+  static const restChoices = [60, 90, 120];
+  static int get restSeconds {
+    final v = _p?.getInt('rest_seconds');
+    return restChoices.contains(v) ? v! : 90;
+  }
+
+  static Future<void> setRestSeconds(int v) async => _p?.setInt('rest_seconds', v);
+
+  // ---------- zal e'lonlari ----------
+  /// Shogird yopgan e'lonlar (qayta ko'rsatilmaydi); oxirgi 50 tasi saqlanadi
+  static Set<String> get hiddenAnnouncements => {...?_p?.getStringList('elon_hidden')};
+
+  static Future<void> hideAnnouncement(String id) async {
+    final ids = [...?_p?.getStringList('elon_hidden'), id];
+    await _p?.setStringList('elon_hidden', ids.length > 50 ? ids.sublist(ids.length - 50) : ids);
+  }
 }
