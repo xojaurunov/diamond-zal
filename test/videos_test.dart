@@ -62,8 +62,6 @@ void main() {
       t.view.physicalSize = const Size(420, 4000);
       t.view.devicePixelRatio = 1;
       addTearDown(t.view.reset);
-      debugVideoCardThumb = (_) => const ColoredBox(color: Colors.grey);
-      addTearDown(() => debugVideoCardThumb = null);
       await t.pumpWidget(MaterialApp(
         home: VideosScreen(user: student(), custom: Stream.value(exercises), lessons: Stream.value(lessons)),
       ));
