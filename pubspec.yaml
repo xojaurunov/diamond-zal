@@ -41,7 +41,8 @@ flutter:
     - assets/brand/
     - assets/credits.txt
 
-# Ilova ikonkasi: assets/icon/icon.png (7-okt 2026 dan — assets/icon/logo_src_3.png: "QOBIL" yozuvli;
+# Ilova ikonkasi: assets/icon/icon.png (20-okt 2026 dan — "QOBIL FITNESS · ZAL · TOSHKENT" yozuvli,
+# fonsiz qalqon; undan oldin 7-okt dan — assets/icon/logo_src_3.png: "QOBIL" yozuvli;
 # logo_src_2.png — undan oldingi asl rasm; burchaklari
 # yumaloqlangan to'liq kvadrat). `dart run flutter_launcher_icons` barcha o'lchamlarni chiqaradi.
 # Eski logotip: assets/icon/logo_src.jpg + tools/make_icon.dart (shaffof fonli variant).

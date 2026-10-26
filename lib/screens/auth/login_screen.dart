@@ -72,42 +72,40 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(children: [
           // Editorial bosh blok: chapga tekislangan yirik matn, laym urg'u
-          GradientHeader(
-            child: Stack(children: [
-              // Bosh blok foni — zal ruhi
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Opacity(
-                    opacity: 0.38,
-                    child: Image.asset(
-                      'assets/brand/pahlavon.png',
-                      fit: BoxFit.fitHeight,
-                      alignment: Alignment.centerRight,
+          // Bosh blok — bannerdagi qora fon bilan bir xil, banner unga singib ketadi
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: _bannerBg,
+              border: Border(bottom: BorderSide(color: AppColors.hairline)),
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(AppRadius.xl)),
+            ),
+            child: SafeArea(
+            bottom: false,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(AppSpace.xl, AppSpace.md, AppSpace.xl, 0),
+                child: Align(alignment: Alignment.centerRight, child: LangPicker(compact: true)),
+              ),
+              // Zal banneri — logotip va "QOBIL FITNESS"; chetlari fonga singib ketadi
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: _fadeEdges(
+                    Axis.vertical,
+                    _fadeEdges(
+                      Axis.horizontal,
+                      AspectRatio(
+                        aspectRatio: 1300 / 400,
+                        child: Image.asset('assets/brand/kirish_banner.jpg', fit: BoxFit.cover),
+                      ),
                     ),
                   ),
                 ),
               ),
               Padding(
-              padding: const EdgeInsets.fromLTRB(AppSpace.xl, 44, AppSpace.xl, 40),
+              padding: const EdgeInsets.fromLTRB(AppSpace.xl, AppSpace.md, AppSpace.xl, 36),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                    ),
-                    child: Icon(Icons.fitness_center, size: 22, color: AppColors.onAccent),
-                  ),
-                  const SizedBox(width: AppSpace.md),
-                  Eyebrow('Qobil zal', color: AppColors.textFaint),
-                  const Spacer(),
-                  const LangPicker(compact: true),
-                ]),
-                const SizedBox(height: AppSpace.xl),
                 Text(
                   tr("To'g'ri ovqatlanish —"),
                   style: t.headlineLarge?.copyWith(color: AppColors.text),
@@ -127,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
               ),
             ]),
+            ),
           ),
           Center(
             child: ConstrainedBox(
@@ -273,6 +272,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+/// Kirish banneri foni (`assets/brand/kirish_banner.jpg` chetidagi rang)
+const _bannerBg = Color(0xFF0E0D0B);
+
+/// Rasm chetlarini [axis] bo'yicha shaffoflashtiradi — banner bosh blok foniga singib ketadi
+Widget _fadeEdges(Axis axis, Widget child) => ShaderMask(
+      blendMode: BlendMode.dstIn,
+      shaderCallback: (r) => LinearGradient(
+        begin: axis == Axis.horizontal ? Alignment.centerLeft : Alignment.topCenter,
+        end: axis == Axis.horizontal ? Alignment.centerRight : Alignment.bottomCenter,
+        colors: const [Color(0x00000000), Color(0xFF000000), Color(0xFF000000), Color(0x00000000)],
+        stops: const [0, 0.08, 0.92, 1],
+      ).createShader(r),
+      child: child,
+    );
 
 /// Kirish / Ro'yxatdan o'tish almashtirgichi — bitta segmentli yorliq
 class _Toggle extends StatelessWidget {
