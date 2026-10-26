@@ -1043,6 +1043,26 @@
   "ru": "Понедельник",
   "en": "Monday"
  },
+ "E'lon matnini yozing": {
+  "ru": "Напишите текст объявления",
+  "en": "Write the announcement text"
+ },
+ "E'lon qilindi": {
+  "ru": "Объявление опубликовано",
+  "en": "Announcement posted"
+ },
+ "E'lon qilish": {
+  "ru": "Опубликовать",
+  "en": "Post"
+ },
+ "E'lonlar": {
+  "ru": "Объявления",
+  "en": "Announcements"
+ },
+ "E'lonni o'chirish": {
+  "ru": "Удалить объявление",
+  "en": "Delete announcement"
+ },
  "E'tibor kerak": {
   "ru": "Требуют внимания",
   "en": "Need attention"
@@ -1283,6 +1303,10 @@
   "ru": "3 дня в неделю. Тренировки по порядку дней: 1) {0}, 2) {1}, 3) {2}.",
   "en": "3 days a week. Workouts follow the day order: 1) {0}, 2) {1}, 3) {2}."
  },
+ "Hali e'lon yo'q": {
+  "ru": "Объявлений пока нет",
+  "en": "No announcements yet"
+ },
  "Hali kelgani belgilanmagan": {
   "ru": "Посещение ещё не отмечено",
   "en": "Attendance not marked yet"
@@ -1338,6 +1362,10 @@
  "Hamma mushaklar": {
   "ru": "Все мышцы",
   "en": "All muscles"
+ },
+ "Hamma shogirdga e'lon: zal vaqti, bayram, yangilik": {
+  "ru": "Объявление всем клиентам: часы работы, праздники, новости",
+  "en": "Notice to all clients: hours, holidays, news"
  },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
@@ -1938,6 +1966,10 @@
  "Masalan: 5 yil tajriba, ozish va massa nabor": {
   "ru": "Например: 5 лет опыта, похудение и набор массы",
   "en": "E.g. 5 years of experience, weight loss and muscle gain"
+ },
+ "Masalan: Ertaga zal 10:00 da ochiladi": {
+  "ru": "Например: завтра зал откроется в 10:00",
+  "en": "For example: the gym opens at 10:00 tomorrow"
  },
  "Mashg'ulot:": {
   "ru": "Тренировка:",
@@ -2542,6 +2574,10 @@
  "Oxirgi baho: {0}": {
   "ru": "Последняя оценка: {0}",
   "en": "Last rated: {0}"
+ },
+ "Oxirgi e'lonlar": {
+  "ru": "Последние объявления",
+  "en": "Recent announcements"
  },
  "Oxirgi o'lchovdan 7 kun o'tdi": {
   "ru": "С последнего взвешивания прошло 7 дней",
@@ -3386,6 +3422,10 @@
  "Shogirdlar": {
   "ru": "Ученики",
   "en": "Clients"
+ },
+ "Shogirdlar e'lonni \"Bugun\" ekranining tepasida 7 kun ko'radi.": {
+  "ru": "Клиенты видят объявление вверху экрана «Сегодня» 7 дней.",
+  "en": "Clients see the announcement at the top of the \"Today\" screen for 7 days."
  },
  "Shogirdlar ko'radi": {
   "ru": "Ученики видят",
@@ -4619,6 +4659,10 @@
   "ru": "Выберите дни в разделе «Зал» — здесь появятся упражнения на сегодня. Пока открыты все мышцы.",
   "en": "Choose your days in the Gym section — today's exercises will appear here. For now all muscles are open."
  },
+ "Zal e'loni · {0}": {
+  "ru": "Объявление зала · {0}",
+  "en": "Gym notice · {0}"
+ },
  "Zal egasi": {
   "ru": "Владелец зала",
   "en": "Gym owner"
@@ -5126,6 +5170,10 @@
  "{0} · kaloriya": {
   "ru": "{0} · калории",
   "en": "{0} · calories"
+ },
+ "{0} · ko'rinmaydi (7 kundan eski)": {
+  "ru": "{0} · скрыто (старше 7 дней)",
+  "en": "{0} · hidden (older than 7 days)"
  },
  "{0} — hali ovqatlanish rejasi yo‘q": {
   "ru": "{0} — ещё нет плана питания",

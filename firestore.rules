@@ -217,6 +217,20 @@ service cloud.firestore {
       allow write: if isStaff();
     }
 
+    // Zal e'lonlari ("Bugun" ekranida banner): hamma kirganlar o'qiydi; yozadi trener va
+    // bosh admin. Muallif va vaqt soxtalanmaydi, tahrir yo'q. O'chiradi — muallif yoki bosh admin.
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow create: if isStaff()
+        && request.resource.data.keys().hasOnly(['text', 'createdAt', 'createdBy'])
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 500
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if isOwner() || (isStaff() && resource.data.createdBy == request.auth.uid);
+    }
+
     // Trener qo'shgan mashqlar ("Tana xaritasi"). Hamma kirganlar o'qiydi; qo'shish,
     // tahrirlash va o'chirish — trener va bosh adminda (barmen va shogirdda yo'q).
     // Mushak — ilovadagi 12 guruhdan biri; matn uzunligi cheklangan.

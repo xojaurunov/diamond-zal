@@ -5,6 +5,7 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
+import 'announcements_admin_screen.dart';
 import 'exercises_admin_screen.dart';
 
 /// Trener: Zal bo'limi — shogirdlar kimda qaysi kun, bugun kim keladi, kim uyda.
@@ -55,6 +56,30 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
                     const SizedBox(height: 2),
                     Text(
                       tr("Tana chizmasidan mushak tanlab, yangi mashq qo'shing"),
+                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                    ),
+                  ]),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.textMuted),
+              ]),
+            ),
+            const SizedBox(height: AppSpace.sm),
+            // Zal e'lonlari: shogirdlar "Bugun" ekranining tepasida ko'radi
+            BentoTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AnnouncementsAdminScreen(admin: widget.admin)),
+              ),
+              padding: const EdgeInsets.all(AppSpace.lg),
+              child: Row(children: [
+                Icon(Icons.campaign_outlined, color: AppColors.accent),
+                const SizedBox(width: AppSpace.md),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(tr("E'lonlar"), style: t.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      tr("Hamma shogirdga e'lon: zal vaqti, bayram, yangilik"),
                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                     ),
                   ]),

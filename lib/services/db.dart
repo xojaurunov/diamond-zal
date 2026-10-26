@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../models/announcement.dart';
 import '../models/gym.dart';
 import '../models/exercises.dart';
 import '../models/models.dart';
@@ -367,6 +368,23 @@ class Db {
       _fs.collection('users').doc(uid).update({
         'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,
       });
+
+  // ---------- announcements (zal e'lonlari) ----------
+  /// Oxirgi e'lonlar, yangisi birinchi
+  static Stream<List<Announcement>> announcements({int limit = 20}) => _fs
+      .collection('announcements')
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map((s) => s.docs.map(Announcement.fromDoc).toList());
+
+  static Future<void> addAnnouncement(String text, String adminId) => _fs.collection('announcements').add({
+        'text': text,
+        'createdAt': FieldValue.serverTimestamp(),
+        'createdBy': adminId,
+      });
+
+  static Future<void> deleteAnnouncement(String id) => _fs.collection('announcements').doc(id).delete();
 
   // ---------- plans ----------
   static Stream<List<Plan>> plans() =>

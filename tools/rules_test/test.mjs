@@ -651,6 +651,41 @@ await check('barmen hamma abonementlarni oqiy OLMAYDI', () =>
 await check('shogird hamma abonementlarni oqiy OLMAYDI', () =>
   assertFails(getDocs(collectionGroup(as(USER), 'subscriptions'))));
 
+console.log("\n== ZAL E'LONLARI (announcements) ==");
+const elon = (by, extra = {}) => ({ text: 'Ertaga zal 10:00 da ochiladi', createdAt: serverTimestamp(), createdBy: by, ...extra });
+await check('trener elon yozadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'announcements', 'a1'), elon(TRAINER))));
+await check('bosh admin elon yozadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'announcements', 'a2'), elon(OWNER))));
+await check('shogird elon yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'announcements', 'a3'), elon(USER))));
+await check('barmen elon yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'announcements', 'a3'), elon(BARMEN))));
+await check('muallifni soxtalab BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(OWNER))));
+await check('vaqtni soxtalab BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { createdAt: new Date(2020, 0, 1) }))));
+await check('500 belgidan uzun BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { text: 'x'.repeat(501) }))));
+await check('bosh elon BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { text: '' }))));
+await check('ortiqcha maydon BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { pin: true }))));
+await check('shogird elonlarni oqiydi', () =>
+  assertSucceeds(getDocs(collection(as(USER), 'announcements'))));
+await check('kirmagan oqiy OLMAYDI', () =>
+  assertFails(getDocs(collection(anon(), 'announcements'))));
+await check('elonni tahrirlab BOLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'announcements', 'a1'), { text: 'Ozgardi' })));
+await check('boshqa trener begona elonni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER2), 'announcements', 'a1'))));
+await check('shogird elonni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'announcements', 'a1'))));
+await check('muallif oz elonini ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'announcements', 'a1'))));
+await check('bosh admin istalgan elonni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(OWNER), 'announcements', 'a2'))));
+
 console.log('\n== MASHQLAR (trener qoshadi) ==');
 const ex = (by, more = {}) => ({
   name: 'Sinov mashqi', muscle: 'chest', sets: '4 x 10', tip: 'Sekin', also: ['triceps'],

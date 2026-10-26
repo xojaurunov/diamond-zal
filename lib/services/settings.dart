@@ -85,4 +85,13 @@ class AppSettings {
   }
 
   static Future<void> setRestSeconds(int v) async => _p?.setInt('rest_seconds', v);
+
+  // ---------- zal e'lonlari ----------
+  /// Shogird yopgan e'lonlar (qayta ko'rsatilmaydi); oxirgi 50 tasi saqlanadi
+  static Set<String> get hiddenAnnouncements => {...?_p?.getStringList('elon_hidden')};
+
+  static Future<void> hideAnnouncement(String id) async {
+    final ids = [...?_p?.getStringList('elon_hidden'), id];
+    await _p?.setStringList('elon_hidden', ids.length > 50 ? ids.sublist(ids.length - 50) : ids);
+  }
 }
