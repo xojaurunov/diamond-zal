@@ -42,7 +42,7 @@ flutter:
     - assets/credits.txt
 
 # Ilova ikonkasi: assets/icon/icon.png (20-okt 2026 dan — "QOBIL FITNESS · ZAL · TOSHKENT" yozuvli,
-# fonsiz qalqon; undan oldin 7-okt dan — assets/icon/logo_src_3.png: "QOBIL" yozuvli;
+# 26-okt dan to'q fonda + adaptiv old qatlam icon_foreground.png; undan oldin 7-okt dan — assets/icon/logo_src_3.png: "QOBIL" yozuvli;
 # logo_src_2.png — undan oldingi asl rasm; burchaklari
 # yumaloqlangan to'liq kvadrat). `dart run flutter_launcher_icons` barcha o'lchamlarni chiqaradi.
 # Eski logotip: assets/icon/logo_src.jpg + tools/make_icon.dart (shaffof fonli variant).
@@ -50,9 +50,11 @@ flutter_launcher_icons:
   android: true
   ios: false
   image_path: "assets/icon/icon.png"
-  # Adaptiv ikonka ATAYLAB yo'q: adaptiv ikonkani launcher doim shaklga solib, shaffof fonni
-  # qora/oq plashka bilan to'ldiradi. Faqat shaffof PNG — ikonka ramkasiz, orqa fon ko'rinadi.
-  # (Eslatma: mipmap-anydpi-v26/ic_launcher.xml bo'lmasligi kerak.)
+  # 26-okt dan adaptiv ikonka: to'q fon (#0E0D0B, kirish banneri rangi) + markazda logotip.
+  # Shaffof ikonka ba'zi telefonlarda oq plashka ichida chiqdi (zal egasining telefoni) —
+  # adaptiv ikonkada telefon o'z shaklini beradi, fon esa doim to'q.
+  adaptive_icon_background: "#0E0D0B"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
   remove_alpha_ios: true
   web:
     generate: true
