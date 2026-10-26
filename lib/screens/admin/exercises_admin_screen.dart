@@ -361,7 +361,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
       _error = null;
     });
     try {
-      final url = await uploadVideo(file.path, file.name, onCompress: (p) {
+      final up = await uploadVideo(file.path, file.name, onCompress: (p) {
         if (mounted) {
           setState(() {
             _compressing = true;
@@ -376,8 +376,8 @@ class _ExerciseFormState extends State<ExerciseForm> {
           });
         }
       });
-      _uploads.add(url);
-      if (mounted) setState(() => _video.text = url);
+      _uploads.add(up.url);
+      if (mounted) setState(() => _video.text = up.url);
     } catch (e) {
       if (mounted) setState(() => _error = trf("Video yuklanmadi: {0}", [e]));
     } finally {

@@ -2,10 +2,13 @@
 //   POST   /upload        — video yuklash (faqat trener va bosh admin), javob: { url }
 //   DELETE /v/<kalit>     — videoni o'chirish (faqat trener va bosh admin)
 //   GET    /v/<kalit>     — videoni ko'rsatish (hammaga; `Range` — oldinga surish; keshlanadi)
+//   PUT    /v/videos/<uuid>.jpg — video muqovasi (faqat trener va bosh admin, JPEG, 512 KB gacha);
+//                            manzil video manzilidan kelib chiqadi, video o'chirilsa muqova ham o'chadi
 // Kimligi: Firebase ID token (ilova `Authorization: Bearer` bilan yuboradi). Rol — foydalanuvchining
 // o'z Firestore hujjatidan, o'z tokeni bilan o'qiladi. Firebase'ga hech narsa yozilmaydi.
 
 export const MAX_BYTES = 80 * 1024 * 1024;
+export const MAX_THUMB_BYTES = 512 * 1024;
 const TYPES = { 'video/mp4': 'mp4', 'video/quicktime': 'mov', 'video/webm': 'webm', 'video/3gpp': '3gp' };
 const KEYS_URL = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
 const STAFF = ['admin', 'owner'];
@@ -89,12 +92,26 @@ async function upload(request, env, deps) {
 async function remove(key, request, env, deps) {
   const denied = await staffOnly(request, env, deps);
   if (denied) return denied;
-  await env.BUCKET.delete(key);
-  // o'chirilgan video keshdan ham ketsin (bir yil keshlanadi). Cache API faqat shu ma'lumot markazini
+  // video o'chirilsa muqovasi ham
+  const keys = key.endsWith('.jpg') ? [key] : [key, key.replace(/\.[a-z0-9]+$/, '.jpg')];
+  await env.BUCKET.delete(keys);
+  // o'chirilgan fayl keshdan ham ketsin (bir yil keshlanadi). Cache API faqat shu ma'lumot markazini
   // tozalaydi; boshqa joylarda havola taxmin qilib bo'lmaydigan bo'lib qoladi va ilovada ko'rinmaydi.
   if (typeof caches !== 'undefined') {
-    await caches.default.delete(new Request(new URL(request.url).toString(), { method: 'GET' }));
+    const origin = new URL(request.url).origin;
+    for (const k of keys) await caches.default.delete(new Request(`${origin}/v/${k}`, { method: 'GET' }));
   }
+  return new Response(null, { status: 204 });
+}
+
+async function putThumb(key, request, env, deps) {
+  const denied = await staffOnly(request, env, deps);
+  if (denied) return denied;
+  const type = (request.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
+  if (type !== 'image/jpeg') return fail(415, 'muqova faqat JPEG');
+  const body = new Uint8Array(await request.arrayBuffer());
+  if (!body.length || body.length > MAX_THUMB_BYTES) return fail(413, 'muqova 512 KB dan katta');
+  await env.BUCKET.put(key, body, { httpMetadata: { contentType: 'image/jpeg' } });
   return new Response(null, { status: 204 });
 }
 
@@ -128,7 +145,7 @@ async function serve(key, request, env, ctx) {
   const headers = new Headers({
     'accept-ranges': 'bytes',
     'cache-control': 'public, max-age=31536000, immutable',
-    'content-type': head.httpMetadata?.contentType ?? 'video/mp4',
+    'content-type': head.httpMetadata?.contentType ?? (key.endsWith('.jpg') ? 'image/jpeg' : 'video/mp4'),
     etag: head.httpEtag,
   });
   if (!range) {
@@ -145,8 +162,9 @@ async function serve(key, request, env, ctx) {
 export async function handle(request, env, ctx, deps) {
   const url = new URL(request.url);
   const key = url.pathname.startsWith('/v/') ? decodeURIComponent(url.pathname.slice(3)) : null;
-  if (key !== null && !/^videos\/[0-9a-f-]{36}\.(mp4|mov|webm|3gp)$/.test(key)) return fail(404, 'yo\'q');
+  if (key !== null && !/^videos\/[0-9a-f-]{36}\.(mp4|mov|webm|3gp|jpg)$/.test(key)) return fail(404, 'yo\'q');
   if (request.method === 'POST' && url.pathname === '/upload') return upload(request, env, deps);
+  if (key && key.endsWith('.jpg') && request.method === 'PUT') return putThumb(key, request, env, deps);
   if (key && request.method === 'DELETE') return remove(key, request, env, deps);
   if (key && (request.method === 'GET' || request.method === 'HEAD')) return serve(key, request, env, ctx);
   return fail(404, 'yo\'q');

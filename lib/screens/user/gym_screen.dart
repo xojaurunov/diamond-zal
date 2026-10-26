@@ -5,6 +5,7 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import 'muscles_screen.dart';
+import 'videos_screen.dart';
 import '../../widgets/ui.dart';
 
 /// Shogird: Zal bo'limi — 3 ta mashg'ulot kunini tanlaydi, bugungi mashg'ulotni ko'radi.
@@ -162,6 +163,27 @@ class _GymScreenState extends State<GymScreen> {
                   const SizedBox(height: 2),
                   Text(
                     tr("Bugungi mashqlar — haftalik reja bo'yicha"),
+                    style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                  ),
+                ]),
+              ),
+              Icon(Icons.chevron_right, color: AppColors.textMuted),
+            ]),
+          ),
+          const SizedBox(height: AppSpace.sm),
+          // Videolar: mashq videolari va trener darslari — tanlab, ko'rib, bajaradi
+          BentoTile(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => VideosScreen(user: user))),
+            padding: const EdgeInsets.all(AppSpace.lg),
+            child: Row(children: [
+              Icon(Icons.video_library_outlined, color: AppColors.accent),
+              const SizedBox(width: AppSpace.md),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(tr('Videolar'), style: t.titleMedium),
+                  const SizedBox(height: 2),
+                  Text(
+                    tr("Mashq videolari va trener darslari — ko'rib, to'g'ri bajaring"),
                     style: t.bodySmall?.copyWith(color: AppColors.textMuted),
                   ),
                 ]),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:video_compress/video_compress.dart';
 
@@ -13,13 +14,15 @@ bool get canUploadVideo => videoServer.isNotEmpty;
 /// Kichraytirish sifatlari — birinchisidan boshlab; natija [maxVideoBytes] dan katta bo'lsa keyingisi
 const _qualities = [VideoQuality.Res1280x720Quality, VideoQuality.Res960x540Quality, VideoQuality.Res640x480Quality];
 
-/// Videoni yuklaydi, R2 havolasini qaytaradi. [compressAboveBytes] dan katta video avval telefonda
-/// kichraytiriladi (asl fayl galereyada o'zgarmay qoladi). [onCompress], [onProgress] — 0..1.
-Future<String> uploadVideo(String path, String fileName,
+/// Videoni yuklaydi, R2 havolasi va davomiyligini qaytaradi. [compressAboveBytes] dan katta video avval
+/// telefonda kichraytiriladi (asl fayl galereyada o'zgarmay qoladi). Keyin muqova (birinchi kadr) qo'yiladi.
+/// [onCompress], [onProgress] — 0..1.
+Future<UploadedVideo> uploadVideo(String path, String fileName,
     {void Function(double)? onProgress, void Function(double)? onCompress}) async {
   if (videoContentType(fileName) == null) throw const VideoUploadError(415);
   final info = await VideoCompress.getMediaInfo(path);
-  if ((info.duration ?? 0) / 1000 > maxVideoSeconds) throw const VideoUploadError(VideoUploadError.tooLong);
+  final seconds = ((info.duration ?? 0) / 1000).round();
+  if (seconds > maxVideoSeconds) throw const VideoUploadError(VideoUploadError.tooLong);
   var file = File(path);
   var name = fileName;
   var compressed = false;
@@ -34,11 +37,39 @@ Future<String> uploadVideo(String path, String fileName,
         if (await file.length() <= maxVideoBytes) break;
       }
     }
-    return await _send(file, name, onProgress);
+    final url = await _send(file, name, onProgress);
+    // muqova — kichraytirilgan fayldan (kichik va tez); bo'lmasa video muqovasiz ham ishlaydi
+    await _sendThumb(file.path, url);
+    return UploadedVideo(url, seconds);
   } finally {
     // kichraytirilgan vaqtinchalik fayllar telefonda joy egallamasin
     if (compressed) unawaited(VideoCompress.deleteAllCache().then((_) {}, onError: (_) {}));
   }
+}
+
+/// Muqova: birinchi kadr JPEG (512 KB gacha) video yonidagi `.jpg` ga. Xatosi yuklashni to'xtatmaydi.
+Future<void> _sendThumb(String videoPath, String videoUrl) async {
+  try {
+    Uint8List? jpg;
+    for (final q in [70, 45, 25]) {
+      jpg = await VideoCompress.getByteThumbnail(videoPath, quality: q, position: -1);
+      if (jpg != null && jpg.length <= 500 * 1024) break;
+    }
+    if (jpg == null || jpg.length > 500 * 1024) return;
+    final token = await videoAuthToken();
+    final client = HttpClient();
+    try {
+      final req = await client.putUrl(Uri.parse(thumbOf(videoUrl)!));
+      req.headers
+        ..set(HttpHeaders.authorizationHeader, 'Bearer $token')
+        ..set(HttpHeaders.contentTypeHeader, 'image/jpeg');
+      req.contentLength = jpg.length;
+      req.add(jpg);
+      await (await req.close()).drain<void>();
+    } finally {
+      client.close();
+    }
+  } catch (_) {}
 }
 
 /// Yarim yo'lda to'xtatish (forma yopilganda)

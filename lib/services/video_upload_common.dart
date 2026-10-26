@@ -27,3 +27,10 @@ Future<String> videoAuthToken() async {
   if (token == null) throw const VideoUploadError(401);
   return token;
 }
+
+/// Yuklangan video: havolasi va davomiyligi (soniya; noma'lum bo'lsa 0)
+class UploadedVideo {
+  final String url;
+  final int seconds;
+  const UploadedVideo(this.url, this.seconds);
+}
