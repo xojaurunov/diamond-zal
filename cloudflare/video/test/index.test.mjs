@@ -1,7 +1,7 @@
 // node --test cloudflare/video/test — tarmoqsiz: soxta R2, o'zimiz yaratgan RSA kalit bilan soxta token.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { handle, parseRange, MAX_BYTES } from '../src/index.js';
+import { handle, parseRange, MAX_BYTES, MAX_AVATAR_BYTES } from '../src/index.js';
 
 const PROJECT = 'kotta-qani-09111753';
 const NOW = 1_800_000_000_000;
@@ -43,6 +43,9 @@ function bucket() {
       return f && { body: r ? f.data.slice(r.offset, r.offset + r.length) : f.data };
     },
     async delete(keys) { for (const k of [].concat(keys)) files.delete(k); },
+    async list({ prefix }) {
+      return { objects: [...files.keys()].filter((k) => k.startsWith(prefix)).map((key) => ({ key })) };
+    },
   };
 }
 
@@ -162,4 +165,108 @@ test("muqova: trener qo'yadi, shogird yo'q, JPEG emas 415, katta 413; video o'ch
     method: 'DELETE', headers: { authorization: `Bearer ${await token('trainer1')}` } }), e, null, deps);
   assert.equal(del.status, 204);
   assert.equal(e.BUCKET.files.size, 0, "video va muqova ikkalasi ham o'chdi");
+});
+
+// ---------- profil rasmi (/avatar) ----------
+
+async function avatar(e, uid, { method = 'POST', type = 'image/jpeg', size = 2000, auth = true } = {}) {
+  const headers = {};
+  if (auth) headers.authorization = `Bearer ${typeof auth === 'string' ? auth : await token(uid)}`;
+  const init = { method, headers };
+  if (method === 'POST') {
+    headers['content-type'] = type;
+    headers['content-length'] = String(size);
+    init.body = new Uint8Array(size).fill(9);
+  }
+  return handle(new Request(`${BASE}/avatar`, init), e, null, deps);
+}
+
+test('avatar: tokensiz va soxta token — 401', async () => {
+  const e = env();
+  assert.equal((await avatar(e, 'user1', { auth: false })).status, 401);
+  assert.equal((await avatar(e, 'user1', { auth: 'buzuq.token.xx' })).status, 401);
+  assert.equal((await avatar(e, 'user1', { method: 'DELETE', auth: false })).status, 401);
+  assert.equal(e.BUCKET.files.size, 0);
+});
+
+test("avatar: har qanday rol o'ziga yuklaydi, havola avatars/<uid>/ ostida va ochiladi", async () => {
+  for (const uid of ['user1', 'barmen1', 'trainer1', 'owner1', 'notanish']) {
+    const e = env();
+    const res = await avatar(e, uid);
+    assert.equal(res.status, 200, uid);
+    assert.equal(res.headers.get('access-control-allow-origin'), '*');
+    const { url } = await res.json();
+    assert.match(url, new RegExp(`^${BASE.replace(/\./g, '\.')}/v/avatars/${uid}/[0-9a-f-]{36}\.jpg$`));
+    const got = await handle(new Request(url), e, null, deps);
+    assert.equal(got.status, 200);
+    assert.equal(got.headers.get('content-type'), 'image/jpeg');
+    assert.equal(got.headers.get('access-control-allow-origin'), '*');
+    assert.equal((await got.arrayBuffer()).byteLength, 2000);
+  }
+});
+
+test("avatar: yangisi yuklansa eskisi o'chadi; PNG va WebP — o'z kengaytmasi bilan", async () => {
+  const e = env();
+  const first = (await (await avatar(e, 'user1')).json()).url;
+  const second = (await (await avatar(e, 'user1', { type: 'image/png' })).json()).url;
+  assert.match(second, /\.png$/);
+  assert.equal(e.BUCKET.files.size, 1);
+  assert.equal((await handle(new Request(first), e, null, deps)).status, 404);
+  assert.match((await (await avatar(e, 'user1', { type: 'image/webp' })).json()).url, /\.webp$/);
+  assert.equal(e.BUCKET.files.size, 1);
+});
+
+test('avatar: katta 413, rasm emas 415, hajmsiz 411', async () => {
+  const e = env();
+  assert.equal((await avatar(e, 'user1', { size: MAX_AVATAR_BYTES + 1 })).status, 413);
+  assert.equal((await avatar(e, 'user1', { type: 'video/mp4' })).status, 415);
+  assert.equal((await avatar(e, 'user1', { type: 'image/svg+xml' })).status, 415);
+  const noLen = await handle(new Request(`${BASE}/avatar`, {
+    method: 'POST', headers: { authorization: `Bearer ${await token('user1')}`, 'content-type': 'image/jpeg' },
+  }), e, null, deps);
+  assert.equal(noLen.status, 411);
+  assert.equal(e.BUCKET.files.size, 0);
+});
+
+test("avatar: DELETE faqat o'zinikini o'chiradi", async () => {
+  const e = env();
+  await avatar(e, 'user1');
+  const theirs = (await (await avatar(e, 'trainer1')).json()).url;
+  const del = await avatar(e, 'user1', { method: 'DELETE' });
+  assert.equal(del.status, 204);
+  assert.equal(e.BUCKET.files.size, 1);
+  assert.equal((await handle(new Request(theirs), e, null, deps)).status, 200);
+  // rasmi yo'q odam o'chirsa ham — 204
+  assert.equal((await avatar(e, 'user1', { method: 'DELETE' })).status, 204);
+});
+
+test("avatar: /v/avatars/... ni PUT/DELETE bilan o'zgartirib bo'lmaydi (bosh admin ham)", async () => {
+  const e = env();
+  const url = (await (await avatar(e, 'user1')).json()).url;
+  for (const uid of ['owner1', 'trainer1']) {
+    const t = `Bearer ${await token(uid)}`;
+    const del = await handle(new Request(url, { method: 'DELETE', headers: { authorization: t } }), e, null, deps);
+    assert.equal(del.status, 404);
+    const put = await handle(new Request(url, {
+      method: 'PUT', headers: { authorization: t, 'content-type': 'image/jpeg' }, body: new Uint8Array(10),
+    }), e, null, deps);
+    assert.equal(put.status, 404);
+  }
+  assert.equal(e.BUCKET.files.get(new URL(url).pathname.slice(3)).data.length, 2000);
+});
+
+test("avatar: begona yo'l ochilmaydi; brauzer preflight (OPTIONS) — 204 va CORS", async () => {
+  const e = env();
+  e.BUCKET.files.set('avatars/user1/x.jpg', { data: new Uint8Array(3), contentType: 'image/jpeg' });
+  assert.equal((await handle(new Request(`${BASE}/v/avatars/user1/x.jpg`), e, null, deps)).status, 404);
+  assert.equal((await handle(new Request(`${BASE}/v/avatars/..%2Fvideos%2Fa.mp4`), e, null, deps)).status, 404);
+  const pre = await handle(new Request(`${BASE}/avatar`, { method: 'OPTIONS' }), e, null, deps);
+  assert.equal(pre.status, 204);
+  assert.equal(pre.headers.get('access-control-allow-origin'), '*');
+  assert.match(pre.headers.get('access-control-allow-headers'), /authorization/);
+  assert.equal((await handle(new Request(`${BASE}/avatar`, { method: 'GET' }), e, null, deps)).status, 405);
+});
+
+test("avatar yo'li video ruxsatini o'zgartirmadi: shogird video yuklay olmaydi", async () => {
+  assert.equal((await upload(env(), await token('user1'))).status, 403);
 });
