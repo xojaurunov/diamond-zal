@@ -211,8 +211,11 @@ class Db {
     await _fs.collection('users').doc(uid).update({'photoUrl': value});
     if (!trainer) return;
     final entry = _fs.collection('trainers').doc(uid);
-    // katalog yozuvini bosh admin ochganda yaratadi — hali yo'q bo'lsa, o'tkazib yuboriladi
-    if ((await entry.get()).exists) await entry.update({'photoUrl': value});
+    // katalog yozuvini bosh admin ochganda yaratadi — hali yo'q bo'lsa, o'tkazib yuboriladi.
+    // Katalog — faqat ko'zgu: yozilmasa ham (masalan eski qoidalar) rasmning o'zi saqlangan, xato ko'rsatilmaydi.
+    try {
+      if ((await entry.get()).exists) await entry.update({'photoUrl': value});
+    } on FirebaseException catch (_) {}
   }
 
   /// Reja biriktirilgan vaqt ham saqlanadi — reytingda rioya shu kundan hisoblanadi
@@ -302,14 +305,16 @@ class Db {
       final gymId = t.gymId ?? '';
       final entry = dir.docs.where((d) => d.id == t.id).firstOrNull;
       if (entry == null) {
-        await _fs
-            .collection('trainers')
-            .doc(t.id)
-            .set({
-              ...TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap(),
-              // trener katalog yozuvidan oldin rasm qo'ygan bo'lsa — u ham ko'chadi
-              if (t.photoUrl != null) 'photoUrl': t.photoUrl,
-            });
+        final ref = _fs.collection('trainers').doc(t.id);
+        final base = TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap();
+        try {
+          // trener katalog yozuvidan oldin rasm qo'ygan bo'lsa — u ham ko'chadi
+          await ref.set({...base, if (t.photoUrl != null) 'photoUrl': t.photoUrl});
+        } on FirebaseException catch (_) {
+          // rasm qabul qilinmasa (eski qoidalar) — yozuv rasmsiz yaratiladi, katalog to'xtab qolmaydi
+          if (t.photoUrl == null) rethrow;
+          await ref.set(base);
+        }
       } else if ((entry.data()['gymId'] ?? '') != gymId) {
         // zal ko'zgusi eskirgan (yoki eski yozuvda yo'q) — to'g'rilanadi
         await entry.reference.update({'gymId': gymId});
