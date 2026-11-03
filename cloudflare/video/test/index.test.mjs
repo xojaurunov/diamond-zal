@@ -228,6 +228,15 @@ test('avatar: katta 413, rasm emas 415, hajmsiz 411', async () => {
   assert.equal(e.BUCKET.files.size, 0);
 });
 
+test("avatar: meros kalit turi (constructor, __proto__) — 415, eski rasm o'chmaydi", async () => {
+  const e = env();
+  await avatar(e, 'user1');
+  for (const type of ['constructor', '__proto__', 'tostring', 'hasownproperty']) {
+    assert.equal((await avatar(e, 'user1', { type })).status, 415, type);
+  }
+  assert.equal(e.BUCKET.files.size, 1);
+});
+
 test("avatar: DELETE faqat o'zinikini o'chiradi", async () => {
   const e = env();
   await avatar(e, 'user1');
