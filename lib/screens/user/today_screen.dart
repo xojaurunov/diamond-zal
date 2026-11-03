@@ -4,6 +4,7 @@ import '../../models/gym.dart' show weekdayNames;
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/avatar_picker.dart';
 import '../../widgets/extra_food_sheet.dart';
 import '../../widgets/food_image.dart';
 import '../../widgets/plan_photo.dart';
@@ -168,7 +169,8 @@ class _Header extends StatelessWidget {
           ]),
         ),
         const SizedBox(width: AppSpace.md),
-        UserAvatar(name: user.name, size: 46),
+        // bosilsa — profil rasmini qo'yish / almashtirish
+        MyAvatar(me: user, size: 46),
       ]),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/tr.dart';
 import '../../services/db.dart';
+import '../../widgets/avatar_picker.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lazy_stack.dart';
 import '../../widgets/settings_sheet.dart';
@@ -46,6 +47,9 @@ class _BarmenHomeState extends ConsumerState<BarmenHome> {
 
     return Scaffold(
       appBar: AppBar(
+        // o'z profil rasmi — bosilsa qo'yish / almashtirish
+        leadingWidth: 60,
+        leading: Center(child: MyAvatar(me: me, size: 36)),
         title: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

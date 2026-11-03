@@ -28,6 +28,28 @@ Future<String> videoAuthToken() async {
   return token;
 }
 
+/// Profil rasmi serveri javobi (Worker `/avatar`): holat kodi -> tushunarli xabar
+class AvatarUploadError implements Exception {
+  final int status;
+  const AvatarUploadError(this.status);
+
+  @override
+  String toString() => switch (status) {
+        401 => tr('Kirish muddati tugagan — ilovadan chiqib, qayta kiring'),
+        413 => tr('Rasm juda katta — boshqa rasm tanlang'),
+        415 => tr('Bu fayl rasm emas (JPEG, PNG, WebP)'),
+        _ => trf('Rasm serveri xatosi ({0})', [status]),
+      };
+}
+
+/// Rasm fayl nomidan turi (Worker qabul qiladiganlari); boshqa tur — JPEG deb olinadi
+/// (`image_picker` kichraytirganda JPEG qaytaradi)
+String avatarContentType(String fileName) => switch (fileName.split('.').last.toLowerCase()) {
+      'png' => 'image/png',
+      'webp' => 'image/webp',
+      _ => 'image/jpeg',
+    };
+
 /// Yuklangan video: havolasi va davomiyligi (soniya; noma'lum bo'lsa 0)
 class UploadedVideo {
   final String url;

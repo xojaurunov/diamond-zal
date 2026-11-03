@@ -138,3 +138,38 @@ Future<void> deleteVideo(String url) async {
     client.close();
   }
 }
+
+/// Profil rasmini yuklaydi (eskisi serverda o'chadi), havolasini qaytaradi
+Future<String> uploadAvatar(Uint8List bytes, String contentType) async {
+  final token = await videoAuthToken();
+  final client = HttpClient();
+  try {
+    final req = await client.postUrl(Uri.parse('$videoServer/avatar'));
+    req.headers
+      ..set(HttpHeaders.authorizationHeader, 'Bearer $token')
+      ..set(HttpHeaders.contentTypeHeader, contentType)
+      ..contentLength = bytes.length;
+    req.add(bytes);
+    final res = await req.close();
+    final body = await res.transform(utf8.decoder).join();
+    if (res.statusCode != 200) throw AvatarUploadError(res.statusCode);
+    return (jsonDecode(body) as Map<String, dynamic>)['url'] as String;
+  } finally {
+    client.close();
+  }
+}
+
+/// O'z profil rasmini serverdan o'chiradi
+Future<void> deleteAvatar() async {
+  final token = await videoAuthToken();
+  final client = HttpClient();
+  try {
+    final req = await client.deleteUrl(Uri.parse('$videoServer/avatar'));
+    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+    final res = await req.close();
+    await res.drain<void>();
+    if (res.statusCode != 204) throw AvatarUploadError(res.statusCode);
+  } finally {
+    client.close();
+  }
+}

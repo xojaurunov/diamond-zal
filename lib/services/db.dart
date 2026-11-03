@@ -204,6 +204,12 @@ class Db {
   static Future<void> updateUser(AppUser u) =>
       _fs.collection('users').doc(u.id).set(u.toMap(), SetOptions(merge: true));
 
+  /// Profil rasmi havolasi (null — olib tashlash). Faqat o'zi yozadi.
+  static Future<void> setPhotoUrl(String uid, String? url) => _fs
+      .collection('users')
+      .doc(uid)
+      .update({'photoUrl': url ?? FieldValue.delete()});
+
   /// Reja biriktirilgan vaqt ham saqlanadi — reytingda rioya shu kundan hisoblanadi
   static Future<void> assignPlan(String uid, String? planId) =>
       _fs.collection('users').doc(uid).update({

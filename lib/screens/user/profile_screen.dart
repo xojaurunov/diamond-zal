@@ -3,6 +3,7 @@ import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/avatar_picker.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lang_picker.dart';
 import '../../widgets/settings_sheet.dart';
@@ -111,21 +112,26 @@ class ProfileScreen extends StatelessWidget {
                     ]),
                   ),
                   const SizedBox(width: AppSpace.lg),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                    child: Text(
-                      initials(user.name),
-                      style: TextStyle(
-                        color: AppColors.onAccent,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1,
+                  // bosilsa — profil rasmini qo'yish / almashtirish
+                  MyAvatar(
+                    me: user,
+                    size: 64,
+                    placeholder: Container(
+                      width: 64,
+                      height: 64,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.accent,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                      child: Text(
+                        initials(user.name),
+                        style: TextStyle(
+                          color: AppColors.onAccent,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -1,
+                        ),
                       ),
                     ),
                   ),

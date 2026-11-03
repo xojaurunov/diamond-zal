@@ -723,6 +723,10 @@
   "ru": "За этот период продаж не было",
   "en": "No sales in this period"
  },
+ "Bu fayl rasm emas (JPEG, PNG, WebP)": {
+  "ru": "Этот файл не изображение (JPEG, PNG, WebP)",
+  "en": "This file is not an image (JPEG, PNG, WebP)"
+ },
  "Bu fayl video emas (mp4, mov, webm, 3gp)": {
   "ru": "Этот файл не видео (mp4, mov, webm, 3gp)",
   "en": "This file is not a video (mp4, mov, webm, 3gp)"
@@ -2791,6 +2795,10 @@
   "ru": "Профиль",
   "en": "Profile"
  },
+ "Profil rasmi": {
+  "ru": "Фото профиля",
+  "en": "Profile photo"
+ },
  "Profil saqlandi": {
   "ru": "Профиль сохранён",
   "en": "Profile saved"
@@ -3087,13 +3095,29 @@
   "ru": "Фото слишком большое ({0} КБ). Выберите другое.",
   "en": "The photo is too large ({0} KB). Choose another."
  },
+ "Rasm juda katta — boshqa rasm tanlang": {
+  "ru": "Фото слишком большое — выберите другое",
+  "en": "The photo is too large — choose another one"
+ },
  "Rasm manbalari": {
   "ru": "Источники изображений",
   "en": "Image credits"
  },
+ "Rasm olib tashlandi": {
+  "ru": "Фото удалено",
+  "en": "Photo removed"
+ },
  "Rasm qo'shildi": {
   "ru": "Фото добавлено",
   "en": "Photo added"
+ },
+ "Rasm saqlandi": {
+  "ru": "Фото сохранено",
+  "en": "Photo saved"
+ },
+ "Rasm serveri xatosi ({0})": {
+  "ru": "Ошибка сервера фото ({0})",
+  "en": "Photo server error ({0})"
  },
  "Rasmlar": {
   "ru": "Фото",
@@ -3102,6 +3126,10 @@
  "Rasmni o'chirish": {
   "ru": "Удалить фото",
   "en": "Delete photo"
+ },
+ "Rasmni olib tashlash": {
+  "ru": "Удалить фото",
+  "en": "Remove photo"
  },
  "Reja": {
   "ru": "План",
