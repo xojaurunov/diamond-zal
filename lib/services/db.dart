@@ -206,10 +206,18 @@ class Db {
       _fs.collection('users').doc(u.id).set(u.toMap(), SetOptions(merge: true));
 
   /// Profil rasmi havolasi (null — olib tashlash). Faqat o'zi yozadi.
-  static Future<void> setPhotoUrl(String uid, String? url) => _fs
-      .collection('users')
-      .doc(uid)
-      .update({'photoUrl': url ?? FieldValue.delete()});
+  /// Trener bo'lsa — katalogga ham (shogirdlar trener rasmini shundan ko'radi).
+  static Future<void> setPhotoUrl(String uid, String? url, {bool trainer = false}) async {
+    final value = url ?? FieldValue.delete();
+    await _fs.collection('users').doc(uid).update({'photoUrl': value});
+    if (!trainer) return;
+    final entry = _fs.collection('trainers').doc(uid);
+    // katalog yozuvini bosh admin ochganda yaratadi — hali yo'q bo'lsa, o'tkazib yuboriladi.
+    // Katalog — faqat ko'zgu: yozilmasa ham (masalan eski qoidalar) rasmning o'zi saqlangan, xato ko'rsatilmaydi.
+    try {
+      if ((await entry.get()).exists) await entry.update({'photoUrl': value});
+    } on FirebaseException catch (_) {}
+  }
 
   /// Reja biriktirilgan vaqt ham saqlanadi — reytingda rioya shu kundan hisoblanadi
   static Future<void> assignPlan(String uid, String? planId) =>
@@ -242,8 +250,10 @@ class Db {
   /// bo'lsa ham eski qiymat yozilib qolmaydi.
   static Future<void> saveTrainerProfile(TrainerInfo t) async {
     final gymId = await _gymOf(t.id);
+    // merge — katalogdagi rasm (photoUrl) saqlanib qolsin
     await _fs.collection('trainers').doc(t.id).set(
-        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap());
+        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap(),
+        SetOptions(merge: true));
   }
 
   static Future<String> _gymOf(String uid) async =>
@@ -296,10 +306,16 @@ class Db {
       final gymId = t.gymId ?? '';
       final entry = dir.docs.where((d) => d.id == t.id).firstOrNull;
       if (entry == null) {
-        await _fs
-            .collection('trainers')
-            .doc(t.id)
-            .set(TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap());
+        final ref = _fs.collection('trainers').doc(t.id);
+        final base = TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap();
+        try {
+          // trener katalog yozuvidan oldin rasm qo'ygan bo'lsa — u ham ko'chadi
+          await ref.set({...base, if (t.photoUrl != null) 'photoUrl': t.photoUrl});
+        } on FirebaseException catch (_) {
+          // rasm qabul qilinmasa (eski qoidalar) — yozuv rasmsiz yaratiladi, katalog to'xtab qolmaydi
+          if (t.photoUrl == null) rethrow;
+          await ref.set(base);
+        }
       } else if ((entry.data()['gymId'] ?? '') != gymId) {
         // zal ko'zgusi eskirgan (yoki eski yozuvda yo'q) — to'g'rilanadi
         await entry.reference.update({'gymId': gymId});

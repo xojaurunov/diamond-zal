@@ -304,7 +304,12 @@ class TrainerInfo {
   /// katalogni esa o'qiydi: buyurtmaga zal shu yerdan yoziladi (barmen faqat o'z zalini ko'radi).
   /// Qoidalar uni `users` dagi qiymatga teng bo'lishga majbur qiladi.
   final String gymId;
-  const TrainerInfo(this.id, this.name, {this.bio = '', this.accepting = true, this.gymId = ''});
+
+  /// Profil rasmi (`users/{id}.photoUrl` ko'zgusi) — shogird trener hujjatini o'qiy olmaydi, katalogni o'qiydi.
+  /// Trener o'zi yozadi (`Db.setPhotoUrl`). toMap() ga kirmaydi — profil saqlanganda o'chib ketmasin.
+  final String? photoUrl;
+  const TrainerInfo(this.id, this.name,
+      {this.bio = '', this.accepting = true, this.gymId = '', this.photoUrl});
 
   factory TrainerInfo.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
@@ -314,6 +319,7 @@ class TrainerInfo {
       bio: (d['bio'] ?? '') as String,
       accepting: (d['accepting'] ?? true) as bool,
       gymId: (d['gymId'] ?? '') as String,
+      photoUrl: isAvatarUrlOf(d['photoUrl'] as String?, doc.id) ? d['photoUrl'] as String : null,
     );
   }
 

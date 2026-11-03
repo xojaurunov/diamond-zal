@@ -35,6 +35,15 @@ void main() {
       expect(isAvatarUrlOf(_avatar, 'abcDEF12'), isFalse, reason: "uid prefiksi emas — to'liq papka");
     });
 
+    test("trener katalogi: TrainerInfo photoUrl'ni o'qiydi (faqat o'ziniki), toMap unga tegmaydi", () {
+      final t = TrainerInfo.fromDoc(_Doc('abcDEF123', {'name': 'Qobil aka', 'photoUrl': _avatar}));
+      expect(t.photoUrl, _avatar);
+      expect(t.toMap().containsKey('photoUrl'), isFalse,
+          reason: "trener ma'lumotini saqlaganda rasm o'chib ketmasin");
+      expect(TrainerInfo.fromDoc(_Doc('boshqa1', {'name': 'X', 'photoUrl': _avatar})).photoUrl, isNull);
+      expect(TrainerInfo.fromDoc(_Doc('abcDEF123', {'name': 'X'})).photoUrl, isNull);
+    });
+
     test('isAvatarUrl: faqat o\'z serverimizdagi avatar', () {
       expect(isAvatarUrl(_avatar), isTrue);
       expect(isAvatarUrl('$videoServer/v/avatars/abc/$_uuid.png'), isTrue);
