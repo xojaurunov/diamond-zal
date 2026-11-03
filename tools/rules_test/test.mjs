@@ -779,6 +779,25 @@ await check('shogird darsni ochira OLMAYDI', () =>
 await check('trener darsni ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(TRAINER), 'videos', 'd1'))));
 
+console.log('\n== PROFIL RASMI (photoUrl) ==');
+const AVA = 'https://qobil-video.qobilfitness.workers.dev/v/avatars/x/0b7c6a1e-2f3d-4c5b-8a9e-1f2a3b4c5d6e.jpg';
+await check('shogird ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER), { photoUrl: AVA })));
+await check('shogird ozining rasmini olib tashlaydi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER), { photoUrl: null })));
+await check('trener ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', TRAINER), { photoUrl: AVA })));
+await check('barmen ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(BARMEN), 'users', BARMEN), { photoUrl: AVA })));
+await check('bosh admin ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(OWNER), 'users', OWNER), { photoUrl: AVA })));
+await check('shogird BOSHQANING rasmini qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER3), { photoUrl: AVA })));
+await check('barmen shogird rasmini qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(BARMEN), 'users', USER), { photoUrl: AVA })));
+await check('kirmagan odam rasm qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(anon(), 'users', USER), { photoUrl: AVA })));
+
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();
 process.exit(fail === 0 ? 0 : 1);

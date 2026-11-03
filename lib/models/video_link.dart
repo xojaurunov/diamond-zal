@@ -57,6 +57,19 @@ bool isUploadedVideo(String url) => _uploaded.hasMatch(url.trim());
 bool isOwnVideo(String url) =>
     videoServer.isNotEmpty && isUploadedVideo(url) && url.trim().startsWith('$videoServer/v/videos/');
 
+/// Shu ilova serveridagi profil rasmi (`/avatar` bilan yuklangan). Faqat shunday havola rasm sifatida
+/// ko'rsatiladi — `photoUrl`ni foydalanuvchi o'zi yozadi, begona havola boshqalarga chiqmasin.
+bool isAvatarUrl(String? url) =>
+    url != null &&
+    videoServer.isNotEmpty &&
+    url.startsWith('$videoServer/v/avatars/') &&
+    RegExp(r'/v/avatars/[A-Za-z0-9]{1,128}/[0-9a-f-]{36}\.(jpg|png|webp)$').hasMatch(url);
+
+/// [uid] ning O'Z avatari: server faqat egasiga `avatars/<uid>/` ga yozishga ruxsat beradi, lekin
+/// `photoUrl`ni foydalanuvchi o'zi yozadi — boshqaning rasmini o'ziniki qilib ko'rsata olmasin.
+bool isAvatarUrlOf(String? url, String uid) =>
+    isAvatarUrl(url) && url!.startsWith('$videoServer/v/avatars/$uid/');
+
 String? videoContentType(String fileName) => switch (fileName.split('.').last.toLowerCase()) {
       'mp4' || 'm4v' => 'video/mp4',
       'mov' => 'video/quicktime',

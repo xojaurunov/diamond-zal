@@ -1027,7 +1027,7 @@ class _StaffTile extends StatelessWidget {
       feature: person.isOwner,
       padding: const EdgeInsets.all(AppSpace.md),
       child: Row(children: [
-        UserAvatar(name: name),
+        UserAvatar(name: name, photoUrl: person.photoUrl),
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1157,7 +1157,7 @@ class _ClientRow extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(AppSpace.md),
       child: Row(children: [
-        UserAvatar(name: name, size: 38),
+        UserAvatar(name: name, size: 38, photoUrl: u.photoUrl),
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1237,7 +1237,7 @@ class _PickUserSheetState extends State<_PickUserSheet> {
                     onTap: () => Navigator.pop(context, u),
                     padding: const EdgeInsets.all(AppSpace.md),
                     child: Row(children: [
-                      UserAvatar(name: name, size: 36),
+                      UserAvatar(name: name, size: 36, photoUrl: u.photoUrl),
                       const SizedBox(width: AppSpace.md),
                       Expanded(
                         child: Column(

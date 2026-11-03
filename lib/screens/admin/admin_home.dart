@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/tr.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/avatar_picker.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/join_qr_sheet.dart';
 import '../../widgets/lazy_stack.dart';
@@ -67,6 +68,9 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
     final tab = _tab < titles.length ? _tab : 0;
     final scaffold = Scaffold(
       appBar: AppBar(
+        // o'z profil rasmi — bosilsa qo'yish / almashtirish
+        leadingWidth: 60,
+        leading: Center(child: MyAvatar(me: me, size: 36)),
         title: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

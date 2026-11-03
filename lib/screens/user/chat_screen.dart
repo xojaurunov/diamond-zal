@@ -12,6 +12,9 @@ class ChatScreen extends StatefulWidget {
   final String title;
   final String? subtitle;
 
+  /// Suhbatdoshning profil rasmi (bo'lsa — sarlavhada bosh harflar o'rniga)
+  final String? photoUrl;
+
   /// true — faqat o'zim va chat egasi (shogird) xabarlari ko'rinadi.
   /// Trener uchun: bosh admin shogirdga yozgan xabarlar ko'rsatilmaydi.
   final bool onlyMineAndClient;
@@ -21,6 +24,7 @@ class ChatScreen extends StatefulWidget {
     required this.myId,
     required this.title,
     this.subtitle,
+    this.photoUrl,
     this.onlyMineAndClient = false,
   });
 
@@ -62,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(children: [
-          UserAvatar(name: widget.title, size: 38),
+          UserAvatar(name: widget.title, size: 38, photoUrl: widget.photoUrl),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

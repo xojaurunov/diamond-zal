@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../l10n/tr.dart';
+import 'video_link.dart';
 
 /// Reja kategoriyalari — shogird maqsadlari bilan bir xil nomlar (AppUser.goalLabel, Plan.category)
 const planCategories = ['Ozish', 'Massa nabor'];
@@ -52,6 +53,10 @@ class AppUser {
   /// Faqat trener/bosh admin yozadi (`Db.setProgram`). toMap() ga kirmaydi.
   final Map<String, List<String>> program;
 
+  /// Profil rasmi (R2, `avatars/<uid>/...`) — o'zi qo'yadi (`Db.setPhotoUrl`). toMap() ga kirmaydi:
+  /// trener shogird profilini saqlaganda rasm o'chib ketmasin.
+  final String? photoUrl;
+
   AppUser({
     required this.id,
     required this.name,
@@ -73,6 +78,7 @@ class AppUser {
     this.homeWorkoutDate,
     this.subscriptionExpiresAt,
     this.program = const {},
+    this.photoUrl,
   });
 
   /// Bosh admin — zal egasi: trener tayinlaydi, hammani ko'radi, o'chira oladi
@@ -208,6 +214,8 @@ class AppUser {
         for (final e in ((d['program'] as Map?) ?? const {}).entries)
           if (e.value is List) e.key.toString(): [for (final k in e.value as List) k.toString()],
       },
+      // faqat o'z papkasidagi rasm (begona havola yoki boshqaning rasmi — e'tiborsiz)
+      photoUrl: isAvatarUrlOf(d['photoUrl'] as String?, doc.id) ? d['photoUrl'] as String : null,
     );
   }
 
