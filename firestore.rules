@@ -177,7 +177,12 @@ service cloud.firestore {
 
     match /trainers/{tid} {
       function validEntry() {
-        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId'])
+        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId', 'photoUrl'])
+          // profil rasmi — faqat o'z serverimizda, faqat shu trenerning papkasida (begona havola emas)
+          && (request.resource.data.get('photoUrl', null) == null
+            || (request.resource.data.photoUrl is string
+              && request.resource.data.photoUrl.matches(
+                'https://qobil-video[.]qobilfitness[.]workers[.]dev/v/avatars/' + tid + '/[0-9a-f-]{36}[.](jpg|png|webp)')))
           // zal — users/{tid}.gymId ko'zgusi: soxta qilib bo'lmaydi (shogird buyurtmasiga shundan yoziladi)
           && request.resource.data.get('gymId', '') == gymOf(tid)
           && request.resource.data.name is string && request.resource.data.name.size() <= 60
@@ -190,7 +195,7 @@ service cloud.firestore {
       allow read: if signedIn();
       allow create: if validEntry() && (isOwner() || isThisTrainer());
       // bosh admin faqat zal ko'zgusini to'g'rilaydi (trenerni boshqa zalga o'tkazganda);
-      // ism, ma'lumot, qabul sozlamasi — trenerning o'zida
+      // ism, ma'lumot, qabul sozlamasi, rasm — trenerning o'zida
       allow update: if validEntry() && (isThisTrainer() || (isOwner()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId'])));
       allow delete: if isOwner();

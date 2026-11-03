@@ -763,6 +763,29 @@ await check('barmen shogird rasmini qoya OLMAYDI', () =>
 await check('kirmagan odam rasm qoya OLMAYDI', () =>
   assertFails(updateDoc(doc(anon(), 'users', USER), { photoUrl: AVA })));
 
+console.log('\n== TRENER RASMI KATALOGDA (trainers.photoUrl) ==');
+const tAva = (tid) => `https://qobil-video.qobilfitness.workers.dev/v/avatars/${tid}/0b7c6a1e-2f3d-4c5b-8a9e-1f2a3b4c5d6e.jpg`;
+await check('trener katalogdagi ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER) })));
+await check('shogird katalogda trener rasmini koradi', async () => {
+  const d = await assertSucceeds(getDoc(doc(as(USER), 'trainers', TRAINER)));
+  if (d.data().photoUrl !== tAva(TRAINER)) throw new Error('photoUrl yoq');
+});
+await check('trener rasmini olib tashlaydi (null)', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: null })));
+await check('trener BOSHQANING papkasidagi rasmni qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER4) })));
+await check('trener BEGONA havolani qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: 'https://evil.example.com/a.jpg' })));
+await check('trener rasm oʻrniga son qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: 5 })));
+await check('trener BOSHQA trener yozuviga rasm qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER4), { photoUrl: tAva(TRAINER4) })));
+await check('bosh admin trener rasmini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(OWNER), 'trainers', TRAINER4), { photoUrl: tAva(TRAINER4) })));
+await check('shogird trener rasmini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER) })));
+
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();
 process.exit(fail === 0 ? 0 : 1);

@@ -490,20 +490,32 @@ class StatTile extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+
+  /// O'ng tomonda (masalan trener rasmi)
+  final Widget? trailing;
   const StatTile({
     super.key,
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
-    final t = Theme.of(context).textTheme;
+    final body = _body(context);
     return BentoTile(
       padding: const EdgeInsets.all(AppSpace.md),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child: trailing == null
+          ? body
+          : Row(children: [Expanded(child: body), const SizedBox(width: AppSpace.md), trailing!]),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(width: AppSpace.sm - 2),
@@ -526,8 +538,7 @@ class StatTile extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(value, style: t.headlineSmall?.copyWith(fontFeatures: tabular)),
         ),
-      ]),
-    );
+      ]);
   }
 }
 

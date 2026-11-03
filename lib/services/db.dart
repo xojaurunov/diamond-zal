@@ -205,10 +205,15 @@ class Db {
       _fs.collection('users').doc(u.id).set(u.toMap(), SetOptions(merge: true));
 
   /// Profil rasmi havolasi (null — olib tashlash). Faqat o'zi yozadi.
-  static Future<void> setPhotoUrl(String uid, String? url) => _fs
-      .collection('users')
-      .doc(uid)
-      .update({'photoUrl': url ?? FieldValue.delete()});
+  /// Trener bo'lsa — katalogga ham (shogirdlar trener rasmini shundan ko'radi).
+  static Future<void> setPhotoUrl(String uid, String? url, {bool trainer = false}) async {
+    final value = url ?? FieldValue.delete();
+    await _fs.collection('users').doc(uid).update({'photoUrl': value});
+    if (!trainer) return;
+    final entry = _fs.collection('trainers').doc(uid);
+    // katalog yozuvini bosh admin ochganda yaratadi — hali yo'q bo'lsa, o'tkazib yuboriladi
+    if ((await entry.get()).exists) await entry.update({'photoUrl': value});
+  }
 
   /// Reja biriktirilgan vaqt ham saqlanadi — reytingda rioya shu kundan hisoblanadi
   static Future<void> assignPlan(String uid, String? planId) =>
@@ -241,8 +246,10 @@ class Db {
   /// bo'lsa ham eski qiymat yozilib qolmaydi.
   static Future<void> saveTrainerProfile(TrainerInfo t) async {
     final gymId = await _gymOf(t.id);
+    // merge — katalogdagi rasm (photoUrl) saqlanib qolsin
     await _fs.collection('trainers').doc(t.id).set(
-        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap());
+        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap(),
+        SetOptions(merge: true));
   }
 
   static Future<String> _gymOf(String uid) async =>
@@ -298,7 +305,11 @@ class Db {
         await _fs
             .collection('trainers')
             .doc(t.id)
-            .set(TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap());
+            .set({
+              ...TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap(),
+              // trener katalog yozuvidan oldin rasm qo'ygan bo'lsa — u ham ko'chadi
+              if (t.photoUrl != null) 'photoUrl': t.photoUrl,
+            });
       } else if ((entry.data()['gymId'] ?? '') != gymId) {
         // zal ko'zgusi eskirgan (yoki eski yozuvda yo'q) — to'g'rilanadi
         await entry.reference.update({'gymId': gymId});

@@ -47,7 +47,7 @@ Future<void> changeAvatar(BuildContext context, AppUser me) async {
   if (action == _AvatarAction.remove) {
     await _busy(context, () async {
       await deleteAvatar();
-      await Db.setPhotoUrl(me.id, null);
+      await Db.setPhotoUrl(me.id, null, trainer: me.isTrainer);
     }, done: tr('Rasm olib tashlandi'));
     return;
   }
@@ -79,7 +79,7 @@ Future<void> changeAvatar(BuildContext context, AppUser me) async {
   final type = mime != null && accepted.contains(mime) ? mime : avatarContentType(file.name);
   await _busy(context, () async {
     final url = await uploadAvatar(bytes, type);
-    await Db.setPhotoUrl(me.id, url);
+    await Db.setPhotoUrl(me.id, url, trainer: me.isTrainer);
   }, done: tr('Rasm saqlandi'));
 }
 

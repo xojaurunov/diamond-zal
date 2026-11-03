@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/tr.dart';
+import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../widgets/lazy_stack.dart';
 import '../../widgets/notification_sync.dart';
@@ -25,6 +26,11 @@ class _UserHomeState extends ConsumerState<UserHome> {
   Widget build(BuildContext context) {
     final me = ref.watch(meProvider).value;
     if (me == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    // trener rasmi — katalogdan (shogird trenerning users hujjatini o'qiy olmaydi)
+    final trainerPhoto = (ref.watch(trainerDirectoryProvider).value ?? const <TrainerInfo>[])
+        .where((t) => t.id == me.trainerId)
+        .firstOrNull
+        ?.photoUrl;
 
     // IndexedStack — bo'limlar almashganda scroll holati saqlanadi
     return StudentNotificationSync(
@@ -42,6 +48,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
               chatUid: me.id,
               myId: me.id,
               title: tr('Trener'),
+              photoUrl: trainerPhoto,
               subtitle: tr('Savollaringizga javob beradi'),
             ),
             ProfileScreen(user: me),

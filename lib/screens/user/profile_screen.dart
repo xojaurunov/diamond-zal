@@ -39,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
           for (final t in others)
             Card(
               child: ListTile(
-                leading: UserAvatar(name: t.name, size: 40),
+                leading: UserAvatar(name: t.name, size: 40, photoUrl: t.photoUrl),
                 title: Text(t.name),
                 subtitle: t.bio.isEmpty ? null : Text(t.bio),
                 onTap: () => Navigator.pop(context, t),
@@ -216,6 +216,9 @@ class ProfileScreen extends StatelessWidget {
                     label: tr('Treneringiz'),
                     value: snap.data?.name ?? '—',
                     color: AppColors.accent,
+                    trailing: snap.data?.photoUrl == null
+                        ? null
+                        : UserAvatar(name: snap.data!.name, size: 48, photoUrl: snap.data!.photoUrl),
                   ),
                 ),
                 Align(
