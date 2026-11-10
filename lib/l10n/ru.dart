@@ -1004,6 +1004,7 @@ const ru = <String, String>{
   'To\'g\'ri': 'В самый раз',
   'To\'g\'ri ovqatlanish —': 'Правильное питание —',
   'To\'g\'ri oyoqda egilish (rumin tortishi)': 'Румынская тяга',
+  'To\'langan sana: {0}': 'Дата оплаты: {0}',
   'To\'langan: {0}': 'Оплачено: {0}',
   'To\'langan: {0} · amal qiladi: {1}': 'Оплачено: {0} · действует: {1}',
   'To\'langan: {0} · keyingi to\'lov: {1}': 'Оплачено: {0} · следующая оплата: {1}',

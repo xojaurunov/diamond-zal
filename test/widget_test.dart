@@ -1060,6 +1060,17 @@ void main() {
       expect(s.toMap()['days'], 1);
     });
 
+    test("kechikib kiritilgan to'lov: muddat to'langan kundan", () {
+      // mijoz 5-noyabrda to'lagan, trener 9-noyabrda kiritgan — sana oynada tanlanadi
+      final paid = DateTime(2026, 11, 5);
+      final oylik = Subscription(startDate: paid, months: 1, paidDate: paid);
+      expect(oylik.expiresAt, DateTime(2026, 12, 5));
+      expect(Subscription.daysLeft(oylik.expiresAt, DateTime(2026, 11, 9, 15)), 26);
+      final kunlik = Subscription(startDate: paid, months: 0, days: 1, paidDate: paid);
+      expect(kunlik.expiresAt, DateTime(2026, 11, 5));
+      expect(Subscription.isExpired(kunlik.expiresAt, DateTime(2026, 11, 9)), isTrue);
+    });
+
     test('eski yozuv (days yo-q) oy bo-yicha hisoblanadi', () {
       final s = Subscription(startDate: DateTime(2026, 10, 3), months: 1);
       expect(s.isDaily, isFalse);
