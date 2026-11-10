@@ -28,7 +28,8 @@ dependencies:
   webview_flutter: ^4.14.1
   # Trener videosini telefonda kichraytirish (telefon kodlovchisi; 4K 3 GB -> 720p ~45 MB)
   video_compress: ^3.1.4
-  mobile_scanner: ^7.4.2
+  # QR davomat muzlatilgan (10-noy 2026) — qayta yoqish: izohdan chiqaring
+  # mobile_scanner: ^7.4.2
 
 dev_dependencies:
   flutter_test:

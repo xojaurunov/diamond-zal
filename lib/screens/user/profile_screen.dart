@@ -4,7 +4,8 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/avatar_picker.dart';
-import '../../widgets/gym_card.dart';
+// QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+// import '../../widgets/gym_card.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lang_picker.dart';
 import '../../widgets/settings_sheet.dart';
@@ -268,13 +269,14 @@ class ProfileScreen extends StatelessWidget {
                 ]),
               ),
               const SizedBox(height: AppSpace.xl),
-              // zal eshigida trenerga ko'rsatiladi — davomat QR bilan belgilanadi
-              FilledButton.icon(
-                onPressed: () => showGymCard(context, user),
-                icon: const Icon(Icons.qr_code_2),
-                label: Text(tr('Zal kartasi')),
-              ),
-              const SizedBox(height: 8),
+              // QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+//               // zal eshigida trenerga ko'rsatiladi — davomat QR bilan belgilanadi
+//               FilledButton.icon(
+//                 onPressed: () => showGymCard(context, user),
+//                 icon: const Icon(Icons.qr_code_2),
+//                 label: Text(tr('Zal kartasi')),
+//               ),
+//               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: () => Navigator.push(
                   context,
