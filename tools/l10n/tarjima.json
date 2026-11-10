@@ -115,6 +115,10 @@
   "ru": "Абонемент",
   "en": "Membership"
  },
+ "Abonement bugun tugaydi": {
+  "ru": "Абонемент заканчивается сегодня",
+  "en": "Membership ends today"
+ },
  "Abonement muddati o‘tdi": {
   "ru": "Срок абонемента истёк",
   "en": "Membership expired"
@@ -1150,6 +1154,10 @@
  "Erkak": {
   "ru": "Мужчина",
   "en": "Male"
+ },
+ "Ertaga yangi to‘lov kerak — zalda to‘lang": {
+  "ru": "Завтра нужна новая оплата — оплатите в зале",
+  "en": "A new payment is due tomorrow — pay at the gym"
  },
  "Ertalab nahorga tortilib, Progress bo'limida vazningizni kiriting": {
   "ru": "Взвесьтесь утром натощак и внесите вес в разделе «Прогресс»",

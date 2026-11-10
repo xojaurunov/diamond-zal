@@ -870,7 +870,8 @@ void main() {
       // chegara: tugash kunining o'zi — hali "o'tdi" emas, faqat bitta element
       final bugun = subs(DateTime(2026, 9, 18));
       expect(bugun, hasLength(1));
-      expect(bugun.first.title, 'Abonement tugadi');
+      expect(bugun.first.title, 'Abonement bugun tugaydi');
+      expect(bugun.first.body, 'Ertaga yangi to‘lov kerak — zalda to‘lang');
       final kecha = subs(DateTime(2026, 9, 17));
       expect(kecha, hasLength(1));
       expect(kecha.first.body, startsWith('1 kun oldin tugadi'));
