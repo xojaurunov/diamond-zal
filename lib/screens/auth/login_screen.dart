@@ -184,10 +184,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         autofillHints: const [AutofillHints.telephoneNumberNational],
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(9),
+                          // 12 — "998" bilan to'liq yozilgan raqam ham sig'sin (9 da kesilardi)
+                          LengthLimitingTextInputFormatter(12),
                         ],
                         validator: (v) =>
-                            (v ?? '').length == 9 ? null : tr("Raqamni to'liq kiriting: 90 123 45 67"),
+                            isValidPhoneInput(v ?? '') ? null : tr("Raqamni to'liq kiriting: 90 123 45 67"),
                         decoration: InputDecoration(
                           labelText: tr('Telefon raqam'),
                           hintText: '90 123 45 67',

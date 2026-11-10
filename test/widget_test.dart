@@ -478,6 +478,20 @@ void main() {
       expect(phoneToEmail('901234567'), '998901234567@phone.kottaqani.uz');
     });
 
+    test("to'liq 12 raqam ham o'sha akkaunt", () {
+      expect(phoneToEmail('998901234567'), '998901234567@phone.kottaqani.uz');
+      expect(phoneToEmail('998998112233'), phoneToEmail('998112233'));
+    });
+
+    test('kirish maydoni tekshiruvi', () {
+      expect(isValidPhoneInput('901234567'), isTrue);
+      expect(isValidPhoneInput('998901234567'), isTrue);
+      expect(isValidPhoneInput('998112233'), isTrue, reason: "raqamning o'zi 998 bilan boshlanishi mumkin");
+      expect(isValidPhoneInput('90123456'), isFalse);
+      expect(isValidPhoneInput('123901234567'), isFalse, reason: "12 raqam, lekin 998 emas");
+      expect(isValidPhoneInput(''), isFalse);
+    });
+
     test("chiroyli ko'rinish", () {
       expect(fmtPhone('998901234567'), '+998 90 123 45 67');
     });
