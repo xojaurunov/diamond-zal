@@ -852,6 +852,14 @@ void main() {
 
       expect(subs(null), isEmpty, reason: "abonementi yo'q — eslatma yo'q");
       expect(subs(DateTime(2026, 10, 18)), isEmpty, reason: 'hali ko‘p kun bor');
+
+      // chegara: tugash kunining o'zi — hali "o'tdi" emas, faqat bitta element
+      final bugun = subs(DateTime(2026, 9, 18));
+      expect(bugun, hasLength(1));
+      expect(bugun.first.title, 'Abonement tugadi');
+      final kecha = subs(DateTime(2026, 9, 17));
+      expect(kecha, hasLength(1));
+      expect(kecha.first.body, startsWith('1 kun oldin tugadi'));
     });
 
     test("trener: muddati o'tgan shogird 30 kungacha ko'rinadi", () {
@@ -873,6 +881,15 @@ void main() {
       final yaqin = items.firstWhere((i) => i.title == 'Abonement tugashi yaqinlashdi');
       expect(yaqin.body, 'Vali — 2 kundan keyin tugaydi');
       expect(items.any((i) => i.body.contains('Jasur')), isFalse);
+
+      // chegara: 30 kun — ko'rinadi, 31 kun — yo'q
+      List<FeedItem> bitta(DateTime exp) => trainerFeed(
+            trainer: trainer,
+            clients: [c('c4', 'Olim', exp)],
+            now: now,
+          ).where((i) => i.kind == FeedKind.subscription).toList();
+      expect(bitta(DateTime(2026, 8, 19)).single.body, 'Olim — 30 kun oldin tugadi');
+      expect(bitta(DateTime(2026, 8, 18)), isEmpty);
     });
 
     test('yangi (ko-rilmagan) soni sanaladi', () {
