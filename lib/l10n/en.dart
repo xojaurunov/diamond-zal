@@ -942,6 +942,7 @@ const en = <String, String>{
   'Tizzani oxirigacha to\'g\'rilamang, bel suyanchiqdan uzilmasin.': 'Don\'t lock the knees, keep the lower back on the pad.',
   'To\'g\'ri ovqatlanish —': 'Eating right is',
   'To\'g\'ri oyoqda egilish (rumin tortishi)': 'Romanian deadlift',
+  'To\'langan sana: {0}': 'Payment date: {0}',
   'To\'langan: {0}': 'Paid: {0}',
   'To\'langan: {0} · amal qiladi: {1}': 'Paid: {0} · valid on: {1}',
   'To\'langan: {0} · keyingi to\'lov: {1}': 'Paid: {0} · next payment: {1}',

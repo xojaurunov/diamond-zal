@@ -3759,6 +3759,10 @@
   "ru": "Румынская тяга",
   "en": "Romanian deadlift"
  },
+ "To'langan sana: {0}": {
+  "ru": "Дата оплаты: {0}",
+  "en": "Payment date: {0}"
+ },
  "To'langan: {0}": {
   "ru": "Оплачено: {0}",
   "en": "Paid: {0}"

@@ -149,6 +149,11 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
   var months = subscriptionMonths.first;
   int stdPrice() => months == 0 ? Subscription.priceOf(days: 1) : Subscription.priceOf(months: months);
   final price = TextEditingController(text: '${stdPrice()}');
+  // To'langan kun — muddat shundan hisoblanadi (zal egasi: "to'lagan kundan hisobla").
+  // Mijoz oldin to'lab, trener keyin kiritsa ham to'g'ri chiqsin; kelajak sana yo'q.
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  var paid = today;
 
   final saved = await showSheet<bool>(
     context,
@@ -178,6 +183,23 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
           keyboardType: TextInputType.number,
           decoration: InputDecoration(labelText: tr('Narxi'), suffixText: tr("so'm")),
         ),
+        const SizedBox(height: AppSpace.sm),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            icon: const Icon(Icons.event_outlined),
+            label: Text(trf("To'langan sana: {0}", [fmtDay(paid)])),
+            onPressed: () async {
+              final d = await showDatePicker(
+                context: ctx,
+                initialDate: paid,
+                firstDate: today.subtract(const Duration(days: 60)),
+                lastDate: today,
+              );
+              if (d != null) setS(() => paid = DateTime(d.year, d.month, d.day));
+            },
+          ),
+        ),
         const SizedBox(height: AppSpace.lg),
         SizedBox(
           width: double.infinity,
@@ -195,11 +217,11 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
     await Db.addSubscription(
       client,
       Subscription(
-        startDate: DateTime.now(),
+        startDate: paid,
         months: months,
         days: months == 0 ? 1 : 0,
         price: int.tryParse(price.text.replaceAll(RegExp(r'\D'), '')) ?? 0,
-        paidDate: DateTime.now(),
+        paidDate: paid,
       ),
     );
     if (context.mounted) showSnack(context, tr('Abonement qo‘shildi'));
