@@ -7,7 +7,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, collectionGroup, query, where,
-  writeBatch, serverTimestamp, Bytes,
+  writeBatch, serverTimestamp, Bytes, deleteField,
 } from 'firebase/firestore';
 
 const RULES = readFileSync(new URL('../../firestore.rules', import.meta.url), 'utf8');
@@ -394,6 +394,23 @@ await check('shogird oz abonementlar royxatini oqiydi', () =>
   assertSucceeds(getDocs(collection(as(USER), 'users', USER, 'subscriptions'))));
 await check('boshqa trener abonementni oqiy OLMAYDI', () =>
   assertFails(getDocs(collection(as(TRAINER3), 'users', USER, 'subscriptions'))));
+// xato kiritilgan to'lovni o'chirish — shogirdning treneri yoki bosh admin
+await env.withSecurityRulesDisabled(async (ctx) => {
+  for (const id of ['del1', 'del2', 'del3'])
+    await setDoc(doc(ctx.firestore(), 'users', USER, 'subscriptions', id), abon({ months: 1 }));
+});
+await check('boshqa trener tolovni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER3), 'users', USER, 'subscriptions', 'del1'))));
+await check('shogird oz tolovini ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'users', USER, 'subscriptions', 'del1'))));
+await check('barmen tolovni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(BARMEN), 'users', USER, 'subscriptions', 'del1'))));
+await check('trener oz shogirdi tolovini ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'users', USER, 'subscriptions', 'del1'))));
+await check('bosh admin tolovni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(OWNER), 'users', USER, 'subscriptions', 'del2'))));
+await check('trener oz shogirdi abonement muddatini olib tashlaydi (yagona tolov ochganda)', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { subscriptionExpiresAt: deleteField() })));
 await check('trener oz shogirdiga abonement muddatini belgilaydi', () =>
   assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { subscriptionExpiresAt: new Date(2027, 0, 1) })));
 await check('shogird ozi abonement muddatini ozgartira OLMAYDI', () =>
@@ -634,8 +651,17 @@ await check('bosh admin hamma tolovlarni oqiydi', () =>
   assertSucceeds(getDocs(collection(as(OWNER), 'memberships'))));
 await check('boshqa trener tolov kozgusi orqali shogird hujjatini ocha OLMAYDI', () =>
   assertFails(getDoc(doc(as(TRAINER2), 'users', USER))));
-await check('trener kozguni ochira OLMAYDI', () =>
-  assertFails(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
+await check('boshqa zal treneri kozguni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER3), 'memberships', USER))));
+await check('shogird oz kozgusini ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'memberships', USER))));
+await check('barmen kozguni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(BARMEN), 'memberships', USER))));
+await check('trener oz shogirdi kozgusini ochiradi (yagona tolov ochirilganda)', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'memberships', USER), kozgu({ updatedAt: new Date() }));
+});
 
 console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {
