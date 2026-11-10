@@ -834,6 +834,47 @@ void main() {
       expect(noPlan.first.body, contains('Aziz'));
     });
 
+    test("shogird: abonement muddati o'tgan — eslatma, yaqinlashgan — avvalgidek", () {
+      AppUser sub(DateTime? exp) => AppUser(id: 'u1', name: 'Shogird', email: '', subscriptionExpiresAt: exp);
+      List<FeedItem> subs(DateTime? exp) => studentFeed(user: sub(exp), messages: const [], now: now)
+          .where((i) => i.kind == FeedKind.subscription)
+          .toList();
+
+      final otgan = subs(DateTime(2026, 9, 15));
+      expect(otgan, hasLength(1));
+      expect(otgan.first.title, 'Abonement muddati o‘tdi');
+      expect(otgan.first.body, startsWith('3 kun oldin tugadi'));
+      expect(otgan.first.action, isTrue);
+
+      final yaqin = subs(DateTime(2026, 9, 20));
+      expect(yaqin, hasLength(1));
+      expect(yaqin.first.title, 'Abonement tugashi yaqinlashdi');
+
+      expect(subs(null), isEmpty, reason: "abonementi yo'q — eslatma yo'q");
+      expect(subs(DateTime(2026, 10, 18)), isEmpty, reason: 'hali ko‘p kun bor');
+    });
+
+    test("trener: muddati o'tgan shogird 30 kungacha ko'rinadi", () {
+      final trainer = AppUser(id: 't1', name: 'Trener', email: '', role: 'admin');
+      AppUser c(String id, String name, DateTime exp) =>
+          AppUser(id: id, name: name, email: '', planId: 'p1', gymDays: const [1, 3, 5], subscriptionExpiresAt: exp);
+      final items = trainerFeed(
+        trainer: trainer,
+        clients: [
+          c('c1', 'Aziz', DateTime(2026, 9, 13)), // 5 kun oldin tugagan
+          c('c2', 'Jasur', DateTime(2026, 8, 9)), // 40 kun oldin — ko'rinmaydi
+          c('c3', 'Vali', DateTime(2026, 9, 20)), // 2 kun qoldi
+        ],
+        now: now,
+      ).where((i) => i.kind == FeedKind.subscription).toList();
+      expect(items, hasLength(2));
+      final otgan = items.firstWhere((i) => i.title == 'Abonement muddati o‘tdi');
+      expect(otgan.body, 'Aziz — 5 kun oldin tugadi');
+      final yaqin = items.firstWhere((i) => i.title == 'Abonement tugashi yaqinlashdi');
+      expect(yaqin.body, 'Vali — 2 kundan keyin tugaydi');
+      expect(items.any((i) => i.body.contains('Jasur')), isFalse);
+    });
+
     test('yangi (ko-rilmagan) soni sanaladi', () {
       final items = [
         FeedItem(kind: FeedKind.chat, title: 'a', body: 'b', at: now),
