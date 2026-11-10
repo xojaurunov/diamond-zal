@@ -150,7 +150,8 @@ async function uploadAvatar(request, env, deps) {
   const { uid, denied } = await authUid(request, env, deps);
   if (denied) return denied;
   const type = (request.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
-  if (!IMAGE_TYPES[type]) return fail(415, 'faqat rasm (JPEG, PNG, WebP)');
+  // Object.hasOwn: `constructor`, `__proto__` kabi meros kalitlar rasm turi bo'lib o'tib ketmasin
+  if (!Object.hasOwn(IMAGE_TYPES, type)) return fail(415, 'faqat rasm (JPEG, PNG, WebP)');
   const size = Number(request.headers.get('content-length'));
   if (!size) return fail(411, 'hajm (Content-Length) kerak');
   if (size > MAX_AVATAR_BYTES) return fail(413, 'rasm 512 KB dan katta');
