@@ -636,6 +636,24 @@ await check('boshqa trener tolov kozgusi orqali shogird hujjatini ocha OLMAYDI',
   assertFails(getDoc(doc(as(TRAINER2), 'users', USER))));
 await check('trener kozguni ochira OLMAYDI', () =>
   assertFails(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
+// shogird boshqa zal treneriga o'tdi — ko'zgudagi zalni o'zi yangilaydi (faqat zal)
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'users', USER), { trainerId: TRAINER3 }, { merge: true });
+});
+await check('shogird trener almashganda kozgu zalini yangi zalga yangilaydi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'memberships', USER), { gymId: 'zal2', updatedAt: serverTimestamp() })));
+await check('shogird kozguga trener zalidan boshqa zal yoza OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { gymId: 'zal1', updatedAt: serverTimestamp() })));
+await check('shogird kozguda summani ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { price: 1, updatedAt: serverTimestamp() })));
+await check('shogird kozguda muddatni ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { expiresAt: new Date(2030, 0, 1), updatedAt: serverTimestamp() })));
+await check('boshqa shogird kozgu zalini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER3), 'memberships', USER), { gymId: 'zal2', updatedAt: serverTimestamp() })));
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'users', USER), { trainerId: TRAINER }, { merge: true });
+  await setDoc(doc(ctx.firestore(), 'memberships', USER), { gymId: 'zal1' }, { merge: true });
+});
 
 console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {
