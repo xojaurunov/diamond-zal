@@ -127,6 +127,8 @@ service cloud.firestore {
           && (request.resource.data.months > 0) != (request.resource.data.get('days', 0) > 0)
           && request.resource.data.price is int && request.resource.data.price >= 0
           && request.resource.data.get('currency', 'UZS') in ['UZS', 'USD'];
+        // xato kiritilgan to'lov — shogirdning treneri yoki bosh admin o'chiradi (zal egasi, 10-noy)
+        allow delete: if canManage(uid);
       }
 
       // Kunlik davomat (sana kalit bilan) — faqat trener/bosh admin belgilaydi
@@ -178,7 +180,8 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId', 'updatedAt'])
         && request.resource.data.gymId == clientGym()
         && request.resource.data.updatedAt == request.time;
-      allow delete: if isOwner();
+      // yagona to'lov o'chirilsa ko'zgu ham o'chadi (trener ham — o'z shogirdi)
+      allow delete: if canManage(uid);
     }
 
     match /trainers/{tid} {

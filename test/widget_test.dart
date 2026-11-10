@@ -1119,6 +1119,15 @@ void main() {
       expect(s.toMap()['days'], 1);
     });
 
+    test("to'lov o'chirilgach qolgan eng oxirgisi hisoblanadi", () {
+      final okt = Subscription(id: 'a', startDate: DateTime(2026, 10, 3), months: 1);
+      final noy = Subscription(id: 'b', startDate: DateTime(2026, 11, 5), months: 1);
+      expect(Subscription.latestAfterDelete([noy, okt], 'b')?.id, 'a');
+      expect(Subscription.latestAfterDelete([noy, okt], 'a')?.id, 'b');
+      expect(Subscription.latestAfterDelete([okt], 'a'), isNull, reason: "yagona to'lov — abonement yo'q");
+      expect(Subscription.latestAfterDelete([okt, noy], 'x')?.id, 'b', reason: 'tartibga bog‘liq emas');
+    });
+
     test("kechikib kiritilgan to'lov: muddat to'langan kundan", () {
       // mijoz 5-noyabrda to'lagan, trener 9-noyabrda kiritgan — sana oynada tanlanadi
       final paid = DateTime(2026, 11, 5);

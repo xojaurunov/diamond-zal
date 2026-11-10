@@ -80,6 +80,17 @@ class Subscription {
   static bool isExpired(DateTime? exp, [DateTime? now]) =>
       exp != null && daysLeft(exp, now) < 0;
 
+  /// [removedId] o'chirilgach qoladigan eng oxirgi yozuv (boshlanish sanasi bo'yicha);
+  /// boshqa yozuv qolmasa — null (abonement yo'q)
+  static Subscription? latestAfterDelete(List<Subscription> list, String removedId) {
+    Subscription? best;
+    for (final s in list) {
+      if (s.id == removedId) continue;
+      if (best == null || s.startDate.isAfter(best.startDate)) best = s;
+    }
+    return best;
+  }
+
   factory Subscription.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
     return Subscription(

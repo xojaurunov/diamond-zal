@@ -744,6 +744,29 @@ class Db {
     await batch.commit();
   }
 
+  /// Xato kiritilgan to'lovni o'chirish (shogirdning treneri yoki bosh admin). Tugash sanasi va
+  /// to'lov ko'zgusi qolgan eng oxirgi yozuvdan qayta hisoblanadi; yozuv qolmasa — ikkalasi
+  /// tozalanadi. Hammasi bitta batch.
+  static Future<void> deleteSubscription(AppUser client, Subscription s) async {
+    final user = _fs.collection('users').doc(client.id);
+    final all = (await user.collection('subscriptions').get()).docs.map(Subscription.fromDoc).toList();
+    final next = Subscription.latestAfterDelete(all, s.id);
+    final mirror = _fs.collection('memberships').doc(client.id);
+    final batch = _fs.batch()..delete(user.collection('subscriptions').doc(s.id));
+    if (next == null) {
+      batch
+        ..update(user, {'subscriptionExpiresAt': FieldValue.delete()})
+        ..delete(mirror);
+    } else {
+      final tid = client.trainerId ?? '';
+      final gymId = tid.isEmpty ? '' : await _gymOf(tid);
+      batch
+        ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(next.expiresAt)})
+        ..set(mirror, Membership.mapOf(client.name, gymId, next));
+    }
+    await batch.commit();
+  }
+
   /// Zal mijozlarining oxirgi to'lovlari: bosh admin — hammasi, trener va barmen — o'z zali
   /// (zalsiz xodim — bo'sh; qoidalar boshqa zalni bermaydi).
   static Stream<List<Membership>> memberships(AppUser me) {

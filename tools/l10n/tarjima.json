@@ -1843,6 +1843,10 @@
   "ru": "Сессия истекла — выйдите из приложения и войдите снова",
   "en": "Your session has expired — sign out and sign in again"
  },
+ "Kiritilgan to'lovlar": {
+  "ru": "Внесённые оплаты",
+  "en": "Recorded payments"
+ },
  "Kiriting": {
   "ru": "Введите",
   "en": "Required"
@@ -4039,6 +4043,14 @@
   "ru": "Висите полностью, плечи не расслабляйте.",
   "en": "Hang fully, keep the shoulders engaged."
  },
+ "To'lov o'chirildi": {
+  "ru": "Оплата удалена",
+  "en": "Payment deleted"
+ },
+ "To'lov o'chirilsinmi?": {
+  "ru": "Удалить оплату?",
+  "en": "Delete this payment?"
+ },
  "To'lov zalda qilinadi, abonementni trener belgilaydi.": {
   "ru": "Оплата в зале, абонемент оформляет тренер.",
   "en": "Payment is made at the gym; your trainer sets up the membership."
@@ -4058,6 +4070,10 @@
  "To'lovlar zal bo'yicha ko'rinadi. Bosh admin sizni zalga biriktirishi kerak.": {
   "ru": "Оплаты показываются по залу. Главный админ должен прикрепить вас к залу.",
   "en": "Payments are shown per gym. The head admin needs to assign you to a gym."
+ },
+ "To'lovni o'chirish": {
+  "ru": "Удалить оплату",
+  "en": "Delete payment"
  },
  "To'raqo'rg'on": {
   "ru": "Туракурган",
@@ -5494,6 +5510,10 @@
  "{0}, {1}-{2}": {
   "ru": "{0}, {1} {2}",
   "en": "{0}, {2} {1}"
+ },
+ "{0}. Abonement muddati oldingi to'lovdan qayta hisoblanadi.": {
+  "ru": "{0}. Срок абонемента будет пересчитан по предыдущей оплате.",
+  "en": "{0}. The membership end date will be recalculated from the previous payment."
  },
  "{0}: \"{1}\" × {2} bekor qilinsinmi?": {
   "ru": "{0}: отменить «{1}» × {2}?",

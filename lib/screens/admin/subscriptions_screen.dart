@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/tr.dart';
 import '../../models/models.dart';
+import '../../models/shop.dart' show fmtMoney;
 import '../../models/subscription.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -209,6 +210,34 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
           ),
         ),
         const SizedBox(height: AppSpace.sm),
+        // Oldingi to'lovlar — xato kiritilganini o'chirib, to'g'risini qayta kiritish uchun
+        StreamBuilder<List<Subscription>>(
+          stream: Db.subscriptions(client.id),
+          builder: (ctx, snap) {
+            final list = snap.data ?? const <Subscription>[];
+            if (list.isEmpty) return const SizedBox.shrink();
+            final muted = Theme.of(ctx).textTheme.bodySmall?.copyWith(color: AppColors.textMuted);
+            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(height: AppSpace.sm),
+              Text(tr("Kiritilgan to'lovlar"), style: muted),
+              for (final s in list.take(5))
+                Row(children: [
+                  Expanded(
+                    child: Text([
+                      fmtDay(s.paidDate ?? s.startDate),
+                      s.kindLabel,
+                      if (s.price > 0) fmtMoney(s.price, s.currency),
+                    ].join(' · ')),
+                  ),
+                  IconButton(
+                    tooltip: tr("To'lovni o'chirish"),
+                    icon: Icon(Icons.delete_outline, color: AppColors.danger),
+                    onPressed: () => _deleteSubscription(ctx, client, s),
+                  ),
+                ]),
+            ]);
+          },
+        ),
       ]),
     ),
   );
@@ -225,6 +254,28 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
       ),
     );
     if (context.mounted) showSnack(context, tr('Abonement qo‘shildi'));
+  }
+}
+
+Future<void> _deleteSubscription(BuildContext context, AppUser client, Subscription s) async {
+  final what = [
+    fmtDay(s.paidDate ?? s.startDate),
+    s.kindLabel,
+    if (s.price > 0) fmtMoney(s.price, s.currency),
+  ].join(' · ');
+  final ok = await confirm(
+    context,
+    title: tr("To'lov o'chirilsinmi?"),
+    message: trf("{0}. Abonement muddati oldingi to'lovdan qayta hisoblanadi.", [what]),
+    ok: tr("O'chirish"),
+    destructive: true,
+  );
+  if (!ok) return;
+  try {
+    await Db.deleteSubscription(client, s);
+    if (context.mounted) showSnack(context, tr("To'lov o'chirildi"));
+  } catch (e) {
+    if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
   }
 }
 
