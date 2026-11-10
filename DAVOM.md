@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-11-03**
+> Oxirgi yangilanish: **2026-11-10**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,7 +11,16 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (3-noyabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (10-noyabr holati)
+
+**10-noyabr (eng yangi).** `sinov/apk-video-logo` dagi hamma shoxlar `main` ga qo'shildi, sayt va saytdagi
+APK yangilandi, qoidalar joylandi (**103-band**). Pastdagi 3-noyabr jadvali — tarix.
+`main` ga qo'shilmagan: `feat/servis-*` va unga bog'liq shoxlar (Python servis; Render — hozircha yo'q).
+
+**Ochiq ishlar:** zal egasi yangi APK'ni telefonda sinaydi; ikonka foni qarori; trener boshqa zalga o'tsa
+shogirdlarining to'lov ko'zgusi ham o'tsin; muddati o'tgan abonement banneri; qarzdorlar ro'yxati; abonementni
+muzlatish; kassa; trener foizini bazaga ko'chirish; progress rasmlari R2'ga; Postgres nusxasiga `days.gymFeel`,
+`announcements`, `photoUrl`; QR davomatni qayta yoqish (kerak bo'lsa).
 
 **▶ KEYINGI SAFAR SHU YERDAN (3-noyabr).** 21-oktabr – 3-noyabr ishlari (**101–102-bandlar**).
 Kod GitHub'da, **alohida shoxlarda; `main` ga qo'shilmagan, sayt 14-oktabrdan beri yangilanmagan**.
@@ -2120,6 +2129,29 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
       **Tekshirilmagan:** telefonda kamera/galereya; trener ro'yxati, chat va trener rasmi shogirdda — ko'z bilan.
     - **Joylandi (3-noy, zal egasi ruxsati bilan):** Worker; qoidalar — avval `feat/trener-rasmi`, keyin
       zal e'lonlari bilan (`sinov/apk-video-logo` fayli).
+103. **Abonement tuzatishlari, QR muzlatildi, hammasi `main` ga va saytga (5–10-noy)** — zal egasi:
+    "to'lov shogirdga ko'rinmadi", "hamma xatolarni tuzat". Rejalar: `specs/abonement-xatolar/`,
+    `specs/abonement-xatolar-2/` (lokal).
+    - **Kirish** (`fix/telefon-maydoni`): telefon maydoni 998 bilan yozilgan 12 raqamni ham qabul qiladi
+      (`isValidPhoneInput`). Shogird kira olmaganining sababi shu edi — maydon 9 raqamda kesardi.
+    - **To'lov sanasi** (`fix/tolov-sanasi`): abonement qo'shishda "To'langan sana" tanlanadi (60 kungacha
+      orqaga), muddat shu sanadan hisoblanadi.
+    - **Muddati o'tgan eslatma** (`fix/muddat-otdi-eslatma`, `fix/tugash-kuni-matni`): shogird "Bugun" da
+      "Abonement muddati o'tdi"; trener — 30 kungacha o'tganlar ro'yxati; tugash kuni "Abonement bugun tugaydi".
+    - **Xato to'lovni o'chirish** (`fix/tolov-ochirish`): shogirdning treneri yoki bosh admin. Muddat va
+      `memberships` ko'zgusi qolgan eng oxirgi to'lovdan qayta hisoblanadi (`Db.deleteSubscription`).
+    - **Trener almashsa** (`fix/tolov-zali`): `memberships.gymId` yangi trener zaliga o'tadi
+      (`_syncMembershipGym`, zal `trainers/{id}.gymId` dan).
+    - **Trener ulushi** (`fix/trener-foizi`): standart 0% (zal egasi: "hozircha foiz olmaydi").
+    - **QR davomat muzlatildi** (`chore/qr-muzlatish`): kod o'chirilmagan, izohda — belgi
+      `// QR davomat muzlatilgan`. `mobile_scanner` `pubspec.yaml` da izohda. Qayta yoqish: izohlarni chiqarish,
+      `flutter pub get`.
+    - **Bazaga qo'lda:** 5-noyabr to'lovi (500 000 so'm, 5-noy – 5-dek) egasi akkaunti bilan yozildi.
+    - **Tekshiruv:** `flutter test` 185/185, qoida testlari 297/297. Telefonda hali ko'rilmagan.
+    - **Joylandi (10-noy, zal egasi ruxsati bilan):** qoidalar (ruleset `7f760016…`; joylashdan oldin jonli
+      qoida bilan diff — faqat ikki yangi ruxsat); `sinov/apk-video-logo` → `main`; sayt — `public/ilova/`
+      (web, `--base-href /ilova/`) va `public/app/kq.bin`, `kq-eski.bin` (APK).
+    - **Ochiq repo:** testdagi haqiqiy telefon raqami push'dan oldin tarixdan olib tashlandi (soxta raqam).
 
 
 ---

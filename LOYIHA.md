@@ -127,7 +127,7 @@ lib/
   screens/
     auth/                   AuthGate (rolga qarab yo'naltiradi), Login
     user/                   shogird ekranlari (Bugun, Progress, Zal, Videolar, Do'kon, Chat, Profil, Anketa)
-    admin/                  trener va bosh admin ekranlari (Mijozlar, Rejalar, Mashqlar, Xodimlar, hisobotlar, QR skaner)
+    admin/                  trener va bosh admin ekranlari (Mijozlar, Rejalar, Mashqlar, Xodimlar, hisobotlar, QR skaner — muzlatilgan)
     barmen/                 barmen paneli
   widgets/                  umumiy komponentlar (ui.dart — BentoTile, StatTile, UserAvatar, showSheet ...)
   l10n/                     tarjimalar: ru.dart, en.dart (kalit — o'zbekcha matn)
@@ -268,24 +268,22 @@ Spark tarifida `.apk` fayl bloklanadi. Shuning uchun APK saytda `.bin` nomida tu
 
 ---
 
-## 11. Hozirgi holat (2026-11-05)
+## 11. Hozirgi holat (2026-11-10)
 
-**Jonli (hamma ishlatyapti):**
-- Sayt va saytdagi APK — **14-oktabr** holati (tana xaritasi, mashg'ulot navbati, do'kon,
-  abonement, uch til va boshqalar).
-- Firestore qoidalari — eng yangi (video, trener rasmi, e'lonlar; 3-noyabr).
+**Jonli (hamma ishlatyapti), `main` = sayt:**
+- Sayt va saytdagi APK — **10-noyabr** holati: "Qobil Fitness" nomi va logotipi, video yuklash va
+  "Videolar" bo'limi, oldin/keyin slayderi, dam olish taymeri, mashg'ulot fikri, zal e'lonlari,
+  profil rasmi (hamma rol), abonement tuzatishlari (to'langan sana, muddati o'tgan eslatma,
+  xato to'lovni o'chirish).
+- Firestore qoidalari — `main` dagi fayl (10-noyabr).
 - Video/rasm serveri — joylangan (3-noyabr).
 
-**Tayyor, lekin faqat sinov APK'da** (`sinov/apk-video-logo`, `main` ga qo'shilmagan):
-- "Qobil Fitness" nomi va logotipi;
-- video yuklash va "Videolar" bo'limi;
-- oldin/keyin slayderi, dam olish taymeri, mashg'ulot fikri, zal e'lonlari, QR davomat;
-- profil rasmi (hamma rol), trener rasmi shogirdda.
+**Muzlatilgan:** QR davomat — kod izohda (`// QR davomat muzlatilgan`), ilovada ko'rinmaydi.
 
 **Kompyuterda, internetga chiqmagan:** Python servis va Postgres nusxasi (`feat/servis-*`).
 
-**Kutilayotgan:** zal egasi sinov APK'ni telefonda tekshiradi → `main` ga qo'shish va saytni
-yangilash. Ochiq ishlar ro'yxati — DAVOM.md, 0-bo'lim.
+**Kutilayotgan:** zal egasi yangi APK'ni telefonda tekshiradi. Ochiq ishlar ro'yxati —
+DAVOM.md, 0-bo'lim.
 
 ---
 
