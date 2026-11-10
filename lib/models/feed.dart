@@ -101,8 +101,9 @@ List<FeedItem> studentFeed({
     final left = Subscription.daysLeft(user.subscriptionExpiresAt, n);
     items.add(FeedItem(
       kind: FeedKind.subscription,
-      title: left <= 0 ? tr('Abonement tugadi') : tr('Abonement tugashi yaqinlashdi'),
-      body: left <= 0 ? tr('Yangilash uchun trenerga murojaat qiling') : trf('{0} kundan keyin tugaydi', [left]),
+      // tugash kuni abonement hali amal qiladi (kunlik mijozga shu kunning o'zi) — "tugadi" emas
+      title: left <= 0 ? tr('Abonement bugun tugaydi') : tr('Abonement tugashi yaqinlashdi'),
+      body: left <= 0 ? tr('Ertaga yangi to‘lov kerak — zalda to‘lang') : trf('{0} kundan keyin tugaydi', [left]),
       at: n,
       action: true,
     ));
