@@ -55,7 +55,8 @@ class AppSettings {
   // ---------- oylik hisobot ----------
   /// Trener ulushi (abonement tushumidan foiz) — bosh admin hisobot ekranida tanlaydi.
   /// Qurilmada saqlanadi: bu hisob-kitob uchun yordamchi son, bazadagi qoida emas.
-  static int get trainerSharePct => _p?.getInt('trainer_share_pct') ?? 40;
+  /// Standart 0% — zal egasi (10-noy 2026): "hozircha trener hech qancha % olmaydi" (avval 40).
+  static int get trainerSharePct => _p?.getInt('trainer_share_pct') ?? 0;
   static Future<void> setTrainerSharePct(int v) async =>
       _p?.setInt('trainer_share_pct', v.clamp(0, 100));
 
