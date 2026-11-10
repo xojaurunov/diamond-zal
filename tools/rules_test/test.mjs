@@ -7,7 +7,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, collectionGroup, query, where,
-  writeBatch, serverTimestamp, Bytes,
+  writeBatch, serverTimestamp, Bytes, deleteField,
 } from 'firebase/firestore';
 
 const RULES = readFileSync(new URL('../../firestore.rules', import.meta.url), 'utf8');
@@ -394,6 +394,23 @@ await check('shogird oz abonementlar royxatini oqiydi', () =>
   assertSucceeds(getDocs(collection(as(USER), 'users', USER, 'subscriptions'))));
 await check('boshqa trener abonementni oqiy OLMAYDI', () =>
   assertFails(getDocs(collection(as(TRAINER3), 'users', USER, 'subscriptions'))));
+// xato kiritilgan to'lovni o'chirish — shogirdning treneri yoki bosh admin
+await env.withSecurityRulesDisabled(async (ctx) => {
+  for (const id of ['del1', 'del2', 'del3'])
+    await setDoc(doc(ctx.firestore(), 'users', USER, 'subscriptions', id), abon({ months: 1 }));
+});
+await check('boshqa trener tolovni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER3), 'users', USER, 'subscriptions', 'del1'))));
+await check('shogird oz tolovini ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'users', USER, 'subscriptions', 'del1'))));
+await check('barmen tolovni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(BARMEN), 'users', USER, 'subscriptions', 'del1'))));
+await check('trener oz shogirdi tolovini ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'users', USER, 'subscriptions', 'del1'))));
+await check('bosh admin tolovni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(OWNER), 'users', USER, 'subscriptions', 'del2'))));
+await check('trener oz shogirdi abonement muddatini olib tashlaydi (yagona tolov ochganda)', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { subscriptionExpiresAt: deleteField() })));
 await check('trener oz shogirdiga abonement muddatini belgilaydi', () =>
   assertSucceeds(updateDoc(doc(as(TRAINER), 'users', USER), { subscriptionExpiresAt: new Date(2027, 0, 1) })));
 await check('shogird ozi abonement muddatini ozgartira OLMAYDI', () =>
@@ -634,8 +651,35 @@ await check('bosh admin hamma tolovlarni oqiydi', () =>
   assertSucceeds(getDocs(collection(as(OWNER), 'memberships'))));
 await check('boshqa trener tolov kozgusi orqali shogird hujjatini ocha OLMAYDI', () =>
   assertFails(getDoc(doc(as(TRAINER2), 'users', USER))));
-await check('trener kozguni ochira OLMAYDI', () =>
-  assertFails(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
+await check('boshqa zal treneri kozguni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER3), 'memberships', USER))));
+await check('shogird oz kozgusini ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'memberships', USER))));
+await check('barmen kozguni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(BARMEN), 'memberships', USER))));
+await check('trener oz shogirdi kozgusini ochiradi (yagona tolov ochirilganda)', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'memberships', USER))));
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'memberships', USER), kozgu({ updatedAt: new Date() }));
+});
+// shogird boshqa zal treneriga o'tdi — ko'zgudagi zalni o'zi yangilaydi (faqat zal)
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'users', USER), { trainerId: TRAINER3 }, { merge: true });
+});
+await check('shogird trener almashganda kozgu zalini yangi zalga yangilaydi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'memberships', USER), { gymId: 'zal2', updatedAt: serverTimestamp() })));
+await check('shogird kozguga trener zalidan boshqa zal yoza OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { gymId: 'zal1', updatedAt: serverTimestamp() })));
+await check('shogird kozguda summani ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { price: 1, updatedAt: serverTimestamp() })));
+await check('shogird kozguda muddatni ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'memberships', USER), { expiresAt: new Date(2030, 0, 1), updatedAt: serverTimestamp() })));
+await check('boshqa shogird kozgu zalini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER3), 'memberships', USER), { gymId: 'zal2', updatedAt: serverTimestamp() })));
+await env.withSecurityRulesDisabled(async (ctx) => {
+  await setDoc(doc(ctx.firestore(), 'users', USER), { trainerId: TRAINER }, { merge: true });
+  await setDoc(doc(ctx.firestore(), 'memberships', USER), { gymId: 'zal1' }, { merge: true });
+});
 
 console.log('\n== OYLIK HISOBOT (collectionGroup) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {
@@ -650,6 +694,41 @@ await check('barmen hamma abonementlarni oqiy OLMAYDI', () =>
   assertFails(getDocs(collectionGroup(as(BARMEN), 'subscriptions'))));
 await check('shogird hamma abonementlarni oqiy OLMAYDI', () =>
   assertFails(getDocs(collectionGroup(as(USER), 'subscriptions'))));
+
+console.log("\n== ZAL E'LONLARI (announcements) ==");
+const elon = (by, extra = {}) => ({ text: 'Ertaga zal 10:00 da ochiladi', createdAt: serverTimestamp(), createdBy: by, ...extra });
+await check('trener elon yozadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'announcements', 'a1'), elon(TRAINER))));
+await check('bosh admin elon yozadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'announcements', 'a2'), elon(OWNER))));
+await check('shogird elon yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'announcements', 'a3'), elon(USER))));
+await check('barmen elon yoza OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'announcements', 'a3'), elon(BARMEN))));
+await check('muallifni soxtalab BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(OWNER))));
+await check('vaqtni soxtalab BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { createdAt: new Date(2020, 0, 1) }))));
+await check('500 belgidan uzun BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { text: 'x'.repeat(501) }))));
+await check('bosh elon BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { text: '' }))));
+await check('ortiqcha maydon BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'announcements', 'a3'), elon(TRAINER, { pin: true }))));
+await check('shogird elonlarni oqiydi', () =>
+  assertSucceeds(getDocs(collection(as(USER), 'announcements'))));
+await check('kirmagan oqiy OLMAYDI', () =>
+  assertFails(getDocs(collection(anon(), 'announcements'))));
+await check('elonni tahrirlab BOLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'announcements', 'a1'), { text: 'Ozgardi' })));
+await check('boshqa trener begona elonni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(TRAINER2), 'announcements', 'a1'))));
+await check('shogird elonni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'announcements', 'a1'))));
+await check('muallif oz elonini ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'announcements', 'a1'))));
+await check('bosh admin istalgan elonni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(OWNER), 'announcements', 'a2'))));
 
 console.log('\n== MASHQLAR (trener qoshadi) ==');
 const ex = (by, more = {}) => ({
@@ -710,6 +789,81 @@ await check('boshqa trener begona shogirdga mashq tanlay OLMAYDI', () =>
   assertFails(updateDoc(doc(as(TRAINER3), 'users', USER), { 'program.chest': ['X'] })));
 await check('bosh admin istalgan shogirdga mashq tanlaydi', () =>
   assertSucceeds(updateDoc(doc(as(OWNER), 'users', USER), { 'program.back': ['Y'] })));
+
+console.log('\n== VIDEO DARSLAR (videos) ==');
+const dars = (by, more = {}) => ({
+  title: 'Ovqatlanish asoslari', category: 'ovqatlanish', description: '', seconds: 240,
+  url: 'https://qobil-video.qobilfitness.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+  createdAt: 1760000000000, createdBy: by, ...more,
+});
+await check('trener dars qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(TRAINER))));
+await check('bosh admin dars qoshadi', () =>
+  assertSucceeds(setDoc(doc(as(OWNER), 'videos', 'd2'), dars(OWNER))));
+await check('shogird dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'videos', 'd3'), dars(USER))));
+await check('barmen dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(BARMEN), 'videos', 'd4'), dars(BARMEN))));
+await check('shogird darsni koradi', () =>
+  assertSucceeds(getDoc(doc(as(USER), 'videos', 'd1'))));
+await check('kirmagan odam darsni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(anon(), 'videos', 'd1'))));
+await check('noma lum turdagi dars OTMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd5'), dars(TRAINER, { category: 'reklama' }))));
+await check('ortiqcha maydonli (izoh/layk) dars OTMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd6'), dars(TRAINER, { likes: 5 }))));
+await check('boshqa nomidan dars qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd7'), dars(OWNER))));
+await check('tahrirda muallifni ozgartirib BOLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(OWNER))));
+await check('trener darsni tahrirlaydi', () =>
+  assertSucceeds(setDoc(doc(as(TRAINER), 'videos', 'd1'), dars(TRAINER, { title: 'Yangi nom' }))));
+await check('shogird darsni ochira OLMAYDI', () =>
+  assertFails(deleteDoc(doc(as(USER), 'videos', 'd1'))));
+await check('trener darsni ochiradi', () =>
+  assertSucceeds(deleteDoc(doc(as(TRAINER), 'videos', 'd1'))));
+
+console.log('\n== PROFIL RASMI (photoUrl) ==');
+const AVA = 'https://qobil-video.qobilfitness.workers.dev/v/avatars/x/0b7c6a1e-2f3d-4c5b-8a9e-1f2a3b4c5d6e.jpg';
+await check('shogird ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER), { photoUrl: AVA })));
+await check('shogird ozining rasmini olib tashlaydi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER), { photoUrl: null })));
+await check('trener ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'users', TRAINER), { photoUrl: AVA })));
+await check('barmen ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(BARMEN), 'users', BARMEN), { photoUrl: AVA })));
+await check('bosh admin ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(OWNER), 'users', OWNER), { photoUrl: AVA })));
+await check('shogird BOSHQANING rasmini qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER3), { photoUrl: AVA })));
+await check('barmen shogird rasmini qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(BARMEN), 'users', USER), { photoUrl: AVA })));
+await check('kirmagan odam rasm qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(anon(), 'users', USER), { photoUrl: AVA })));
+
+console.log('\n== TRENER RASMI KATALOGDA (trainers.photoUrl) ==');
+const tAva = (tid) => `https://qobil-video.qobilfitness.workers.dev/v/avatars/${tid}/0b7c6a1e-2f3d-4c5b-8a9e-1f2a3b4c5d6e.jpg`;
+await check('trener katalogdagi ozining rasmini qoyadi', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER) })));
+await check('shogird katalogda trener rasmini koradi', async () => {
+  const d = await assertSucceeds(getDoc(doc(as(USER), 'trainers', TRAINER)));
+  if (d.data().photoUrl !== tAva(TRAINER)) throw new Error('photoUrl yoq');
+});
+await check('trener rasmini olib tashlaydi (null)', () =>
+  assertSucceeds(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: null })));
+await check('trener BOSHQANING papkasidagi rasmni qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER4) })));
+await check('trener BEGONA havolani qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: 'https://evil.example.com/a.jpg' })));
+await check('trener rasm oʻrniga son qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER), { photoUrl: 5 })));
+await check('trener BOSHQA trener yozuviga rasm qoya OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(TRAINER), 'trainers', TRAINER4), { photoUrl: tAva(TRAINER4) })));
+await check('bosh admin trener rasmini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(OWNER), 'trainers', TRAINER4), { photoUrl: tAva(TRAINER4) })));
+await check('shogird trener rasmini ozgartira OLMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'trainers', TRAINER), { photoUrl: tAva(TRAINER) })));
 
 console.log('\n=== NATIJA: ' + pass + ' otdi, ' + fail + ' xato ===');
 await env.cleanup();

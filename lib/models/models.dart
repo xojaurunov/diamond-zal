@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../l10n/tr.dart';
+import 'video_link.dart';
 
 /// Reja kategoriyalari — shogird maqsadlari bilan bir xil nomlar (AppUser.goalLabel, Plan.category)
 const planCategories = ['Ozish', 'Massa nabor'];
@@ -52,6 +53,10 @@ class AppUser {
   /// Faqat trener/bosh admin yozadi (`Db.setProgram`). toMap() ga kirmaydi.
   final Map<String, List<String>> program;
 
+  /// Profil rasmi (R2, `avatars/<uid>/...`) — o'zi qo'yadi (`Db.setPhotoUrl`). toMap() ga kirmaydi:
+  /// trener shogird profilini saqlaganda rasm o'chib ketmasin.
+  final String? photoUrl;
+
   AppUser({
     required this.id,
     required this.name,
@@ -73,6 +78,7 @@ class AppUser {
     this.homeWorkoutDate,
     this.subscriptionExpiresAt,
     this.program = const {},
+    this.photoUrl,
   });
 
   /// Bosh admin — zal egasi: trener tayinlaydi, hammani ko'radi, o'chira oladi
@@ -208,6 +214,8 @@ class AppUser {
         for (final e in ((d['program'] as Map?) ?? const {}).entries)
           if (e.value is List) e.key.toString(): [for (final k in e.value as List) k.toString()],
       },
+      // faqat o'z papkasidagi rasm (begona havola yoki boshqaning rasmi — e'tiborsiz)
+      photoUrl: isAvatarUrlOf(d['photoUrl'] as String?, doc.id) ? d['photoUrl'] as String : null,
     );
   }
 
@@ -296,7 +304,12 @@ class TrainerInfo {
   /// katalogni esa o'qiydi: buyurtmaga zal shu yerdan yoziladi (barmen faqat o'z zalini ko'radi).
   /// Qoidalar uni `users` dagi qiymatga teng bo'lishga majbur qiladi.
   final String gymId;
-  const TrainerInfo(this.id, this.name, {this.bio = '', this.accepting = true, this.gymId = ''});
+
+  /// Profil rasmi (`users/{id}.photoUrl` ko'zgusi) — shogird trener hujjatini o'qiy olmaydi, katalogni o'qiydi.
+  /// Trener o'zi yozadi (`Db.setPhotoUrl`). toMap() ga kirmaydi — profil saqlanganda o'chib ketmasin.
+  final String? photoUrl;
+  const TrainerInfo(this.id, this.name,
+      {this.bio = '', this.accepting = true, this.gymId = '', this.photoUrl});
 
   factory TrainerInfo.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? {};
@@ -306,6 +319,7 @@ class TrainerInfo {
       bio: (d['bio'] ?? '') as String,
       accepting: (d['accepting'] ?? true) as bool,
       gymId: (d['gymId'] ?? '') as String,
+      photoUrl: isAvatarUrlOf(d['photoUrl'] as String?, doc.id) ? d['photoUrl'] as String : null,
     );
   }
 

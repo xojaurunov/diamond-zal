@@ -425,7 +425,7 @@ class _TrainerOption extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppSpace.md),
           child: Row(children: [
-            UserAvatar(name: trainer.name, size: 42),
+            UserAvatar(name: trainer.name, size: 42, photoUrl: trainer.photoUrl),
             const SizedBox(width: AppSpace.md),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

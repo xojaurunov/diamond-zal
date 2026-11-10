@@ -43,6 +43,10 @@
   "ru": "«{0}» вернётся к образцу: ваши изменения и ссылка на видео удалятся.",
   "en": "\"{0}\" will return to the sample: your changes and the video link will be removed."
  },
+ "\"{0}\" o'chiriladi — video ham.": {
+  "ru": "«{0}» будет удалён — вместе с видео.",
+  "en": "\"{0}\" will be deleted — the video too."
+ },
  "\"{0}\" o'chiriladi. Shogirdlar uni boshqa ko'rmaydi.": {
   "ru": "«{0}» будет удалено. Ученики больше его не увидят.",
   "en": "\"{0}\" will be deleted. Students will no longer see it."
@@ -95,6 +99,14 @@
   "ru": "За 30 дней: {0}",
   "en": "Last 30 days: {0}"
  },
+ "5 daqiqagacha — ilova o'zi kichraytiradi": {
+  "ru": "До 5 минут — приложение само сожмёт",
+  "en": "Up to 5 minutes — the app compresses it"
+ },
+ "50 MB gacha (taxminan 1 daqiqa)": {
+  "ru": "До 50 МБ (примерно 1 минута)",
+  "en": "Up to 50 MB (about 1 minute)"
+ },
  "7 kun": {
   "ru": "7 дней",
   "en": "7 days"
@@ -102,6 +114,14 @@
  "Abonement": {
   "ru": "Абонемент",
   "en": "Membership"
+ },
+ "Abonement bugun tugaydi": {
+  "ru": "Абонемент заканчивается сегодня",
+  "en": "Membership ends today"
+ },
+ "Abonement muddati o‘tdi": {
+  "ru": "Срок абонемента истёк",
+  "en": "Membership expired"
  },
  "Abonement qo‘shildi": {
   "ru": "Абонемент добавлен",
@@ -699,6 +719,10 @@
   "ru": "Раздел дорабатывается — упражнения для каждой тренировки скоро появятся.",
   "en": "This section is being improved — exercises for each workout are coming soon."
  },
+ "Bu bo'limda video topilmadi.": {
+  "ru": "В этом разделе видео не найдено.",
+  "en": "No videos found in this section."
+ },
  "Bu darajada mashq yo'q.": {
   "ru": "Упражнений этого уровня нет.",
   "en": "No exercises at this level."
@@ -706,6 +730,14 @@
  "Bu davrda sotuv bo‘lmagan": {
   "ru": "За этот период продаж не было",
   "en": "No sales in this period"
+ },
+ "Bu fayl rasm emas (JPEG, PNG, WebP)": {
+  "ru": "Этот файл не изображение (JPEG, PNG, WebP)",
+  "en": "This file is not an image (JPEG, PNG, WebP)"
+ },
+ "Bu fayl video emas (mp4, mov, webm, 3gp)": {
+  "ru": "Этот файл не видео (mp4, mov, webm, 3gp)",
+  "en": "This file is not a video (mp4, mov, webm, 3gp)"
  },
  "Bu ma'lumotlar asosida kunlik kaloriya normangiz hisoblanadi.": {
   "ru": "По этим данным рассчитывается ваша дневная норма калорий.",
@@ -735,9 +767,17 @@
   "ru": "Удалить это фото?",
   "en": "Delete this photo?"
  },
+ "Bu shogird sizniki emas": {
+  "ru": "Это не ваш клиент",
+  "en": "This client is not yours"
+ },
  "Bu yagona bosh admin — tushirib bo’lmaydi. Avval boshqa birovni bosh admin qiling.": {
   "ru": "Это единственный главный админ — понизить нельзя. Сначала назначьте главным админом кого-то ещё.",
   "en": "This is the only head admin — they can't be demoted. Make someone else head admin first."
+ },
+ "Bu zal kartasi emas": {
+  "ru": "Это не карта зала",
+  "en": "This is not a gym card"
  },
  "Bu zalda trener yo'q — qo'shing yoki boshqa zaldan ko'chiring": {
   "ru": "В этом зале нет тренеров — добавьте или переведите из другого зала",
@@ -802,6 +842,10 @@
  "Bugun · {0} kkal": {
   "ru": "Сегодня · {0} ккал",
   "en": "Today · {0} kcal"
+ },
+ "Bugungi mashg'ulot qanday bo'ldi?": {
+  "ru": "Как прошла сегодняшняя тренировка?",
+  "en": "How was today's workout?"
  },
  "Bugungi mashg'ulot tugadi": {
   "ru": "Тренировка на сегодня окончена",
@@ -931,6 +975,10 @@
   "ru": "Чиракчи",
   "en": "Chirakchi"
  },
+ "Chiziqni chapga-o'ngga suring: chapda — oldin, o'ngda — keyin.": {
+  "ru": "Двигайте линию влево-вправо: слева — до, справа — после.",
+  "en": "Drag the line left and right: left — before, right — after."
+ },
  "Chizmani bosing — tanlangan tur belgilanadi.": {
   "ru": "Нажмите на схему — отметится выбранный тип.",
   "en": "Tap the figure — the chosen type is marked."
@@ -951,6 +999,10 @@
   "ru": "Чуст",
   "en": "Chust"
  },
+ "DAM OLISH": {
+  "ru": "ОТДЫХ",
+  "en": "REST"
+ },
  "Dam olish kuni": {
   "ru": "День отдыха",
   "en": "Rest day"
@@ -962,6 +1014,38 @@
  "Daraja (shogird ko'rmaydi)": {
   "ru": "Уровень (ученик не видит)",
   "en": "Level (hidden from students)"
+ },
+ "Dars nomi": {
+  "ru": "Название урока",
+  "en": "Lesson title"
+ },
+ "Dars nomini yozing": {
+  "ru": "Введите название урока",
+  "en": "Enter the lesson title"
+ },
+ "Dars o'chirildi": {
+  "ru": "Урок удалён",
+  "en": "Lesson deleted"
+ },
+ "Dars qo'shish": {
+  "ru": "Добавить урок",
+  "en": "Add lesson"
+ },
+ "Dars saqlandi": {
+  "ru": "Урок сохранён",
+  "en": "Lesson saved"
+ },
+ "Darslar": {
+  "ru": "Уроки",
+  "en": "Lessons"
+ },
+ "Darsni o'chirish": {
+  "ru": "Удалить урок",
+  "en": "Delete lesson"
+ },
+ "Darsni tahrirlash": {
+  "ru": "Редактировать урок",
+  "en": "Edit lesson"
  },
  "Davom etish": {
   "ru": "Продолжить",
@@ -1031,6 +1115,26 @@
   "ru": "Понедельник",
   "en": "Monday"
  },
+ "E'lon matnini yozing": {
+  "ru": "Напишите текст объявления",
+  "en": "Write the announcement text"
+ },
+ "E'lon qilindi": {
+  "ru": "Объявление опубликовано",
+  "en": "Announcement posted"
+ },
+ "E'lon qilish": {
+  "ru": "Опубликовать",
+  "en": "Post"
+ },
+ "E'lonlar": {
+  "ru": "Объявления",
+  "en": "Announcements"
+ },
+ "E'lonni o'chirish": {
+  "ru": "Удалить объявление",
+  "en": "Delete announcement"
+ },
  "E'tibor kerak": {
   "ru": "Требуют внимания",
   "en": "Need attention"
@@ -1050,6 +1154,10 @@
  "Erkak": {
   "ru": "Мужчина",
   "en": "Male"
+ },
+ "Ertaga yangi to‘lov kerak — zalda to‘lang": {
+  "ru": "Завтра нужна новая оплата — оплатите в зале",
+  "en": "A new payment is due tomorrow — pay at the gym"
  },
  "Ertalab nahorga tortilib, Progress bo'limida vazningizni kiriting": {
   "ru": "Взвесьтесь утром натощак и внесите вес в разделе «Прогресс»",
@@ -1271,6 +1379,14 @@
   "ru": "3 дня в неделю. Тренировки по порядку дней: 1) {0}, 2) {1}, 3) {2}.",
   "en": "3 days a week. Workouts follow the day order: 1) {0}, 2) {1}, 3) {2}."
  },
+ "Hali dars yo'q.": {
+  "ru": "Уроков пока нет.",
+  "en": "No lessons yet."
+ },
+ "Hali e'lon yo'q": {
+  "ru": "Объявлений пока нет",
+  "en": "No announcements yet"
+ },
  "Hali kelgani belgilanmagan": {
   "ru": "Посещение ещё не отмечено",
   "en": "Attendance not marked yet"
@@ -1307,6 +1423,10 @@
   "ru": "Вес ещё не внесён",
   "en": "No weight logged yet"
  },
+ "Hali video yo'q. Trener mashqlarga video qo'shgach, shu yerda ko'rinadi.": {
+  "ru": "Пока нет видео. Они появятся здесь, когда тренер добавит видео к упражнениям.",
+  "en": "No videos yet. They will appear here once the trainer adds videos to exercises."
+ },
  "Hali zal qo'shilmagan": {
   "ru": "Залы ещё не добавлены",
   "en": "No gyms added yet"
@@ -1327,6 +1447,10 @@
   "ru": "Все мышцы",
   "en": "All muscles"
  },
+ "Hamma shogirdga e'lon: zal vaqti, bayram, yangilik": {
+  "ru": "Объявление всем клиентам: часы работы, праздники, новости",
+  "en": "Notice to all clients: hours, holidays, news"
+ },
  "Hamma shogirdlar jadvali": {
   "ru": "Расписание всех учеников",
   "en": "All clients' schedule"
@@ -1334,6 +1458,10 @@
  "Hamma shogirdlarda hammasi joyida": {
   "ru": "У всех учеников всё в порядке",
   "en": "All clients are on track"
+ },
+ "Hamma videolar": {
+  "ru": "Все видео",
+  "en": "All videos"
  },
  "Hamma zallar": {
   "ru": "Все залы",
@@ -1607,6 +1735,10 @@
   "ru": "Камера",
   "en": "Camera"
  },
+ "Kamera ochilmadi. Telefon sozlamalarida ilovaga kamera ruxsatini bering.": {
+  "ru": "Камера не открылась. Разрешите приложению доступ к камере в настройках телефона.",
+  "en": "The camera did not open. Allow camera access for the app in phone settings."
+ },
  "Kamida 6 belgi — xodimga shu parolni aytasiz": {
   "ru": "Минимум 6 символов — сообщите этот пароль сотруднику",
   "en": "At least 6 characters — give this password to the staff member"
@@ -1706,6 +1838,14 @@
  "Kirish": {
   "ru": "Войти",
   "en": "Sign in"
+ },
+ "Kirish muddati tugagan — ilovadan chiqib, qayta kiring": {
+  "ru": "Сессия истекла — выйдите из приложения и войдите снова",
+  "en": "Your session has expired — sign out and sign in again"
+ },
+ "Kiritilgan to'lovlar": {
+  "ru": "Внесённые оплаты",
+  "en": "Recorded payments"
  },
  "Kiriting": {
   "ru": "Введите",
@@ -1927,6 +2067,14 @@
   "ru": "Например: 5 лет опыта, похудение и набор массы",
   "en": "E.g. 5 years of experience, weight loss and muscle gain"
  },
+ "Masalan: Ertaga zal 10:00 da ochiladi": {
+  "ru": "Например: завтра зал откроется в 10:00",
+  "en": "For example: the gym opens at 10:00 tomorrow"
+ },
+ "Mashg'ulot:": {
+  "ru": "Тренировка:",
+  "en": "Workout:"
+ },
  "Mashg'ulotdan keyin": {
   "ru": "После тренировки",
   "en": "After training"
@@ -1962,6 +2110,14 @@
  "Mashq saqlandi": {
   "ru": "Упражнение сохранено",
   "en": "Exercise saved"
+ },
+ "Mashq videolari mashqning o'zida (Mashqlar). Bu yerda — ovqatlanish, texnika, nafas, motivatsiya darslari. Shogird ularni \"Videolar\" bo'limida ko'radi.": {
+  "ru": "Видео упражнений — в самих упражнениях (Упражнения). Здесь — уроки о питании, технике, дыхании, мотивации. Ученик видит их в разделе «Видео».",
+  "en": "Exercise videos live in the exercises themselves (Exercises). Here — lessons on nutrition, technique, breathing, motivation. Students see them in \"Videos\"."
+ },
+ "Mashq videolari va trener darslari — ko'rib, to'g'ri bajaring": {
+  "ru": "Видео упражнений и уроки тренера — смотрите и выполняйте правильно",
+  "en": "Exercise videos and trainer lessons — watch and do it right"
  },
  "Mashq yo'q": {
   "ru": "Нет упражнений",
@@ -2119,6 +2275,10 @@
   "ru": "Говядина, нежирная",
   "en": "Beef, lean"
  },
+ "Motivatsiya": {
+  "ru": "Мотивация",
+  "en": "Motivation"
+ },
  "Muborak": {
   "ru": "Мубарек",
   "en": "Mubarek"
@@ -2142,6 +2302,10 @@
  "Muzrabot": {
   "ru": "Музрабат",
   "en": "Muzrabat"
+ },
+ "Nafas va cho'zilish": {
+  "ru": "Дыхание и растяжка",
+  "en": "Breathing and stretching"
  },
  "Namangan": {
   "ru": "Наманганская область",
@@ -2339,6 +2503,10 @@
   "ru": "Разгибание ног сидя",
   "en": "Leg extension"
  },
+ "O'tkazib yuborish": {
+  "ru": "Пропустить",
+  "en": "Skip"
+ },
  "O'zbekiston": {
   "ru": "Узбекистан",
   "en": "Uzbekistan"
@@ -2479,6 +2647,10 @@
   "ru": "Подъём ног в висе",
   "en": "Hanging leg raise"
  },
+ "Oson": {
+  "ru": "Легко",
+  "en": "Easy"
+ },
  "Otjimaniya": {
   "ru": "Отжимания",
   "en": "Push-ups"
@@ -2495,6 +2667,10 @@
   "ru": "Напоминания о еде, весе, чате и плане",
   "en": "Meal, weight, chat and plan reminders"
  },
+ "Ovqatlanish": {
+  "ru": "Питание",
+  "en": "Nutrition"
+ },
  "Ovqatlanish mahallari ({0})": {
   "ru": "Приёмы пищи ({0})",
   "en": "Meals ({0})"
@@ -2507,6 +2683,10 @@
   "ru": "Напишите вопрос о питании, тренировках или плане.",
   "en": "Ask a question about nutrition, training or your plan."
  },
+ "Ovqatlanish, texnika, motivatsiya darslari — shogirdlar \"Videolar\"da ko'radi": {
+  "ru": "Уроки о питании, технике, мотивации — ученики видят их в «Видео»",
+  "en": "Nutrition, technique, motivation lessons — students see them in \"Videos\""
+ },
  "Ovsyanka yoki gerkules bo'tqasi (quruq vazni)": {
   "ru": "Овсяная или геркулесовая каша (сухой вес)",
   "en": "Oatmeal or rolled-oat porridge (dry weight)"
@@ -2518,6 +2698,10 @@
  "Oxirgi baho: {0}": {
   "ru": "Последняя оценка: {0}",
   "en": "Last rated: {0}"
+ },
+ "Oxirgi e'lonlar": {
+  "ru": "Последние объявления",
+  "en": "Recent announcements"
  },
  "Oxirgi o'lchovdan 7 kun o'tdi": {
   "ru": "С последнего взвешивания прошло 7 дней",
@@ -2699,6 +2883,10 @@
   "ru": "Профиль",
   "en": "Profile"
  },
+ "Profil rasmi": {
+  "ru": "Фото профиля",
+  "en": "Profile photo"
+ },
  "Profil saqlandi": {
   "ru": "Профиль сохранён",
   "en": "Profile saved"
@@ -2739,6 +2927,10 @@
   "ru": "QR-код",
   "en": "QR code"
  },
+ "QR skaner": {
+  "ru": "QR-сканер",
+  "en": "QR scanner"
+ },
  "Qadam keng, oldingi tizza oyoq uchidan o'tmasin.": {
   "ru": "Шаг широкий, переднее колено не выходит за носок.",
   "en": "Take a wide step, front knee stays behind the toes."
@@ -2750,6 +2942,10 @@
  "Qancha yedingiz?": {
   "ru": "Сколько вы съели?",
   "en": "How much did you eat?"
+ },
+ "Qanday bajariladi": {
+  "ru": "Как выполнять",
+  "en": "How to do it"
  },
  "Qanliko'l": {
   "ru": "Канлыкуль",
@@ -2831,13 +3027,25 @@
   "ru": "Кибрай",
   "en": "Kibray"
  },
+ "Qidirish": {
+  "ru": "Поиск",
+  "en": "Search"
+ },
  "Qidiruv natijasi": {
   "ru": "Результат поиска",
   "en": "Search results"
  },
+ "Qisqa izoh (ixtiyoriy)": {
+  "ru": "Краткое описание (необязательно)",
+  "en": "Short description (optional)"
+ },
  "Qisqa ma'lumot": {
   "ru": "Коротко о себе",
   "en": "Short bio"
+ },
+ "Qiyin": {
+  "ru": "Тяжело",
+  "en": "Hard"
  },
  "Qiziltepa": {
   "ru": "Кызылтепа",
@@ -2955,6 +3163,10 @@
   "ru": "Куйичирчик",
   "en": "Quyi Chirchik"
  },
+ "Rahmat! Trener ko'radi va yuklamani shunga qarab o'zgartiradi.": {
+  "ru": "Спасибо! Тренер увидит и скорректирует нагрузку.",
+  "en": "Thanks! Your trainer will see it and adjust the load."
+ },
  "Ranglar (ixtiyoriy)": {
   "ru": "Цвета (необязательно)",
   "en": "Colors (optional)"
@@ -2983,13 +3195,29 @@
   "ru": "Фото слишком большое ({0} КБ). Выберите другое.",
   "en": "The photo is too large ({0} KB). Choose another."
  },
+ "Rasm juda katta — boshqa rasm tanlang": {
+  "ru": "Фото слишком большое — выберите другое",
+  "en": "The photo is too large — choose another one"
+ },
  "Rasm manbalari": {
   "ru": "Источники изображений",
   "en": "Image credits"
  },
+ "Rasm olib tashlandi": {
+  "ru": "Фото удалено",
+  "en": "Photo removed"
+ },
  "Rasm qo'shildi": {
   "ru": "Фото добавлено",
   "en": "Photo added"
+ },
+ "Rasm saqlandi": {
+  "ru": "Фото сохранено",
+  "en": "Photo saved"
+ },
+ "Rasm serveri xatosi ({0})": {
+  "ru": "Ошибка сервера фото ({0})",
+  "en": "Photo server error ({0})"
  },
  "Rasmlar": {
   "ru": "Фото",
@@ -2998,6 +3226,10 @@
  "Rasmni o'chirish": {
   "ru": "Удалить фото",
   "en": "Delete photo"
+ },
+ "Rasmni olib tashlash": {
+  "ru": "Удалить фото",
+  "en": "Remove photo"
  },
  "Reja": {
   "ru": "План",
@@ -3335,6 +3567,10 @@
   "ru": "Ученик видит это изображение",
   "en": "The client sees this image"
  },
+ "Shogird topilmadi": {
+  "ru": "Клиент не найден",
+  "en": "Client not found"
+ },
  "Shogird yo'q": {
   "ru": "Учеников нет",
   "en": "No clients"
@@ -3354,6 +3590,10 @@
  "Shogirdlar": {
   "ru": "Ученики",
   "en": "Clients"
+ },
+ "Shogirdlar e'lonni \"Bugun\" ekranining tepasida 7 kun ko'radi.": {
+  "ru": "Клиенты видят объявление вверху экрана «Сегодня» 7 дней.",
+  "en": "Clients see the announcement at the top of the \"Today\" screen for 7 days."
  },
  "Shogirdlar ko'radi": {
   "ru": "Ученики видят",
@@ -3378,6 +3618,14 @@
  "Shogirdni \"Mijozlar\" bo’limidan tanlab, shu trenerga biriktirishingiz mumkin.": {
   "ru": "Выберите ученика в разделе «Клиенты» и прикрепите к этому тренеру.",
   "en": "Pick a client in the Clients section and assign them to this trainer."
+ },
+ "Shogirdning \"Zal kartasi\" QR kodini ramkaga to'g'rilang.": {
+  "ru": "Наведите камеру на QR-код «Карта зала» клиента.",
+  "en": "Point the camera at the client's \"Gym card\" QR code."
+ },
+ "Shogirdning zal kartasini skanerlang — davomat belgilanadi": {
+  "ru": "Отсканируйте карту зала клиента — посещение отметится",
+  "en": "Scan the client's gym card to mark attendance"
  },
  "Shokolad (shakari kam)": {
   "ru": "Шоколад (с низким содержанием сахара)",
@@ -3446,6 +3694,10 @@
  "Siz katalogda yo'qsiz — shogirdlar sizni tanlay olmaydi.": {
   "ru": "Вас нет в каталоге — ученики не могут вас выбрать.",
   "en": "You're not in the catalog — clients can't choose you."
+ },
+ "Siz uchun": {
+  "ru": "Для вас",
+  "en": "For you"
  },
  "Sizning bahoingiz": {
   "ru": "Ваша оценка",
@@ -3703,6 +3955,10 @@
   "ru": "город Термез",
   "en": "Termez city"
  },
+ "Texnika": {
+  "ru": "Техника",
+  "en": "Technique"
+ },
  "Tez": {
   "ru": "Быстрый",
   "en": "Fast"
@@ -3718,6 +3974,10 @@
  "Tez — ovqat tez hazm bo'lib, tez-tez qorin ochadi. Sekin — ovqat sekin hazm bo'ladi, kuniga 2 mahal yeb ham yuraverasiz. Bilmasangiz — «Sekin»ni tanlang.": {
   "ru": "Быстрый — еда переваривается быстро, вы часто хотите есть. Медленный — еда переваривается медленно, вам хватает 2 приёмов пищи в день. Не знаете — выберите «Медленный».",
   "en": "Fast — food digests quickly and you get hungry often. Slow — food digests slowly and two meals a day are enough. If unsure, choose “Slow”."
+ },
+ "Tezlik:": {
+  "ru": "Скорость:",
+  "en": "Speed:"
  },
  "Tik turib oyoq uchiga ko'tarilish": {
   "ru": "Подъём на носки стоя",
@@ -3751,6 +4011,10 @@
   "ru": "Не выпрямляйте колени до конца, поясница не отрывается от спинки.",
   "en": "Don't lock the knees, keep the lower back on the pad."
  },
+ "To'g'ri": {
+  "ru": "В самый раз",
+  "en": "Just right"
+ },
  "To'g'ri ovqatlanish —": {
   "ru": "Правильное питание —",
   "en": "Eating right is"
@@ -3758,6 +4022,10 @@
  "To'g'ri oyoqda egilish (rumin tortishi)": {
   "ru": "Румынская тяга",
   "en": "Romanian deadlift"
+ },
+ "To'langan sana: {0}": {
+  "ru": "Дата оплаты: {0}",
+  "en": "Payment date: {0}"
  },
  "To'langan: {0}": {
   "ru": "Оплачено: {0}",
@@ -3774,6 +4042,14 @@
  "To'liq osiling, yelkalarni bo'shashtirmang.": {
   "ru": "Висите полностью, плечи не расслабляйте.",
   "en": "Hang fully, keep the shoulders engaged."
+ },
+ "To'lov o'chirildi": {
+  "ru": "Оплата удалена",
+  "en": "Payment deleted"
+ },
+ "To'lov o'chirilsinmi?": {
+  "ru": "Удалить оплату?",
+  "en": "Delete this payment?"
  },
  "To'lov zalda qilinadi, abonementni trener belgilaydi.": {
   "ru": "Оплата в зале, абонемент оформляет тренер.",
@@ -3794,6 +4070,10 @@
  "To'lovlar zal bo'yicha ko'rinadi. Bosh admin sizni zalga biriktirishi kerak.": {
   "ru": "Оплаты показываются по залу. Главный админ должен прикрепить вас к залу.",
   "en": "Payments are shown per gym. The head admin needs to assign you to a gym."
+ },
+ "To'lovni o'chirish": {
+  "ru": "Удалить оплату",
+  "en": "Delete payment"
  },
  "To'raqo'rg'on": {
   "ru": "Туракурган",
@@ -4239,6 +4519,22 @@
   "ru": "Видео",
   "en": "Video"
  },
+ "Video 5 daqiqadan uzun — qisqaroq video tanlang": {
+  "ru": "Видео длиннее 5 минут — выберите покороче",
+  "en": "The video is longer than 5 minutes — choose a shorter one"
+ },
+ "Video 50 MB dan katta — qisqaroq yoki siqilgan video tanlang": {
+  "ru": "Видео больше 50 МБ — выберите покороче или сжатое",
+  "en": "The video is larger than 50 MB — choose a shorter or compressed one"
+ },
+ "Video darslar": {
+  "ru": "Видеоуроки",
+  "en": "Video lessons"
+ },
+ "Video faqat trener va bosh admin yuklaydi": {
+  "ru": "Видео загружают только тренер и главный админ",
+  "en": "Only trainers and the head admin can upload videos"
+ },
  "Video hali tayyorlanmagan. Trener tayyorlab qo'ygach, shu yerda ko'rinadi.": {
   "ru": "Видео ещё не готово. Когда тренер его подготовит, оно появится здесь.",
   "en": "The video isn't ready yet. Once your trainer prepares it, it will appear here."
@@ -4247,13 +4543,61 @@
   "ru": "Ссылка на видео (необязательно)",
   "en": "Video link (optional)"
  },
+ "Video havolasi (yoki yuklang)": {
+  "ru": "Ссылка на видео (или загрузите)",
+  "en": "Video link (or upload)"
+ },
+ "Video internetni ko'p sarflaydi (4 daqiqa ≈ 45 MB) — Wi‑Fi'da ko'rish tavsiya etiladi.": {
+  "ru": "Видео расходует много трафика (4 минуты ≈ 45 МБ) — лучше смотреть по Wi‑Fi.",
+  "en": "Videos use a lot of data (4 minutes ≈ 45 MB) — watching on Wi‑Fi is recommended."
+ },
+ "Video kichraytirilgandan keyin ham 80 MB dan katta — qisqaroq video tanlang": {
+  "ru": "Даже после сжатия видео больше 80 МБ — выберите покороче",
+  "en": "Even after compression the video is over 80 MB — choose a shorter one"
+ },
+ "Video kichraytirilmoqda… {0}% (ilovani yopmang)": {
+  "ru": "Видео сжимается… {0}% (не закрывайте приложение)",
+  "en": "Compressing video… {0}% (keep the app open)"
+ },
  "Video ochilmasa — YouTube'da ochish": {
   "ru": "Если видео не открывается — открыть в YouTube",
   "en": "If the video does not play — open in YouTube"
  },
+ "Video serveri xatosi ({0})": {
+  "ru": "Ошибка видеосервера ({0})",
+  "en": "Video server error ({0})"
+ },
+ "Video yuklang yoki havola qo'ying": {
+  "ru": "Загрузите видео или вставьте ссылку",
+  "en": "Upload a video or paste a link"
+ },
+ "Video yuklanmadi: {0}": {
+  "ru": "Видео не загружено: {0}",
+  "en": "Video was not uploaded: {0}"
+ },
+ "Video yuklanmoqda… {0}%": {
+  "ru": "Видео загружается… {0}%",
+  "en": "Uploading video… {0}%"
+ },
+ "Video yuklash": {
+  "ru": "Загрузить видео",
+  "en": "Upload video"
+ },
+ "Videolar": {
+  "ru": "Видео",
+  "en": "Videos"
+ },
+ "Videoni kichraytirib bo'lmadi — boshqa video tanlang": {
+  "ru": "Не удалось сжать видео — выберите другое",
+  "en": "Could not compress the video — choose another one"
+ },
  "Videoni ko'rish": {
   "ru": "Смотреть видео",
   "en": "Watch video"
+ },
+ "Videoni o'chirish": {
+  "ru": "Удалить видео",
+  "en": "Delete video"
  },
  "Viloyat / shahar": {
   "ru": "Область / город",
@@ -4314,6 +4658,10 @@
  "Xovos": {
   "ru": "Хаваст",
   "en": "Khavast"
+ },
+ "YANGI": {
+  "ru": "НОВОЕ",
+  "en": "NEW"
  },
  "Yak": {
   "ru": "Вс",
@@ -4559,6 +4907,10 @@
   "ru": "Не удалось загрузить: {0}",
   "en": "Could not load: {0}"
  },
+ "Yuklangan video": {
+  "ru": "Загруженное видео",
+  "en": "Uploaded video"
+ },
  "Yunusobod": {
   "ru": "Юнусабад",
   "en": "Yunusabad"
@@ -4583,9 +4935,17 @@
   "ru": "Выберите дни в разделе «Зал» — здесь появятся упражнения на сегодня. Пока открыты все мышцы.",
   "en": "Choose your days in the Gym section — today's exercises will appear here. For now all muscles are open."
  },
+ "Zal e'loni · {0}": {
+  "ru": "Объявление зала · {0}",
+  "en": "Gym notice · {0}"
+ },
  "Zal egasi": {
   "ru": "Владелец зала",
   "en": "Gym owner"
+ },
+ "Zal kartasi": {
+  "ru": "Карта зала",
+  "en": "Gym card"
  },
  "Zal kunlari": {
   "ru": "Дни зала",
@@ -4642,6 +5002,10 @@
  "Zalga biriktirish": {
   "ru": "Прикрепить к залу",
   "en": "Assign to gym"
+ },
+ "Zalga kelganda trenerga ko'rsating — u skanerlaydi va davomat belgilanadi.": {
+  "ru": "Покажите тренеру при входе в зал — он отсканирует, и посещение отметится.",
+  "en": "Show it to your trainer at the gym — they scan it and your attendance is marked."
  },
  "Zallar": {
   "ru": "Залы",
@@ -4919,6 +5283,10 @@
   "ru": "{0} дн.",
   "en": "{0} days"
  },
+ "{0} kun oldin tugadi. To‘lov zalda — trenerga murojaat qiling": {
+  "ru": "Закончился {0} дн. назад. Оплата в зале — обратитесь к тренеру",
+  "en": "Ended {0} days ago. Pay at the gym — contact your trainer"
+ },
  "{0} kun qoldi": {
   "ru": "осталось {0} дн.",
   "en": "{0} days left"
@@ -4970,6 +5338,10 @@
  "{0} rasm": {
   "ru": "{0} фото",
   "en": "{0} photos"
+ },
+ "{0} s": {
+  "ru": "{0} с",
+  "en": "{0} s"
  },
  "{0} shogird": {
   "ru": "учеников: {0}",
@@ -5087,9 +5459,25 @@
   "ru": "{0} · калории",
   "en": "{0} · calories"
  },
+ "{0} · ko'rinmaydi (7 kundan eski)": {
+  "ru": "{0} · скрыто (старше 7 дней)",
+  "en": "{0} · hidden (older than 7 days)"
+ },
+ "{0} — bugun allaqachon belgilangan": {
+  "ru": "{0} — уже отмечен сегодня",
+  "en": "{0} — already marked today"
+ },
+ "{0} — bugun tugadi": {
+  "ru": "{0} — закончился сегодня",
+  "en": "{0} — ended today"
+ },
  "{0} — hali ovqatlanish rejasi yo‘q": {
   "ru": "{0} — ещё нет плана питания",
   "en": "{0} — no meal plan yet"
+ },
+ "{0} — keldi": {
+  "ru": "{0} — пришёл",
+  "en": "{0} — checked in"
  },
  "{0} — mashg‘ulot kunlarini tanlamagan": {
   "ru": "{0} — не выбрал дни тренировок",
@@ -5098,6 +5486,14 @@
  "{0} — tugadi": {
   "ru": "{0} — готово",
   "en": "{0} — finished"
+ },
+ "{0} — {1} kun oldin tugadi": {
+  "ru": "{0} — закончился {1} дн. назад",
+  "en": "{0} — ended {1} days ago"
+ },
+ "{0} — {1} kundan keyin tugaydi": {
+  "ru": "{0} — закончится через {1} дн.",
+  "en": "{0} — ends in {1} days"
  },
  "{0} — {1} ta variant": {
   "ru": "{0} — вариантов: {1}",
@@ -5114,6 +5510,10 @@
  "{0}, {1}-{2}": {
   "ru": "{0}, {1} {2}",
   "en": "{0}, {2} {1}"
+ },
+ "{0}. Abonement muddati oldingi to'lovdan qayta hisoblanadi.": {
+  "ru": "{0}. Срок абонемента будет пересчитан по предыдущей оплате.",
+  "en": "{0}. The membership end date will be recalculated from the previous payment."
  },
  "{0}: \"{1}\" × {2} bekor qilinsinmi?": {
   "ru": "{0}: отменить «{1}» × {2}?",

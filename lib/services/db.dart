@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../models/announcement.dart';
 import '../models/gym.dart';
+import '../models/lesson.dart';
 import '../models/exercises.dart';
 import '../models/models.dart';
 import '../models/shop.dart';
@@ -28,6 +30,12 @@ const _phoneDomain = 'phone.kottaqani.uz';
 String normalizePhone(String input) {
   final d = input.replaceAll(RegExp(r'\D'), '');
   return d.length == 9 ? '998$d' : d;
+}
+
+/// Kirish maydoni: 9 raqam ("90 123 45 67") yoki to'liq 12 raqam ("998 90 123 45 67")
+bool isValidPhoneInput(String input) {
+  final d = input.replaceAll(RegExp(r'\D'), '');
+  return d.length == 9 || (d.length == 12 && d.startsWith('998'));
 }
 
 String phoneToEmail(String phone) => '${normalizePhone(phone)}@$_phoneDomain';
@@ -203,6 +211,20 @@ class Db {
   static Future<void> updateUser(AppUser u) =>
       _fs.collection('users').doc(u.id).set(u.toMap(), SetOptions(merge: true));
 
+  /// Profil rasmi havolasi (null — olib tashlash). Faqat o'zi yozadi.
+  /// Trener bo'lsa — katalogga ham (shogirdlar trener rasmini shundan ko'radi).
+  static Future<void> setPhotoUrl(String uid, String? url, {bool trainer = false}) async {
+    final value = url ?? FieldValue.delete();
+    await _fs.collection('users').doc(uid).update({'photoUrl': value});
+    if (!trainer) return;
+    final entry = _fs.collection('trainers').doc(uid);
+    // katalog yozuvini bosh admin ochganda yaratadi — hali yo'q bo'lsa, o'tkazib yuboriladi.
+    // Katalog — faqat ko'zgu: yozilmasa ham (masalan eski qoidalar) rasmning o'zi saqlangan, xato ko'rsatilmaydi.
+    try {
+      if ((await entry.get()).exists) await entry.update({'photoUrl': value});
+    } on FirebaseException catch (_) {}
+  }
+
   /// Reja biriktirilgan vaqt ham saqlanadi — reytingda rioya shu kundan hisoblanadi
   static Future<void> assignPlan(String uid, String? planId) =>
       _fs.collection('users').doc(uid).update({
@@ -215,8 +237,26 @@ class Db {
       _fs.collection('users').doc(uid).update({'goal': goal});
 
   /// Shogirdni trenerga biriktirish (null — biriktirishni bekor qilish)
-  static Future<void> assignTrainer(String uid, String? trainerId) =>
-      _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+  static Future<void> assignTrainer(String uid, String? trainerId) async {
+    await _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+    await _syncMembershipGym(uid, trainerId);
+  }
+
+  /// To'lov ko'zgusidagi zal shogird treneri almashganda yangilanadi — keyingi to'lovni
+  /// kutmasdan yangi zal ro'yxatida ko'rinsin. Zal trenerlar katalogidan olinadi (shogird
+  /// trenerning `users` hujjatini o'qiy olmaydi). Ko'zgu yo'q yoki yozish rad etilsa
+  /// (eski qoidalar) — jim o'tadi: trener almashishi baribir bajarilgan.
+  static Future<void> _syncMembershipGym(String uid, String? trainerId) async {
+    try {
+      final ref = _fs.collection('memberships').doc(uid);
+      if (!(await ref.get()).exists) return;
+      final tid = trainerId ?? '';
+      final gymId = tid.isEmpty
+          ? ''
+          : ((await _fs.collection('trainers').doc(tid).get()).data()?['gymId'] ?? '') as String;
+      await ref.update({'gymId': gymId, 'updatedAt': FieldValue.serverTimestamp()});
+    } on FirebaseException catch (_) {}
+  }
 
   /// Trenerlar katalogi — shogird anketada tanlaydi (qabul qilayotganlar)
   static Stream<List<TrainerInfo>> trainerDirectory() => _fs.collection('trainers').snapshots().map(
@@ -234,8 +274,10 @@ class Db {
   /// bo'lsa ham eski qiymat yozilib qolmaydi.
   static Future<void> saveTrainerProfile(TrainerInfo t) async {
     final gymId = await _gymOf(t.id);
+    // merge — katalogdagi rasm (photoUrl) saqlanib qolsin
     await _fs.collection('trainers').doc(t.id).set(
-        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap());
+        TrainerInfo(t.id, t.name, bio: t.bio, accepting: t.accepting, gymId: gymId).toMap(),
+        SetOptions(merge: true));
   }
 
   static Future<String> _gymOf(String uid) async =>
@@ -251,8 +293,10 @@ class Db {
 
   /// Shogird trenerini o'zi tanlaydi yoki almashtiradi (qoidalar: faqat katalogda shogird
   /// qabul qilayotgan trener)
-  static Future<void> chooseTrainer(String uid, String trainerId) =>
-      _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+  static Future<void> chooseTrainer(String uid, String trainerId) async {
+    await _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+    await _syncMembershipGym(uid, trainerId);
+  }
 
   // ---------- zal ----------
   /// Shogird o'z mashg'ulot kunlarini tanlaydi (aynan 3 ta)
@@ -288,10 +332,16 @@ class Db {
       final gymId = t.gymId ?? '';
       final entry = dir.docs.where((d) => d.id == t.id).firstOrNull;
       if (entry == null) {
-        await _fs
-            .collection('trainers')
-            .doc(t.id)
-            .set(TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap());
+        final ref = _fs.collection('trainers').doc(t.id);
+        final base = TrainerInfo(t.id, t.name.isEmpty ? t.phone : t.name, gymId: gymId).toMap();
+        try {
+          // trener katalog yozuvidan oldin rasm qo'ygan bo'lsa — u ham ko'chadi
+          await ref.set({...base, if (t.photoUrl != null) 'photoUrl': t.photoUrl});
+        } on FirebaseException catch (_) {
+          // rasm qabul qilinmasa (eski qoidalar) — yozuv rasmsiz yaratiladi, katalog to'xtab qolmaydi
+          if (t.photoUrl == null) rethrow;
+          await ref.set(base);
+        }
       } else if ((entry.data()['gymId'] ?? '') != gymId) {
         // zal ko'zgusi eskirgan (yoki eski yozuvda yo'q) — to'g'rilanadi
         await entry.reference.update({'gymId': gymId});
@@ -318,6 +368,7 @@ class Db {
       final orphans = await _fs.collection('users').where('trainerId', isEqualTo: uid).get();
       for (final d in orphans.docs) {
         await d.reference.update({'trainerId': null});
+        await _syncMembershipGym(d.id, null);
       }
     }
   }
@@ -363,10 +414,39 @@ class Db {
   static Future<void> deleteExercise(String id) => _fs.collection('exercises').doc(id).delete();
 
   /// Trener shogirdga [muscle] uchun mashqlar tanlaydi; bo'sh ro'yxat — standartga qaytish
+  // ---------- video darslar ----------
+  /// Trener darslari, yangisi tepada
+  static Stream<List<Lesson>> lessons() => _fs.collection('videos').snapshots().map((s) =>
+      s.docs.map(Lesson.fromDoc).toList()
+        ..sort((a, b) => (b.createdAt ?? DateTime(0)).compareTo(a.createdAt ?? DateTime(0))));
+
+  static Future<void> saveLesson(Lesson l) => l.id.isEmpty
+      ? _fs.collection('videos').add(l.toMap())
+      : _fs.collection('videos').doc(l.id).set(l.toMap());
+
+  static Future<void> deleteLesson(String id) => _fs.collection('videos').doc(id).delete();
+
   static Future<void> setProgram(String uid, String muscle, List<String> keys) =>
       _fs.collection('users').doc(uid).update({
         'program.$muscle': keys.isEmpty ? FieldValue.delete() : keys,
       });
+
+  // ---------- announcements (zal e'lonlari) ----------
+  /// Oxirgi e'lonlar, yangisi birinchi
+  static Stream<List<Announcement>> announcements({int limit = 20}) => _fs
+      .collection('announcements')
+      .orderBy('createdAt', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map((s) => s.docs.map(Announcement.fromDoc).toList());
+
+  static Future<void> addAnnouncement(String text, String adminId) => _fs.collection('announcements').add({
+        'text': text,
+        'createdAt': FieldValue.serverTimestamp(),
+        'createdBy': adminId,
+      });
+
+  static Future<void> deleteAnnouncement(String id) => _fs.collection('announcements').doc(id).delete();
 
   // ---------- plans ----------
   static Stream<List<Plan>> plans() =>
@@ -569,8 +649,13 @@ class Db {
         return WorkoutProgress(
           started: data?['gymStarted'] == true,
           done: {for (final k in (data?['gymDone'] as List? ?? const [])) k.toString()},
+          feel: gymFeels.containsKey(data?['gymFeel']) ? data!['gymFeel'] as String : null,
         );
       });
+
+  /// Mashg'ulot tugagach shogird fikri ([gymFeels] kaliti)
+  static Future<void> setGymFeel(String uid, String day, String feel) =>
+      _dayRef(uid, day).set({'gymFeel': feel}, SetOptions(merge: true));
 
   static Future<void> startWorkout(String uid, String day) =>
       _dayRef(uid, day).set({'gymStarted': true}, SetOptions(merge: true));
@@ -656,6 +741,29 @@ class Db {
       ..set(user.collection('subscriptions').doc(), s.toMap())
       ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(s.expiresAt)})
       ..set(_fs.collection('memberships').doc(client.id), Membership.mapOf(client.name, gymId, s));
+    await batch.commit();
+  }
+
+  /// Xato kiritilgan to'lovni o'chirish (shogirdning treneri yoki bosh admin). Tugash sanasi va
+  /// to'lov ko'zgusi qolgan eng oxirgi yozuvdan qayta hisoblanadi; yozuv qolmasa — ikkalasi
+  /// tozalanadi. Hammasi bitta batch.
+  static Future<void> deleteSubscription(AppUser client, Subscription s) async {
+    final user = _fs.collection('users').doc(client.id);
+    final all = (await user.collection('subscriptions').get()).docs.map(Subscription.fromDoc).toList();
+    final next = Subscription.latestAfterDelete(all, s.id);
+    final mirror = _fs.collection('memberships').doc(client.id);
+    final batch = _fs.batch()..delete(user.collection('subscriptions').doc(s.id));
+    if (next == null) {
+      batch
+        ..update(user, {'subscriptionExpiresAt': FieldValue.delete()})
+        ..delete(mirror);
+    } else {
+      final tid = client.trainerId ?? '';
+      final gymId = tid.isEmpty ? '' : await _gymOf(tid);
+      batch
+        ..update(user, {'subscriptionExpiresAt': Timestamp.fromDate(next.expiresAt)})
+        ..set(mirror, Membership.mapOf(client.name, gymId, next));
+    }
     await batch.commit();
   }
 

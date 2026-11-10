@@ -5,6 +5,7 @@ import '../l10n/tr.dart';
 import '../models/photo.dart';
 import '../services/db.dart';
 import '../theme.dart';
+import 'before_after.dart';
 import 'ui.dart';
 
 /// "Oldin / keyin" rasmlari — shogird qo'shadi, trener va bosh admin faqat ko'radi
@@ -135,6 +136,18 @@ class ProgressPhotos extends StatelessWidget {
                 const SizedBox(width: AppSpace.sm),
                 Expanded(child: _Shot(photos.last, tr('Keyin'), onTap: () => _open(context, photos.last))),
               ]),
+            if (photos.length >= 2)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => BeforeAfterPage(photos: photos, caption: _caption)),
+                  ),
+                  icon: const Icon(Icons.compare),
+                  label: Text(tr('Solishtirish')),
+                ),
+              ),
             if (photos.length != 2) ...[
               if (photos.length > 2) const SizedBox(height: AppSpace.sm),
               SizedBox(

@@ -55,7 +55,8 @@ class AppSettings {
   // ---------- oylik hisobot ----------
   /// Trener ulushi (abonement tushumidan foiz) — bosh admin hisobot ekranida tanlaydi.
   /// Qurilmada saqlanadi: bu hisob-kitob uchun yordamchi son, bazadagi qoida emas.
-  static int get trainerSharePct => _p?.getInt('trainer_share_pct') ?? 40;
+  /// Standart 0% — zal egasi (10-noy 2026): "hozircha trener hech qancha % olmaydi" (avval 40).
+  static int get trainerSharePct => _p?.getInt('trainer_share_pct') ?? 0;
   static Future<void> setTrainerSharePct(int v) async =>
       _p?.setInt('trainer_share_pct', v.clamp(0, 100));
 
@@ -74,5 +75,24 @@ class AppSettings {
     final t = at ?? DateTime.now();
     feedSeen.value = t;
     await _p?.setInt('feed_seen', t.millisecondsSinceEpoch);
+  }
+
+  // ---------- dam olish taymeri ----------
+  /// Setlar orasidagi dam olish (soniya) — shogird tanlaydi: 60 / 90 / 120
+  static const restChoices = [60, 90, 120];
+  static int get restSeconds {
+    final v = _p?.getInt('rest_seconds');
+    return restChoices.contains(v) ? v! : 90;
+  }
+
+  static Future<void> setRestSeconds(int v) async => _p?.setInt('rest_seconds', v);
+
+  // ---------- zal e'lonlari ----------
+  /// Shogird yopgan e'lonlar (qayta ko'rsatilmaydi); oxirgi 50 tasi saqlanadi
+  static Set<String> get hiddenAnnouncements => {...?_p?.getStringList('elon_hidden')};
+
+  static Future<void> hideAnnouncement(String id) async {
+    final ids = [...?_p?.getStringList('elon_hidden'), id];
+    await _p?.setStringList('elon_hidden', ids.length > 50 ? ids.sublist(ids.length - 50) : ids);
   }
 }

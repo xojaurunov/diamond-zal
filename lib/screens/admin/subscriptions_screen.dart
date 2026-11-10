@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/tr.dart';
 import '../../models/models.dart';
+import '../../models/shop.dart' show fmtMoney;
 import '../../models/subscription.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
@@ -149,6 +150,11 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
   var months = subscriptionMonths.first;
   int stdPrice() => months == 0 ? Subscription.priceOf(days: 1) : Subscription.priceOf(months: months);
   final price = TextEditingController(text: '${stdPrice()}');
+  // To'langan kun — muddat shundan hisoblanadi (zal egasi: "to'lagan kundan hisobla").
+  // Mijoz oldin to'lab, trener keyin kiritsa ham to'g'ri chiqsin; kelajak sana yo'q.
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  var paid = today;
 
   final saved = await showSheet<bool>(
     context,
@@ -178,6 +184,23 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
           keyboardType: TextInputType.number,
           decoration: InputDecoration(labelText: tr('Narxi'), suffixText: tr("so'm")),
         ),
+        const SizedBox(height: AppSpace.sm),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            icon: const Icon(Icons.event_outlined),
+            label: Text(trf("To'langan sana: {0}", [fmtDay(paid)])),
+            onPressed: () async {
+              final d = await showDatePicker(
+                context: ctx,
+                initialDate: paid,
+                firstDate: today.subtract(const Duration(days: 60)),
+                lastDate: today,
+              );
+              if (d != null) setS(() => paid = DateTime(d.year, d.month, d.day));
+            },
+          ),
+        ),
         const SizedBox(height: AppSpace.lg),
         SizedBox(
           width: double.infinity,
@@ -187,6 +210,34 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
           ),
         ),
         const SizedBox(height: AppSpace.sm),
+        // Oldingi to'lovlar — xato kiritilganini o'chirib, to'g'risini qayta kiritish uchun
+        StreamBuilder<List<Subscription>>(
+          stream: Db.subscriptions(client.id),
+          builder: (ctx, snap) {
+            final list = snap.data ?? const <Subscription>[];
+            if (list.isEmpty) return const SizedBox.shrink();
+            final muted = Theme.of(ctx).textTheme.bodySmall?.copyWith(color: AppColors.textMuted);
+            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(height: AppSpace.sm),
+              Text(tr("Kiritilgan to'lovlar"), style: muted),
+              for (final s in list.take(5))
+                Row(children: [
+                  Expanded(
+                    child: Text([
+                      fmtDay(s.paidDate ?? s.startDate),
+                      s.kindLabel,
+                      if (s.price > 0) fmtMoney(s.price, s.currency),
+                    ].join(' · ')),
+                  ),
+                  IconButton(
+                    tooltip: tr("To'lovni o'chirish"),
+                    icon: Icon(Icons.delete_outline, color: AppColors.danger),
+                    onPressed: () => _deleteSubscription(ctx, client, s),
+                  ),
+                ]),
+            ]);
+          },
+        ),
       ]),
     ),
   );
@@ -195,14 +246,36 @@ Future<void> addSubscriptionSheet(BuildContext context, AppUser client) async {
     await Db.addSubscription(
       client,
       Subscription(
-        startDate: DateTime.now(),
+        startDate: paid,
         months: months,
         days: months == 0 ? 1 : 0,
         price: int.tryParse(price.text.replaceAll(RegExp(r'\D'), '')) ?? 0,
-        paidDate: DateTime.now(),
+        paidDate: paid,
       ),
     );
     if (context.mounted) showSnack(context, tr('Abonement qo‘shildi'));
+  }
+}
+
+Future<void> _deleteSubscription(BuildContext context, AppUser client, Subscription s) async {
+  final what = [
+    fmtDay(s.paidDate ?? s.startDate),
+    s.kindLabel,
+    if (s.price > 0) fmtMoney(s.price, s.currency),
+  ].join(' · ');
+  final ok = await confirm(
+    context,
+    title: tr("To'lov o'chirilsinmi?"),
+    message: trf("{0}. Abonement muddati oldingi to'lovdan qayta hisoblanadi.", [what]),
+    ok: tr("O'chirish"),
+    destructive: true,
+  );
+  if (!ok) return;
+  try {
+    await Db.deleteSubscription(client, s);
+    if (context.mounted) showSnack(context, tr("To'lov o'chirildi"));
+  } catch (e) {
+    if (context.mounted) showSnack(context, trf("Bo'lmadi: {0}", [e]));
   }
 }
 

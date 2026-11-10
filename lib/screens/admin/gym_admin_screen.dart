@@ -5,7 +5,11 @@ import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/ui.dart';
+import 'announcements_admin_screen.dart';
 import 'exercises_admin_screen.dart';
+import 'lessons_admin_screen.dart';
+// QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+// import 'qr_scan_screen.dart';
 
 /// Trener: Zal bo'limi — shogirdlar kimda qaysi kun, bugun kim keladi, kim uyda.
 /// "Uyda mashq" faqat shogird bugun chatda kela olmasligini yozgan bo'lsa belgilanadi.
@@ -62,6 +66,79 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
                 Icon(Icons.chevron_right, color: AppColors.textMuted),
               ]),
             ),
+            const SizedBox(height: AppSpace.sm),
+            // Video darslar: ovqatlanish, texnika, motivatsiya — shogird "Videolar" bo'limida ko'radi
+            BentoTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => LessonsAdminScreen(admin: widget.admin)),
+              ),
+              padding: const EdgeInsets.all(AppSpace.lg),
+              child: Row(children: [
+                Icon(Icons.video_library_outlined, color: AppColors.accent),
+                const SizedBox(width: AppSpace.md),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(tr('Video darslar'), style: t.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      tr("Ovqatlanish, texnika, motivatsiya darslari — shogirdlar \"Videolar\"da ko'radi"),
+                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                    ),
+                  ]),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.textMuted),
+              ]),
+            ),
+            const SizedBox(height: AppSpace.sm),
+            // Zal e'lonlari: shogirdlar "Bugun" ekranining tepasida ko'radi
+            BentoTile(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AnnouncementsAdminScreen(admin: widget.admin)),
+              ),
+              padding: const EdgeInsets.all(AppSpace.lg),
+              child: Row(children: [
+                Icon(Icons.campaign_outlined, color: AppColors.accent),
+                const SizedBox(width: AppSpace.md),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(tr("E'lonlar"), style: t.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      tr("Hamma shogirdga e'lon: zal vaqti, bayram, yangilik"),
+                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+                    ),
+                  ]),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.textMuted),
+              ]),
+            ),
+            // QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+//             const SizedBox(height: AppSpace.sm),
+//             // QR davomat: shogirdning "Zal kartasi" skanerlanadi — bugun keldi deb belgilanadi
+//             BentoTile(
+//               onTap: () => Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (_) => QrScanScreen(admin: widget.admin)),
+//               ),
+//               padding: const EdgeInsets.all(AppSpace.lg),
+//               child: Row(children: [
+//                 Icon(Icons.qr_code_scanner, color: AppColors.accent),
+//                 const SizedBox(width: AppSpace.md),
+//                 Expanded(
+//                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+//                     Text(tr('QR skaner'), style: t.titleMedium),
+//                     const SizedBox(height: 2),
+//                     Text(
+//                       tr('Shogirdning zal kartasini skanerlang — davomat belgilanadi'),
+//                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+//                     ),
+//                   ]),
+//                 ),
+//                 Icon(Icons.chevron_right, color: AppColors.textMuted),
+//               ]),
+//             ),
             const SizedBox(height: AppSpace.xl),
             Text(trf('Bugun · {0}', [tr(weekdayNames[today] ?? '')]), style: t.titleLarge),
             const SizedBox(height: AppSpace.md),
@@ -250,6 +327,30 @@ class _ClientGymTile extends StatelessWidget {
                       onPressed: () => _toggleAttendance(context, present),
                       icon: Icon(present ? Icons.close : Icons.check, size: 18),
                       label: Text(present ? tr('Bekor') : tr('Keldi')),
+                    ),
+                  ]),
+                );
+              },
+            ),
+          // Mashg'ulotdan keyingi fikri: Oson / To'g'ri / Qiyin — yuklamani o'zgartirish uchun
+          if (!showWeek && todayWorkout != null && !isHome)
+            StreamBuilder<WorkoutProgress>(
+              stream: Db.workout(u.id, todayKey()),
+              builder: (context, snap) {
+                final feel = snap.data?.feel;
+                if (feel == null) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(top: AppSpace.sm),
+                  child: Row(children: [
+                    Text(tr("Mashg'ulot:"), style: t.bodySmall?.copyWith(color: AppColors.textMuted)),
+                    const SizedBox(width: AppSpace.sm),
+                    Pill(
+                      text: tr(gymFeels[feel]!),
+                      color: switch (feel) {
+                        'hard' => AppColors.warning,
+                        'easy' => AppColors.water,
+                        _ => AppColors.success,
+                      },
                     ),
                   ]),
                 );

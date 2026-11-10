@@ -12,6 +12,9 @@ import 'subscription.dart';
 
 enum FeedKind { chat, plan, weighIn, meal, order, attention, gym, subscription }
 
+/// Trenerga muddati o'tgan shogird necha kungacha ko'rsatiladi
+const expiredFeedDays = 30;
+
 class FeedItem {
   final FeedKind kind;
   final String title;
@@ -98,8 +101,22 @@ List<FeedItem> studentFeed({
     final left = Subscription.daysLeft(user.subscriptionExpiresAt, n);
     items.add(FeedItem(
       kind: FeedKind.subscription,
-      title: left <= 0 ? tr('Abonement tugadi') : tr('Abonement tugashi yaqinlashdi'),
-      body: left <= 0 ? tr('Yangilash uchun trenerga murojaat qiling') : trf('{0} kundan keyin tugaydi', [left]),
+      // tugash kuni abonement hali amal qiladi (kunlik mijozga shu kunning o'zi) — "tugadi" emas
+      title: left <= 0 ? tr('Abonement bugun tugaydi') : tr('Abonement tugashi yaqinlashdi'),
+      body: left <= 0 ? tr('Ertaga yangi to‘lov kerak — zalda to‘lang') : trf('{0} kundan keyin tugaydi', [left]),
+      at: n,
+      action: true,
+    ));
+  }
+
+  // 3c. Abonement muddati o'tgan — to'lov kiritilguncha turadi (avval tugagan kundan keyin
+  // hech narsa chiqmasdi, faqat Profil'da qizil belgi)
+  if (Subscription.isExpired(user.subscriptionExpiresAt, n)) {
+    final ago = -Subscription.daysLeft(user.subscriptionExpiresAt, n);
+    items.add(FeedItem(
+      kind: FeedKind.subscription,
+      title: tr('Abonement muddati o‘tdi'),
+      body: trf('{0} kun oldin tugadi. To‘lov zalda — trenerga murojaat qiling', [ago]),
       at: n,
       action: true,
     ));
@@ -215,8 +232,25 @@ List<FeedItem> trainerFeed({
     items.add(FeedItem(
       kind: FeedKind.subscription,
       title: tr('Abonement tugashi yaqinlashdi'),
-      body: '${nameOf[c.id]} — ${left <= 0 ? 'tugadi' : '$left kundan keyin tugaydi'}',
+      body: left <= 0
+          ? trf('{0} — bugun tugadi', [nameOf[c.id]])
+          : trf('{0} — {1} kundan keyin tugaydi', [nameOf[c.id], left]),
       at: n.subtract(const Duration(seconds: 2)),
+      action: true,
+    ));
+  }
+
+  // 6. E'tibor: abonementi tugagan shogirdlar — 30 kungacha (ketib qolgan mijoz ro'yxatni
+  // abadiy to'ldirmasin)
+  for (final c in clients) {
+    if (!Subscription.isExpired(c.subscriptionExpiresAt, n)) continue;
+    final ago = -Subscription.daysLeft(c.subscriptionExpiresAt, n);
+    if (ago > expiredFeedDays) continue;
+    items.add(FeedItem(
+      kind: FeedKind.subscription,
+      title: tr('Abonement muddati o‘tdi'),
+      body: trf('{0} — {1} kun oldin tugadi', [nameOf[c.id], ago]),
+      at: n.subtract(const Duration(seconds: 3)),
       action: true,
     ));
   }

@@ -127,6 +127,8 @@ service cloud.firestore {
           && (request.resource.data.months > 0) != (request.resource.data.get('days', 0) > 0)
           && request.resource.data.price is int && request.resource.data.price >= 0
           && request.resource.data.get('currency', 'UZS') in ['UZS', 'USD'];
+        // xato kiritilgan to'lov — shogirdning treneri yoki bosh admin o'chiradi (zal egasi, 10-noy)
+        allow delete: if canManage(uid);
       }
 
       // Kunlik davomat (sana kalit bilan) — faqat trener/bosh admin belgilaydi
@@ -172,12 +174,24 @@ service cloud.firestore {
         || ((isStaff() || isBarmen()) && gymOf(request.auth.uid) != ''
             && resource.data.get('gymId', '') == gymOf(request.auth.uid));
       allow create, update: if canManage(uid) && validMembership();
-      allow delete: if isOwner();
+      // Shogird trenerini o'zi almashtirganda — faqat zal ko'zgusi yangi trener zaliga
+      // (summa, sana, tur tegilmaydi)
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId', 'updatedAt'])
+        && request.resource.data.gymId == clientGym()
+        && request.resource.data.updatedAt == request.time;
+      // yagona to'lov o'chirilsa ko'zgu ham o'chadi (trener ham — o'z shogirdi)
+      allow delete: if canManage(uid);
     }
 
     match /trainers/{tid} {
       function validEntry() {
-        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId'])
+        return request.resource.data.keys().hasOnly(['name', 'bio', 'accepting', 'gymId', 'photoUrl'])
+          // profil rasmi — faqat o'z serverimizda, faqat shu trenerning papkasida (begona havola emas)
+          && (request.resource.data.get('photoUrl', null) == null
+            || (request.resource.data.photoUrl is string
+              && request.resource.data.photoUrl.matches(
+                'https://qobil-video[.]qobilfitness[.]workers[.]dev/v/avatars/' + tid + '/[0-9a-f-]{36}[.](jpg|png|webp)')))
           // zal — users/{tid}.gymId ko'zgusi: soxta qilib bo'lmaydi (shogird buyurtmasiga shundan yoziladi)
           && request.resource.data.get('gymId', '') == gymOf(tid)
           && request.resource.data.name is string && request.resource.data.name.size() <= 60
@@ -190,7 +204,7 @@ service cloud.firestore {
       allow read: if signedIn();
       allow create: if validEntry() && (isOwner() || isThisTrainer());
       // bosh admin faqat zal ko'zgusini to'g'rilaydi (trenerni boshqa zalga o'tkazganda);
-      // ism, ma'lumot, qabul sozlamasi — trenerning o'zida
+      // ism, ma'lumot, qabul sozlamasi, rasm — trenerning o'zida
       allow update: if validEntry() && (isThisTrainer() || (isOwner()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId'])));
       allow delete: if isOwner();
@@ -215,6 +229,20 @@ service cloud.firestore {
     match /plans/{id} {
       allow read: if signedIn();
       allow write: if isStaff();
+    }
+
+    // Zal e'lonlari ("Bugun" ekranida banner): hamma kirganlar o'qiydi; yozadi trener va
+    // bosh admin. Muallif va vaqt soxtalanmaydi, tahrir yo'q. O'chiradi — muallif yoki bosh admin.
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow create: if isStaff()
+        && request.resource.data.keys().hasOnly(['text', 'createdAt', 'createdBy'])
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 500
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if isOwner() || (isStaff() && resource.data.createdBy == request.auth.uid);
     }
 
     // Trener qo'shgan mashqlar ("Tana xaritasi"). Hamma kirganlar o'qiydi; qo'shish,
@@ -242,6 +270,26 @@ service cloud.firestore {
       // kim qo'shgani soxtalashtirilmaydi; tahrirda birinchi muallif va vaqt saqlanadi
       allow create: if isStaff() && validExercise() && request.resource.data.createdBy == request.auth.uid;
       allow update: if isStaff() && validExercise() && same('createdBy') && same('createdAt') && same('base');
+      allow delete: if isStaff();
+    }
+
+    // Trener video darslari ("Videolar" bo'limi): hamma kirganlar ko'radi; qo'shish, tahrirlash,
+    // o'chirish — trener va bosh admin. Video fayl R2'da (havola), muallif va vaqt soxtalanmaydi.
+    match /videos/{id} {
+      function validLesson() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['title', 'category', 'description', 'url', 'seconds', 'createdAt', 'createdBy'])
+          && d.title is string && d.title.size() > 0 && d.title.size() <= 80
+          && d.category in ['texnika', 'ovqatlanish', 'nafas', 'motivatsiya', 'boshqa']
+          && d.get('description', '') is string && d.get('description', '').size() <= 500
+          && d.url is string && d.url.size() > 0 && d.url.size() <= 300
+          && d.get('seconds', 0) is int && d.get('seconds', 0) >= 0 && d.get('seconds', 0) <= 3600
+          && d.createdAt is int
+          && d.createdBy is string;
+      }
+      allow read: if signedIn();
+      allow create: if isStaff() && validLesson() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isStaff() && validLesson() && same('createdBy') && same('createdAt');
       allow delete: if isStaff();
     }
 

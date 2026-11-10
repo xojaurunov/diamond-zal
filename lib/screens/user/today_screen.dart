@@ -4,6 +4,8 @@ import '../../models/gym.dart' show weekdayNames;
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/announcements.dart';
+import '../../widgets/avatar_picker.dart';
 import '../../widgets/extra_food_sheet.dart';
 import '../../widgets/food_image.dart';
 import '../../widgets/plan_photo.dart';
@@ -21,7 +23,7 @@ class TodayScreen extends StatelessWidget {
     final day = todayKey();
     Widget page(List<Widget> children) => ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.sm, AppSpace.lg, AppSpace.xxl),
-          children: [_Header(user: user), ...children],
+          children: [_Header(user: user), AnnouncementBanner(stream: Db.announcements()), ...children],
         );
 
     return Scaffold(
@@ -168,7 +170,8 @@ class _Header extends StatelessWidget {
           ]),
         ),
         const SizedBox(width: AppSpace.md),
-        UserAvatar(name: user.name, size: 46),
+        // bosilsa — profil rasmini qo'yish / almashtirish
+        MyAvatar(me: user, size: 46),
       ]),
     );
   }

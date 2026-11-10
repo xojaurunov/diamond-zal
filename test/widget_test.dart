@@ -478,6 +478,20 @@ void main() {
       expect(phoneToEmail('901234567'), '998901234567@phone.kottaqani.uz');
     });
 
+    test("to'liq 12 raqam ham o'sha akkaunt", () {
+      expect(phoneToEmail('998901234567'), '998901234567@phone.kottaqani.uz');
+      expect(phoneToEmail('998998112233'), phoneToEmail('998112233'));
+    });
+
+    test('kirish maydoni tekshiruvi', () {
+      expect(isValidPhoneInput('901234567'), isTrue);
+      expect(isValidPhoneInput('998901234567'), isTrue);
+      expect(isValidPhoneInput('998112233'), isTrue, reason: "raqamning o'zi 998 bilan boshlanishi mumkin");
+      expect(isValidPhoneInput('90123456'), isFalse);
+      expect(isValidPhoneInput('123901234567'), isFalse, reason: "12 raqam, lekin 998 emas");
+      expect(isValidPhoneInput(''), isFalse);
+    });
+
     test("chiroyli ko'rinish", () {
       expect(fmtPhone('998901234567'), '+998 90 123 45 67');
     });
@@ -834,6 +848,65 @@ void main() {
       expect(noPlan.first.body, contains('Aziz'));
     });
 
+    test("shogird: abonement muddati o'tgan — eslatma, yaqinlashgan — avvalgidek", () {
+      AppUser sub(DateTime? exp) => AppUser(id: 'u1', name: 'Shogird', email: '', subscriptionExpiresAt: exp);
+      List<FeedItem> subs(DateTime? exp) => studentFeed(user: sub(exp), messages: const [], now: now)
+          .where((i) => i.kind == FeedKind.subscription)
+          .toList();
+
+      final otgan = subs(DateTime(2026, 9, 15));
+      expect(otgan, hasLength(1));
+      expect(otgan.first.title, 'Abonement muddati o‘tdi');
+      expect(otgan.first.body, startsWith('3 kun oldin tugadi'));
+      expect(otgan.first.action, isTrue);
+
+      final yaqin = subs(DateTime(2026, 9, 20));
+      expect(yaqin, hasLength(1));
+      expect(yaqin.first.title, 'Abonement tugashi yaqinlashdi');
+
+      expect(subs(null), isEmpty, reason: "abonementi yo'q — eslatma yo'q");
+      expect(subs(DateTime(2026, 10, 18)), isEmpty, reason: 'hali ko‘p kun bor');
+
+      // chegara: tugash kunining o'zi — hali "o'tdi" emas, faqat bitta element
+      final bugun = subs(DateTime(2026, 9, 18));
+      expect(bugun, hasLength(1));
+      expect(bugun.first.title, 'Abonement bugun tugaydi');
+      expect(bugun.first.body, 'Ertaga yangi to‘lov kerak — zalda to‘lang');
+      final kecha = subs(DateTime(2026, 9, 17));
+      expect(kecha, hasLength(1));
+      expect(kecha.first.body, startsWith('1 kun oldin tugadi'));
+    });
+
+    test("trener: muddati o'tgan shogird 30 kungacha ko'rinadi", () {
+      final trainer = AppUser(id: 't1', name: 'Trener', email: '', role: 'admin');
+      AppUser c(String id, String name, DateTime exp) =>
+          AppUser(id: id, name: name, email: '', planId: 'p1', gymDays: const [1, 3, 5], subscriptionExpiresAt: exp);
+      final items = trainerFeed(
+        trainer: trainer,
+        clients: [
+          c('c1', 'Aziz', DateTime(2026, 9, 13)), // 5 kun oldin tugagan
+          c('c2', 'Jasur', DateTime(2026, 8, 9)), // 40 kun oldin — ko'rinmaydi
+          c('c3', 'Vali', DateTime(2026, 9, 20)), // 2 kun qoldi
+        ],
+        now: now,
+      ).where((i) => i.kind == FeedKind.subscription).toList();
+      expect(items, hasLength(2));
+      final otgan = items.firstWhere((i) => i.title == 'Abonement muddati o‘tdi');
+      expect(otgan.body, 'Aziz — 5 kun oldin tugadi');
+      final yaqin = items.firstWhere((i) => i.title == 'Abonement tugashi yaqinlashdi');
+      expect(yaqin.body, 'Vali — 2 kundan keyin tugaydi');
+      expect(items.any((i) => i.body.contains('Jasur')), isFalse);
+
+      // chegara: 30 kun — ko'rinadi, 31 kun — yo'q
+      List<FeedItem> bitta(DateTime exp) => trainerFeed(
+            trainer: trainer,
+            clients: [c('c4', 'Olim', exp)],
+            now: now,
+          ).where((i) => i.kind == FeedKind.subscription).toList();
+      expect(bitta(DateTime(2026, 8, 19)).single.body, 'Olim — 30 kun oldin tugadi');
+      expect(bitta(DateTime(2026, 8, 18)), isEmpty);
+    });
+
     test('yangi (ko-rilmagan) soni sanaladi', () {
       final items = [
         FeedItem(kind: FeedKind.chat, title: 'a', body: 'b', at: now),
@@ -1044,6 +1117,26 @@ void main() {
       expect(Subscription.isActive(s.expiresAt, DateTime(2026, 10, 5, 23)), isTrue);
       expect(Subscription.isActive(s.expiresAt, DateTime(2026, 10, 6, 1)), isFalse);
       expect(s.toMap()['days'], 1);
+    });
+
+    test("to'lov o'chirilgach qolgan eng oxirgisi hisoblanadi", () {
+      final okt = Subscription(id: 'a', startDate: DateTime(2026, 10, 3), months: 1);
+      final noy = Subscription(id: 'b', startDate: DateTime(2026, 11, 5), months: 1);
+      expect(Subscription.latestAfterDelete([noy, okt], 'b')?.id, 'a');
+      expect(Subscription.latestAfterDelete([noy, okt], 'a')?.id, 'b');
+      expect(Subscription.latestAfterDelete([okt], 'a'), isNull, reason: "yagona to'lov — abonement yo'q");
+      expect(Subscription.latestAfterDelete([okt, noy], 'x')?.id, 'b', reason: 'tartibga bog‘liq emas');
+    });
+
+    test("kechikib kiritilgan to'lov: muddat to'langan kundan", () {
+      // mijoz 5-noyabrda to'lagan, trener 9-noyabrda kiritgan — sana oynada tanlanadi
+      final paid = DateTime(2026, 11, 5);
+      final oylik = Subscription(startDate: paid, months: 1, paidDate: paid);
+      expect(oylik.expiresAt, DateTime(2026, 12, 5));
+      expect(Subscription.daysLeft(oylik.expiresAt, DateTime(2026, 11, 9, 15)), 26);
+      final kunlik = Subscription(startDate: paid, months: 0, days: 1, paidDate: paid);
+      expect(kunlik.expiresAt, DateTime(2026, 11, 5));
+      expect(Subscription.isExpired(kunlik.expiresAt, DateTime(2026, 11, 9)), isTrue);
     });
 
     test('eski yozuv (days yo-q) oy bo-yicha hisoblanadi', () {
@@ -1676,6 +1769,91 @@ void main() {
       expect(asked, 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg', reason: 'muqova so-raldi');
       expect(find.text('https://youtu.be/dQw4w9WgXcQ'), findsNothing, reason: 'havola matni emas — muqova');
       expect(find.text('Havolani nusxalash'), findsNothing);
+    });
+
+    const r2 = 'https://qobil-video.misol.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4';
+
+    test('yuklangan video (R2) havolasini taniydi; YouTube va begona havola — yo-q', () {
+      expect(isUploadedVideo(r2), isTrue);
+      expect(isUploadedVideo(' $r2 '), isTrue);
+      for (final u in [
+        '',
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://example.com/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'http://qobil-video.misol.workers.dev/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'https://qobil-video.misol.workers.dev/v/maxfiy/123e4567-e89b-12d3-a456-426614174000.mp4',
+        'https://qobil-video.misol.workers.dev/v/videos/qisqa.mp4',
+      ]) {
+        expect(isUploadedVideo(u), isFalse, reason: u);
+      }
+      expect(isUploadedVideo(youtubeThumb('https://youtu.be/dQw4w9WgXcQ')!), isFalse);
+      expect(isOwnVideo(r2), isFalse, reason: 'boshqa Worker — token yuborilmaydi');
+      expect(isOwnVideo('$videoServer/v/videos/123e4567-e89b-12d3-a456-426614174000.mp4'), isTrue);
+    });
+
+    test('video turi fayl nomidan; boshqa fayl — null', () {
+      expect(videoContentType('mashq.MP4'), 'video/mp4');
+      expect(videoContentType('a.mov'), 'video/quicktime');
+      expect(videoContentType('a.3gp'), 'video/3gpp');
+      expect(videoContentType('rasm.jpg'), isNull);
+      expect(maxVideoBytes, 80 * 1024 * 1024);
+      expect(maxVideoSeconds, 330);
+    });
+
+    testWidgets('yuklangan videoli mashqda pleyer darhol; YouTube muqovasi yo-q', (t) async {
+      t.view.physicalSize = const Size(420, 7000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      String? played;
+      debugVideoPlayer = (u) {
+        played = u;
+        return const SizedBox(key: Key('pleyer'));
+      };
+      addTearDown(() => debugVideoPlayer = null);
+      final e = Exercise('Fayl mashq', 'chest', '3 × 10', 'Sekin',
+          id: 'v2', video: r2, createdAt: DateTime.now(), createdBy: 't1');
+      await t.pumpWidget(MaterialApp(
+        home: MusclesScreen(gymDays: evenDays, weekday: DateTime.tuesday, onBack: () {}, custom: Stream.value([e])),
+      ));
+      await t.pump(const Duration(seconds: 3));
+      await t.tap(find.text('Fayl mashq'));
+      await t.pump(const Duration(seconds: 1));
+      expect(find.byKey(const Key('pleyer')), findsOneWidget);
+      expect(played, r2);
+      expect(find.byIcon(Icons.play_arrow), findsNothing, reason: 'YouTube muqovasi emas');
+      expect(find.text(r2), findsNothing, reason: 'havola matni ko-rinmaydi');
+    });
+
+    testWidgets('formada: Video yuklash tugmasi; yuklangan videoni o-chirish maydonni bo-shatadi', (t) async {
+      t.view.physicalSize = const Size(420, 3000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      debugCanUploadVideo = true;
+      addTearDown(() => debugCanUploadVideo = null);
+      final e = Exercise('Fayl mashq', 'chest', '3 × 10', 'Sekin',
+          id: 'v2', video: r2, createdAt: DateTime(2026, 1, 1), createdBy: 't1');
+      await t.pumpWidget(MaterialApp(
+        home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest', existing: e)),
+      ));
+      expect(find.text('Video yuklash'), findsOneWidget);
+      expect(find.text('Yuklangan video'), findsOneWidget);
+      await t.ensureVisible(find.text("Videoni o'chirish"));
+      await t.tap(find.text("Videoni o'chirish"));
+      await t.pump();
+      expect(find.text("Videoni o'chirish"), findsNothing);
+      expect(find.text('Video havolasi (ixtiyoriy)'), findsOneWidget);
+    });
+
+    testWidgets('yuklash mumkin bo-lmasa (web) — tugma ko-rinmaydi', (t) async {
+      t.view.physicalSize = const Size(420, 3000);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      debugCanUploadVideo = false;
+      addTearDown(() => debugCanUploadVideo = null);
+      await t.pumpWidget(const MaterialApp(
+        home: Scaffold(body: ExerciseForm(adminId: 't1', muscle: 'chest')),
+      ));
+      expect(find.text('Video yuklash'), findsNothing);
     });
   });
 

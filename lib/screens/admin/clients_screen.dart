@@ -176,7 +176,7 @@ class _ClientTile extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(AppSpace.md),
       child: Row(children: [
-        UserAvatar(name: u.name),
+        UserAvatar(name: u.name, photoUrl: u.photoUrl),
         const SizedBox(width: AppSpace.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -252,6 +252,7 @@ class ClientDetail extends StatelessWidget {
                           chatUid: u.id,
                           myId: admin.id,
                           title: u.name,
+                          photoUrl: u.photoUrl,
                           subtitle: tr('Mijoz'),
                           // trener boshqa xodim (bosh admin) xabarlarini ko'rmaydi
                           onlyMineAndClient: admin.isTrainer,

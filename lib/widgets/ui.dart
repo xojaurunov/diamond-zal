@@ -1,7 +1,9 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../l10n/tr.dart';
+import '../models/video_link.dart';
 import '../theme.dart';
+import 'food_image.dart' show netImage;
 
 // ---------- formatlash ----------
 
@@ -381,13 +383,30 @@ class EmptyState extends StatelessWidget {
 
 // ---------- kichik komponentlar ----------
 
+/// Bosh harflar yoki (bo'lsa) profil rasmi. Rasm faqat o'z serverimizdagi avatar bo'lsa
+/// ko'rsatiladi ([isAvatarUrl]); yuklanmasa — bosh harflar.
 class UserAvatar extends StatelessWidget {
   final String name;
   final double size;
-  const UserAvatar({super.key, required this.name, this.size = 44});
+  final String? photoUrl;
+  const UserAvatar({super.key, required this.name, this.size = 44, this.photoUrl});
 
   @override
   Widget build(BuildContext context) {
+    if (isAvatarUrl(photoUrl)) {
+      final px = (size * MediaQuery.devicePixelRatioOf(context)).round();
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: SizedBox.square(
+          dimension: size,
+          child: netImage(photoUrl!, cacheWidth: px, errorBuilder: (_, __, ___) => _initials()),
+        ),
+      );
+    }
+    return _initials();
+  }
+
+  Widget _initials() {
     final c = avatarColor(name);
     return Container(
       width: size,
@@ -471,20 +490,32 @@ class StatTile extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+
+  /// O'ng tomonda (masalan trener rasmi)
+  final Widget? trailing;
   const StatTile({
     super.key,
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
-    final t = Theme.of(context).textTheme;
+    final body = _body(context);
     return BentoTile(
       padding: const EdgeInsets.all(AppSpace.md),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child: trailing == null
+          ? body
+          : Row(children: [Expanded(child: body), const SizedBox(width: AppSpace.md), trailing!]),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(width: AppSpace.sm - 2),
@@ -507,8 +538,7 @@ class StatTile extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(value, style: t.headlineSmall?.copyWith(fontFeatures: tabular)),
         ),
-      ]),
-    );
+      ]);
   }
 }
 

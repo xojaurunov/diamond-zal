@@ -3,6 +3,9 @@ import '../../l10n/tr.dart';
 import '../../models/models.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
+import '../../widgets/avatar_picker.dart';
+// QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+// import '../../widgets/gym_card.dart';
 import '../../widgets/change_password.dart';
 import '../../widgets/lang_picker.dart';
 import '../../widgets/settings_sheet.dart';
@@ -38,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
           for (final t in others)
             Card(
               child: ListTile(
-                leading: UserAvatar(name: t.name, size: 40),
+                leading: UserAvatar(name: t.name, size: 40, photoUrl: t.photoUrl),
                 title: Text(t.name),
                 subtitle: t.bio.isEmpty ? null : Text(t.bio),
                 onTap: () => Navigator.pop(context, t),
@@ -111,21 +114,26 @@ class ProfileScreen extends StatelessWidget {
                     ]),
                   ),
                   const SizedBox(width: AppSpace.lg),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                    child: Text(
-                      initials(user.name),
-                      style: TextStyle(
-                        color: AppColors.onAccent,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1,
+                  // bosilsa — profil rasmini qo'yish / almashtirish
+                  MyAvatar(
+                    me: user,
+                    size: 64,
+                    placeholder: Container(
+                      width: 64,
+                      height: 64,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.accent,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                      child: Text(
+                        initials(user.name),
+                        style: TextStyle(
+                          color: AppColors.onAccent,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -1,
+                        ),
                       ),
                     ),
                   ),
@@ -210,6 +218,9 @@ class ProfileScreen extends StatelessWidget {
                     label: tr('Treneringiz'),
                     value: snap.data?.name ?? '—',
                     color: AppColors.accent,
+                    trailing: snap.data?.photoUrl == null
+                        ? null
+                        : UserAvatar(name: snap.data!.name, size: 48, photoUrl: snap.data!.photoUrl),
                   ),
                 ),
                 Align(
@@ -258,6 +269,14 @@ class ProfileScreen extends StatelessWidget {
                 ]),
               ),
               const SizedBox(height: AppSpace.xl),
+              // QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+//               // zal eshigida trenerga ko'rsatiladi — davomat QR bilan belgilanadi
+//               FilledButton.icon(
+//                 onPressed: () => showGymCard(context, user),
+//                 icon: const Icon(Icons.qr_code_2),
+//                 label: Text(tr('Zal kartasi')),
+//               ),
+//               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: () => Navigator.push(
                   context,
