@@ -237,8 +237,26 @@ class Db {
       _fs.collection('users').doc(uid).update({'goal': goal});
 
   /// Shogirdni trenerga biriktirish (null — biriktirishni bekor qilish)
-  static Future<void> assignTrainer(String uid, String? trainerId) =>
-      _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+  static Future<void> assignTrainer(String uid, String? trainerId) async {
+    await _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+    await _syncMembershipGym(uid, trainerId);
+  }
+
+  /// To'lov ko'zgusidagi zal shogird treneri almashganda yangilanadi — keyingi to'lovni
+  /// kutmasdan yangi zal ro'yxatida ko'rinsin. Zal trenerlar katalogidan olinadi (shogird
+  /// trenerning `users` hujjatini o'qiy olmaydi). Ko'zgu yo'q yoki yozish rad etilsa
+  /// (eski qoidalar) — jim o'tadi: trener almashishi baribir bajarilgan.
+  static Future<void> _syncMembershipGym(String uid, String? trainerId) async {
+    try {
+      final ref = _fs.collection('memberships').doc(uid);
+      if (!(await ref.get()).exists) return;
+      final tid = trainerId ?? '';
+      final gymId = tid.isEmpty
+          ? ''
+          : ((await _fs.collection('trainers').doc(tid).get()).data()?['gymId'] ?? '') as String;
+      await ref.update({'gymId': gymId, 'updatedAt': FieldValue.serverTimestamp()});
+    } on FirebaseException catch (_) {}
+  }
 
   /// Trenerlar katalogi — shogird anketada tanlaydi (qabul qilayotganlar)
   static Stream<List<TrainerInfo>> trainerDirectory() => _fs.collection('trainers').snapshots().map(
@@ -275,8 +293,10 @@ class Db {
 
   /// Shogird trenerini o'zi tanlaydi yoki almashtiradi (qoidalar: faqat katalogda shogird
   /// qabul qilayotgan trener)
-  static Future<void> chooseTrainer(String uid, String trainerId) =>
-      _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+  static Future<void> chooseTrainer(String uid, String trainerId) async {
+    await _fs.collection('users').doc(uid).update({'trainerId': trainerId});
+    await _syncMembershipGym(uid, trainerId);
+  }
 
   // ---------- zal ----------
   /// Shogird o'z mashg'ulot kunlarini tanlaydi (aynan 3 ta)
@@ -348,6 +368,7 @@ class Db {
       final orphans = await _fs.collection('users').where('trainerId', isEqualTo: uid).get();
       for (final d in orphans.docs) {
         await d.reference.update({'trainerId': null});
+        await _syncMembershipGym(d.id, null);
       }
     }
   }

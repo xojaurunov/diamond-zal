@@ -172,6 +172,12 @@ service cloud.firestore {
         || ((isStaff() || isBarmen()) && gymOf(request.auth.uid) != ''
             && resource.data.get('gymId', '') == gymOf(request.auth.uid));
       allow create, update: if canManage(uid) && validMembership();
+      // Shogird trenerini o'zi almashtirganda — faqat zal ko'zgusi yangi trener zaliga
+      // (summa, sana, tur tegilmaydi)
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gymId', 'updatedAt'])
+        && request.resource.data.gymId == clientGym()
+        && request.resource.data.updatedAt == request.time;
       allow delete: if isOwner();
     }
 
