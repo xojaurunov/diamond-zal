@@ -32,6 +32,12 @@ String normalizePhone(String input) {
   return d.length == 9 ? '998$d' : d;
 }
 
+/// Kirish maydoni: 9 raqam ("90 123 45 67") yoki to'liq 12 raqam ("998 90 123 45 67")
+bool isValidPhoneInput(String input) {
+  final d = input.replaceAll(RegExp(r'\D'), '');
+  return d.length == 9 || (d.length == 12 && d.startsWith('998'));
+}
+
 String phoneToEmail(String phone) => '${normalizePhone(phone)}@$_phoneDomain';
 
 class AuthService {
