@@ -115,6 +115,10 @@
   "ru": "Абонемент",
   "en": "Membership"
  },
+ "Abonement muddati o‘tdi": {
+  "ru": "Срок абонемента истёк",
+  "en": "Membership expired"
+ },
  "Abonement qo‘shildi": {
   "ru": "Абонемент добавлен",
   "en": "Membership added"
@@ -5255,6 +5259,10 @@
   "ru": "{0} дн.",
   "en": "{0} days"
  },
+ "{0} kun oldin tugadi. To‘lov zalda — trenerga murojaat qiling": {
+  "ru": "Закончился {0} дн. назад. Оплата в зале — обратитесь к тренеру",
+  "en": "Ended {0} days ago. Pay at the gym — contact your trainer"
+ },
  "{0} kun qoldi": {
   "ru": "осталось {0} дн.",
   "en": "{0} days left"
@@ -5435,6 +5443,10 @@
   "ru": "{0} — уже отмечен сегодня",
   "en": "{0} — already marked today"
  },
+ "{0} — bugun tugadi": {
+  "ru": "{0} — закончился сегодня",
+  "en": "{0} — ended today"
+ },
  "{0} — hali ovqatlanish rejasi yo‘q": {
   "ru": "{0} — ещё нет плана питания",
   "en": "{0} — no meal plan yet"
@@ -5450,6 +5462,14 @@
  "{0} — tugadi": {
   "ru": "{0} — готово",
   "en": "{0} — finished"
+ },
+ "{0} — {1} kun oldin tugadi": {
+  "ru": "{0} — закончился {1} дн. назад",
+  "en": "{0} — ended {1} days ago"
+ },
+ "{0} — {1} kundan keyin tugaydi": {
+  "ru": "{0} — закончится через {1} дн.",
+  "en": "{0} — ends in {1} days"
  },
  "{0} — {1} ta variant": {
   "ru": "{0} — вариантов: {1}",
