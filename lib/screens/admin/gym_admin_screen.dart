@@ -7,7 +7,8 @@ import '../../theme.dart';
 import '../../widgets/ui.dart';
 import 'announcements_admin_screen.dart';
 import 'exercises_admin_screen.dart';
-import 'qr_scan_screen.dart';
+// QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+// import 'qr_scan_screen.dart';
 
 /// Trener: Zal bo'limi — shogirdlar kimda qaysi kun, bugun kim keladi, kim uyda.
 /// "Uyda mashq" faqat shogird bugun chatda kela olmasligini yozgan bo'lsa belgilanadi.
@@ -89,29 +90,30 @@ class _GymAdminScreenState extends State<GymAdminScreen> {
               ]),
             ),
             const SizedBox(height: AppSpace.sm),
-            // QR davomat: shogirdning "Zal kartasi" skanerlanadi — bugun keldi deb belgilanadi
-            BentoTile(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => QrScanScreen(admin: widget.admin)),
-              ),
-              padding: const EdgeInsets.all(AppSpace.lg),
-              child: Row(children: [
-                Icon(Icons.qr_code_scanner, color: AppColors.accent),
-                const SizedBox(width: AppSpace.md),
-                Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(tr('QR skaner'), style: t.titleMedium),
-                    const SizedBox(height: 2),
-                    Text(
-                      tr('Shogirdning zal kartasini skanerlang — davomat belgilanadi'),
-                      style: t.bodySmall?.copyWith(color: AppColors.textMuted),
-                    ),
-                  ]),
-                ),
-                Icon(Icons.chevron_right, color: AppColors.textMuted),
-              ]),
-            ),
+            // QR davomat muzlatilgan (10-noy 2026, zal egasi: "hozircha kerak emas") — qayta yoqish: izohdan chiqaring
+//             // QR davomat: shogirdning "Zal kartasi" skanerlanadi — bugun keldi deb belgilanadi
+//             BentoTile(
+//               onTap: () => Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (_) => QrScanScreen(admin: widget.admin)),
+//               ),
+//               padding: const EdgeInsets.all(AppSpace.lg),
+//               child: Row(children: [
+//                 Icon(Icons.qr_code_scanner, color: AppColors.accent),
+//                 const SizedBox(width: AppSpace.md),
+//                 Expanded(
+//                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+//                     Text(tr('QR skaner'), style: t.titleMedium),
+//                     const SizedBox(height: 2),
+//                     Text(
+//                       tr('Shogirdning zal kartasini skanerlang — davomat belgilanadi'),
+//                       style: t.bodySmall?.copyWith(color: AppColors.textMuted),
+//                     ),
+//                   ]),
+//                 ),
+//                 Icon(Icons.chevron_right, color: AppColors.textMuted),
+//               ]),
+//             ),
             const SizedBox(height: AppSpace.xl),
             Text(trf('Bugun · {0}', [tr(weekdayNames[today] ?? '')]), style: t.titleLarge),
             const SizedBox(height: AppSpace.md),
