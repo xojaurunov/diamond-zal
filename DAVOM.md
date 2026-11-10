@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-10-08**
+> Oxirgi yangilanish: **2026-11-10**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,9 +11,88 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (12-oktabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (10-noyabr holati)
 
-**▶ KEYINGI SAFAR SHU YERDAN (12-oktabr kechki holat).** Hamma kod GitHub'da. Qoidalar,
+**10-noyabr (eng yangi).** `sinov/apk-video-logo` dagi hamma shoxlar `main` ga qo'shildi, sayt va saytdagi
+APK yangilandi, qoidalar joylandi (**103-band**). Pastdagi 3-noyabr jadvali — tarix.
+`main` ga qo'shilmagan: `feat/servis-*` va unga bog'liq shoxlar (Python servis; Render — hozircha yo'q).
+
+**Ochiq ishlar:** zal egasi yangi APK'ni telefonda sinaydi; ikonka foni qarori; trener boshqa zalga o'tsa
+shogirdlarining to'lov ko'zgusi ham o'tsin; muddati o'tgan abonement banneri; qarzdorlar ro'yxati; abonementni
+muzlatish; kassa; trener foizini bazaga ko'chirish; progress rasmlari R2'ga; Postgres nusxasiga `days.gymFeel`,
+`announcements`, `photoUrl`; QR davomatni qayta yoqish (kerak bo'lsa).
+
+**▶ KEYINGI SAFAR SHU YERDAN (3-noyabr).** 21-oktabr – 3-noyabr ishlari (**101–102-bandlar**).
+Kod GitHub'da, **alohida shoxlarda; `main` ga qo'shilmagan, sayt 14-oktabrdan beri yangilanmagan**.
+Hamma yangi shoxlar yig'ilgan sinov shoxi — `sinov/apk-video-logo` (faqat shu kompyuterda, GitHub'da yo'q),
+undan APK: Desktop'da `QobilFitness-profil-rasm-2026-11-03.apk`.
+
+**Jonli (joylangan) holat, 3-noyabr:**
+- **Firestore qoidalari** — `sinov/apk-video-logo` dagi fayl (ruleset `42f71ef0…`, 3-noy): video darslar,
+  trener rasmi katalogda, zal e'lonlari. Joylangan qoidani o'qish: firebaserules API (`releases/cloud.firestore`).
+  Keyingi joylashdan oldin diff qiling — boshqa shoxdan joylab, ichidagi qoidani o'chirib yubormang.
+- **Video serveri** (Cloudflare Worker `qobil-video`, R2 bucket `qobil-video`):
+  `https://qobil-video.qobilfitness.workers.dev`, versiya `171167c6…` (3-noy) — video + profil rasmi.
+  Joylash: `cd cloudflare/video && npx wrangler deploy` (`CLOUDFLARE_API_TOKEN` — `backend/.env`).
+- **Sayt va saytdagi APK** — 14-oktabr holati (99-band).
+
+| Shox | Nima | Holat |
+|---|---|---|
+| `feat/login-banner` | "Qobil Fitness" logotipi, ilova nomi, adaptiv ikonka (orqa foni shaffof) | Ikonka foni — zal egasi 4 variantni ham rad etdi, qaror kutilmoqda |
+| `feat/video-r2-worker` → `feat/video-bolim` | Video yuklash (720p kichraytirish, 80 MB), muqova, "Videolar" bo'limi, trener darslari | Worker joylangan; ilova — sinov APK'da |
+| `feat/oldin-keyin-slayder` | Oldin/keyin rasmlarini surib solishtirish | Paket-1, sinov APK'da |
+| `feat/dam-olish-taymer` | "Bajardim" dan keyin dam olish taymeri | Paket-1, sinov APK'da |
+| `feat/mashgulot-fikri` | Mashg'ulotdan keyin "Oson / To'g'ri / Qiyin" | Paket-1, sinov APK'da |
+| `feat/zal-elonlari` | Zal e'lonlari ("Bugun" tepasida) | Paket-1; qoidasi **joylandi (3-noy)** |
+| `feat/qr-davomat` | QR davomat (shogird kartasi, trener skaneri) | Paket-1, sinov APK'da |
+| `feat/avatar-worker` → `feat/avatar-ilovada` → `feat/trener-rasmi` | Profil rasmi — hamma rol; shogird trener rasmini ko'radi (102) | Worker va qoida joylangan; telefonda sinash kerak |
+| `feat/servis-*`, `feat/firebase-nusxa-model`, `feat/ilova-servis`, `feat/sinov-telefon`, `fix/zaxira-toliq` | Python servis va Postgres nusxasi (100-band) | Tayyor, kompyuterda; Render (4-bosqich) — hozircha yo'q |
+| `docs/davom-20-okt` → `docs/davom-noyabr` | Shu fayl | — |
+
+**Zal egasidan kutilayotgan:** sinov APK'ni telefonda ko'rish — profil rasmi (kamera, galereya, olib tashlash,
+trener rasmi shogirdda), Paket-1, video — "yaxshi" → shoxlar `main` ga, sayt va saytdagi APK yangilanadi;
+ikonka foni qarori; model varianti (rasm / 3D manekin / Viggle); kiyim qoldig'i (19 ta), sport sumka rasmi va
+narxi; trenerdan mashqlar ro'yxati, video havolalari, taomlar kaloriyasi; ruscha tarjimani tekshirish.
+
+**Mening keyingi ishlarim:** shoxlarni `main` ga qo'shish ("yaxshi" dan keyin); progress rasmlarini R2'ga
+ko'chirish (reja yozilmagan — profil rasmi Worker'i qayta ishlatiladi); Postgres nusxasiga `days.gymFeel`,
+`announcements`, `photoUrl` qo'shish.
+
+**`backend/` papkasi (bu shoxlarda ko'rinsa):** manba kodi faqat `feat/servis-*` shoxlarida. Boshqa shoxda
+`backend/` da faqat qoldiqlar turadi — `.venv/` (73 MB), `__pycache__/`, `.env` (maxfiy kalitlar) va
+`data/` (**haqiqiy ma'lumot eksporti va akkauntlar — hech qachon commit qilinmaydi**). Ular shu kompyuterning
+`.git/info/exclude` ida, `git status` da chiqmaydi.
+
+**20-oktabr holati (tarix).** 19–20-oktabr ishlari (**100-band**) — hammasi
+GitHub'da, **alohida shoxlarda, `main` ga hali qo'shilmagan va saytga joylanmagan**:
+
+| Shox | Nima | Holat |
+|---|---|---|
+| `feat/login-banner` | "Qobil Fitness" logotipi: ilova ikonkasi + kirish ekrani banneri | APK Desktop'da (`Qobil-2026-10-20-yangi-logo.apk`) — zal egasi telefonda ko'rishi kerak |
+| `feat/video-r2-worker` | Trener ilovadan video yuklaydi (Cloudflare R2), shogird ilova ichida ko'radi | Worker joylanmagan — Cloudflare'da "Allow" kutilmoqda |
+| `fix/zaxira-toliq` | Haftalik zaxira to'liq (sahifalash, to'lovlar, mashqlar, rasmlar) | Tayyor, jonli sinaldi |
+| `feat/firebase-nusxa-model` | Firebase'ning Postgres nusxasi: jadvallar, ruxsatlar (237 test), ko'chirish, parollar | Tayyor, kompyuterda (Docker) |
+| `feat/servis-yadro` | Python servis (FastAPI): kirish, token, har so'rov foydalanuvchi nomidan | Tayyor, kompyuterda |
+| `feat/servis-api` | Servis: Firestore'ga o'xshash hujjat API (`/doc /col /group /batch`), ro'yxat, xodim, parol | Tayyor, 271 test |
+| `feat/servis-jonli` | Servis: jonli yangilanish (Postgres NOTIFY → WebSocket), CORS, xato tuzatishlar | Tayyor, 274 test |
+| `feat/servis-sinov-web` | Servis ilovaning web nusxasini `/sinov/` da beradi (telefonda sinov) | Tayyor |
+| `feat/ilova-servis` | Ilova servis bilan ishlay oladi (`--dart-define=API_URL=…`), aks holda Firebase | Brauzerda sinaldi: ro'yxat, anketa, chat (jonli), do'kon |
+| `feat/sinov-telefon` | `API_URL=origin` + `tools/sinov/servis-tunnel.ps1` (servis + web + Cloudflare tunnel) | Tunnel zal egasi "tayyor" deganda |
+
+**Shoxlar tartibi (qo'shish uchun):** `feat/firebase-nusxa-model` → `feat/servis-yadro` → `feat/servis-api` →
+`feat/servis-jonli` → `feat/servis-sinov-web` (har biri oldingisidan); `feat/ilova-servis` → `feat/sinov-telefon`
+(`main` dan). Qolganlari `main` dan mustaqil.
+
+**Qarorlar (19–20-okt):** Firebase'dan bosqichma-bosqich chiqiladi — Firebase'ga tegmasdan
+nusxasi yonida quriladi, keyin almashtiriladi; fayllar (video, rasm) — Cloudflare R2
+(`zalpro-files`), server va baza — Render (4-bosqich, **hozircha qilinmaydi**); Supabase kerak emas.
+Reja: `specs/firebase-nusxa/` (lokal, git'da emas). Logotip — B varianti ("QOBIL FITNESS · ZAL ·
+TOSHKENT"); rasm manbasi noma'lum — rasmiy tovar belgisi uchun yangi chizdirish kerak.
+
+**Zal egasidan kutilayotgan:** APK'ni telefonda ko'rish ("yaxshi" → `main` ga va saytga); Cloudflare
+"Allow" (video); ilova nomi "Qobil Fitness" bo'ladimi; 98–99-bandlarni telefonda tekshirish.
+
+**12-oktabr kechki holat (tarix):** Hamma kod GitHub'da. Qoidalar,
 web va APK **saytga joylangan (14-okt)** — 91–99-bandlar jonli. APK nusxasi:
 `Qobil-2026-10-14.apk` (zal egasining `Music` papkasi va Desktop). Zal egasi 12-okt APK ni
 telefonda ko'rib ikki nuqson topdi — 13-okt tuzatildi (96-band). **Zal egasi 13-okt APK ni
@@ -1991,6 +2070,88 @@ telefon+parol bilan kirish, haqiqiy Firebase'ga ulanish, birinchi APK.
     - `flutter test` 153/153, qoida testlari 237/237. Trenerning "Mashqlar" tabi telefonda
       va ekranda ko'rilmagan. Zal egasi "webga chiqaz" dedi — web va APK joylandi.
     - Keyingi: video FAYL yuklash va o'chirish (Blaze yoqilgach; `specs/mashq-dasturi/00-overview.md`).
+100. **Firebase nusxasi, video R2'da, servis yadrosi, yangi logotip, to'liq zaxira (19–20-okt)** —
+    zal egasi: Firebase'dan chiqishni o'ylab ko'rish, video fayl yuklash, "Qobil Fitness" logotipi.
+    Hammasi alohida shoxlarda (0-bo'limdagi jadval), `main` ga qo'shilmagan, saytga joylanmagan.
+    - **Postgres nusxasi** (`backend/`, shox `feat/firebase-nusxa-model`): 17 jadval, `firestore.rules`
+      ning aynan nusxasi (RLS + triggerlar), 237 qoida testi Python'da; ko'chirish — Firestore'dan
+      faqat o'qib (224 hujjat, sonlar teng) va 11 akkaunt; parol — birinchi kirishda Firebase orqali
+      tekshiriladi, keyin o'z xeshimiz (sinov shogirdi bilan isbotlandi, shogird o'chirildi).
+      Haqiqiy ma'lumot faqat `backend/data/` (git'da emas). Mahalliy baza: `docker compose -f
+      backend/docker-compose.yml up -d` (port 5433), testlar: `backend/.venv` + `pytest backend/tests`.
+    - **Servis yadrosi** (`backend/app/`, shox `feat/servis-yadro`): FastAPI — `/auth/login`
+      (telefon + parol, urinishlar cheklangan), `/me`; har so'rov `app_user` + `app.uid` bilan —
+      ruxsatlarni baza tekshiradi. Testlar 257/257. Topilgan xato tuzatildi (uid o'rniga ustun nomi).
+    - **Video R2** (shox `feat/video-r2-worker`): `cloudflare/video` Worker (yuklash/o'chirish faqat
+      trener va bosh admin, 50 MB, ko'rsatish keshi va surish bilan) + ilova: "Video yuklash" (foiz),
+      "Videoni o'chirish", shogird ilova ichida ko'radi. Blaze kerak emas. Xavfsizlik: o'chirish
+      so'rovi faqat o'z serverimizga. Worker joylanmagan — `npx wrangler login` da "Allow" kerak.
+    - **Logotip** (shox `feat/login-banner`): ilova ikonkasi va kirish ekrani banneri — B varianti.
+      Instagram / YouTube rasmlari Desktop'da (`qobil-fitness-logo	ayyor`). Ilova nomi o'zgarmagan.
+    - **Zaxira** (shox `fix/zaxira-toliq`): sahifalash va `exercises`, `memberships`, `photos`.
+    - Tekshiruv: `flutter test` 158/158 (video shoxida), backend 257/257, Worker 10/10.
+101. **Video joylandi, "Videolar" bo'limi, ilova nomi, Paket-1 (21–26-okt)** — hammasi alohida shoxlarda
+    (0-bo'limdagi jadval), sinov APK'da; `main` ga va saytga qo'shilmagan.
+    - **Ilova nomi "Qobil Fitness"** (telefon, sayt, brauzer sarlavhasi). Ikonka adaptiv: avval to'q fon,
+      keyin orqa foni shaffof (faqat logotip) — zal egasi fonni hali tanlamagan.
+    - **Video serveri joylandi:** `https://qobil-video.qobilfitness.workers.dev` (R2 bucket `qobil-video`),
+      ilovada standart manzil (`lib/models/video_link.dart`, `--dart-define=VIDEO_SERVER=` bilan almashadi).
+      Ilova videoni o'zi kichraytiradi (720p, 5 daqiqagacha, 80 MB), muqova — 1-soniyadagi to'liq kadr;
+      o'chirilgan video keshdan ham o'chadi.
+    - **"Videolar" bo'limi** (`feat/video-bolim`): shogird — Zal → Videolar (muqova, "Siz uchun", "YANGI",
+      filtr, qidiruv, pleyer, tezlik 0.5/0.75/1x); trener — Zal → Video darslar (ovqatlanish, texnika, nafas,
+      motivatsiya). Yangi `videos` to'plami va qoidalari. Izoh, layk, yuklab olish yo'q.
+    - **Paket-1** (har biri o'z shoxida): oldin/keyin slayderi; dam olish taymeri (60/90/120 s, eslab qoladi,
+      tebranish); mashg'ulotdan keyin fikr (`days.gymFeel`, trener Zal ro'yxatida ko'radi); zal e'lonlari
+      (trener/bosh admin yozadi, shogird 7 kun ko'radi, yopsa qaytmaydi); QR davomat (`mobile_scanner`).
+      Sinov shoxida `flutter test` 177/177, qoida testlari 266/266.
+    - **Backend:** `videos` jadvali va API (`feat/servis-videos`).
+    - Qo'shimcha (shoxsiz): reel videolar va "trenerdek qimirlaydigan model" sinovlari — Desktop'da
+      (`Model_trenerdek_Yelka.mp4`, `Viggle_uchun\`); sinov sahifasi vaqtinchalik papkada edi va o'chib ketdi.
+102. **Profil rasmi — hamma rol (3-noy)** — zal egasi: "profilda ism bosh harfi o'rniga rasm bo'lsin, hammaga".
+    Reja: `specs/profil-rasm/` (lokal, 3 qism). Rasm Cloudflare R2'da, bazada faqat havola (`photoUrl`).
+    - **Worker** (`feat/avatar-worker`): `POST /avatar` (har kim faqat o'ziga, JPEG/PNG/WebP, 512 KB, eskisi
+      o'chadi), `DELETE /avatar`; ko'rish `/v/avatars/<uid>/<uuid>.<ext>`; web uchun CORS. Video ruxsatlari
+      o'zgarmagan. Testlar 20/20. Joylandi.
+    - **Ilova** (`feat/avatar-ilovada`): `AppUser.photoUrl` (toMap'ga kirmaydi), `Db.setPhotoUrl`,
+      `UserAvatar(photoUrl:)`, `lib/widgets/avatar_picker.dart` (`MyAvatar`, "Kamera / Galereya / Olib
+      tashlash"; web'da kamera yo'q). Qayerda: shogird — Profil boshi va "Bugun" tepasi; trener, bosh admin,
+      barmen — panel tepasi (chapda). Ko'rinadi: trener mijozlar ro'yxati va chat, Xodimlar ro'yxati.
+    - **Trener rasmi shogirdga** (`feat/trener-rasmi`): `trainers/{id}.photoUrl` (shogird trenerning `users`
+      hujjatini o'qiy olmaydi); anketada, "Trenerni almashtirish" da, Profil "Treneringiz" katagida, chatda.
+    - **Xavfsizlik:** faqat o'z serverimizdagi va egasining papkasidagi rasm ko'rsatiladi (`isAvatarUrlOf`) —
+      begona havola yoki boshqaning rasmi bosh harflar bo'lib chiqadi; qoida trener katalogida ham shuni
+      tekshiradi, bosh admin trener rasmini o'zgartira olmaydi. Kod tekshiruvida topilib tuzatildi: Worker'da
+      `constructor` kabi meros kalitli tur, ruxsat etilmagan MIME, boshqaning rasmini o'ziniki qilish.
+    - **Tekshiruv:** sinov shoxida `flutter test` 183/183, qoida testlari 283/283; haqiqiy Worker'da
+      vaqtinchalik akkaunt bilan yuklash/ko'rish/o'chirish; web brauzerda vaqtinchalik shogird: "Bugun" va
+      Profil'da rasm, olib tashlash, fayl tanlab yuklash, barmen panelida rasm (akkaunt keyin o'chirildi).
+      **Tekshirilmagan:** telefonda kamera/galereya; trener ro'yxati, chat va trener rasmi shogirdda — ko'z bilan.
+    - **Joylandi (3-noy, zal egasi ruxsati bilan):** Worker; qoidalar — avval `feat/trener-rasmi`, keyin
+      zal e'lonlari bilan (`sinov/apk-video-logo` fayli).
+103. **Abonement tuzatishlari, QR muzlatildi, hammasi `main` ga va saytga (5–10-noy)** — zal egasi:
+    "to'lov shogirdga ko'rinmadi", "hamma xatolarni tuzat". Rejalar: `specs/abonement-xatolar/`,
+    `specs/abonement-xatolar-2/` (lokal).
+    - **Kirish** (`fix/telefon-maydoni`): telefon maydoni 998 bilan yozilgan 12 raqamni ham qabul qiladi
+      (`isValidPhoneInput`). Shogird kira olmaganining sababi shu edi — maydon 9 raqamda kesardi.
+    - **To'lov sanasi** (`fix/tolov-sanasi`): abonement qo'shishda "To'langan sana" tanlanadi (60 kungacha
+      orqaga), muddat shu sanadan hisoblanadi.
+    - **Muddati o'tgan eslatma** (`fix/muddat-otdi-eslatma`, `fix/tugash-kuni-matni`): shogird "Bugun" da
+      "Abonement muddati o'tdi"; trener — 30 kungacha o'tganlar ro'yxati; tugash kuni "Abonement bugun tugaydi".
+    - **Xato to'lovni o'chirish** (`fix/tolov-ochirish`): shogirdning treneri yoki bosh admin. Muddat va
+      `memberships` ko'zgusi qolgan eng oxirgi to'lovdan qayta hisoblanadi (`Db.deleteSubscription`).
+    - **Trener almashsa** (`fix/tolov-zali`): `memberships.gymId` yangi trener zaliga o'tadi
+      (`_syncMembershipGym`, zal `trainers/{id}.gymId` dan).
+    - **Trener ulushi** (`fix/trener-foizi`): standart 0% (zal egasi: "hozircha foiz olmaydi").
+    - **QR davomat muzlatildi** (`chore/qr-muzlatish`): kod o'chirilmagan, izohda — belgi
+      `// QR davomat muzlatilgan`. `mobile_scanner` `pubspec.yaml` da izohda. Qayta yoqish: izohlarni chiqarish,
+      `flutter pub get`.
+    - **Bazaga qo'lda:** 5-noyabr to'lovi (500 000 so'm, 5-noy – 5-dek) egasi akkaunti bilan yozildi.
+    - **Tekshiruv:** `flutter test` 185/185, qoida testlari 297/297. Telefonda hali ko'rilmagan.
+    - **Joylandi (10-noy, zal egasi ruxsati bilan):** qoidalar (ruleset `7f760016…`; joylashdan oldin jonli
+      qoida bilan diff — faqat ikki yangi ruxsat); `sinov/apk-video-logo` → `main`; sayt — `public/ilova/`
+      (web, `--base-href /ilova/`) va `public/app/kq.bin`, `kq-eski.bin` (APK).
+    - **Ochiq repo:** testdagi haqiqiy telefon raqami push'dan oldin tarixdan olib tashlandi (soxta raqam).
 
 
 ---
