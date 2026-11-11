@@ -173,3 +173,60 @@ Future<void> deleteAvatar() async {
     client.close();
   }
 }
+
+/// "Oldin / keyin" rasmini R2'ga yuklaydi (faqat o'ziga), kalitini qaytaradi
+Future<String> uploadProgressPhoto(Uint8List bytes, String contentType) async {
+  final token = await videoAuthToken();
+  final client = HttpClient();
+  try {
+    final req = await client.postUrl(Uri.parse('$videoServer/photo'));
+    req.headers
+      ..set(HttpHeaders.authorizationHeader, 'Bearer $token')
+      ..set(HttpHeaders.contentTypeHeader, contentType)
+      ..contentLength = bytes.length;
+    req.add(bytes);
+    final res = await req.close();
+    final body = await res.transform(utf8.decoder).join();
+    if (res.statusCode != 200) throw AvatarUploadError(res.statusCode);
+    return (jsonDecode(body) as Map<String, dynamic>)['key'] as String;
+  } finally {
+    client.close();
+  }
+}
+
+/// Progress rasmini serverdan oladi — Worker ruxsatni Firestore qoidalari bilan tekshiradi
+Future<Uint8List> fetchProgressPhoto(String uid, String id) async {
+  final token = await videoAuthToken();
+  final client = HttpClient();
+  try {
+    final req = await client.getUrl(Uri.parse('$videoServer/p/$uid/$id'));
+    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+    final res = await req.close();
+    if (res.statusCode != 200) {
+      await res.drain<void>();
+      throw AvatarUploadError(res.statusCode);
+    }
+    final b = BytesBuilder(copy: false);
+    await for (final chunk in res) {
+      b.add(chunk);
+    }
+    return b.takeBytes();
+  } finally {
+    client.close();
+  }
+}
+
+/// O'z progress rasmini R2'dan o'chiradi (yo'q bo'lsa — xato emas)
+Future<void> deleteProgressPhoto(String key) async {
+  final token = await videoAuthToken();
+  final client = HttpClient();
+  try {
+    final req = await client.deleteUrl(Uri.parse('$videoServer/photo/${Uri.encodeComponent(key)}'));
+    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+    final res = await req.close();
+    await res.drain<void>();
+    if (res.statusCode != 204 && res.statusCode != 404) throw AvatarUploadError(res.statusCode);
+  } finally {
+    client.close();
+  }
+}

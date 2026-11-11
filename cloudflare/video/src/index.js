@@ -7,6 +7,12 @@
 //   POST   /avatar        — profil rasmi (har kim faqat o'ziga; JPEG/PNG/WebP, 512 KB gacha), javob: { url };
 //                            eski rasmi o'chiriladi. Manzil: /v/avatars/<uid>/<uuid>.<kengaytma>
 //   DELETE /avatar        — o'z profil rasmini o'chirish
+//   POST   /photo         — "oldin / keyin" (progress) rasmi: har kim faqat o'ziga; JPEG/WebP, 1 MB gacha;
+//                            javob: { key } (photos/<uid>/<uuid>.<kengaytma>). Ommaviy havola YO'Q.
+//   GET    /p/<uid>/<id>  — progress rasmini ko'rish: token shart; Worker ko'ruvchi tokeni bilan
+//                            Firestore `users/<uid>/photos/<id>` ni o'qiydi — qoidalar ruxsat bersa
+//                            (o'zi, treneri, bosh admin) va hujjatdagi kalit shu papkada bo'lsa, beradi
+//   DELETE /photo/<kalit> — o'z progress rasmini o'chirish (kalit photos/<o'z uid>/ ostida)
 // Kimligi: Firebase ID token (ilova `Authorization: Bearer` bilan yuboradi). Rol — foydalanuvchining
 // o'z Firestore hujjatidan, o'z tokeni bilan o'qiladi. Firebase'ga hech narsa yozilmaydi.
 
@@ -17,6 +23,10 @@ const KEYS_URL = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken
 export const MAX_AVATAR_BYTES = 512 * 1024;
 const IMAGE_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 const STAFF = ['admin', 'owner'];
+export const MAX_PHOTO_BYTES = 1024 * 1024;
+const PHOTO_TYPES = { 'image/jpeg': 'jpg', 'image/webp': 'webp' };
+const PHOTO_KEY = /^photos\/([A-Za-z0-9]{1,128})\/[0-9a-f-]{36}\.(jpg|webp)$/;
+const ID = /^[A-Za-z0-9]{1,128}$/;
 // Brauzer (web ilova) boshqa domendan chaqiradi; kimligi cookie emas, token bilan — shuning uchun '*'
 const CORS = {
   'access-control-allow-origin': '*',
@@ -24,6 +34,9 @@ const CORS = {
   'access-control-allow-headers': 'authorization, content-type',
   'access-control-max-age': '86400',
 };
+
+// progress rasmi GET ham token bilan (brauzer preflight qiladi)
+const PHOTO_CORS = { ...CORS, 'access-control-allow-methods': 'GET, POST, DELETE' };
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -72,6 +85,15 @@ export async function firestoreRole(uid, token, project, fetchFn = fetch) {
     { headers: { authorization: `Bearer ${token}` } });
   if (!res.ok) return null;
   return (await res.json()).fields?.role?.stringValue ?? null;
+}
+
+/** Progress rasmi hujjati ko'ruvchi tokeni bilan: { status, key } (qoidalar ruxsat bermasa — 403) */
+export async function firestorePhoto(uid, id, token, project, fetchFn = fetch) {
+  const res = await fetchFn(
+    `https://firestore.googleapis.com/v1/projects/${project}/databases/(default)/documents/users/${uid}/photos/${id}`,
+    { headers: { authorization: `Bearer ${token}` } });
+  if (!res.ok) return { status: res.status };
+  return { status: 200, key: (await res.json()).fields?.key?.stringValue ?? null };
 }
 
 /** Token egasi: { uid, token } yoki { denied: 401 javob } */
@@ -170,6 +192,50 @@ async function removeAvatar(request, env, deps) {
   return new Response(null, { status: 204 });
 }
 
+async function uploadPhoto(request, env, deps) {
+  const { uid, denied } = await authUid(request, env, deps);
+  if (denied) return denied;
+  const type = (request.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
+  if (!Object.hasOwn(PHOTO_TYPES, type)) return fail(415, 'faqat rasm (JPEG, WebP)');
+  const size = Number(request.headers.get('content-length'));
+  if (!size) return fail(411, 'hajm (Content-Length) kerak');
+  if (size > MAX_PHOTO_BYTES) return fail(413, 'rasm 1 MB dan katta');
+  const body = new Uint8Array(await request.arrayBuffer());
+  if (!body.length || body.length > MAX_PHOTO_BYTES) return fail(413, 'rasm 1 MB dan katta');
+  const key = `photos/${uid}/${crypto.randomUUID()}.${PHOTO_TYPES[type]}`;
+  await env.BUCKET.put(key, body, { httpMetadata: { contentType: type } });
+  return json({ key });
+}
+
+async function removePhoto(key, request, env, deps) {
+  const { uid, denied } = await authUid(request, env, deps);
+  if (denied) return denied;
+  const m = PHOTO_KEY.exec(key);
+  if (!m) return fail(404, 'yo\'q');
+  if (m[1] !== uid) return fail(403, 'faqat o\'z rasmi');
+  await env.BUCKET.delete(key);
+  return new Response(null, { status: 204 });
+}
+
+/** Ruxsatni Firestore qoidalari hal qiladi; kesh yo'q (tana rasmi — har ko'ruvchiga alohida) */
+async function servePhoto(uid, id, request, env, deps) {
+  const { token, denied } = await authUid(request, env, deps);
+  if (denied) return denied;
+  const doc = await deps.photo(uid, id, token, env.FIREBASE_PROJECT);
+  if (doc.status === 401 || doc.status === 403) return fail(403, 'ruxsat yo\'q');
+  if (doc.status !== 200) return fail(404, 'yo\'q');
+  const m = doc.key ? PHOTO_KEY.exec(doc.key) : null;
+  if (!m || m[1] !== uid) return fail(404, 'yo\'q');
+  const obj = await env.BUCKET.get(doc.key);
+  if (!obj) return fail(404, 'yo\'q');
+  return new Response(obj.body, {
+    headers: {
+      'content-type': obj.httpMetadata?.contentType ?? 'image/jpeg',
+      'cache-control': 'private, no-store',
+    },
+  });
+}
+
 /** `Range: bytes=a-b` / `bytes=a-` / `bytes=-n` -> { offset, length } (hajmga moslab) */
 export function parseRange(header, size) {
   const m = /^bytes=(\d*)-(\d*)$/.exec(header ?? '');
@@ -222,6 +288,27 @@ function withCors(res) {
   return out;
 }
 
+function withPhotoCors(res) {
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(PHOTO_CORS)) out.headers.set(k, v);
+  return out;
+}
+
+async function photoRoute(url, request, env, deps) {
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204 });
+  if (url.pathname === '/photo') {
+    return request.method === 'POST' ? uploadPhoto(request, env, deps) : fail(405, 'faqat POST');
+  }
+  if (url.pathname.startsWith('/photo/')) {
+    if (request.method !== 'DELETE') return fail(405, 'faqat DELETE');
+    return removePhoto(decodeURIComponent(url.pathname.slice('/photo/'.length)), request, env, deps);
+  }
+  const [uid, id, ...rest] = url.pathname.slice('/p/'.length).split('/');
+  if (rest.length || !ID.test(uid ?? '') || !ID.test(id ?? '')) return fail(404, 'yo\'q');
+  if (request.method !== 'GET') return fail(405, 'faqat GET');
+  return servePhoto(uid, id, request, env, deps);
+}
+
 export async function handle(request, env, ctx, deps) {
   const url = new URL(request.url);
   if (url.pathname === '/avatar') {
@@ -229,6 +316,9 @@ export async function handle(request, env, ctx, deps) {
     if (request.method === 'POST') return withCors(await uploadAvatar(request, env, deps));
     if (request.method === 'DELETE') return withCors(await removeAvatar(request, env, deps));
     return withCors(fail(405, 'faqat POST yoki DELETE'));
+  }
+  if (url.pathname === '/photo' || url.pathname.startsWith('/photo/') || url.pathname.startsWith('/p/')) {
+    return withPhotoCors(await photoRoute(url, request, env, deps));
   }
   const key = url.pathname.startsWith('/v/') ? decodeURIComponent(url.pathname.slice(3)) : null;
   // profil rasmi — faqat ko'rish (yozish va o'chirish yuqoridagi /avatar orqali, egasining o'zi)
@@ -248,6 +338,7 @@ export default {
   fetch: (request, env, ctx) => handle(request, env, ctx, {
     keys: () => googleKeys(),
     role: (uid, token, project) => firestoreRole(uid, token, project),
+    photo: (uid, id, token, project) => firestorePhoto(uid, id, token, project),
     now: () => Date.now(),
   }),
 };

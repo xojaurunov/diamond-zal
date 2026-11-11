@@ -43,12 +43,14 @@ class ProgressPhotos extends StatelessWidget {
       source = picked;
     }
     try {
-      // Rasm hujjat ichida saqlanadi — shuning uchun kichraytirib, siqib olinadi
+      // Rasm R2'da (1 MB gacha) — avvalgidan (720px, 60%) tiniqroq
       final file =
-          await ImagePicker().pickImage(source: source, maxWidth: 720, imageQuality: 60);
+          await ImagePicker().pickImage(source: source, maxWidth: 1280, imageQuality: 75);
       if (file == null) return;
       final bytes = await file.readAsBytes();
-      if (bytes.length > ProgressPhoto.maxBytes) {
+      final limit =
+          photoContentType(bytes) == null ? ProgressPhoto.maxBytes : ProgressPhoto.maxRemoteBytes;
+      if (bytes.length > limit) {
         if (context.mounted) {
           showSnack(context, trf('Rasm juda katta ({0} KB). Boshqasini tanlang.', [bytes.length ~/ 1024]));
         }
@@ -67,7 +69,7 @@ class ProgressPhotos extends StatelessWidget {
       builder: (ctx) => Dialog(
         clipBehavior: Clip.antiAlias,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Flexible(child: InteractiveViewer(child: Image.memory(p.bytes, fit: BoxFit.contain))),
+          Flexible(child: InteractiveViewer(child: ProgressPhotoImage(p, fit: BoxFit.contain))),
           Padding(
             padding: const EdgeInsets.all(AppSpace.sm),
             child: Row(children: [
@@ -84,7 +86,7 @@ class ProgressPhotos extends StatelessWidget {
                       destructive: true,
                     );
                     if (!ok) return;
-                    await Db.deletePhoto(uid, p.id);
+                    await Db.deletePhoto(uid, p);
                     if (ctx.mounted) Navigator.pop(ctx);
                   },
                   icon: const Icon(Icons.delete_outline),
@@ -98,6 +100,17 @@ class ProgressPhotos extends StatelessWidget {
     );
   }
 
+  /// Shu ochilishda ko'chirishga urinilganlar — xato bo'lsa keyingi ochilishda qayta
+  static final _tried = <String>{};
+
+  /// Eski (hujjat ichidagi) rasmlar R2'ga — jim, fonda; ko'chmasa rasm avvalgidek ko'rinadi
+  void _migrate(List<ProgressPhoto> photos) {
+    for (final p in photos) {
+      if (!p.needsMigration || !_tried.add('$uid/${p.id}')) continue;
+      Db.migratePhoto(uid, p).catchError((Object _) => false);
+    }
+  }
+
   static String _caption(ProgressPhoto p) =>
       [p.dateLabel, if (p.weight > 0) trf('{0} kg', [fmtNum(p.weight)])].where((e) => e.isNotEmpty).join(' · ');
 
@@ -108,6 +121,7 @@ class ProgressPhotos extends StatelessWidget {
       stream: Db.photos(uid),
       builder: (context, snap) {
         final photos = snap.data ?? const <ProgressPhoto>[];
+        if (!readOnly) _migrate(photos);
         // trener ko'rinishida rasm bo'lmasa bo'lim umuman chiqmaydi
         if (readOnly && photos.isEmpty) return const SizedBox.shrink();
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -188,8 +202,7 @@ class _Shot extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 3 / 4,
             // to'liq o'lchamda emas - katakcha eniga mos dekodlanadi (xotira va tezlik)
-            child: Image.memory(photo.bytes,
-                fit: BoxFit.cover, gaplessPlayback: true, cacheWidth: 360),
+            child: ProgressPhotoImage(photo, cacheWidth: 360),
           ),
         ),
       ),

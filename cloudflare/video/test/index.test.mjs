@@ -1,7 +1,7 @@
 // node --test cloudflare/video/test — tarmoqsiz: soxta R2, o'zimiz yaratgan RSA kalit bilan soxta token.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { handle, parseRange, MAX_BYTES, MAX_AVATAR_BYTES } from '../src/index.js';
+import { handle, parseRange, MAX_BYTES, MAX_AVATAR_BYTES, MAX_PHOTO_BYTES } from '../src/index.js';
 
 const PROJECT = 'kotta-qani-09111753';
 const NOW = 1_800_000_000_000;
@@ -278,4 +278,110 @@ test("avatar: begona yo'l ochilmaydi; brauzer preflight (OPTIONS) — 204 va COR
 
 test("avatar yo'li video ruxsatini o'zgartirmadi: shogird video yuklay olmaydi", async () => {
   assert.equal((await upload(env(), await token('user1'))).status, 403);
+});
+
+// ---------- progress ("oldin / keyin") rasmlari ----------
+// Soxta Firestore: hujjatlar va ko'rish ruxsati (qoidalar o'rnida): o'zi, treneri (trainer1 — user1 ning), bosh admin
+const PHOTO_DOCS = new Map();
+const MAY_READ = (viewer, owner) => viewer === owner || viewer === 'owner1' || (viewer === 'trainer1' && owner === 'user1');
+const photoDeps = {
+  ...deps,
+  photo: async (uid, id, tok) => {
+    const viewer = JSON.parse(Buffer.from(tok.split('.')[1], 'base64url')).sub;
+    if (!MAY_READ(viewer, uid)) return { status: 403 };
+    const d = PHOTO_DOCS.get(`${uid}/${id}`);
+    return d ? { status: 200, key: d } : { status: 404 };
+  },
+};
+
+async function photoPost(e, uid, { type = 'image/jpeg', size = 3000, auth = true } = {}) {
+  const headers = { 'content-type': type, 'content-length': String(size) };
+  if (auth) headers.authorization = `Bearer ${auth === true ? await token(uid) : auth}`;
+  return handle(new Request(`${BASE}/photo`, { method: 'POST', headers, body: new Uint8Array(size).fill(5) }),
+    e, null, photoDeps);
+}
+async function photoGet(e, viewer, owner, id) {
+  const headers = viewer ? { authorization: `Bearer ${await token(viewer)}` } : {};
+  return handle(new Request(`${BASE}/p/${owner}/${id}`, { headers }), e, null, photoDeps);
+}
+async function photoDelete(e, uid, key) {
+  return handle(new Request(`${BASE}/photo/${encodeURIComponent(key)}`, {
+    method: 'DELETE', headers: { authorization: `Bearer ${await token(uid)}` } }), e, null, photoDeps);
+}
+
+test("progress rasmi: o'ziga yuklaydi, kalit photos/<uid>/ ostida, ommaviy havola yo'q", async () => {
+  const e = env();
+  const res = await photoPost(e, 'user1');
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('access-control-allow-origin'), '*');
+  const { key, url } = await res.json();
+  assert.equal(url, undefined);
+  assert.match(key, /^photos\/user1\/[0-9a-f-]{36}\.jpg$/);
+  assert.equal(e.BUCKET.files.get(key).data.length, 3000);
+  // /v/ orqali (ommaviy yo'l) ochilmaydi
+  assert.equal((await handle(new Request(`${BASE}/v/${key}`), e, null, photoDeps)).status, 404);
+  const webp = await (await photoPost(e, 'user1', { type: 'image/webp' })).json();
+  assert.match(webp.key, /\.webp$/);
+});
+
+test('progress rasmi yuklash: tokensiz 401, PNG/video 415, 1 MB dan katta 413, hajmsiz 411', async () => {
+  const e = env();
+  assert.equal((await photoPost(e, 'user1', { auth: false })).status, 401);
+  assert.equal((await photoPost(e, 'user1', { auth: 'buzuq.token.xx' })).status, 401);
+  assert.equal((await photoPost(e, 'user1', { type: 'image/png' })).status, 415);
+  assert.equal((await photoPost(e, 'user1', { type: 'constructor' })).status, 415);
+  assert.equal((await photoPost(e, 'user1', { size: MAX_PHOTO_BYTES + 1 })).status, 413);
+  assert.equal((await photoPost(e, 'user1', { size: 0 })).status, 411);
+  assert.equal(e.BUCKET.files.size, 0);
+});
+
+test("progress rasmini ko'rish: o'zi, treneri, bosh admin — ha; boshqa shogird, tokensiz — yo'q", async () => {
+  const e = env();
+  const { key } = await (await photoPost(e, 'user1')).json();
+  PHOTO_DOCS.set('user1/doc1', key);
+  for (const v of ['user1', 'trainer1', 'owner1']) {
+    const res = await photoGet(e, v, 'user1', 'doc1');
+    assert.equal(res.status, 200, v);
+    assert.equal(res.headers.get('content-type'), 'image/jpeg');
+    assert.equal(res.headers.get('cache-control'), 'private, no-store');
+    assert.equal((await res.arrayBuffer()).byteLength, 3000);
+  }
+  assert.equal((await photoGet(e, 'user2', 'user1', 'doc1')).status, 403);
+  assert.equal((await photoGet(e, 'barmen1', 'user1', 'doc1')).status, 403);
+  assert.equal((await photoGet(e, null, 'user1', 'doc1')).status, 401);
+  assert.equal((await photoGet(e, 'user1', 'user1', 'yoq')).status, 404);
+});
+
+test("progress rasmi: hujjatdagi kalit boshqa papkada yoki kalitsiz (eski shakl) — 404", async () => {
+  const e = env();
+  const { key } = await (await photoPost(e, 'user2')).json();
+  PHOTO_DOCS.set('user1/doc2', key); // user1 hujjatiga user2 rasmi kaliti
+  assert.equal((await photoGet(e, 'user1', 'user1', 'doc2')).status, 404);
+  PHOTO_DOCS.set('user1/doc3', null); // eski shakl: rasm hujjat ichida
+  assert.equal((await photoGet(e, 'user1', 'user1', 'doc3')).status, 404);
+  PHOTO_DOCS.set('user1/doc4', 'avatars/user1/x.jpg');
+  assert.equal((await photoGet(e, 'user1', 'user1', 'doc4')).status, 404);
+  assert.equal((await handle(new Request(`${BASE}/p/user1/doc1/ortiqcha`), e, null, photoDeps)).status, 404);
+  assert.equal((await handle(new Request(`${BASE}/p/..%2Fx/doc1`), e, null, photoDeps)).status, 404);
+});
+
+test("progress rasmini o'chirish: faqat egasi; preflight va noto'g'ri usul", async () => {
+  const e = env();
+  const { key } = await (await photoPost(e, 'user1')).json();
+  assert.equal((await photoDelete(e, 'trainer1', key)).status, 403);
+  assert.equal((await photoDelete(e, 'owner1', key)).status, 403);
+  assert.ok(e.BUCKET.files.has(key));
+  assert.equal((await photoDelete(e, 'user1', 'videos/x.mp4')).status, 404);
+  assert.equal((await photoDelete(e, 'user1', key)).status, 204);
+  assert.ok(!e.BUCKET.files.has(key));
+  const pre = await handle(new Request(`${BASE}/p/user1/doc1`, { method: 'OPTIONS' }), e, null, photoDeps);
+  assert.equal(pre.status, 204);
+  assert.match(pre.headers.get('access-control-allow-methods'), /GET/);
+  assert.equal((await handle(new Request(`${BASE}/photo`, { method: 'GET' }), e, null, photoDeps)).status, 405);
+});
+
+test("progress yo'llari video va avatar ruxsatlarini o'zgartirmadi", async () => {
+  assert.equal((await upload(env(), await token('user1'))).status, 403);
+  const e = env();
+  assert.equal((await avatar(e, 'user1')).status, 200);
 });
