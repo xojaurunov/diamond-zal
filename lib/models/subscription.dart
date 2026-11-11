@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../l10n/tr.dart';
+import 'models.dart' show AppUser;
 
 /// Abonement muddatlari (oy) — tanlov ro'yxati uchun
 const subscriptionMonths = [1, 3, 6, 12];
@@ -247,4 +248,17 @@ class Membership {
         'expiresAt': Timestamp.fromDate(s.expiresAt),
         'updatedAt': FieldValue.serverTimestamp(),
       };
+}
+
+/// Qarzdorlar: abonement muddati o'tgan mijozlar — eng ko'p kun o'tgani birinchi, teng bo'lsa ism
+/// bo'yicha. Abonement hech yozilmagan va tugash kuni bugun bo'lganlar (hali amal qiladi) kirmaydi.
+List<AppUser> debtors(Iterable<AppUser> clients, [DateTime? now]) {
+  int ago(AppUser u) => -Subscription.daysLeft(u.subscriptionExpiresAt, now);
+  return [
+    for (final c in clients)
+      if (Subscription.isExpired(c.subscriptionExpiresAt, now)) c,
+  ]..sort((a, b) {
+      final d = ago(b).compareTo(ago(a));
+      return d != 0 ? d : a.name.compareTo(b.name);
+    });
 }

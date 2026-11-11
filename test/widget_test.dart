@@ -14,6 +14,7 @@ import 'package:kotta_qani_diet/models/subscription.dart';
 import 'package:kotta_qani_diet/models/video_link.dart';
 import 'package:kotta_qani_diet/screens/admin/exercises_admin_screen.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
+import 'package:kotta_qani_diet/screens/admin/subscriptions_screen.dart';
 import 'package:kotta_qani_diet/screens/notifications_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
 import 'package:kotta_qani_diet/services/reminders.dart';
@@ -1126,6 +1127,66 @@ void main() {
       expect(Subscription.latestAfterDelete([noy, okt], 'a')?.id, 'b');
       expect(Subscription.latestAfterDelete([okt], 'a'), isNull, reason: "yagona to'lov — abonement yo'q");
       expect(Subscription.latestAfterDelete([okt, noy], 'x')?.id, 'b', reason: 'tartibga bog‘liq emas');
+    });
+
+    group('qarzdorlar', () {
+      final now = DateTime(2026, 11, 11, 15);
+      AppUser c(String id, String name, DateTime? exp) =>
+          AppUser(id: id, name: name, email: '', subscriptionExpiresAt: exp);
+      final clients = [
+        c('a', 'Aziz', DateTime(2026, 11, 9)), // 2 kun o'tdi
+        c('b', 'Bobur', DateTime(2026, 10, 1)), // 41 kun o'tdi
+        c('c', 'Dilshod', DateTime(2026, 11, 11)), // bugun tugaydi — hali amal qiladi
+        c('d', 'Elyor', null), // abonement yozilmagan
+        c('e', 'Anvar', DateTime(2026, 11, 9)), // 2 kun, ism bo'yicha Azizdan oldin
+        c('f', 'Farrux', DateTime(2026, 12, 1)), // faol
+      ];
+
+      test("faqat muddati o'tganlar, eng ko'p kun o'tgani birinchi", () {
+        expect(debtors(clients, now).map((u) => u.id), ['b', 'e', 'a']);
+        expect(debtors(const [], now), isEmpty);
+      });
+
+      testWidgets("bo'lim: soni, kun, oxirgi to'lov; bo'sh holat", (t) async {
+        t.view.physicalSize = const Size(420, 1400);
+        t.view.devicePixelRatio = 1;
+        addTearDown(t.view.reset);
+        await t.pumpWidget(MaterialApp(
+          home: Scaffold(
+            body: DebtorsTab(
+              clients: Stream.value(clients),
+              memberships: Stream.value(const [
+                Membership(uid: 'b', price: 500000, months: 1, name: 'Bobur'),
+              ]),
+              adminId: 't1',
+              now: now,
+            ),
+          ),
+        ));
+        await t.pump();
+        await t.pump(); // ichki oqim (to'lovlar) — ikkinchi kadr
+        expect(find.text('3 ta'), findsOneWidget);
+        expect(find.text("41 kun o'tdi"), findsOneWidget);
+        expect(find.text("2 kun o'tdi"), findsNWidgets(2));
+        expect(find.textContaining("Oxirgi to'lov: 500"), findsOneWidget);
+        expect(find.text('Dilshod'), findsNothing);
+        expect(find.text('Elyor'), findsNothing);
+        expect(find.text('Eslatma yubor'), findsNWidgets(3));
+
+        await t.pumpWidget(MaterialApp(
+          home: Scaffold(
+            body: DebtorsTab(
+              clients: Stream.value([clients[5]]),
+              memberships: Stream.value(const []),
+              adminId: 't1',
+              now: now,
+            ),
+          ),
+        ));
+        await t.pump();
+        expect(find.text("Qarzdor yo'q"), findsOneWidget);
+        expect(find.text('0 ta'), findsOneWidget);
+      });
     });
 
     test("kechikib kiritilgan to'lov: muddat to'langan kundan", () {
