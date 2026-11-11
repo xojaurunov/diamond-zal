@@ -2715,6 +2715,10 @@
   "ru": "С последнего взвешивания прошло {0} дн.",
   "en": "{0} days since your last weigh-in"
  },
+ "Oxirgi to'lov: {0} · {1}": {
+  "ru": "Последняя оплата: {0} · {1}",
+  "en": "Last payment: {0} · {1}"
+ },
  "Oyiga bir marta bir xil joyda, bir xil yorug'likda rasm oling — o'zgarish tarozidan ko'ra rasmda yaxshiroq ko'rinadi. Rasmni faqat siz va treneringiz ko'radi.": {
   "ru": "Раз в месяц делайте фото в одном месте при одинаковом свете — изменения на фото видны лучше, чем на весах. Фото видите только вы и ваш тренер.",
   "en": "Once a month take a photo in the same spot and lighting — changes show better in photos than on the scale. Only you and your trainer can see them."
@@ -2962,6 +2966,14 @@
  "Qarshi shahri": {
   "ru": "город Карши",
   "en": "Karshi city"
+ },
+ "Qarzdor yo'q": {
+  "ru": "Должников нет",
+  "en": "No overdue clients"
+ },
+ "Qarzdorlar": {
+  "ru": "Должники",
+  "en": "Overdue"
  },
  "Qashqadaryo": {
   "ru": "Кашкадарьинская область",
@@ -5282,6 +5294,10 @@
  "{0} kun": {
   "ru": "{0} дн.",
   "en": "{0} days"
+ },
+ "{0} kun o'tdi": {
+  "ru": "Просрочено {0} дн.",
+  "en": "{0} days overdue"
  },
  "{0} kun oldin tugadi. To‘lov zalda — trenerga murojaat qiling": {
   "ru": "Закончился {0} дн. назад. Оплата в зале — обратитесь к тренеру",
