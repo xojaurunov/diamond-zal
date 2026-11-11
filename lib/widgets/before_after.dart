@@ -1,7 +1,41 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import '../l10n/tr.dart';
 import '../models/photo.dart';
+import '../services/progress_photo_cache.dart';
 import '../theme.dart';
+
+/// Progress rasmi: eski shakl — hujjatdagi baytlardan, yangisi — serverdan (token bilan, xotirada keshlanadi)
+class ProgressPhotoImage extends StatelessWidget {
+  final ProgressPhoto photo;
+  final BoxFit fit;
+  final int? cacheWidth;
+  const ProgressPhotoImage(this.photo, {super.key, this.fit = BoxFit.cover, this.cacheWidth});
+
+  Widget _image(Uint8List bytes) =>
+      Image.memory(bytes, fit: fit, gaplessPlayback: true, cacheWidth: cacheWidth);
+
+  @override
+  Widget build(BuildContext context) {
+    if (!photo.isRemote) return _image(photo.bytes);
+    return FutureBuilder<Uint8List>(
+      future: ProgressPhotoCache.load(photo),
+      builder: (context, snap) {
+        final bytes = snap.data;
+        if (bytes != null) return _image(bytes);
+        return ColoredBox(
+          color: AppColors.cardHigh,
+          child: Center(
+            child: snap.hasError
+                ? Icon(Icons.broken_image_outlined, color: AppColors.textMuted)
+                : const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+          ),
+        );
+      },
+    );
+  }
+}
 
 /// "Oldin / keyin" solishtirish: ikki rasm ustma-ust, o'rtadagi chiziqni surib farq ko'riladi.
 /// Qaysi ikkitasi — tepada tanlanadi (standart: birinchi va oxirgi).
@@ -84,7 +118,7 @@ class _BeforeAfterSliderState extends State<BeforeAfterSlider> {
             onHorizontalDragUpdate: (d) => move(d.localPosition.dx),
             onTapDown: (d) => move(d.localPosition.dx),
             child: Stack(fit: StackFit.expand, children: [
-              Image.memory(widget.after.bytes, fit: BoxFit.cover, gaplessPlayback: true),
+              ProgressPhotoImage(widget.after),
               ClipRect(
                 child: Align(
                   key: const Key('oldin-qismi'),
@@ -93,7 +127,7 @@ class _BeforeAfterSliderState extends State<BeforeAfterSlider> {
                   child: SizedBox(
                     width: box.maxWidth,
                     height: box.maxHeight,
-                    child: Image.memory(widget.before.bytes, fit: BoxFit.cover, gaplessPlayback: true),
+                    child: ProgressPhotoImage(widget.before),
                   ),
                 ),
               ),

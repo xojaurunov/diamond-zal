@@ -606,6 +606,62 @@ await check('trener shogird rasmini ochira OLMAYDI', () =>
 await check('shogird oz rasmini ochiradi', () =>
   assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'r1'))));
 
+console.log('\n== RASMLAR R2 da (kalit bilan, 11-noy) ==');
+const KALIT = (u = USER, ext = 'jpg') => `photos/${u}/0f8fad5b-d9cb-469f-a165-70867728950e.${ext}`;
+const r2rasm = (key = KALIT()) => ({ key, takenAt: serverTimestamp(), weight: 80 });
+await check('shogird R2 kalitli rasm qoshadi (jpg, webp)', async () => {
+  await assertSucceeds(setDoc(doc(as(USER), 'users', USER, 'photos', 'k1'), r2rasm()));
+  await assertSucceeds(setDoc(doc(as(USER), 'users', USER, 'photos', 'k2'), r2rasm(KALIT(USER, 'webp'))));
+});
+await check('boshqa shogird papkasidagi kalit OTMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k3'), r2rasm(KALIT(USER3)))));
+await check('begona kalit (avatars/, videos/, buzuq) OTMAYDI', async () => {
+  await assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k4'), r2rasm(`avatars/${USER}/0f8fad5b-d9cb-469f-a165-70867728950e.jpg`)));
+  await assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k5'), r2rasm('videos/0f8fad5b-d9cb-469f-a165-70867728950e.mp4')));
+  await assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k6'), r2rasm(`photos/${USER}/../x.jpg`)));
+  await assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k7'), r2rasm(KALIT(USER, 'png'))));
+});
+await check('kalit va bytes birga OTMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'k8'), { ...rasm(), key: KALIT() })));
+await check('trener shogird nomiga kalitli rasm qosha OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'users', USER, 'photos', 'k9'), r2rasm())));
+await check('trener kalitli rasm hujjatini koradi', () =>
+  assertSucceeds(getDoc(doc(as(TRAINER), 'users', USER, 'photos', 'k1'))));
+await check('boshqa trener kalitli rasmni kora OLMAYDI', () =>
+  assertFails(getDoc(doc(as(TRAINER3), 'users', USER, 'photos', 'k1'))));
+
+console.log('\n== ESKI RASMNI R2 ga KOCHIRISH (update) ==');
+await env.withSecurityRulesDisabled(async (ctx) => {
+  const db = ctx.firestore();
+  await setDoc(doc(db, 'users', USER, 'photos', 'm1'),
+    { data: Bytes.fromUint8Array(new Uint8Array(100)), takenAt: new Date('2026-10-01T08:00:00Z'), weight: 82 });
+  await setDoc(doc(db, 'users', USER, 'photos', 'm2'),
+    { data: Bytes.fromUint8Array(new Uint8Array(100)), takenAt: new Date('2026-10-02T08:00:00Z') });
+});
+const m1 = () => ({ key: KALIT(), takenAt: new Date('2026-10-01T08:00:00Z'), weight: 82 });
+await check('trener eski rasmni kochira OLMAYDI', () =>
+  assertFails(setDoc(doc(as(TRAINER), 'users', USER, 'photos', 'm1'), m1())));
+await check('kochirishda sanani ozgartirib bolmaydi', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), { ...m1(), takenAt: new Date('2026-11-01T08:00:00Z') })));
+await check('kochirishda vaznni ozgartirib bolmaydi', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), { ...m1(), weight: 70 })));
+await check('kochirishda boshqa papka kaliti OTMAYDI', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), { ...m1(), key: KALIT(USER3) })));
+await check('kochirishda bytes qolib ketsa OTMAYDI', () =>
+  assertFails(updateDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), { key: KALIT() })));
+await check('shogird eski rasmini R2 kalitiga kochiradi (sana, vazn saqlanadi)', () =>
+  assertSucceeds(setDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), m1())));
+await check('vazni yoq eski rasm ham kochadi', () =>
+  assertSucceeds(updateDoc(doc(as(USER), 'users', USER, 'photos', 'm2'), { data: deleteField(), key: KALIT(USER, 'webp') })));
+await check('kochirilgan rasmni qayta ozgartirib bolmaydi', () =>
+  assertFails(setDoc(doc(as(USER), 'users', USER, 'photos', 'm1'), { ...m1(), key: KALIT(USER, 'webp') })));
+await check('kalitli rasmni ozi ochiradi', async () => {
+  await assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'm1')));
+  await assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'm2')));
+  await assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'k1')));
+  await assertSucceeds(deleteDoc(doc(as(USER), 'users', USER, 'photos', 'k2')));
+});
+
 console.log('\n== TOLOV KOZGUSI (memberships) ==');
 await env.withSecurityRulesDisabled(async (ctx) => {
   const db = ctx.firestore();

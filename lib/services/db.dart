@@ -15,7 +15,9 @@ import '../models/stats.dart';
 import '../models/photo.dart';
 import '../models/subscription.dart';
 import 'notifications.dart';
+import 'progress_photo_cache.dart';
 import 'push.dart';
+import 'video_upload.dart';
 
 final _fs = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -703,16 +705,57 @@ class Db {
       .snapshots()
       .map((s) => s.docs.map(ProgressPhoto.fromDoc).toList());
 
-  /// Rasm hujjatning o'zida saqlanadi (siqilgan, [ProgressPhoto.maxBytes] gacha)
-  static Future<void> addPhoto(String uid, Uint8List bytes, double weight) =>
-      _fs.collection('users').doc(uid).collection('photos').add({
-        'data': Blob(bytes),
-        'takenAt': FieldValue.serverTimestamp(),
-        'weight': weight,
-      });
+  /// JPEG/WebP — R2'ga ([ProgressPhoto.maxRemoteBytes] gacha), hujjatda faqat kalit.
+  /// Boshqa tur (masalan brauzer bergan PNG) — eski usulda hujjat ichida ([ProgressPhoto.maxBytes] gacha).
+  static Future<void> addPhoto(String uid, Uint8List bytes, double weight) async {
+    final col = _fs.collection('users').doc(uid).collection('photos');
+    final type = photoContentType(bytes);
+    if (type == null) {
+      if (bytes.length > ProgressPhoto.maxBytes) throw const AvatarUploadError(413);
+      await col.add({'data': Blob(bytes), 'takenAt': FieldValue.serverTimestamp(), 'weight': weight});
+      return;
+    }
+    if (bytes.length > ProgressPhoto.maxRemoteBytes) throw const AvatarUploadError(413);
+    final key = await uploadProgressPhoto(bytes, type);
+    ProgressPhotoCache.put(key, bytes);
+    try {
+      await col.add({'key': key, 'takenAt': FieldValue.serverTimestamp(), 'weight': weight});
+    } catch (_) {
+      await deleteProgressPhoto(key).catchError((_) {}); // hujjat yozilmasa fayl qolib ketmasin
+      rethrow;
+    }
+  }
 
-  static Future<void> deletePhoto(String uid, String id) =>
-      _fs.collection('users').doc(uid).collection('photos').doc(id).delete();
+  /// Hujjat har holda o'chadi; R2'dagi fayl o'chmasa ham (tarmoq) — hujjatsiz uni hech kim ocholmaydi
+  static Future<void> deletePhoto(String uid, ProgressPhoto p) async {
+    if (p.isRemote) {
+      try {
+        await deleteProgressPhoto(p.key);
+      } catch (_) {}
+    }
+    await _fs.collection('users').doc(uid).collection('photos').doc(p.id).delete();
+  }
+
+  /// Eski (hujjat ichidagi) rasmni R2'ga ko'chiradi — sana va vazn o'zgarmaydi (qoida ham shuni
+  /// talab qiladi). JPEG/WebP bo'lmasa — ko'chirilmaydi (false).
+  static Future<bool> migratePhoto(String uid, ProgressPhoto p) async {
+    final type = photoContentType(p.bytes);
+    if (!p.needsMigration || type == null) return false;
+    final key = await uploadProgressPhoto(p.bytes, type);
+    ProgressPhotoCache.put(key, p.bytes);
+    try {
+      await _fs
+          .collection('users')
+          .doc(uid)
+          .collection('photos')
+          .doc(p.id)
+          .update({'key': key, 'data': FieldValue.delete()});
+    } catch (_) {
+      await deleteProgressPhoto(key).catchError((_) {});
+      rethrow;
+    }
+    return true;
+  }
 
   // ---------- abonement ----------
   static Stream<List<Subscription>> subscriptions(String uid) => _fs

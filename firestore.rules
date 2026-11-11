@@ -99,16 +99,30 @@ service cloud.firestore {
       }
 
       // "Oldin / keyin" rasmlari — shogird o'zi qo'shadi va o'chiradi; o'zi, treneri va
-      // bosh admin ko'radi. Rasm hujjat ichida (bytes), 350 KB gacha.
+      // bosh admin ko'radi. Eski shakl: rasm hujjat ichida (bytes), 350 KB gacha. Yangi shakl
+      // (11-noy): rasm Cloudflare R2'da, hujjatda faqat kalit — Worker rasmni ko'ruvchiga shu
+      // hujjatni o'qiy olsagina beradi (o'qish ruxsati — tana rasmlari himoyasi).
       match /photos/{id} {
+        function photoKeyOk(k) {
+          return k is string && k.matches('photos/' + uid + '/[0-9a-f-]{36}[.](jpg|webp)');
+        }
         allow read: if isSelf(uid) || canManage(uid);
         allow create: if isSelf(uid)
-          && request.resource.data.keys().hasOnly(['data', 'takenAt', 'weight'])
-          && request.resource.data.data is bytes
-          && request.resource.data.data.size() > 0
-          && request.resource.data.data.size() <= 358400
           && request.resource.data.takenAt == request.time
-          && request.resource.data.get('weight', 0) is number;
+          && request.resource.data.get('weight', 0) is number
+          && ((request.resource.data.keys().hasOnly(['data', 'takenAt', 'weight'])
+               && request.resource.data.data is bytes
+               && request.resource.data.data.size() > 0
+               && request.resource.data.data.size() <= 358400)
+            || (request.resource.data.keys().hasOnly(['key', 'takenAt', 'weight'])
+               && photoKeyOk(request.resource.data.key)));
+        // eski rasmni R2'ga ko'chirish: faqat o'zi, `data` o'rniga `key`; sana va vazn o'zgarmaydi
+        allow update: if isSelf(uid)
+          && 'data' in resource.data
+          && request.resource.data.keys().hasOnly(['key', 'takenAt', 'weight'])
+          && photoKeyOk(request.resource.data.key)
+          && request.resource.data.takenAt == resource.data.takenAt
+          && request.resource.data.get('weight', 0) == resource.data.get('weight', 0);
         allow delete: if isSelf(uid);
       }
 
