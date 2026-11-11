@@ -103,12 +103,21 @@ class ProgressPhotos extends StatelessWidget {
   /// Shu ochilishda ko'chirishga urinilganlar — xato bo'lsa keyingi ochilishda qayta
   static final _tried = <String>{};
 
-  /// Eski (hujjat ichidagi) rasmlar R2'ga — jim, fonda; ko'chmasa rasm avvalgidek ko'rinadi
+  /// Eski (hujjat ichidagi) rasmlar R2'ga — jim, fonda, bittadan (mobil internetni band qilmasin);
+  /// ko'chmasa rasm avvalgidek ko'rinadi
   void _migrate(List<ProgressPhoto> photos) {
-    for (final p in photos) {
-      if (!p.needsMigration || !_tried.add('$uid/${p.id}')) continue;
-      Db.migratePhoto(uid, p).catchError((Object _) => false);
-    }
+    final todo = [
+      for (final p in photos)
+        if (p.needsMigration && _tried.add('$uid/${p.id}')) p,
+    ];
+    if (todo.isEmpty) return;
+    Future(() async {
+      for (final p in todo) {
+        try {
+          await Db.migratePhoto(uid, p);
+        } catch (_) {}
+      }
+    });
   }
 
   static String _caption(ProgressPhoto p) =>

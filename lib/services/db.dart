@@ -79,6 +79,8 @@ class AuthService {
     try {
       await Notifications.cancelAll().timeout(const Duration(seconds: 1));
     } catch (_) {}
+    // xotiradagi progress (tana) rasmlari keyingi akkauntga qolmasin
+    ProgressPhotoCache.clear();
     await _auth.signOut();
   }
 
@@ -726,14 +728,15 @@ class Db {
     }
   }
 
-  /// Hujjat har holda o'chadi; R2'dagi fayl o'chmasa ham (tarmoq) — hujjatsiz uni hech kim ocholmaydi
+  /// Avval hujjat (o'chmasa — rasm o'z joyida qoladi), keyin R2'dagi fayl. Fayl o'chmasa ham (tarmoq)
+  /// zarar yo'q: hujjatsiz uni Worker hech kimga bermaydi.
   static Future<void> deletePhoto(String uid, ProgressPhoto p) async {
+    await _fs.collection('users').doc(uid).collection('photos').doc(p.id).delete();
     if (p.isRemote) {
       try {
         await deleteProgressPhoto(p.key);
       } catch (_) {}
     }
-    await _fs.collection('users').doc(uid).collection('photos').doc(p.id).delete();
   }
 
   /// Eski (hujjat ichidagi) rasmni R2'ga ko'chiradi — sana va vazn o'zgarmaydi (qoida ham shuni
