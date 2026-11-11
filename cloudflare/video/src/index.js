@@ -192,6 +192,14 @@ async function removeAvatar(request, env, deps) {
   return new Response(null, { status: 204 });
 }
 
+/** Rasm turi baytlaridan: JPEG (FF D8 FF) yoki WebP (RIFF....WEBP), boshqasi — null */
+export function photoTypeOf(b) {
+  if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return 'image/jpeg';
+  const ascii = (from, to) => String.fromCharCode(...b.subarray(from, to));
+  if (b.length >= 12 && ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return 'image/webp';
+  return null;
+}
+
 async function uploadPhoto(request, env, deps) {
   const { uid, denied } = await authUid(request, env, deps);
   if (denied) return denied;
@@ -202,6 +210,8 @@ async function uploadPhoto(request, env, deps) {
   if (size > MAX_PHOTO_BYTES) return fail(413, 'rasm 1 MB dan katta');
   const body = new Uint8Array(await request.arrayBuffer());
   if (!body.length || body.length > MAX_PHOTO_BYTES) return fail(413, 'rasm 1 MB dan katta');
+  // aytilgan tur baytlarga mos bo'lsin (rasm o'rniga boshqa fayl saqlanmasin)
+  if (photoTypeOf(body) !== type) return fail(415, 'faqat rasm (JPEG, WebP)');
   const key = `photos/${uid}/${crypto.randomUUID()}.${PHOTO_TYPES[type]}`;
   await env.BUCKET.put(key, body, { httpMetadata: { contentType: type } });
   return json({ key });
@@ -232,6 +242,7 @@ async function servePhoto(uid, id, request, env, deps) {
     headers: {
       'content-type': obj.httpMetadata?.contentType ?? 'image/jpeg',
       'cache-control': 'private, no-store',
+      'x-content-type-options': 'nosniff',
     },
   });
 }
@@ -301,7 +312,13 @@ async function photoRoute(url, request, env, deps) {
   }
   if (url.pathname.startsWith('/photo/')) {
     if (request.method !== 'DELETE') return fail(405, 'faqat DELETE');
-    return removePhoto(decodeURIComponent(url.pathname.slice('/photo/'.length)), request, env, deps);
+    let key;
+    try {
+      key = decodeURIComponent(url.pathname.slice('/photo/'.length));
+    } catch {
+      return fail(404, 'yo\'q'); // buzuq `%` — 500 emas
+    }
+    return removePhoto(key, request, env, deps);
   }
   const [uid, id, ...rest] = url.pathname.slice('/p/'.length).split('/');
   if (rest.length || !ID.test(uid ?? '') || !ID.test(id ?? '')) return fail(404, 'yo\'q');

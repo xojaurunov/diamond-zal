@@ -294,12 +294,35 @@ const photoDeps = {
   },
 };
 
-async function photoPost(e, uid, { type = 'image/jpeg', size = 3000, auth = true } = {}) {
+// rasm baytlari: boshida tur belgisi (JPEG FF D8 FF, WebP RIFF....WEBP), qolgani to'ldirilgan
+function photoBytes(size, magic) {
+  const b = new Uint8Array(size).fill(5);
+  if (size < 12) return b;
+  if (magic === 'image/jpeg') b.set([0xff, 0xd8, 0xff]);
+  if (magic === 'image/webp') b.set([...'RIFF'].map((c) => c.charCodeAt(0)).concat([0, 0, 0, 0],
+    [...'WEBP'].map((c) => c.charCodeAt(0))));
+  return b;
+}
+
+async function photoPost(e, uid, { type = 'image/jpeg', size = 3000, auth = true, magic = type } = {}) {
   const headers = { 'content-type': type, 'content-length': String(size) };
   if (auth) headers.authorization = `Bearer ${auth === true ? await token(uid) : auth}`;
-  return handle(new Request(`${BASE}/photo`, { method: 'POST', headers, body: new Uint8Array(size).fill(5) }),
+  return handle(new Request(`${BASE}/photo`, { method: 'POST', headers, body: photoBytes(size, magic) }),
     e, null, photoDeps);
 }
+
+test('progress rasmi: tur baytlarga mos bolmasa 415; korishda nosniff; buzuq % — 404', async () => {
+  const e = env();
+  assert.equal((await photoPost(e, 'user1', { magic: null })).status, 415);
+  assert.equal((await photoPost(e, 'user1', { type: 'image/jpeg', magic: 'image/webp' })).status, 415);
+  assert.equal(e.BUCKET.files.size, 0);
+  const { key } = await (await photoPost(e, 'user1')).json();
+  PHOTO_DOCS.set('user1/doc9', key);
+  assert.equal((await photoGet(e, 'user1', 'user1', 'doc9')).headers.get('x-content-type-options'), 'nosniff');
+  const bad = await handle(new Request(`${BASE}/photo/%E0%A4%A`, {
+    method: 'DELETE', headers: { authorization: `Bearer ${await token('user1')}` } }), e, null, photoDeps);
+  assert.equal(bad.status, 404);
+});
 async function photoGet(e, viewer, owner, id) {
   const headers = viewer ? { authorization: `Bearer ${await token(viewer)}` } : {};
   return handle(new Request(`${BASE}/p/${owner}/${id}`, { headers }), e, null, photoDeps);
