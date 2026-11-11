@@ -42,6 +42,7 @@ TABLES = {
     'orders': ('orders', None, 'id'),
     'reminders': ('reminders', None, 'id'),
     'memberships': ('memberships', None, 'user_id'),
+    'announcements': ('announcements', None, 'id'),
     'days': ('user_days', 'user_id', 'day'),
     'weights': ('weights', 'user_id', 'id'),
     'photos': ('photos', 'user_id', 'id'),

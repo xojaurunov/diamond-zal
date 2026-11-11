@@ -212,11 +212,37 @@ create constraint trigger weights_after_guard after insert on weights
 alter table photos enable row level security;
 drop policy if exists photos_select on photos;
 create policy photos_select on photos for select using (user_id = app.uid() or app.can_manage(user_id));
+-- R2 kaliti: faqat o'z papkasi (photos/<uid>/<uuid>.jpg|webp)
+create or replace function app.photo_key_ok(uid text, k text) returns boolean language sql immutable as $$
+  select k is not null and k ~ ('^photos/' || uid || '/[0-9a-f-]{36}[.](jpg|webp)$')
+$$;
+
 drop policy if exists photos_insert on photos;
 create policy photos_insert on photos for insert with check (
   user_id = app.uid()
-  and octet_length(data) between 1 and 358400
-  and taken_at = now());
+  and taken_at = now()
+  and ((key is null and octet_length(data) between 1 and 358400)
+    or (data is null and app.photo_key_ok(user_id, key))));
+-- eski rasmni R2'ga ko'chirish: faqat o'zi, data o'rniga key (sana, vazn — photos_guard)
+drop policy if exists photos_update on photos;
+create policy photos_update on photos for update
+  using (user_id = app.uid() and data is not null)
+  with check (user_id = app.uid() and data is null and app.photo_key_ok(user_id, key));
+
+create or replace function app.photos_guard() returns trigger language plpgsql as $$
+begin
+  if app.is_bypass() then return new; end if;
+  if new.user_id is distinct from old.user_id or new.id is distinct from old.id
+     or new.taken_at is distinct from old.taken_at
+     or coalesce(new.weight, 0) is distinct from coalesce(old.weight, 0) then
+    raise exception 'photos: sana va vazn o''zgarmaydi' using errcode = '42501';
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists photos_guard on photos;
+create trigger photos_guard before update on photos for each row execute function app.photos_guard();
+
 drop policy if exists photos_delete on photos;
 create policy photos_delete on photos for delete using (user_id = app.uid());
 
@@ -237,6 +263,9 @@ create policy subscriptions_insert on subscriptions for insert with check (
   and (months > 0) <> (days > 0)
   and price >= 0
   and currency in ('UZS', 'USD'));
+-- xato kiritilgan to'lov — shogirdning treneri yoki bosh admin o'chiradi (10-noy)
+drop policy if exists subscriptions_delete on subscriptions;
+create policy subscriptions_delete on subscriptions for delete using (app.can_manage(user_id));
 
 -- ---------- users/{uid}/attendance ----------
 
@@ -277,8 +306,27 @@ create policy memberships_insert on memberships for insert
 drop policy if exists memberships_update on memberships;
 create policy memberships_update on memberships for update using (app.can_manage(user_id))
   with check (app.can_manage(user_id) and app.membership_ok(memberships));
+-- shogird trenerini o'zi almashtirganda — faqat zal ko'zgusi yangi trener zaliga (10-noy);
+-- summa, sana, tur tegilmaydi (memberships_guard)
+drop policy if exists memberships_update_self on memberships;
+create policy memberships_update_self on memberships for update using (user_id = app.uid())
+  with check (user_id = app.uid() and gym_id = app.client_gym(user_id) and updated_at = now());
+
+create or replace function app.memberships_guard() returns trigger language plpgsql as $$
+begin
+  if app.is_bypass() or app.can_manage(old.user_id) then return new; end if;
+  if not app.only_changed(to_jsonb(old), to_jsonb(new), array['gym_id', 'updated_at']) then
+    raise exception 'memberships: faqat zal' using errcode = '42501';
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists memberships_guard on memberships;
+create trigger memberships_guard before update on memberships for each row
+  execute function app.memberships_guard();
+-- yagona to'lov o'chirilsa ko'zgu ham o'chadi — trener ham (o'z shogirdi)
 drop policy if exists memberships_delete on memberships;
-create policy memberships_delete on memberships for delete using (app.is_owner());
+create policy memberships_delete on memberships for delete using (app.can_manage(user_id));
 
 -- ---------- trainers ----------
 -- Hamma kirganlar o'qiydi. Yozuvni trenerning O'ZI boshqaradi; bosh admin qo'shadi/o'chiradi
@@ -291,6 +339,9 @@ create or replace function app.trainer_entry_ok(t trainers) returns boolean lang
     and char_length(t.bio) <= 300
     -- zal — users.gym_id ko'zgusi: soxta qilib bo'lmaydi
     and t.gym_id = app.gym_of(t.id)
+    -- trener rasmi — faqat o'z serverimizdagi va o'z papkasidagi (3-noy)
+    and (t.photo_url is null or t.photo_url ~ (
+      '^https://qobil-video[.]qobilfitness[.]workers[.]dev/v/avatars/' || t.id || '/[0-9a-f-]{36}[.](jpg|png|webp)$'))
 $$;
 
 drop policy if exists trainers_select on trainers;
@@ -572,6 +623,23 @@ create policy chat_messages_select on chat_messages for select
 drop policy if exists chat_messages_insert on chat_messages;
 create policy chat_messages_insert on chat_messages for insert
   with check ((chat_user_id = app.uid() or app.can_manage(chat_user_id)) and sender_id = app.uid());
+
+-- ---------- announcements (zal e'lonlari) ----------
+-- Hamma kirganlar o'qiydi; trener va bosh admin yozadi (500 belgigacha); o'chirish — bosh admin
+-- yoki e'lon muallifi; tahrirlash yo'q
+
+alter table announcements enable row level security;
+drop policy if exists announcements_select on announcements;
+create policy announcements_select on announcements for select using (app.signed_in());
+drop policy if exists announcements_insert on announcements;
+create policy announcements_insert on announcements for insert with check (
+  app.is_staff()
+  and char_length(text) between 1 and 500
+  and created_at = now()
+  and created_by = app.uid());
+drop policy if exists announcements_delete on announcements;
+create policy announcements_delete on announcements for delete
+  using (app.is_owner() or (app.is_staff() and created_by = app.uid()));
 
 -- ---------- ruxsatlar (grant) ----------
 

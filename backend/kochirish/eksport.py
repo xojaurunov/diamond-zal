@@ -21,7 +21,7 @@ REPO = Path(__file__).resolve().parents[2]
 DATA = REPO / 'backend' / 'data'
 
 TOP_LEVEL = ['users', 'trainers', 'ratings', 'gyms', 'foods', 'plans', 'exercises', 'shop', 'orders',
-             'reminders', 'memberships', 'videos']
+             'reminders', 'memberships', 'videos', 'announcements']
 # users/{uid}/<nom> va chats/{uid}/messages
 USER_SUB = ['days', 'weights', 'photos', 'subscriptions', 'attendance']
 

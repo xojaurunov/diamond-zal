@@ -28,7 +28,8 @@ create table if not exists users (
   subscription_expires_at timestamptz,
   last_weigh_in timestamptz,
   program jsonb,
-  fcm_tokens text[]
+  fcm_tokens text[],
+  photo_url text
 );
 create index if not exists users_trainer_id on users (trainer_id);
 create index if not exists users_gym_id on users (gym_id);
@@ -42,6 +43,7 @@ create table if not exists user_days (
   gym_started boolean,
   gym_done text[],
   water int,
+  gym_feel text,
   primary key (user_id, day)
 );
 
@@ -54,11 +56,13 @@ create table if not exists weights (
   primary key (user_id, id)
 );
 
--- users/{uid}/photos — "oldin / keyin" rasmi hujjat ichida (350 KB gacha)
+-- users/{uid}/photos — "oldin / keyin" rasmi: eski shakl hujjat ichida (data, 350 KB gacha),
+-- yangisi (11-noy) Cloudflare R2'da, bu yerda faqat kalit (key)
 create table if not exists photos (
   user_id text not null,
   id text not null default gen_random_uuid()::text,
   data bytea,
+  key text,
   taken_at timestamptz,
   weight double precision,
   primary key (user_id, id)
@@ -109,7 +113,8 @@ create table if not exists trainers (
   name text,
   bio text not null default '',
   accepting boolean not null default true,
-  gym_id text not null default ''
+  gym_id text not null default '',
+  photo_url text
 );
 
 -- ratings/{trenerUid} — bosh admin bahosi
@@ -261,4 +266,20 @@ create table if not exists kirish.accounts (
   created_at timestamptz,
   last_sign_in timestamptz,
   disabled boolean not null default false
+);
+
+
+-- ---------- 11-noyabr qo'shimchalari (Firebase'ga 21-okt – 10-noy qo'shilganlar) ----------
+-- Oldin yaratilgan bazada ham ustunlar paydo bo'lsin
+alter table users add column if not exists photo_url text;
+alter table user_days add column if not exists gym_feel text;
+alter table photos add column if not exists key text;
+alter table trainers add column if not exists photo_url text;
+
+-- announcements/{id} — zal e'lonlari ("Bugun" tepasida)
+create table if not exists announcements (
+  id text primary key default gen_random_uuid()::text,
+  text text,
+  created_at timestamptz,
+  created_by text
 );

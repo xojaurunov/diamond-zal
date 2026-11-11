@@ -615,6 +615,70 @@ def _(pg): pg.no(TRAINER).delete('photos', user_id=USER, id='r1')
 def _(pg): pg.ok(USER).delete('photos', user_id=USER, id='r1')
 
 
+# == RASMLAR R2 da (kalit bilan, 11-noy) ==
+def kalit(u=USER, ext='jpg'):
+    return f'photos/{u}/0f8fad5b-d9cb-469f-a165-70867728950e.{ext}'
+
+
+def r2rasm(key=None):
+    return {'key': key or kalit(), 'taken_at': NOW, 'weight': 80}
+
+
+@check('shogird R2 kalitli rasm qoshadi (jpg, webp)')
+def _(pg):
+    pg.ok(USER).set('photos', r2rasm(), user_id=USER, id='k1')
+    pg.ok(USER).set('photos', r2rasm(kalit(USER, 'webp')), user_id=USER, id='k2')
+@check('boshqa shogird papkasidagi kalit OTMAYDI')
+def _(pg): pg.no(USER).set('photos', r2rasm(kalit(USER3)), user_id=USER, id='k3')
+@check('begona kalit (avatars/, videos/, buzuq) OTMAYDI')
+def _(pg):
+    pg.no(USER).set('photos', r2rasm(f'avatars/{USER}/0f8fad5b-d9cb-469f-a165-70867728950e.jpg'), user_id=USER, id='k4')
+    pg.no(USER).set('photos', r2rasm('videos/0f8fad5b-d9cb-469f-a165-70867728950e.mp4'), user_id=USER, id='k5')
+    pg.no(USER).set('photos', r2rasm(f'photos/{USER}/../x.jpg'), user_id=USER, id='k6')
+    pg.no(USER).set('photos', r2rasm(kalit(USER, 'png')), user_id=USER, id='k7')
+@check('kalit va bytes birga OTMAYDI')
+def _(pg): pg.no(USER).set('photos', {**rasm(), 'key': kalit()}, user_id=USER, id='k8')
+@check('trener shogird nomiga kalitli rasm qosha OLMAYDI')
+def _(pg): pg.no(TRAINER).set('photos', r2rasm(), user_id=USER, id='k9')
+@check('trener kalitli rasm hujjatini koradi')
+def _(pg): pg.ok(TRAINER).get('photos', user_id=USER, id='k1')
+@check('boshqa trener kalitli rasmni kora OLMAYDI')
+def _(pg): pg.no(TRAINER3).get('photos', user_id=USER, id='k1')
+
+
+# == ESKI RASMNI R2 ga KOCHIRISH (update) ==
+@setup
+def _eski_rasm(pg):
+    pg.admin.set('photos', {'data': bytes(100), 'taken_at': day(2026, 10, 1), 'weight': 82}, user_id=USER, id='m1')
+    pg.admin.set('photos', {'data': bytes(100), 'taken_at': day(2026, 10, 2)}, user_id=USER, id='m2')
+
+
+def m1(**x):
+    return {'data': None, 'key': kalit(), 'taken_at': day(2026, 10, 1), 'weight': 82, **x}
+
+
+@check('trener eski rasmni kochira OLMAYDI')
+def _(pg): pg.no(TRAINER).update('photos', m1(), user_id=USER, id='m1')
+@check('kochirishda sanani ozgartirib bolmaydi')
+def _(pg): pg.no(USER).update('photos', m1(taken_at=day(2026, 11, 1)), user_id=USER, id='m1')
+@check('kochirishda vaznni ozgartirib bolmaydi')
+def _(pg): pg.no(USER).update('photos', m1(weight=70), user_id=USER, id='m1')
+@check('kochirishda boshqa papka kaliti OTMAYDI')
+def _(pg): pg.no(USER).update('photos', m1(key=kalit(USER3)), user_id=USER, id='m1')
+@check('kochirishda bytes qolib ketsa OTMAYDI')
+def _(pg): pg.no(USER).update('photos', {'key': kalit()}, user_id=USER, id='m1')
+@check('shogird eski rasmini R2 kalitiga kochiradi (sana, vazn saqlanadi)')
+def _(pg): pg.ok(USER).update('photos', m1(), user_id=USER, id='m1')
+@check('vazni yoq eski rasm ham kochadi')
+def _(pg): pg.ok(USER).update('photos', {'data': None, 'key': kalit(USER, 'webp')}, user_id=USER, id='m2')
+@check('kochirilgan rasmni qayta ozgartirib bolmaydi')
+def _(pg): pg.no(USER).update('photos', {'key': kalit(USER, 'webp')}, user_id=USER, id='m1')
+@check('kalitli rasmni ozi ochiradi')
+def _(pg):
+    for i in ('m1', 'm2', 'k1', 'k2'):
+        pg.ok(USER).delete('photos', user_id=USER, id=i)
+
+
 # == TOLOV KOZGUSI (memberships) ==
 @setup
 def _memberships(pg):
@@ -672,8 +736,60 @@ def _(pg): pg.no(USER3).get('memberships', user_id=USER)
 def _(pg): assert len(pg.ok(OWNER).list('memberships')) == len(pg.admin.list('memberships'))
 @check('boshqa trener tolov kozgusi orqali shogird hujjatini ocha OLMAYDI')
 def _(pg): pg.no(TRAINER2).get('users', id=USER)
-@check('trener kozguni ochira OLMAYDI')
-def _(pg): pg.no(TRAINER).delete('memberships', user_id=USER)
+@check('boshqa trener kozguni ochira OLMAYDI')
+def _(pg): pg.no(TRAINER3).delete('memberships', user_id=USER)
+@check('shogird oz kozgusini ochira OLMAYDI')
+def _(pg): pg.no(USER).delete('memberships', user_id=USER)
+
+
+# == TRENER ALMASHSA KOZGU ZALI (10-noy) ==
+@check('shogird kozgu zalini trener zaliga yangilaydi')
+def _(pg): pg.ok(USER).update('memberships', {'gym_id': 'zal1', 'updated_at': NOW}, user_id=USER)
+@check('shogird kozguga boshqa zal yoza OLMAYDI')
+def _(pg): pg.no(USER).update('memberships', {'gym_id': 'zal2', 'updated_at': NOW}, user_id=USER)
+@check('shogird kozgu summasini ozgartira OLMAYDI')
+def _(pg): pg.no(USER).update('memberships', {'price': 1, 'updated_at': NOW}, user_id=USER)
+@check('shogird kozgu muddatini ozgartira OLMAYDI')
+def _(pg): pg.no(USER).update('memberships', {'expires_at': day(2030, 1, 1), 'updated_at': NOW}, user_id=USER)
+@check('boshqa shogird kozgu zalini ozgartira OLMAYDI')
+def _(pg): pg.no(USER3).update('memberships', {'gym_id': 'zal1', 'updated_at': NOW}, user_id=USER)
+
+
+@check('trener almashgach shogird kozguni yangi zalga otkazadi')
+def _(pg):
+    pg.admin.update('users', {'trainer_id': TRAINER3}, id=USER)
+    try:
+        pg.ok(USER).update('memberships', {'gym_id': 'zal2', 'updated_at': NOW}, user_id=USER)
+    finally:
+        pg.admin.update('users', {'trainer_id': TRAINER}, id=USER)
+        pg.admin.update('memberships', {'gym_id': 'zal1'}, user_id=USER)
+
+
+@check('trener oz shogirdi kozgusini ochiradi (yagona tolov ochirilganda)')
+def _(pg):
+    row = pg.admin.get('memberships', user_id=USER)
+    pg.ok(TRAINER).delete('memberships', user_id=USER)
+    pg.admin.set('memberships', {k: v for k, v in row.items() if k != 'user_id'}, user_id=USER)
+
+
+# == XATO TOLOVNI OCHIRISH (10-noy) ==
+@setup
+def _tolov_ochirish(pg):
+    for i in ('del1', 'del2'):
+        pg.admin.set('subscriptions', {'start_date': now(), 'months': 1, 'price': 100000, 'currency': 'UZS',
+                                       'paid_date': now()}, user_id=USER, id=i)
+
+
+@check('boshqa trener tolovni ochira OLMAYDI')
+def _(pg): pg.no(TRAINER3).delete('subscriptions', user_id=USER, id='del1')
+@check('shogird oz tolovini ochira OLMAYDI')
+def _(pg): pg.no(USER).delete('subscriptions', user_id=USER, id='del1')
+@check('barmen tolovni ochira OLMAYDI')
+def _(pg): pg.no(BARMEN).delete('subscriptions', user_id=USER, id='del1')
+@check('shogirdning treneri xato tolovni ochiradi')
+def _(pg): pg.ok(TRAINER).delete('subscriptions', user_id=USER, id='del1')
+@check('bosh admin tolovni ochiradi')
+def _(pg): pg.ok(OWNER).delete('subscriptions', user_id=USER, id='del2')
 
 
 # == OYLIK HISOBOT (collectionGroup) ==
@@ -691,6 +807,69 @@ def _(pg): pg.no(TRAINER).list('subscriptions')
 def _(pg): pg.no(BARMEN).list('subscriptions')
 @check('shogird hamma abonementlarni oqiy OLMAYDI')
 def _(pg): pg.no(USER).list('subscriptions')
+
+
+# == ZAL ELONLARI (announcements) ==
+def elon(by, text='Ertaga zal 10:00 da'):
+    return {'text': text, 'created_at': NOW, 'created_by': by}
+
+
+@check('trener elon yozadi')
+def _(pg): pg.ok(TRAINER).set('announcements', elon(TRAINER), id='e1')
+@check('bosh admin elon yozadi')
+def _(pg): pg.ok(OWNER).set('announcements', elon(OWNER), id='e2')
+@check('shogird elon yoza OLMAYDI')
+def _(pg): pg.no(USER).set('announcements', elon(USER), id='e3')
+@check('barmen elon yoza OLMAYDI')
+def _(pg): pg.no(BARMEN).set('announcements', elon(BARMEN), id='e4')
+@check('boshqa nomidan elon yozib bolmaydi')
+def _(pg): pg.no(TRAINER).set('announcements', elon(OWNER), id='e5')
+@check('bosh yoki 500 belgidan uzun elon OTMAYDI')
+def _(pg):
+    pg.no(TRAINER).set('announcements', elon(TRAINER, ''), id='e6')
+    pg.no(TRAINER).set('announcements', elon(TRAINER, 'x' * 501), id='e7')
+@check('shogird elonni oqiydi')
+def _(pg): pg.ok(USER).get('announcements', id='e1')
+@check('kirmagan odam elonni oqiy OLMAYDI')
+def _(pg): pg.no(None).get('announcements', id='e1')
+@check('elonni tahrirlab bolmaydi')
+def _(pg): pg.no(TRAINER).update('announcements', {'text': 'boshqa'}, id='e1')
+@check('boshqa trener elonni ochira OLMAYDI')
+def _(pg): pg.no(TRAINER2).delete('announcements', id='e1')
+@check('trener bosh admin elonini ochira OLMAYDI')
+def _(pg): pg.no(TRAINER).delete('announcements', id='e2')
+@check('trener oz elonini ochiradi')
+def _(pg): pg.ok(TRAINER).delete('announcements', id='e1')
+@check('bosh admin istalgan elonni ochiradi')
+def _(pg):
+    pg.admin.set('announcements', {'text': 'x', 'created_at': now(), 'created_by': TRAINER2}, id='e8')
+    pg.ok(OWNER).delete('announcements', id='e8')
+    pg.ok(OWNER).delete('announcements', id='e2')
+
+
+# == PROFIL VA TRENER RASMI, MASHGULOT FIKRI (3-noy, 26-okt) ==
+def avatar(u, ext='jpg', host='https://qobil-video.qobilfitness.workers.dev'):
+    return f'{host}/v/avatars/{u}/123e4567-e89b-12d3-a456-426614174000.{ext}'
+
+
+@check('shogird oz profil rasmini qoyadi va olib tashlaydi')
+def _(pg):
+    pg.ok(USER).update('users', {'photo_url': avatar(USER)}, id=USER)
+    pg.ok(USER).update('users', {'photo_url': None}, id=USER)
+@check('trener katalogdagi oz rasmini qoyadi')
+def _(pg): pg.ok(TRAINER).update('trainers', {'photo_url': avatar(TRAINER, 'webp')}, id=TRAINER)
+@check('trener katalogiga boshqaning rasmi OTMAYDI')
+def _(pg): pg.no(TRAINER).update('trainers', {'photo_url': avatar(TRAINER3)}, id=TRAINER)
+@check('trener katalogiga begona sayt rasmi OTMAYDI')
+def _(pg): pg.no(TRAINER).update('trainers', {'photo_url': avatar(TRAINER, host='https://boshqa.example')}, id=TRAINER)
+@check('bosh admin trener rasmini ozgartira OLMAYDI')
+def _(pg): pg.no(OWNER).update('trainers', {'photo_url': None}, id=TRAINER)
+@check('shogird mashgulot fikrini yozadi')
+def _(pg): pg.ok(USER).set('user_days', {'gym_feel': 'hard'}, user_id=USER, day='2026-11-11')
+@check('trener shogird mashgulot fikrini koradi')
+def _(pg): assert pg.ok(TRAINER).get('user_days', user_id=USER, day='2026-11-11')['gym_feel'] == 'hard'
+@check('trener shogird kuniga yoza OLMAYDI')
+def _(pg): pg.no(TRAINER).update('user_days', {'gym_feel': 'easy'}, user_id=USER, day='2026-11-11')
 
 
 # == VIDEO DARSLAR (videos) — firestore test.mjs dagi bilan bir xil ==

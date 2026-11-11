@@ -27,6 +27,7 @@ TOP = {
     'exercises': ('exercises', None, 'id'), 'shop': ('shop', None, 'id'), 'videos': ('videos', None, 'id'),
     'orders': ('orders', None, 'id'), 'reminders': ('reminders', None, 'id'),
     'memberships': ('memberships', None, 'user_id'),
+    'announcements': ('announcements', None, 'id'),
 }
 SUB = {
     ('users', 'days'): ('user_days', 'user_id', 'day'),
