@@ -15,6 +15,7 @@ import 'package:kotta_qani_diet/models/video_link.dart';
 import 'package:kotta_qani_diet/screens/admin/exercises_admin_screen.dart';
 import 'package:kotta_qani_diet/screens/admin/plans_screen.dart';
 import 'package:kotta_qani_diet/screens/notifications_screen.dart';
+import 'package:kotta_qani_diet/screens/user/today_screen.dart';
 import 'package:kotta_qani_diet/services/db.dart';
 import 'package:kotta_qani_diet/services/reminders.dart';
 import 'package:kotta_qani_diet/widgets/change_password.dart';
@@ -875,6 +876,28 @@ void main() {
       final kecha = subs(DateTime(2026, 9, 17));
       expect(kecha, hasLength(1));
       expect(kecha.first.body, startsWith('1 kun oldin tugadi'));
+    });
+
+    testWidgets('"Bugun" banneri: faqat muddati o\'tganda, necha kun oldin', (t) async {
+      Future<void> show(DateTime? exp) => t.pumpWidget(MaterialApp(
+            home: Scaffold(
+              body: ExpiredBanner(
+                user: AppUser(id: 'u1', name: 'Shogird', email: '', subscriptionExpiresAt: exp),
+                now: now,
+              ),
+            ),
+          ));
+
+      await show(DateTime(2026, 9, 13));
+      expect(find.text('Abonement muddati o‘tdi'), findsOneWidget);
+      expect(find.textContaining('5 kun oldin tugadi'), findsOneWidget);
+      expect(find.byTooltip('Yopish'), findsNothing, reason: 'yopib bo‘lmaydi');
+
+      await show(DateTime(2026, 9, 18));
+      expect(find.text('Abonement muddati o‘tdi'), findsNothing, reason: 'tugash kuni — hali amal qiladi');
+
+      await show(null);
+      expect(find.text('Abonement muddati o‘tdi'), findsNothing, reason: "abonement yozilmagan");
     });
 
     test("trener: muddati o'tgan shogird 30 kungacha ko'rinadi", () {

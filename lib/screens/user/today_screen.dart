@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/tr.dart';
 import '../../models/gym.dart' show weekdayNames;
 import '../../models/models.dart';
+import '../../models/subscription.dart';
 import '../../services/db.dart';
 import '../../theme.dart';
 import '../../widgets/announcements.dart';
@@ -23,7 +24,12 @@ class TodayScreen extends StatelessWidget {
     final day = todayKey();
     Widget page(List<Widget> children) => ListView(
           padding: const EdgeInsets.fromLTRB(AppSpace.lg, AppSpace.sm, AppSpace.lg, AppSpace.xxl),
-          children: [_Header(user: user), AnnouncementBanner(stream: Db.announcements()), ...children],
+          children: [
+            _Header(user: user),
+            AnnouncementBanner(stream: Db.announcements()),
+            ExpiredBanner(user: user),
+            ...children,
+          ],
         );
 
     return Scaffold(
@@ -582,6 +588,43 @@ class _CheckCircle extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Abonement muddati o'tgan bo'lsa — "Bugun" tepasida qizil banner (zal egasi, 11-noy).
+/// Faqat ogohlantiradi: ilova bloklanmaydi, yopib bo'lmaydi, to'lov kiritilgach o'zi yo'qoladi.
+/// Tugash kunida (`daysLeft == 0`) abonement hali amal qiladi — banner yo'q.
+class ExpiredBanner extends StatelessWidget {
+  final AppUser user;
+  final DateTime? now;
+  const ExpiredBanner({super.key, required this.user, this.now});
+
+  @override
+  Widget build(BuildContext context) {
+    final exp = user.subscriptionExpiresAt;
+    if (!Subscription.isExpired(exp, now)) return const SizedBox.shrink();
+    final ago = -Subscription.daysLeft(exp, now);
+    final t = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpace.sm),
+      child: BentoTile(
+        color: AppColors.danger.withValues(alpha: 0.12),
+        padding: const EdgeInsets.all(AppSpace.md),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Icon(Icons.card_membership_outlined, color: AppColors.danger),
+          const SizedBox(width: AppSpace.md),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(tr('Abonement muddati o‘tdi'),
+                  style: t.titleSmall?.copyWith(color: AppColors.danger)),
+              const SizedBox(height: 4),
+              Text(trf('{0} kun oldin tugadi. To‘lov zalda — trenerga murojaat qiling', [ago]),
+                  style: t.bodyMedium),
+            ]),
+          ),
+        ]),
       ),
     );
   }
