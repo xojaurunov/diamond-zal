@@ -3,7 +3,7 @@
 > **Bu fayl bitta joyda hamma narsani saqlaydi.** Yangi kompyuterda yoki yangi suhbatda
 > shu faylni o'qib, ishni to'xtagan joyidan davom ettirsa bo'ladi.
 >
-> Oxirgi yangilanish: **2026-11-10**
+> Oxirgi yangilanish: **2026-11-13**
 >
 > Boshqa hujjatlar: [QOLLANMA.md](QOLLANMA.md) — trener va mijoz uchun foydalanuvchi
 > qo'llanmasi; [README.md](README.md) va [HOLAT.md](HOLAT.md) — eski, batafsilroq
@@ -11,9 +11,44 @@
 
 ---
 
-## 0. ▶ SHU YERDAN BOSHLANG (10-noyabr holati)
+## 0. ▶ SHU YERDAN BOSHLANG (13-noyabr holati)
 
-**10-noyabr (eng yangi).** `sinov/apk-video-logo` dagi hamma shoxlar `main` ga qo'shildi, sayt va saytdagi
+**11–13-noyabr (eng yangi, 104-band hali yozilmagan).** To'rtta ish qilindi, hammasi GitHub'da, `main` ga
+**qo'shilmagan** (zal egasi telefonda sinab "yaxshi" deyishi kerak):
+
+| Shox | Nima | Holat |
+|---|---|---|
+| `fix/yuklash-sahifa-nomi` | Yuklab olish sahifasida "Qobil Fitness", APK 28 MB | `main` da, sayt yangilangan |
+| `feat/muddat-banner` | "Bugun" ekranida muddati o'tgan abonement uchun qizil banner | sinov APK'da |
+| `feat/qarzdorlar` | Abonement → "Qarzdorlar": kim, necha kun o'tdi, oxirgi to'lov, "Eslatma yubor" | sinov APK'da |
+| `feat/progress-rasm-r2` | Oldin/keyin rasmlari R2'da (1 MB gacha, 1280 px); eskilari o'zi ko'chadi | sinov APK'da, **joylanmagan** |
+| `feat/servis-yangi-maydonlar` | Postgres nusxasiga e'lonlar, rasm kaliti, `photoUrl`, `gymFeel`, 10-noy ruxsatlari | faqat kompyuterda (Docker) |
+| `sinov/noyabr` | `main` + banner + qarzdorlar + R2 rasmlar — sinov APK shundan | worktree `../kq-sinov` |
+
+**Keyingi qadamlar, tartib bilan:**
+1. **Joylash (zal egasi ruxsati bilan):** `feat/progress-rasm-r2` dagi Worker (`cd cloudflare/video && npx
+   wrangler deploy`) va `firestore.rules` (avval jonli qoida bilan diff). Busiz yangi APK'da progress rasmi
+   qo'shilmaydi (eski rasmlar ko'rinadi). Joylagach vaqtinchalik akkaunt bilan haqiqiy Worker'da sinash:
+   yuklash, o'zi ko'radi, begona token rad, o'chirish — keyin akkaunt o'chiriladi.
+2. Zal egasi sinov APK'ni telefonda ko'radi → "yaxshi" → banner, qarzdorlar, R2 rasmlar `main` ga, sayt va
+   saytdagi APK yangilanadi, shu bo'limga 104-band.
+3. `trener123` parolini almashtirish (ilgari saytda ochiq turgan).
+4. Render / Python servis — zal egasi Render akkaunti ochgach.
+
+**Taklif qilingan, boshlanmagan:** shogird o'z akkauntini o'zi o'chirishi va maxfiylik siyosati sahifasi
+(Play Market sharti); mashq jurnali (kg, takror); webdan video yuklash (hozir faqat telefondan); mashqni faqat
+qo'shgan trener o'zgartirishi; trener zali almashsa shogirdlar ko'zgusi ham; trener foizi bazada; QR skaner;
+akkaunt o'chirilganda R2 rasmlari ham; abonement muzlatish; kassa; o'zbek taomlari bazasi; tana o'lchamlari.
+
+**Tekshiruv (11-noy):** `flutter test` 192/192 (`sinov/noyabr`), qoidalar 313/313, Worker 27/27,
+`pytest` 337/337. Rejalar (`specs/noyabr-ishlar/`) — faqat ish kompyuterida, git'da yo'q; asosiy qarorlar shu
+bo'limda.
+
+**Yangi kompyuterda git'da YO'Q fayllar** (qo'lda, xavfsiz yo'l bilan ko'chiriladi, GitHub'ga emas):
+`PAROLLAR.md`, `.env`, `backend/.env`, `android/key.properties`, `android/diamond-release.jks` (imzo kaliti —
+usiz APK yangilanmaydi), `android/local.properties` (o'sha kompyuterda `flutter` o'zi yozadi).
+
+**10-noyabr.** `sinov/apk-video-logo` dagi hamma shoxlar `main` ga qo'shildi, sayt va saytdagi
 APK yangilandi, qoidalar joylandi (**103-band**). Pastdagi 3-noyabr jadvali — tarix.
 `main` ga qo'shilmagan: `feat/servis-*` va unga bog'liq shoxlar (Python servis; Render — hozircha yo'q).
 
